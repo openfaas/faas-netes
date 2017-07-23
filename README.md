@@ -39,3 +39,5 @@ $ minikube ssh 'curl -s 10.0.0.46:8080/system/functions'
 
 [{"name":"nodeinfo","image":"functions/nodeinfo:latest","invocationCount":0,"replicas":1}]
 ```
+
+Internally within the cluster the `faas-netesd` service will have the DNS entry of `faas-netesd.default`.
