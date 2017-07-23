@@ -29,6 +29,10 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/system/functions", handlers.MakeFunctionReader(clientset)).Methods("GET")
 
+	functionProxy := handlers.MakeProxy()
+	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}", functionProxy)
+	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}/", functionProxy)
+
 	readTimeout := 8 * time.Second
 	writeTimeout := 8 * time.Second
 	tcpPort := 8080

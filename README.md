@@ -9,6 +9,8 @@ Create a cluster on Mac:
 $ minikube start --vm-driver=xhyve
 ```
 
+> You can also omit `--vm-driver=xhyve` if you want to use VirtualBox for your local cluster.
+
 Start a "function"
 
 ```
