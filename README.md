@@ -26,10 +26,11 @@ $ kubectl delete service/faas-netesd ; \
    kubectl expose deployment/faas-netesd
 ```
 
-Now try it out:
+Now try it out
+
+This it the route for the function list as used by the FaaS UI / gateway.
 
 ```
-
 $ kubectl get service faas-netesd
 NAME          CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
 faas-netesd   10.0.0.46    <none>        8080/TCP   10s
@@ -37,5 +38,4 @@ faas-netesd   10.0.0.46    <none>        8080/TCP   10s
 $ minikube ssh 'curl -s 10.0.0.46:8080/system/functions'
 
 [{"name":"nodeinfo","image":"functions/nodeinfo:latest","invocationCount":0,"replicas":1}]
-
 ```
