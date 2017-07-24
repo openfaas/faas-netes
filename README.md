@@ -3,6 +3,10 @@ faas-netes
 
 This is a PoC (Proof of Concept) for a FaaS implementation on Kubernetes.
 
+![FaaS](https://pbs.twimg.com/media/DFhYYP-XUAIWBET.jpg:large)
+
+If you'd like to know more about the FaaS project head over to - https://github.com/alexellis/faas
+
 The code in this repository is a daemon or micro-service which can provide the basic functionality the FaaS Gateway requires:
 
 * List functions
