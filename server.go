@@ -27,7 +27,9 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+
 	r.HandleFunc("/system/functions", handlers.MakeFunctionReader(clientset)).Methods("GET")
+	r.HandleFunc("/system/functions", handlers.MakeDeployHandler(clientset)).Methods("POST")
 
 	functionProxy := handlers.MakeProxy()
 	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}", functionProxy)

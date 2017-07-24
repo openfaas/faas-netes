@@ -16,7 +16,7 @@ func MakeFunctionReader(clientset *kubernetes.Clientset) http.HandlerFunc {
 		var functions []requests.Function
 
 		listOpts := metav1.ListOptions{
-			LabelSelector: "faas_function=true",
+			LabelSelector: "faas_function",
 		}
 
 		res, err := clientset.ExtensionsV1beta1().Deployments("default").List(listOpts)

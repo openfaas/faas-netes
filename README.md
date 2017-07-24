@@ -42,12 +42,12 @@ $ minikube start --vm-driver=xhyve
 **Start a "function"**
 
 * Create a deployment and service pair
-* The label `faas_function=true` marks this as a "function"
+* The label `faas_function=<function_name>` marks this as a "function"
 
 ```
 $ kubectl delete deployment/nodeinfo ; \
   kubectl delete service/nodeinfo ; \
-  kubectl run --labels="faas_function=true" nodeinfo --port 8080 --image functions/nodeinfo:latest ; \
+  kubectl run --labels="faas_function=nodeinfo" nodeinfo --port 8080 --image functions/nodeinfo:latest ; \
   kubectl expose deployment/nodeinfo
 ```
 
@@ -108,4 +108,7 @@ You can now use the `curl` example from above and you will see either of the two
 
 #### Get involved
 
+*Please Star the FaaS and FaaS-netes Github repo.*
+
 Contributions are welcome - see the contributing guide for [FaaS](https://github.com/alexellis/faas/blob/master/CONTRIBUTING.md).
+
