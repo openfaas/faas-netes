@@ -16,12 +16,17 @@ The code in this repository is a daemon or micro-service which can provide the b
 
 Any other metrics or UI components will be maintained separately in the main FaaS project.
 
+
+### Technical overview
+
 Motivation for separate micro-service:
 
 * Kubernetes go-client is 41MB with only a few lines of code
 * After including the go-client the code takes > 2mins to compile
 
 So rather than inflating the original project's source-code this micro-service will act as a co-operator or plug-in. Some additional changes will be needed in the main FaaS project to switch between implementations.
+
+![](https://pbs.twimg.com/media/DFh7i-ZXkAAZkw4.jpg:large)
 
 There is no planned support for dual orchestrators - i.e. Swarm and K8s at the same time on the same host/network.
 
