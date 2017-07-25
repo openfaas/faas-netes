@@ -1,7 +1,7 @@
 faas-netes
 ===========
 
-This is a PoC (Proof of Concept) for a FaaS implementation on Kubernetes.
+This is a plugin to enable Kubernetes as a FaaS backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestation frameworks such as Nomad and Mesos/Marathon.
 
 In this README you'll find a technical overview and instructions for testing out FaaS with a Kubernetes back-end. 
 
