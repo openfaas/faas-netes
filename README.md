@@ -58,6 +58,12 @@ $ kubectl delete -f ./faas.yml ; \
   kubectl apply -f ./faas.yml
 ```
 
+If you're using `kubeadm` and *RBAC* then you can run in a cluster role for FaaS-netes:
+
+```
+$ kubectl apply -f ./faas-rbac.yml
+```
+
 Or:
 
 ```
@@ -67,7 +73,9 @@ $ kubectl delete deployment/nodeinfo ; \
   kubectl expose deployment/nodeinfo
 ```
 
-**Build and deploy the development image:**
+**(Optionally) Build and deploy the development image:**
+
+This step is optional if you have already applied the faas.yml file into the cluster via `kubectl`
 
 ```
 $ eval $(minikube docker-env)
