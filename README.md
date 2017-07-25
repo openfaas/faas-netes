@@ -54,6 +54,13 @@ $ minikube start --vm-driver=xhyve
 * The label `faas_function=<function_name>` marks this as a "function"
 
 ```
+$ kubectl delete -f ./faas.yml ; \
+  kubectl apply -f ./faas.yml
+```
+
+Or:
+
+```
 $ kubectl delete deployment/nodeinfo ; \
   kubectl delete service/nodeinfo ; \
   kubectl run --labels="faas_function=nodeinfo" nodeinfo --port 8080 --image functions/nodeinfo:latest ; \
