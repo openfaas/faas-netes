@@ -48,10 +48,7 @@ $ minikube start --vm-driver=xhyve
 
 > You can also omit `--vm-driver=xhyve` if you want to use VirtualBox for your local cluster.
 
-**Start a "function"**
-
-* Create a deployment and service pair
-* The label `faas_function=<function_name>` marks this as a "function"
+**Deploy FaaS-netes and the API Gateway**
 
 ```
 $ kubectl delete -f ./faas.yml ; \
@@ -64,7 +61,25 @@ If you're using `kubeadm` and *RBAC* then you can run in a cluster role for FaaS
 $ kubectl apply -f ./faas-rbac.yml
 ```
 
-Or:
+**Deploy a tester function**
+
+You have three options for deploying a function:
+
+* Via the FaaS CLI 
+
+The CLI can build FaaS functions into Docker images that you can share via the Docker Hub. These can also be deployed through the same tool using a YAML format.
+
+Available at: https://github.com/alexellis/faas-cli
+
+> Note: currently Kubernetes FaaS functions can only be named a-zA-Z and dash (-).
+
+* Through the FaaS UI
+
+The FaaS UI is accessible in a web-browser on port 31112 with the IP of your node.
+
+See below for a screenshot.
+
+* Manual deployment + service with a label of "faas_function=<function_name>"
 
 ```
 $ kubectl delete deployment/nodeinfo ; \
@@ -73,18 +88,7 @@ $ kubectl delete deployment/nodeinfo ; \
   kubectl expose deployment/nodeinfo
 ```
 
-**(Optionally) Build and deploy the development image:**
-
-This step is optional if you have already applied the faas.yml file into the cluster via `kubectl`
-
-```
-$ eval $(minikube docker-env)
-$ docker build -t faas-netesd .
-$ kubectl delete service/faas-netesd ; \
-   kubectl delete deployment/faas-netesd ; \
-   kubectl run faas-netesd --image=faas-netesd:latest --port 8080 --image-pull-policy=Never ; \
-   kubectl expose deployment/faas-netesd
-```
+* The label `faas_function=<function_name>` marks this as a "function"
 
 ### Now try it out
 
@@ -93,32 +97,43 @@ $ kubectl delete service/faas-netesd ; \
 This it the route for the function list as used by the FaaS UI / gateway.
 
 ```
-$ kubectl get service faas-netesd
-NAME          CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
-faas-netesd   10.0.0.46    <none>        8080/TCP   10s
+$ kubectl get service gateway
+NAME      CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+gateway   10.106.11.234   <nodes>       8080:31112/TCP   1h
+```
 
-$ minikube ssh 'curl -s 10.0.0.46:8080/system/functions'
+You can now use the node's IP address and port 31112 or the Cluster IP and port 8080.
+
+Using the internal IP:
+```
+$ minikube ssh 'curl -s 10.106.11.234:8080/system/functions'
 
 [{"name":"nodeinfo","image":"functions/nodeinfo:latest","invocationCount":0,"replicas":1}]
 ```
 
-Internally within the cluster the `faas-netesd` service will have the DNS entry of `faas-netesd.default`.
-
-**Invoke a function via Gateway**
+Or via the node's IP and NodePort we mapped (31112):
 
 ```
-$ kubectl get service faas-netesd
-NAME          CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
-faas-netesd   10.0.0.46    <none>        8080/TCP   10s
+$ curl -s http://$(minikube ip):31112/system/functions
 
-$ minikube ssh 'curl -s 10.0.0.46:8080/function/nodeinfo'
-Hostname: nodeinfo-3504543019-q96rm
+[{"name":"nodeinfo","image":"functions/nodeinfo:latest","invocationCount":0,"replicas":1}]
+```
+
+**Invoke a function via the API Gateway**
+
+Using the IP from the previous step you can now invoke the `nodeinfo` function
+
+```
+curl -s --data "" http://$(minikube ip):31112/function/nodeinfo
+Hostname: nodeinfo-2186484981-lcm0m
 
 Platform: linux
 Arch: x64
 CPU count: 2
-Uptime: 500
+Uptime: 19960
 ```
+
+The `--data` flag turns the `curl` from a GET to a POST. Right now FaaS functions are invoked via a POST to the API Gateway.
 
 **Manually scale a function**
 
@@ -130,9 +145,19 @@ $ kubectl scale deployment/nodeinfo --replicas=2
 
 You can now use the `curl` example from above and you will see either of the two replicas.
 
+**Test out the UI**
+
+You can also access the FaaS UI through the node's IP address and the NodePort we exposed earlier.
+
+![](https://pbs.twimg.com/media/DFkUuH1XsAAtNJ6.jpg:medium)
+
+If you've ever used the *Kubernetes dashboard* then this UI is a similar concept. You can list, invoke and create new functions.
+
 #### Get involved
 
 *Please Star the FaaS and FaaS-netes Github repo.*
+
+* [Main FaaS repo](https://github.com/alexellis/faas)
 
 Contributions are welcome - see the contributing guide for [FaaS](https://github.com/alexellis/faas/blob/master/CONTRIBUTING.md).
 
