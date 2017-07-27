@@ -31,6 +31,9 @@ func main() {
 	r.HandleFunc("/system/functions", handlers.MakeFunctionReader(clientset)).Methods("GET")
 	r.HandleFunc("/system/functions", handlers.MakeDeployHandler(clientset)).Methods("POST")
 
+	r.HandleFunc("/system/function/{name:[-a-zA-Z_0-9]+}", handlers.MakeReplicaReader(clientset)).Methods("GET")
+	r.HandleFunc("/system/scale-function/{name:[-a-zA-Z_0-9]+}", handlers.MakeReplicaUpdater(clientset)).Methods("POST")
+
 	functionProxy := handlers.MakeProxy()
 	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}", functionProxy)
 	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}/", functionProxy)

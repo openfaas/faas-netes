@@ -6,6 +6,7 @@ WORKDIR /go/src/github.com/alexellis/faas-netes
 
 COPY vendor     vendor
 COPY handlers	handlers
+COPY types      types
 COPY server.go  .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes .
