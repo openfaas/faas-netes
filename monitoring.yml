@@ -28,11 +28,12 @@ spec:
       containers:
       - name: prometheus
         image: functions/prometheus:latest-k8s
+        command: ["prometheus","-config.file=/etc/prometheus/prometheus.yml", "-storage.local.path=/prometheus", "-storage.local.memory-chunks=10000", "--alertmanager.url=http://alertmanager.default:9093"]
         imagePullPolicy: Always
         ports:
         - containerPort: 9090
           protocol: TCP
-
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -64,6 +65,7 @@ spec:
       - name: alertmanager
         image: functions/alertmanager:latest-k8s
         imagePullPolicy: Always
+        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
         ports:
         - containerPort: 9003
           protocol: TCP

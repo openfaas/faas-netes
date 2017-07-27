@@ -27,8 +27,8 @@ spec:
     spec:
       containers:
       - name: faas-netesd
-        image: faas-netes-dev:latest
-        imagePullPolicy: Never
+        image: alexellis2/faas-netes:scaling
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -62,7 +62,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: alexellis2/gateway:external
+        image: alexellis2/gateway:k8s-monitoring-dev
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
