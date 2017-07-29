@@ -5,7 +5,7 @@ This is a plugin to enable Kubernetes as a FaaS backend. The existing CLI and UI
 
 In this README you'll find a technical overview and instructions for testing out FaaS with a Kubernetes back-end. 
 
-You can also watch a [video overview on YouTube](https://www.youtube.com/watch?v=CQYjiMXOqOQ).
+You can also watch a [conceptual design video](https://www.youtube.com/watch?v=CQYjiMXOqOQ) or a [complete FaaS-netes walk-through](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
 
 ![FaaS](https://pbs.twimg.com/media/DFhYYP-XUAIWBET.jpg:large)
 
@@ -55,9 +55,10 @@ $ minikube start --vm-driver=xhyve
 **Deploy FaaS-netes and the API Gateway**
 
 ```
-$ kubectl delete -f ./faas.yml ; \
-  kubectl apply -f ./faas.yml
+$ kubectl apply -f ./faas.yml,monitoring.yml
 ```
+
+The `monitoring.yml` file provides Prometheus and AlertManager functionality for metrics and auto-scaling behaviour.
 
 If you're using `kubeadm` and *RBAC* then you can run in a cluster role for FaaS-netes:
 
@@ -98,7 +99,9 @@ $ kubectl delete deployment/nodeinfo ; \
 
 **Function List**
 
-This it the route for the function list as used by the FaaS UI / gateway.
+The function list is available on the gateway and is also used by the FaaS UI.
+
+Find the gateway service:
 
 ```
 $ kubectl get service gateway
@@ -109,6 +112,7 @@ gateway   10.106.11.234   <nodes>       8080:31112/TCP   1h
 You can now use the node's IP address and port 31112 or the Cluster IP and port 8080.
 
 Using the internal IP:
+
 ```
 $ minikube ssh 'curl -s 10.106.11.234:8080/system/functions'
 
@@ -125,7 +129,7 @@ $ curl -s http://$(minikube ip):31112/system/functions
 
 **Invoke a function via the API Gateway**
 
-Using the IP from the previous step you can now invoke the `nodeinfo` function
+Using the IP from the previous step you can now invoke the `nodeinfo` function with a HTTP POST and an empty body.
 
 ```
 curl -s --data "" http://$(minikube ip):31112/function/nodeinfo
@@ -139,6 +143,8 @@ Uptime: 19960
 
 The `--data` flag turns the `curl` from a GET to a POST. Right now FaaS functions are invoked via a POST to the API Gateway.
 
+> The nodeinfo function also supports a parameter of `verbose` to view network adapters - to try this set the `--data` flag to `verbose`.
+
 **Manually scale a function**
 
 Let's scale the deployment from 1 to 2 instances of the nodeinfo function:
@@ -148,6 +154,10 @@ $ kubectl scale deployment/nodeinfo --replicas=2
 ```
 
 You can now use the `curl` example from above and you will see either of the two replicas.
+
+Given enough load (> 5 requests/second) FaaS will auto-scale your service, you can test this out by opening up the Prometheus web-page and then generating load with Apache Bench or a while/true/curl bash loop. Prometheus is exposed on a NodePort of 31119.
+
+The [FaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
 
 **Test out the UI**
 
@@ -164,4 +174,6 @@ If you've ever used the *Kubernetes dashboard* then this UI is a similar concept
 * [Main FaaS repo](https://github.com/alexellis/faas)
 
 Contributions are welcome - see the contributing guide for [FaaS](https://github.com/alexellis/faas/blob/master/CONTRIBUTING.md).
+
+The [FaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
 
