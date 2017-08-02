@@ -167,6 +167,10 @@ The [FaaS complete walk-through on Kubernetes Video](https://www.youtube.com/wat
 
 You can also access the FaaS UI through the node's IP address and the NodePort we exposed earlier.
 
+```
+$ open http://$(minikube ip):31112/
+```
+
 ![](https://pbs.twimg.com/media/DFkUuH1XsAAtNJ6.jpg:medium)
 
 If you've ever used the *Kubernetes dashboard* then this UI is a similar concept. You can list, invoke and create new functions.
