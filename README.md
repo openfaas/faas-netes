@@ -1,11 +1,11 @@
 faas-netes
 ===========
 
-This is a plugin to enable Kubernetes as a FaaS backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestation frameworks such as Nomad and Mesos/Marathon.
+This is a plugin to enable Kubernetes as a [FaaS](https://github.com/alexellis/faas) backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestation frameworks such as Nomad and Mesos/Marathon.
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-FaaS is an event-driven serverless framework for containers - any container for Windows or Linux can be leveraged as a FaaS function. FaaS is easy to deploy and let's you avoid boiler-plate coding.
+[FaaS](https://github.com/alexellis/faas) is an event-driven serverless framework for containers - any container for Windows or Linux can be leveraged as a FaaS function. FaaS is easy to deploy and let's you avoid boiler-plate coding.
 
 In this README you'll find a technical overview and instructions for testing out FaaS with a Kubernetes back-end. 
 
