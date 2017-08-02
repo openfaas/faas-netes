@@ -159,9 +159,31 @@ $ kubectl scale deployment/nodeinfo --replicas=2
 
 You can now use the `curl` example from above and you will see either of the two replicas.
 
-Given enough load (> 5 requests/second) FaaS will auto-scale your service, you can test this out by opening up the Prometheus web-page and then generating load with Apache Bench or a while/true/curl bash loop. Prometheus is exposed on a NodePort of 31119.
+**Auto-scale your functions**
 
-The [FaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
+Given enough load (> 5 requests/second) FaaS will auto-scale your service, you can test this out by opening up the Prometheus web-page and then generating load with Apache Bench or a while/true/curl bash loop.
+
+Here's an example you can use to generate load:
+
+```
+ip=$(minikube ip); while [ true ] ; do curl $ip:31112/function/nodeinfo -d "" ; done
+```
+
+Prometheus is exposed on a NodePort of 31119 which shows the function invocation rate. 
+
+```
+$ open http://$(minikube ip):31119/
+```
+
+Here's an example for use with the Prometheus UI:
+
+```
+rate(gateway_function_invocation_total[20s])
+```
+
+> It shows the rate the function has been invoked over a 20 second window.
+
+The [FaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows auto-scaling in action and how to use the Prometheus UI.
 
 **Test out the UI**
 
