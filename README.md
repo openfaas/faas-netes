@@ -5,11 +5,11 @@ This is a plugin to enable Kubernetes as a [FaaS](https://github.com/alexellis/f
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-[FaaS](https://github.com/alexellis/faas) is an event-driven serverless framework for containers - any container for Windows or Linux can be leveraged as a FaaS function. FaaS is easy to deploy and let's you avoid boiler-plate coding.
+[FaaS](https://github.com/alexellis/faas) is an event-driven serverless framework for containers. Any container for Windows or Linux can be leveraged as a serverless function. FaaS is quick and easy to deploy (less than 60 secs) and lets you avoid writing boiler-plate code.
 
-In this README you'll find a technical overview and instructions for testing out FaaS with a Kubernetes back-end. 
+In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster but Docker Swarm is also natively supported. 
 
-You can also watch a [conceptual design video](https://www.youtube.com/watch?v=CQYjiMXOqOQ) or a [complete FaaS-netes walk-through](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
+You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
 
 ![FaaS](https://pbs.twimg.com/media/DFhYYP-XUAIWBET.jpg:large)
 
@@ -47,6 +47,7 @@ Let's try it out:
 * Build and deploy the FaaS-netes microservice
 * Make calls to list the functions and invoke a function
 
+I'll give instructions for creating your cluster on a Mac with `minikube`, but you can also use `kubeadm` on Linux in the cloud by [following this tutorial](https://blog.alexellis.io/kubernetes-kubeadm-video/).
 
 **Create a cluster on Mac:**
 
