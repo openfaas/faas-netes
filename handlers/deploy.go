@@ -2,24 +2,39 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/alexellis/faas/gateway/requests"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"regexp"
+
+	"github.com/alexellis/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
-	"log"
-	"net/http"
 )
 
 const namespace string = "default"
+
+// ValidateDeployRequest validates that the service name is valid for Kubernetes
+func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
+	var validDNS = regexp.MustCompile(`^[a-zA-Z\-]+$`)
+	matched := validDNS.MatchString(request.Service)
+	if matched {
+		return nil
+	}
+
+	return fmt.Errorf("(%s) must be a valid DNS entry for service name", request.Service)
+}
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
 func MakeDeployHandler(clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
+
 		body, _ := ioutil.ReadAll(r.Body)
 
 		request := requests.CreateFunctionRequest{}
@@ -29,27 +44,41 @@ func MakeDeployHandler(clientset *kubernetes.Clientset) http.HandlerFunc {
 			return
 		}
 
+		if err := ValidateDeployRequest(&request); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
 		deploymentSpec := makeDeploymentSpec(request)
 		deploy := clientset.Extensions().Deployments(namespace)
 
 		_, err = deploy.Create(deploymentSpec)
 		if err != nil {
 			log.Println(err)
-		} else {
-			log.Println("Created deployment - " + request.Service)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
 		}
 
+		log.Println("Created deployment - " + request.Service)
+
 		service := clientset.Core().Services(namespace)
-        serviceSpec := makeServiceSpec(request)
+		serviceSpec := makeServiceSpec(request)
 		_, err = service.Create(serviceSpec)
 
 		if err != nil {
 			log.Println(err)
-		} else {
-			log.Println("Created service - " + request.Service)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
 		}
 
+		log.Println("Created service - " + request.Service)
 		log.Println(string(body))
+
+		w.WriteHeader(http.StatusAccepted)
+
 	}
 }
 
