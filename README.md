@@ -204,7 +204,7 @@ If you've ever used the *Kubernetes dashboard* then this UI is a similar concept
 
 * [Main FaaS repo](https://github.com/alexellis/faas)
 
-Contributions are welcome - see the contributing guide for [FaaS](https://github.com/alexellis/faas/blob/master/CONTRIBUTING.md).
+Contributions are welcome - see the [contributing guide for FaaS](https://github.com/alexellis/faas/blob/master/CONTRIBUTING.md).
 
 The [FaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
 
