@@ -14,6 +14,11 @@ spec:
   selector:
     app: faas-netesd
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: faas-controller
+---
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -25,6 +30,7 @@ spec:
       labels:
         app: faas-netesd
     spec:
+      serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
         image: alexellis2/faas-netes:scaling
