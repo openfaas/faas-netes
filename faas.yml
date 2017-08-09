@@ -72,7 +72,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
-          value: "http://faas-netesd.default:8080/"
+          value: "http://faas-netesd.default.svc.cluster.local:8080/"
         ports:
         - containerPort: 8080
           protocol: TCP
