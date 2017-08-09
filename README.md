@@ -68,7 +68,7 @@ The `monitoring.yml` file provides Prometheus and AlertManager functionality for
 If you're using `kubeadm` and *RBAC* then you can run in a cluster role for FaaS-netes:
 
 ```
-$ kubectl apply -f ./faas-rbac.yml
+$ kubectl apply -f ./rbac.yml
 ```
 
 **Deploy a tester function**
