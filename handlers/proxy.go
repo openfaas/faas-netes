@@ -15,6 +15,8 @@ import (
 
 	"io/ioutil"
 
+	"os"
+
 	"github.com/gorilla/mux"
 )
 
@@ -52,7 +54,12 @@ func MakeProxy() http.HandlerFunc {
 			watchdogPort := 8080
 			var addr string
 
-			entries, lookupErr := net.LookupIP(fmt.Sprintf("%s.default", service))
+			dnsSuffix := "default.svc.cluster.local"
+			if envSuffix, has := os.LookupEnv("dns_function_suffix"); has && len(envSuffix) > 0 {
+				dnsSuffix = envSuffix
+			}
+
+			entries, lookupErr := net.LookupIP(fmt.Sprintf("%s.%s", service, dnsSuffix))
 			if lookupErr == nil && len(entries) > 0 {
 				index := randomInt(0, len(entries))
 				addr = entries[index].String()
