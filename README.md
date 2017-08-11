@@ -24,6 +24,9 @@ The code in this repository is a daemon or micro-service which can provide the b
 
 Any other metrics or UI components will be maintained separately in the main FaaS project.
 
+### QuickStart
+
+If you're looking to just get FaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/alexellis/faas-netes/blob/master/QuickStart.md) or read on for a technical overview.
 
 ### Technical overview
 
