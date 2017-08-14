@@ -86,6 +86,8 @@ func MakeDeployHandler(clientset *kubernetes.Clientset) http.HandlerFunc {
 }
 
 func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deployment {
+	envVars := buildEnvVars(request)
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -123,6 +125,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deploym
 							Ports: []apiv1.ContainerPort{
 								{ContainerPort: int32(8080), Protocol: v1.ProtocolTCP},
 							},
+							Env: envVars,
 							Resources: apiv1.ResourceRequirements{
 								Limits: apiv1.ResourceList{
 								//v1.ResourceCPU:    resource.MustParse("100m"),
@@ -166,6 +169,29 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 		},
 	}
 	return serviceSpec
+}
+
+func buildEnvVars(request requests.CreateFunctionRequest) []v1.EnvVar {
+	envVars := []v1.EnvVar{}
+
+	if len(request.EnvProcess) > 0 {
+		envVar := v1.EnvVar{
+			Name:  "fprocess",
+			Value: request.EnvProcess,
+		}
+		envVars = append(envVars, envVar)
+	}
+
+	for k, v := range request.EnvVars {
+		if len(request.EnvProcess) > 0 {
+			envVar := v1.EnvVar{
+				Name:  k,
+				Value: v,
+			}
+			envVars = append(envVars, envVar)
+		}
+	}
+	return envVars
 }
 
 func int32p(i int32) *int32 {
