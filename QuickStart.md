@@ -33,6 +33,24 @@ For simplicity the default configuration uses NodePorts rather than an IngressCo
 
 There are currently no sample functions built into this stack, but we can deploy them quickly via the UI or FaaS-CLI.
 
+**Use the CLI**
+
+Follow the tutorial below, but change your gateway URL from localhost:8080 to kubernetes-node-ip:31112
+
+i.e.
+
+```
+provider:  
+  name: faas
+  gateway: http://192.168.4.95:31112
+```
+
+[Your first serverless Python function with OpenFaaS](https://blog.alexellis.io/first-faas-python-function/)
+
+You can also deploy the samples from the [FaaS-cli](https://github.com/alexellis/faas-cli), but change the gateway address as above.
+
+**Use the UI**
+
 Click "New Function" and fill it out with the following:
 
 | Field      | Value                        |
