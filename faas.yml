@@ -33,7 +33,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        image: alexellis2/faas-netes:scaling
+        image: alexellis2/faas-netes:envvars
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
