@@ -169,7 +169,7 @@ Given enough load (> 5 requests/second) FaaS will auto-scale your service, you c
 
 Here's an example you can use to generate load:
 
-```
+```bash
 ip=$(minikube ip); while [ true ] ; do curl $ip:31112/function/nodeinfo -d "" ; done
 ```
 
