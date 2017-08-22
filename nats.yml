@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  labels:
+    app: nats
+spec:
+  type: NodePort
+  ports:
+    - port: 4222
+      protocol: TCP
+      targetPort: 4222
+      nodePort: 31114
+  selector:
+    app: nats
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nats
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+      - name:  nats
+        image: nats-streaming:0.5.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4222
+          protocol: TCP
+        - containerPort: 8222
+          protocol: TCP
+        command: ["/nats-streaming-server"]
+        args:
+          - --store
+          - memory
+          - --cluster_id
+          - faas-cluster
+
+
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: queue-worker
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: queue-worker
+    spec:
+      containers:
+      - name:  queue-worker
+        image: functions/queue-worker:0.1 
+        imagePullPolicy: Always
+
