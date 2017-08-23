@@ -26,7 +26,7 @@ Any other metrics or UI components will be maintained separately in the main Faa
 
 ### QuickStart
 
-If you're looking to just get FaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/alexellis/faas-netes/blob/master/QuickStart.md) or read on for a technical overview.
+If you're looking to just get FaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/alexellis/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
 
 ### Technical overview
 
