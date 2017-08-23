@@ -39,7 +39,7 @@ Follow the tutorial below, but change your gateway URL from localhost:8080 to ku
 
 i.e.
 
-```
+```yaml
 provider:  
   name: faas
   gateway: http://192.168.4.95:31112
