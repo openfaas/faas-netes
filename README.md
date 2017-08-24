@@ -9,11 +9,17 @@ This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/alexel
 
 In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster but Docker Swarm is also natively supported. 
 
-You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
-
 ![FaaS](https://pbs.twimg.com/media/DFhYYP-XUAIWBET.jpg:large)
 
-If you'd like to know more about the FaaS project head over to - https://github.com/alexellis/faas
+You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
+
+If you'd like to know more about the OpenFaaS project head over to - https://github.com/alexellis/faas
+
+### QuickStart
+
+If you're looking to just get OpenFaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/alexellis/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
+
+### Technical overview
 
 The code in this repository is a daemon or micro-service which can provide the basic functionality the FaaS Gateway requires:
 
@@ -24,13 +30,7 @@ The code in this repository is a daemon or micro-service which can provide the b
 
 Any other metrics or UI components will be maintained separately in the main OpenFaaS project.
 
-### QuickStart
-
-If you're looking to just get OpenFaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/alexellis/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
-
-### Technical overview
-
-Motivation for separate micro-service:
+**Motivation for separate micro-service:**
 
 * Kubernetes go-client is 41MB with only a few lines of code
 * After including the go-client the code takes > 2mins to compile
