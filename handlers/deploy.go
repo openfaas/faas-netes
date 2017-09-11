@@ -20,7 +20,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-const functionNamespace string = "default"
+const DefaultFunctionNamespace string = "default"
 
 // ValidateDeployRequest validates that the service name is valid for Kubernetes
 func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
@@ -34,7 +34,7 @@ func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
 }
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
-func MakeDeployHandler(clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 

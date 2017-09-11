@@ -13,14 +13,14 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func getServiceList(clientset *kubernetes.Clientset) ([]requests.Function, error) {
+func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) ([]requests.Function, error) {
 	var functions []requests.Function
 
 	listOpts := metav1.ListOptions{
 		LabelSelector: "faas_function",
 	}
 
-	res, err := clientset.ExtensionsV1beta1().Deployments("default").List(listOpts)
+	res, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).List(listOpts)
 
 	if err != nil {
 		return nil, err
@@ -43,10 +43,10 @@ func getServiceList(clientset *kubernetes.Clientset) ([]requests.Function, error
 }
 
 // MakeFunctionReader handler for reading functions deployed in the cluster as deployments.
-func MakeFunctionReader(clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeFunctionReader(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		functions, err := getServiceList(clientset)
+		functions, err := getServiceList(functionNamespace, clientset)
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(500)

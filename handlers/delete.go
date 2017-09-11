@@ -17,7 +17,7 @@ import (
 )
 
 // MakeDeleteHandler delete a function
-func MakeDeleteHandler(clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
@@ -51,7 +51,7 @@ func MakeDeleteHandler(clientset *kubernetes.Clientset) http.HandlerFunc {
 		}
 
 		if isFunction(deployment) {
-			deleteFunction(clientset, request, w)
+			deleteFunction(functionNamespace, clientset, request, w)
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 
@@ -70,7 +70,7 @@ func isFunction(deployment *v1beta1.Deployment) bool {
 	return false
 }
 
-func deleteFunction(clientset *kubernetes.Clientset, request requests.DeleteFunctionRequest, w http.ResponseWriter) {
+func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, request requests.DeleteFunctionRequest, w http.ResponseWriter) {
 	opts := &metav1.DeleteOptions{}
 
 	if deployErr := clientset.Extensions().Deployments(functionNamespace).Delete(request.FunctionName, opts); deployErr != nil {
