@@ -17,9 +17,9 @@ import (
 )
 
 // MakeReplicaUpdater updates desired count of replicas
-func MakeReplicaUpdater(clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-        log.Println("Update replicas")
+		log.Println("Update replicas")
 
 		vars := mux.Vars(r)
 		functionName := vars["name"]
@@ -44,7 +44,7 @@ func MakeReplicaUpdater(clientset *kubernetes.Clientset) http.HandlerFunc {
 				APIVersion: "extensions/v1beta1",
 			},
 		}
-		deployment, err := clientset.ExtensionsV1beta1().Deployments("default").Get(functionName, options)
+		deployment, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(functionName, options)
 
 		if err != nil {
 			w.WriteHeader(500)
@@ -56,27 +56,27 @@ func MakeReplicaUpdater(clientset *kubernetes.Clientset) http.HandlerFunc {
 		var replicas int32
 		replicas = int32(req.Replicas)
 		deployment.Spec.Replicas = &replicas
-		_, err = clientset.ExtensionsV1beta1().Deployments("default").Update(deployment)
+		_, err = clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment)
 
 		if err != nil {
 			w.WriteHeader(500)
 			w.Write([]byte("Unable to update function deployment " + functionName))
 			log.Println(err)
-            return
+			return
 		}
 
 	}
 }
 
 // MakeReplicaReader reads the amount of replicas for a deployment
-func MakeReplicaReader(clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-        log.Println("Update replicas")
+		log.Println("Update replicas")
 
 		vars := mux.Vars(r)
 		functionName := vars["name"]
 
-		functions, err := getServiceList(clientset)
+		functions, err := getServiceList(functionNamespace, clientset)
 		if err != nil {
 			w.WriteHeader(500)
 			return
@@ -92,7 +92,7 @@ func MakeReplicaReader(clientset *kubernetes.Clientset) http.HandlerFunc {
 
 		if found == nil {
 			w.WriteHeader(404)
-            return
+			return
 		}
 
 		functionBytes, _ := json.Marshal(found)

@@ -19,7 +19,7 @@ import (
 )
 
 // MakeProxy creates a proxy for HTTP web requests which can be routed to a function.
-func MakeProxy() http.HandlerFunc {
+func MakeProxy(functionNamespace string) http.HandlerFunc {
 	proxyClient := http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -52,7 +52,7 @@ func MakeProxy() http.HandlerFunc {
 			watchdogPort := 8080
 			var addr string
 
-			entries, lookupErr := net.LookupIP(fmt.Sprintf("%s.default", service))
+			entries, lookupErr := net.LookupIP(fmt.Sprintf("%s.%s", service, functionNamespace))
 			if lookupErr == nil && len(entries) > 0 {
 				index := randomInt(0, len(entries))
 				addr = entries[index].String()
