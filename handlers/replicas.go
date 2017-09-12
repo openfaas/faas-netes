@@ -19,7 +19,7 @@ import (
 // MakeReplicaUpdater updates desired count of replicas
 func MakeReplicaUpdater(clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-        log.Println("Update replicas")
+		log.Println("Update replicas")
 
 		vars := mux.Vars(r)
 		functionName := vars["name"]
@@ -62,7 +62,7 @@ func MakeReplicaUpdater(clientset *kubernetes.Clientset) http.HandlerFunc {
 			w.WriteHeader(500)
 			w.Write([]byte("Unable to update function deployment " + functionName))
 			log.Println(err)
-            return
+			return
 		}
 
 	}
@@ -71,7 +71,7 @@ func MakeReplicaUpdater(clientset *kubernetes.Clientset) http.HandlerFunc {
 // MakeReplicaReader reads the amount of replicas for a deployment
 func MakeReplicaReader(clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-        log.Println("Update replicas")
+		log.Println("Update replicas")
 
 		vars := mux.Vars(r)
 		functionName := vars["name"]
@@ -92,7 +92,7 @@ func MakeReplicaReader(clientset *kubernetes.Clientset) http.HandlerFunc {
 
 		if found == nil {
 			w.WriteHeader(404)
-            return
+			return
 		}
 
 		functionBytes, _ := json.Marshal(found)
