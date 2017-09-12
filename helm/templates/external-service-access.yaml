@@ -1,0 +1,110 @@
+{{- if .Values.exposeServices }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-netesd
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-netesd-external
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31111
+  selector:
+    app: faas-netesd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: gateway
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: gateway-external
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31112
+  selector:
+    app: gateway
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: prometheus
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: prometheus-external
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: NodePort
+  ports:
+    - port: 9090
+      protocol: TCP
+      targetPort: 9090
+      nodePort: 31119
+  selector:
+    app: prometheus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: alertmanager
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: alertmanager-external
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: NodePort
+  ports:
+    - port: 9093
+      protocol: TCP
+      targetPort: 9093
+      nodePort: 31113
+  selector:
+    app: alertmanager
+---
+{{- if .Values.async }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: nats
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nats-external
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: NodePort
+  ports:
+    - port: 4222
+      protocol: TCP
+      targetPort: 4222
+      nodePort: 31114
+  selector:
+    app: nats
+{{- end }}
+---
+{{- end }}

@@ -1,0 +1,25 @@
+functionNamespace:
+async: false
+armhf: false
+exposeServices: true
+rbac: true
+
+# images
+images:
+  controller: functions/faas-netesd:0.3-alpha5
+  controllerArmhf: functions/faas-netesd-armhf
+
+  gateway: functions/gateway:0.6.5
+  gatewayArmhf: functions/gateway-armhf:0.6.5
+
+  prometheus: prom/prometheus:v1.5.2
+  prometheusArmhf: alexellis2/prometheus-armhf:1.5.2
+
+  alertmanager: prom/alertmanager:v0.7.1
+  alertmanagerArmhf: alexellis2/alertmanager-armhf:0.5.1
+
+  nats: nats-streaming:0.5.0
+  natsArmhf:
+
+  queueWorker: functions/queue-worker:0.1
+  queueWorkerArmhf:
