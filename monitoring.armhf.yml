@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: alexellis2/prometheus-armhf:1.5.2
+        image: alexellis2/prometheus-armhf:1.5.2-k8s # alexellis2/prometheus-armhf:1.5.2
         command: ["prometheus","-config.file=/etc/prometheus/prometheus.yml", "-storage.local.path=/prometheus", "-storage.local.memory-chunks=10000", "--alertmanager.url=http://alertmanager.default:9093"]
         imagePullPolicy: Always
         ports:

@@ -33,7 +33,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        image: functions/faas-netesd-armhf
+        image: functions/faas-netesd:armhf-0.1
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -68,12 +68,16 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway-armhf:0.6.0
+        image: functions/gateway:armhf-0.6.5
 #k8s-monitoring-dev
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
           value: "http://faas-netesd.default.svc.cluster.local:8080/"
+        - name: faas_prometheus_host
+          value: "prometheus.default"
+        - name: faas_prometheus_port
+          value: "9090"
         ports:
         - containerPort: 8080
           protocol: TCP
