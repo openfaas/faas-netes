@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31112
+  selector:
+    app: gateway
+  type: LoadBalancer #LB 
