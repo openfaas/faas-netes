@@ -65,7 +65,7 @@ spec:
       - name: alertmanager
         image: alexellis2/alertmanager-armhf:0.5.1
         imagePullPolicy: Always
-        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
+        command: ["/bin/alertmanager","-config.file=/etc/alertmanager/config.yml", "-storage.path=/alertmanager"]
         ports:
         - containerPort: 9003
           protocol: TCP
