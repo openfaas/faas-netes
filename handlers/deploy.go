@@ -132,7 +132,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deploym
 								//v1.ResourceMemory: resource.MustParse("256Mi"),
 								},
 							},
-							ImagePullPolicy: v1.PullIfNotPresent,
+							ImagePullPolicy: v1.PullAlways,
 						},
 					},
 					RestartPolicy: v1.RestartPolicyAlways,
