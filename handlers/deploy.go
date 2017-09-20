@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"regexp"
-	"time"
 
 	"github.com/alexellis/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
@@ -118,7 +117,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deploym
 					Name: request.Service,
 					Labels: map[string]string{
 						"faas_function": request.Service,
-						"uid":           fmt.Sprintf("%d", time.Now().Nanosecond()),
+						// "uid":           fmt.Sprintf("%d", time.Now().Nanosecond()),
 					},
 				},
 				Spec: apiv1.PodSpec{
