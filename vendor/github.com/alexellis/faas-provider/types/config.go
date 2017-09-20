@@ -13,6 +13,9 @@ type FaaSHandlers struct {
 	ReplicaReader  http.HandlerFunc
 	FunctionProxy  http.HandlerFunc
 	ReplicaUpdater http.HandlerFunc
+
+	// Optional: Update an existing function
+	UpdateHandler http.HandlerFunc
 }
 
 // FaaSConfig set config for HTTP handlers

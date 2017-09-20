@@ -40,6 +40,7 @@ func main() {
 		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
+		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
 	}
 
 	var port int
