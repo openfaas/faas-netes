@@ -79,7 +79,6 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-
 		w.Write([]byte(deployErr.Error()))
 		return
 	}
