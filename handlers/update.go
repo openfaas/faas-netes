@@ -39,10 +39,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 		if len(deployment.Spec.Template.Spec.Containers) > 0 {
 			deployment.Spec.Template.Spec.Containers[0].Image = request.Image
 			deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
-			labels := deployment.Spec.Template.Labels
-			labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
-
-			deployment.Spec.Template.SetLabels(labels)
+			deployment.Spec.Template.Labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
 		}
 
 		if _, updateErr := clientset.Extensions().Deployments(functionNamespace).Update(deployment); updateErr != nil {
