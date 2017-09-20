@@ -2,8 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
+
+	v1 "k8s.io/api/core/v1"
 
 	"github.com/alexellis/faas/gateway/requests"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,6 +34,15 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(findDeployErr.Error()))
 			return
+		}
+
+		if len(deployment.Spec.Template.Spec.Containers) > 0 {
+			deployment.Spec.Template.Spec.Containers[0].Image = request.Image
+			deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
+			labels := deployment.Spec.Template.Labels
+			labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
+
+			deployment.Spec.Template.SetLabels(labels)
 		}
 
 		if _, updateErr := clientset.Extensions().Deployments(functionNamespace).Update(deployment); updateErr != nil {
