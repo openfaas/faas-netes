@@ -4,7 +4,7 @@
 package main
 
 import (
-	"flag"
+	"os"
 	"time"
 
 	"github.com/alexellis/faas-netes/handlers"
@@ -21,10 +21,11 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+	functionNamespace := "default"
 
-	// command line flags
-	var functionNamespace = flag.String("function-namespace", handlers.DefaultFunctionNamespace, "namespace to run function deployments in")
-	flag.Parse()
+	if namespace, exists := os.LookupEnv("function_namespace"); exists {
+		functionNamespace = namespace
+	}
 
 	// creates the clientset
 	clientset, err := kubernetes.NewForConfig(config)
@@ -33,13 +34,14 @@ func main() {
 	}
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:  handlers.MakeProxy(*functionNamespace),
-		DeleteHandler:  handlers.MakeDeleteHandler(*functionNamespace, clientset),
-		DeployHandler:  handlers.MakeDeployHandler(*functionNamespace, clientset),
-		FunctionReader: handlers.MakeFunctionReader(*functionNamespace, clientset),
-		ReplicaReader:  handlers.MakeReplicaReader(*functionNamespace, clientset),
-		ReplicaUpdater: handlers.MakeReplicaUpdater(*functionNamespace, clientset),
+		FunctionProxy:  handlers.MakeProxy(functionNamespace),
+		DeleteHandler:  handlers.MakeDeleteHandler(functionNamespace, clientset),
+		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, clientset),
+		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),
+		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
+		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 	}
+
 	var port int
 	port = 8080
 	bootstrapConfig := bootTypes.FaaSConfig{
@@ -49,5 +51,4 @@ func main() {
 	}
 
 	bootstrap.Serve(&bootstrapHandlers, &bootstrapConfig)
-
 }
