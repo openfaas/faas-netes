@@ -4,10 +4,11 @@
 package main
 
 import (
+	"log"
 	"os"
-	"time"
 
 	"github.com/openfaas/faas-netes/handlers"
+	"github.com/openfaas/faas-netes/types"
 	"github.com/openfaas/faas-provider"
 	bootTypes "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes"
@@ -42,11 +43,18 @@ func main() {
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
 	}
 
+	readConfig := types.ReadConfig{}
+	osEnv := types.OsEnv{}
+	cfg := readConfig.Read(osEnv)
+
+	log.Printf("HTTP Read Timeout: %s", cfg.ReadTimeout)
+	log.Printf("HTTP Write Timeout: %s", cfg.WriteTimeout)
+
 	var port int
 	port = 8080
 	bootstrapConfig := bootTypes.FaaSConfig{
-		ReadTimeout:  time.Second * 8,
-		WriteTimeout: time.Second * 8,
+		ReadTimeout:  cfg.ReadTimeout,
+		WriteTimeout: cfg.WriteTimeout,
 		TCPPort:      &port,
 	}
 
