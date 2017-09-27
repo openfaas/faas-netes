@@ -12,7 +12,7 @@ services:
   - docker
 
 before_script:
-- curl -sSL test.docker.com | sudo -E sh
+- curl -sSL get.docker.com | sudo -E sh
 
 script:
-  - make
+  - make build
