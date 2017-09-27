@@ -9,9 +9,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/alexellis/faas-netes/types"
-	"github.com/alexellis/faas/gateway/requests"
 	"github.com/gorilla/mux"
+	"github.com/openfaas/faas-netes/types"
+	"github.com/openfaas/faas/gateway/requests"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )

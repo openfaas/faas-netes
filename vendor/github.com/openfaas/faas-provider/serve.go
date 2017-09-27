@@ -8,8 +8,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/alexellis/faas-provider/types"
 	"github.com/gorilla/mux"
+	"github.com/openfaas/faas-provider/types"
 )
 
 // Mark this as a Golang "package"
@@ -24,7 +24,7 @@ func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
 	r.HandleFunc("/system/functions", handlers.FunctionReader).Methods("GET")
 	r.HandleFunc("/system/functions", handlers.DeployHandler).Methods("POST")
 	r.HandleFunc("/system/functions", handlers.DeleteHandler).Methods("DELETE")
-	r.HandleFunc("/system/functions", handlers.UpdateHandler).Methods("UPDATE")
+	r.HandleFunc("/system/functions", handlers.UpdateHandler).Methods("PUT")
 
 	r.HandleFunc("/system/function/{name:[-a-zA-Z_0-9]+}", handlers.ReplicaReader).Methods("GET")
 	r.HandleFunc("/system/scale-function/{name:[-a-zA-Z_0-9]+}", handlers.ReplicaUpdater).Methods("POST")

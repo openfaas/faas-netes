@@ -1,13 +1,13 @@
 faas-netes
 ===========
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/alexellis/faas-netes)](https://goreportcard.com/report/github.com/alexellis/faas-netes) [![Build Status](https://travis-ci.org/alexellis/faas-netes.svg?branch=master)](https://travis-ci.org/alexellis/faas-netes)
+[![Go Report Card](https://goreportcard.com/badge/github.com/openfaas/faas-netes)](https://goreportcard.com/report/github.com/openfaas/faas-netes) [![Build Status](https://travis-ci.org/openfaas/faas-netes.svg?branch=master)](https://travis-ci.org/openfaas/faas-netes)
 
-This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/alexellis/faas) backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestation frameworks such as Nomad,  Mesos/Marathon or even a cloud-managed back-end such as Hyper.sh or Azure ACI.
+This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfaas/faas) backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestation frameworks such as Nomad,  Mesos/Marathon or even a cloud-managed back-end such as Hyper.sh or Azure ACI.
 
 **Update:** [Watch the demo and intro to the CNCF Serverless Workgroup](https://youtu.be/SwRjPiqpFTk?t=1m8s)
 
-[OpenFaaS](https://github.com/alexellis/faas) is an event-driven serverless framework for containers. Any container for Windows or Linux can be leveraged as a serverless function. OpenFaaS is quick and easy to deploy (less than 60 secs) and lets you avoid writing boiler-plate code.
+[OpenFaaS](https://github.com/openfaas/faas) is an event-driven serverless framework for containers. Any container for Windows or Linux can be leveraged as a serverless function. OpenFaaS is quick and easy to deploy (less than 60 secs) and lets you avoid writing boiler-plate code.
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
@@ -18,11 +18,11 @@ In this README you'll find a technical overview and instructions for deploying F
 
 You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
 
-If you'd like to know more about the OpenFaaS project head over to - https://github.com/alexellis/faas
+If you'd like to know more about the OpenFaaS project head over to - https://github.com/openfaas/faas
 
 ### QuickStart
 
-If you're looking to just get OpenFaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/alexellis/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
+If you're looking to just get OpenFaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/openfaas/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
 
 ### Technical overview
 
@@ -87,7 +87,7 @@ You have three options for deploying a function:
 
 The CLI can build OpenFaaS functions into Docker images that you can share via the Docker Hub. These can also be deployed through the same tool using a YAML format.
 
-Available at: https://github.com/alexellis/faas-cli
+Available at: https://github.com/openfaas/faas-cli
 
 > Note: currently Kubernetes OpenFaaS functions can only be named a-zA-Z and dash (-).
 
@@ -210,9 +210,9 @@ If you've ever used the *Kubernetes dashboard* then this UI is a similar concept
 
 *Please Star the FaaS and FaaS-netes Github repo.*
 
-* [Main OpenFaaS repo](https://github.com/alexellis/faas)
+* [Main OpenFaaS repo](https://github.com/openfaas/faas)
 
-Contributions are welcome - see the [contributing guide for OpenFaaS](https://github.com/alexellis/faas/blob/master/CONTRIBUTING.md).
+Contributions are welcome - see the [contributing guide for OpenFaaS](https://github.com/openfaas/faas/blob/master/CONTRIBUTING.md).
 
 The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
 
