@@ -7,10 +7,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/alexellis/faas-netes/handlers"
-	"github.com/alexellis/faas-provider"
-	bootTypes "github.com/alexellis/faas-provider/types"
-
+	"github.com/openfaas/faas-netes/handlers"
+	"github.com/openfaas/faas-provider"
+	bootTypes "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )

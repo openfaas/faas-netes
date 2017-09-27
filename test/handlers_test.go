@@ -6,8 +6,8 @@ package test
 import (
 	"testing"
 
-	"github.com/alexellis/faas-netes/handlers"
-	"github.com/alexellis/faas/gateway/requests"
+	"github.com/openfaas/faas-netes/handlers"
+	"github.com/openfaas/faas/gateway/requests"
 )
 
 func Test_ValidateDeployRequest_ValidCharacters(t *testing.T) {

@@ -3,7 +3,7 @@ faas-provider
 
 This is a common template or interface for you to start building your own OpenFaaS backend.
 
-Checkout the [backends guide here](https://github.com/alexellis/faas/blob/master/guide/backends.md) before starting.
+Checkout the [backends guide here](https://github.com/openfaas/faas/blob/master/guide/backends.md) before starting.
 
 OpenFaaS projects use the MIT License and are written in Golang. We encourage the same for external / third-party providers.
 
@@ -13,7 +13,7 @@ We will setup all the standard HTTP routes for you, then start listening on a gi
 
 Just implement the supplied routes.
 
-For an example checkout the [server.go](https://github.com/alexellis/faas-netes/blob/master/server.go) file in the [faas-netes](https://github.com/alexellis/faas-netes) Kubernetes backend.
+For an example checkout the [server.go](https://github.com/openfaas/faas-netes/blob/master/server.go) file in the [faas-netes](https://github.com/openfaas/faas-netes) Kubernetes backend.
 
 I.e.:
 
