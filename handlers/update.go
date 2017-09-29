@@ -14,6 +14,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+// MakeUpdateHandler update specified function
 func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
@@ -29,7 +30,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 		getOpts := metav1.GetOptions{}
 
-		deployment, findDeployErr := clientset.Extensions().Deployments(functionNamespace).Get(request.Service, getOpts)
+		deployment, findDeployErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(request.Service, getOpts)
 		if findDeployErr != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(findDeployErr.Error()))
@@ -42,7 +43,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			deployment.Spec.Template.Labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
 		}
 
-		if _, updateErr := clientset.Extensions().Deployments(functionNamespace).Update(deployment); updateErr != nil {
+		if _, updateErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment); updateErr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(updateErr.Error()))
 		}
