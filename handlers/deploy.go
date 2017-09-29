@@ -22,6 +22,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+// DefaultFunctionNamespace define default work namespace
 const DefaultFunctionNamespace string = "default"
 
 // ValidateDeployRequest validates that the service name is valid for Kubernetes
