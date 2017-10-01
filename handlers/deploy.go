@@ -136,6 +136,13 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deploym
 								},
 							},
 							ImagePullPolicy: v1.PullAlways,
+							LivenessProbe: &apiv1.Probe{
+								Handler: apiv1.Handler{
+									Exec: &apiv1.ExecAction{
+										Command: []string{"cat", "/tmp/.lock"},
+									},
+								},
+							},
 						},
 					},
 					RestartPolicy: v1.RestartPolicyAlways,
