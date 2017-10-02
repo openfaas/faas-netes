@@ -24,6 +24,8 @@ If you'd like to know more about the OpenFaaS project head over to - https://git
 
 If you're looking to just get OpenFaaS deployed on Kubernetes follow the [QuickStart guide](https://github.com/openfaas/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
 
+> To try the experimental `helm` chart click here [helm guide](https://github.com/openfaas/faas-netes/blob/master/HELM.md).
+
 ### Technical overview
 
 The code in this repository is a daemon or micro-service which can provide the basic functionality the FaaS Gateway requires:
