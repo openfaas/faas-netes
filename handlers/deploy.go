@@ -33,8 +33,12 @@ func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
 	return fmt.Errorf("(%s) must be a valid DNS entry for service name", request.Service)
 }
 
+type DeployHandlerConfig struct {
+	EnableFunctionReadinessProbe bool
+}
+
 // MakeDeployHandler creates a handler to create new functions in the cluster
-func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset, config *DeployHandlerConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
@@ -53,7 +57,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		deploymentSpec := makeDeploymentSpec(request)
+		deploymentSpec := makeDeploymentSpec(request, config.EnableFunctionReadinessProbe)
 		deploy := clientset.Extensions().Deployments(functionNamespace)
 
 		_, err = deploy.Create(deploymentSpec)
@@ -85,8 +89,23 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deployment {
+func makeDeploymentSpec(request requests.CreateFunctionRequest, enableProbe bool) *v1beta1.Deployment {
 	envVars := buildEnvVars(request)
+	probe := &apiv1.Probe{
+		Handler: apiv1.Handler{
+			Exec: &apiv1.ExecAction{
+				Command: []string{"cat", "/tmp/.lock"},
+			},
+		},
+		InitialDelaySeconds: 10,
+		TimeoutSeconds:      1,
+		PeriodSeconds:       10,
+		SuccessThreshold:    1,
+		FailureThreshold:    3,
+	}
+	if !enableProbe {
+		probe = nil
+	}
 
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
@@ -136,19 +155,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest) *v1beta1.Deploym
 								},
 							},
 							ImagePullPolicy: v1.PullAlways,
-							LivenessProbe: &apiv1.Probe{
-								Handler: apiv1.Handler{
-									Exec: &apiv1.ExecAction{
-										Command: []string{"cat", "/tmp/.lock"},
-									},
-								},
-								InitialDelaySeconds: 10,
-								TimeoutSeconds:      1,
-								PeriodSeconds:       10,
-								SuccessThreshold:    1,
-								FailureThreshold:    3,
-							},
-						},
+							LivenessProbe:   probe},
 					},
 					RestartPolicy: v1.RestartPolicyAlways,
 					DNSPolicy:     v1.DNSClusterFirst,
