@@ -12,9 +12,16 @@ This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfa
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
 
-In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster but Docker Swarm is also natively supported. 
+In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster. 
 
-![FaaS](https://pbs.twimg.com/media/DFhYYP-XUAIWBET.jpg:large)
+> Docker Swarm is also supported. 
+
+* Serverless framework for containers
+* Native Kubernetes support
+* Built-in UI
+* YAML templates
+* Over 6k GitHub stars
+* Independent open-source project with 35 authors/contributors
 
 You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
 
