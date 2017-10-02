@@ -33,22 +33,27 @@ func main() {
 		panic(err.Error())
 	}
 
-	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:  handlers.MakeProxy(functionNamespace),
-		DeleteHandler:  handlers.MakeDeleteHandler(functionNamespace, clientset),
-		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, clientset),
-		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),
-		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
-		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
-		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
-	}
-
 	readConfig := types.ReadConfig{}
 	osEnv := types.OsEnv{}
 	cfg := readConfig.Read(osEnv)
 
 	log.Printf("HTTP Read Timeout: %s", cfg.ReadTimeout)
 	log.Printf("HTTP Write Timeout: %s", cfg.WriteTimeout)
+	log.Printf("Function Readiness Probe Enabled: %v", cfg.EnableFunctionReadinessProbe)
+
+	deployConfig := &handlers.DeployHandlerConfig{
+		EnableFunctionReadinessProbe: cfg.EnableFunctionReadinessProbe,
+	}
+
+	bootstrapHandlers := bootTypes.FaaSHandlers{
+		FunctionProxy:  handlers.MakeProxy(functionNamespace),
+		DeleteHandler:  handlers.MakeDeleteHandler(functionNamespace, clientset),
+		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, clientset, deployConfig),
+		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),
+		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
+		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
+		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
+	}
 
 	var port int
 	port = 8080

@@ -36,21 +36,34 @@ func parseIntValue(val string, fallback int) int {
 	return fallback
 }
 
+func parseBoolValue(val string, fallback bool) bool {
+	if len(val) > 0 {
+		if val == "true" {
+			return true
+		}
+		return false
+	}
+	return fallback
+}
+
 // Read fetches config from environmental variables.
 func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg := BootstrapConfig{}
 
 	readTimeout := parseIntValue(hasEnv.Getenv("read_timeout"), 8)
 	writeTimeout := parseIntValue(hasEnv.Getenv("write_timeout"), 8)
+	enableProbe := parseBoolValue(hasEnv.Getenv("enable_function_readiness_probe"), true)
 
 	cfg.ReadTimeout = time.Duration(readTimeout) * time.Second
 	cfg.WriteTimeout = time.Duration(writeTimeout) * time.Second
+	cfg.EnableFunctionReadinessProbe = enableProbe
 
 	return cfg
 }
 
 // BootstrapConfig for the process.
 type BootstrapConfig struct {
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
+	EnableFunctionReadinessProbe bool
+	ReadTimeout                  time.Duration
+	WriteTimeout                 time.Duration
 }
