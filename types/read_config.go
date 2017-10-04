@@ -38,10 +38,7 @@ func parseIntValue(val string, fallback int) int {
 
 func parseBoolValue(val string, fallback bool) bool {
 	if len(val) > 0 {
-		if val == "true" {
-			return true
-		}
-		return false
+		return val == "true"
 	}
 	return fallback
 }
