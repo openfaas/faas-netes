@@ -37,9 +37,9 @@ func main() {
 	osEnv := types.OsEnv{}
 	cfg := readConfig.Read(osEnv)
 
-	log.Printf("HTTP Read Timeout: %s", cfg.ReadTimeout)
-	log.Printf("HTTP Write Timeout: %s", cfg.WriteTimeout)
-	log.Printf("Function Readiness Probe Enabled: %v", cfg.EnableFunctionReadinessProbe)
+	log.Printf("HTTP Read Timeout: %s\n", cfg.ReadTimeout)
+	log.Printf("HTTP Write Timeout: %s\n", cfg.WriteTimeout)
+	log.Printf("Function Readiness Probe Enabled: %v\n", cfg.EnableFunctionReadinessProbe)
 
 	deployConfig := &handlers.DeployHandlerConfig{
 		EnableFunctionReadinessProbe: cfg.EnableFunctionReadinessProbe,
