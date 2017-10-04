@@ -97,7 +97,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, enableProbe bool
 				Command: []string{"cat", "/tmp/.lock"},
 			},
 		},
-		InitialDelaySeconds: 10,
+		InitialDelaySeconds: 3,
 		TimeoutSeconds:      1,
 		PeriodSeconds:       10,
 		SuccessThreshold:    1,
