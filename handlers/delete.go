@@ -71,7 +71,8 @@ func isFunction(deployment *v1beta1.Deployment) bool {
 }
 
 func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, request requests.DeleteFunctionRequest, w http.ResponseWriter) {
-	opts := &metav1.DeleteOptions{}
+	foregroundPolicy := metav1.DeletePropagationForeground
+	opts := &metav1.DeleteOptions{PropagationPolicy: &foregroundPolicy}
 
 	if deployErr := clientset.Extensions().Deployments(functionNamespace).Delete(request.FunctionName, opts); deployErr != nil {
 		if errors.IsNotFound(deployErr) {
