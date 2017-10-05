@@ -11,7 +11,6 @@ This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfa
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-
 In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster. 
 
 > Docker Swarm is also supported. 
@@ -33,7 +32,11 @@ If you're looking to just get OpenFaaS deployed on Kubernetes follow the [QuickS
 
 > To try the experimental `helm` chart click here [helm guide](https://github.com/openfaas/faas-netes/blob/master/HELM.md).
 
-### Technical overview
+### How is this project different from others?
+
+* [Read an Introduction to OpenFaaS here](https://blog.alexellis.io/introducing-functions-as-a-service/).
+
+## Technical overview
 
 The code in this repository is a daemon or micro-service which can provide the basic functionality the FaaS Gateway requires:
 
