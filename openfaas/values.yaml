@@ -50,3 +50,47 @@ ingress:
     kubernetes.io/ingress.class: nginx
   tls:
     # Secrets must be manually created in the namespace.
+resources:
+  enabled: false
+  nats:
+    requests:
+      memory: "32MiB"
+      cpu: "50m"
+    limits:
+      memory: "32MiB"
+      cpu: "50m"
+  queueworker:
+    requests:
+      memory: "32MiB"
+      cpu: "50m"
+    limits:
+      memory: "32MiB"
+      cpu: "50m"
+  prometheus:
+    requests:
+      memory: "32MiB"
+      cpu: "50m"
+    limits:
+      memory: "32MiB"
+      cpu: "50m"
+  alertmanager:
+    requests:
+      memory: "32MiB"
+      cpu: "50m"
+    limits:
+      memory: "32MiB"
+      cpu: "50m"
+  faasnetesd:
+    requests:
+      memory: "32MiB"
+      cpu: "50m"
+    limits:
+      memory: "32MiB"
+      cpu: "50m"
+  gateway:
+    requests:
+      memory: "32MiB"
+      cpu: "50m"
+    limits:
+      memory: "32MiB"
+      cpu: "50m"

@@ -72,6 +72,10 @@ spec:
         image: {{ .Values.images.controller }}
         {{- end }}
         imagePullPolicy: Always
+        {{ if .Values.resources.enabled }}
+        resources:
+{{ toYaml .Values.resources.faasnetesd | indent 12 }}
+        {{- end }}
         env:
         - name: function_namespace
           value: {{ $functionNs | quote }}
@@ -124,6 +128,10 @@ spec:
         image: {{ .Values.images.gateway }}
         {{- end }}
         imagePullPolicy: Always
+        {{ if .Values.resources.enabled }}
+        resources:
+{{ toYaml .Values.resources.gateway | indent 12 }}
+        {{- end }}
         env:
         - name: functions_provider_url
           value: "http://faas-netesd.{{ .Release.Namespace }}:8080/"
