@@ -13,6 +13,7 @@ services:
 
 before_script:
 - curl -sSL get.docker.com | sudo -E sh
+- echo "{\"experimental\": true}" | sudo tee /etc/docker/daemon.json
 
 script:
   - make build
