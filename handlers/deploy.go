@@ -5,10 +5,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"path/filepath"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 
 	"github.com/openfaas/faas/gateway/requests"
@@ -91,10 +93,11 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 func makeDeploymentSpec(request requests.CreateFunctionRequest, enableProbe bool) *v1beta1.Deployment {
 	envVars := buildEnvVars(request)
+	path := filepath.Join(os.TempDir(), ".lock")
 	probe := &apiv1.Probe{
 		Handler: apiv1.Handler{
 			Exec: &apiv1.ExecAction{
-				Command: []string{"cat", "/tmp/.lock"},
+				Command: []string{"cat", path},
 			},
 		},
 		InitialDelaySeconds: 3,
