@@ -12,7 +12,7 @@ services:
   - docker
 
 before_script:
-- bash enable-docker.sh
+- bash contrib/set_travis_experimental_mode.sh
 - curl -sSL get.docker.com | sudo -E sh
 
 script:
