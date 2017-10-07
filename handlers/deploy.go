@@ -59,7 +59,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		deploymentSpec := makeDeploymentSpec(request, config.EnableFunctionReadinessProbe)
+		deploymentSpec := makeDeploymentSpec(request, config)
 		deploy := clientset.Extensions().Deployments(functionNamespace)
 
 		_, err = deploy.Create(deploymentSpec)
@@ -91,7 +91,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest, enableProbe bool) *v1beta1.Deployment {
+func makeDeploymentSpec(request requests.CreateFunctionRequest, config DeployHandlerConfig) *v1beta1.Deployment {
 	envVars := buildEnvVars(request)
 	path := filepath.Join(os.TempDir(), ".lock")
 	probe := &apiv1.Probe{
@@ -106,7 +106,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, enableProbe bool
 		SuccessThreshold:    1,
 		FailureThreshold:    3,
 	}
-	if !enableProbe {
+	if !config.EnableFunctionReadinessProbe {
 		probe = nil
 	}
 
