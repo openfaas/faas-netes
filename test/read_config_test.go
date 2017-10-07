@@ -4,9 +4,9 @@
 package test
 
 import (
+	"github.com/alexellis/faas-netes/types"
 	"testing"
 	"time"
-	"github.com/alexellis/faas-netes/types"
 )
 
 type EnvBucket struct {
@@ -41,6 +41,10 @@ func TestRead_EmptyTimeoutConfig(t *testing.T) {
 		t.Log("WriteTimeout incorrect")
 		t.Fail()
 	}
+	if !config.EnableFunctionReadinessProbe {
+		t.Log("EnableFunctionReadinressProbe incorrect")
+		t.Fail()
+	}
 }
 
 func TestRead_ReadAndWriteTimeoutConfig(t *testing.T) {
@@ -57,6 +61,32 @@ func TestRead_ReadAndWriteTimeoutConfig(t *testing.T) {
 	}
 	if (config.WriteTimeout) != time.Duration(60)*time.Second {
 		t.Logf("WriteTimeout incorrect, got: %d\n", config.WriteTimeout)
+		t.Fail()
+	}
+}
+
+func TestRead_EnableFunctionReadinessProbeConfig(t *testing.T) {
+	defaults := NewEnvBucket()
+	defaults.Setenv("enable_function_readiness_probe", "false")
+
+	readConfig := types.ReadConfig{}
+	config := readConfig.Read(defaults)
+
+	if config.EnableFunctionReadinessProbe {
+		t.Logf("EnableFunctionReadinessProbe incorrect, got: %s\n", config.EnableFunctionReadinessProbe)
+		t.Fail()
+	}
+}
+
+func TestRead_EnableFunctionReadinessProbeConfig_true(t *testing.T) {
+	defaults := NewEnvBucket()
+	defaults.Setenv("enable_function_readiness_probe", "true")
+
+	readConfig := types.ReadConfig{}
+	config := readConfig.Read(defaults)
+
+	if !config.EnableFunctionReadinessProbe {
+		t.Logf("EnableFunctionReadinessProbe incorrect, got: %s\n", config.EnableFunctionReadinessProbe)
 		t.Fail()
 	}
 }
