@@ -12,8 +12,8 @@ services:
   - docker
 
 before_script:
+- bash enable-docker.sh
 - curl -sSL get.docker.com | sudo -E sh
-- echo "{\"experimental\": true}" | sudo tee /etc/docker/daemon.json
 
 script:
   - make build
