@@ -1,7 +1,7 @@
 # Helm
 
-[Helm](https://github.com/kubernetes/helm) is a client CLI used to deploy Kubernetes 
-applications. It supports templating of configuration files, but also needs a server 
+[Helm](https://github.com/kubernetes/helm) is a client CLI used to deploy Kubernetes
+applications. It supports templating of configuration files, but also needs a server
 component installing called `tiller`.
 
 ## Pre-reqs:
@@ -20,7 +20,7 @@ $ sudo tar -xvf helm-v2.6.1-linux-amd64.tar.gz --strip-components=1 -C /usr/loca
 ```
 kubectl -n kube-system create sa tiller \
  && kubectl create clusterrolebinding tiller \
-  --clusterrole cluster-admin 
+  --clusterrole cluster-admin
   --serviceaccount=kube-system:tiller
 ```
 
@@ -31,6 +31,10 @@ $ helm init --skip-refresh --upgrade --service-account tiller
 ```
 
 ## Deploy OpenFaaS via Helm
+
+**Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control. For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
+
+---
 
 To use defaults including the `default` Kubernetes namespace (recommended)
 
