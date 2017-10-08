@@ -35,7 +35,7 @@ $ helm init --skip-refresh --upgrade --service-account tiller
 To use defaults including the `default` Kubernetes namespace (recommended)
 
 ```
-$ helm upgrade --install --debug --reset-values --set async=true openfaas openfaas/
+$ helm upgrade --install --debug --reset-values --set async=false openfaas openfaas/
 ```
 
 For an advanced configuration with a separate function namespace:
@@ -45,9 +45,10 @@ $ kubectl create ns openfaas
 $ kubectl create ns openfaas-fn
 
 $ helm upgrade --install --debug --namespace openfaas \
-  --reset-values --set async=true --set functionNamespace=openfaas-fn openfaas openfaas/
-
+  --reset-values --set async=false --set functionNamespace=openfaas-fn openfaas openfaas/
 ```
+
+If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
 
 ### OpenFaaS Helm chart options:
 
