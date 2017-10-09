@@ -10,8 +10,8 @@ images:
   controller: functions/faas-netesd:0.3.1a
   controllerArmhf: functions/faas-netesd-armhf
 
-  gateway: functions/gateway:0.6.6-beta1
-  gatewayArmhf: functions/gateway-armhf:0.6.6b
+  gateway: functions/gateway:0.6.6b
+  gatewayArmhf: functions/gateway-armhf:0.6.5
 
   prometheus: prom/prometheus:v1.5.2
   prometheusArmhf: alexellis2/prometheus-armhf:1.5.2
