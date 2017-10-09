@@ -15,5 +15,12 @@ before_script:
 - bash contrib/set_travis_experimental_mode.sh
 - curl -sSL get.docker.com | sudo -E sh
 
+after_success:
+    - if [ ! -s "$TRAVIS_TAG" ] ; then 
+        docker tag $DOCKER_NS/faas-netesd:latest $DOCKER_NS/faas-netesd:$TRAVIS_TAG;
+        docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD;
+        docker push $DOCKER_NS/faas-netesd:$TRAVIS_TAG;
+        fi
+
 script:
   - make build
