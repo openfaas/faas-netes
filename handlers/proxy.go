@@ -16,6 +16,7 @@ import (
 	"io/ioutil"
 
 	"github.com/gorilla/mux"
+	"github.com/openfaas/faas/gateway/requests"
 )
 
 // MakeProxy creates a proxy for HTTP web requests which can be routed to a function.
@@ -61,7 +62,9 @@ func MakeProxy(functionNamespace string) http.HandlerFunc {
 			requestBody, _ := ioutil.ReadAll(r.Body)
 			defer r.Body.Close()
 
-			url := fmt.Sprintf("http://%s:%d/", addr, watchdogPort)
+			forwardReq := requests.NewForwardRequest(r.Method, *r.URL)
+
+			url := forwardReq.ToURL(addr, watchdogPort)
 
 			request, _ := http.NewRequest("POST", url, bytes.NewReader(requestBody))
 
