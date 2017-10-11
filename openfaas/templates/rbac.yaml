@@ -2,7 +2,11 @@
 {{- if .Values.rbac }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- if (ne .Release.Namespace $functionNs) }}
 kind: ClusterRole
+{{- else }}
+kind: Role
+{{- end }}
 metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
@@ -11,6 +15,9 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: faas-controller
+  {{- if (eq .Release.Namespace $functionNs) }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
@@ -35,6 +42,29 @@ rules:
       - delete
       - update
 ---
+{{- if (eq .Release.Namespace $functionNs) }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-controller
+  namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: faas-controller
+subjects:
+  - kind: ServiceAccount
+    name: faas-controller
+    namespace: {{ .Release.Namespace | quote }}
+---
+{{- end }}
+{{- if (ne .Release.Namespace $functionNs) }}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -55,7 +85,6 @@ subjects:
     name: faas-controller
     namespace: {{ .Release.Namespace | quote }}
 ---
-{{- if (ne .Release.Namespace $functionNs) }}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -75,6 +104,6 @@ subjects:
   - kind: ServiceAccount
     name: faas-controller
     namespace: {{ .Release.Namespace | quote }}
-{{- end }}
 ---
+{{- end }}
 {{- end }}
