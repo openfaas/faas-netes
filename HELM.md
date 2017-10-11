@@ -20,7 +20,7 @@ $ sudo tar -xvf helm-v2.6.1-linux-amd64.tar.gz --strip-components=1 -C /usr/loca
 ```
 kubectl -n kube-system create sa tiller \
  && kubectl create clusterrolebinding tiller \
-  --clusterrole cluster-admin
+  --clusterrole cluster-admin \
   --serviceaccount=kube-system:tiller
 ```
 
