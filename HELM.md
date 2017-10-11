@@ -54,14 +54,33 @@ $ helm upgrade --install --debug --namespace openfaas \
 
 If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
 
+### Deploy with ingress
+
+NOTE: you need ingress controller in your k8s cluster for ingress resources to have any effect.
+
+Add `--set ingress.enabled` to enable ingress:
+
+```
+$ helm upgrade --install --debug --reset-values --set async=false --set ingress.enabled=true openfaas openfaas/
+```
+
+By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
+* `faas-netesd.openfaas.local`
+* `gateway.openfaas.local`
+* `prometheus.openfaas.local`
+* `alertmanager.openfaas.local`
+
+
 ### OpenFaaS Helm chart options:
 
 ```
 functionNamespace=defaults to the deployed namespace, kube namespace to create function deployments in
 async=true/false defaults to false, deploy nats if true
 armhf=true/false, defaults to false, use arm images if true (missing images for async)
-exposeServices=true/false, defaults to true, will always create `ClusterIP` services, and expose `NodePorts` if true
+exposeServices=true/false, defaults to true, will always create `ClusterIP` services, and expose `NodePorts/LoadBalancer` if true (based on serviceType)
+serviceType=NodePort/LoadBalancer, defaults to NodePort, type of external service to use when exposeServices is set to true
 rbac=true/false defaults to true, if true create roles
+ingress.enabled=true/false defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
 ```
 
 
