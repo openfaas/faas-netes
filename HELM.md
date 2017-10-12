@@ -11,8 +11,16 @@ Instructions for Kubernetes on Linux
 * Install Helm
 
 ```
-$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz
-$ sudo tar -xvf helm-v2.6.1-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
+$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz && \
+  sudo tar -xvf helm-v2.6.1-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
+```
+
+On Mac/Darwin:
+
+```
+$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.2-darwin-amd64.tar.gz && \
+  sudo tar -xvf helm-v2.6.2-darwin-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
+
 ```
 
 * Create RBAC permissions for Tiller
