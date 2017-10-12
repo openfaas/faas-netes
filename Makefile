@@ -9,6 +9,9 @@ local-go:
 
 local: 	local-fmt 	local-go
 
+build-arm64:
+	docker build -t functions/faas-netesd:$(TAG)-arm64 . -f Dockerfile.arm64
+
 build-armhf:
 	docker build -t functions/faas-netesd:$(TAG)-armhf . -f Dockerfile.armhf
 
