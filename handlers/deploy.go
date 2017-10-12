@@ -111,6 +111,15 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 		probe = nil
 	}
 
+	// Add / reference pre-existing secrets within Kubernetes
+	imagePullSecrets := []apiv1.LocalObjectReference{}
+	for _, secret := range request.Secrets {
+		imagePullSecrets = append(imagePullSecrets,
+			apiv1.LocalObjectReference{
+				Name: secret,
+			})
+	}
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -144,6 +153,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 					},
 				},
 				Spec: apiv1.PodSpec{
+					ImagePullSecrets: imagePullSecrets,
 					Containers: []apiv1.Container{
 						{
 							Name:  request.Service,

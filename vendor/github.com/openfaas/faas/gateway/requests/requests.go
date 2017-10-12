@@ -27,6 +27,9 @@ type CreateFunctionRequest struct {
 
 	// Constraints are specific to back-end orchestration platform
 	Constraints []string `json:"constraints"`
+
+	// Secrets defines a list of secrets in the backend needed to deploy the function.
+	Secrets []string `json:"secrets"`
 }
 
 // DeleteFunctionRequest delete a deployed function
