@@ -23,6 +23,12 @@ $ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.2-darwin-amd64.t
 
 ```
 
+Or via Homebrew on Mac:
+
+```
+$ brew install kubernetes-helm
+```
+
 * Create RBAC permissions for Tiller
 
 ```
