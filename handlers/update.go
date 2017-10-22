@@ -40,7 +40,20 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 		if len(deployment.Spec.Template.Spec.Containers) > 0 {
 			deployment.Spec.Template.Spec.Containers[0].Image = request.Image
 			deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
-			deployment.Spec.Template.Labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
+
+			labels := map[string]string{
+				"faas_function": request.Service,
+				"uid":           fmt.Sprintf("%d", time.Now().Nanosecond()),
+			}
+
+			if request.Labels != nil {
+				for k, v := range *request.Labels {
+					labels[k] = v
+				}
+			}
+
+			deployment.Spec.Template.Labels = labels
+			deployment.Spec.Template.ObjectMeta.Labels = labels
 		}
 
 		if _, updateErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment); updateErr != nil {
