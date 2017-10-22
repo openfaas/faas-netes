@@ -30,6 +30,9 @@ type CreateFunctionRequest struct {
 
 	// Secrets defines a list of secrets in the backend needed to deploy the function.
 	Secrets []string `json:"secrets"`
+
+	// Labels for deployments/services
+	Labels *map[string]string `json:"labels"`
 }
 
 // DeleteFunctionRequest delete a deployed function

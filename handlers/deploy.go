@@ -36,6 +36,7 @@ func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
 	return fmt.Errorf("(%s) must be a valid DNS entry for service name", request.Service)
 }
 
+// DeployHandlerConfig specify options for Deployments
 type DeployHandlerConfig struct {
 	EnableFunctionReadinessProbe bool
 }
@@ -120,6 +121,15 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 			})
 	}
 
+	labels := map[string]string{
+		"faas_function": request.Service,
+	}
+	if request.Labels != nil {
+		for k, v := range *request.Labels {
+			labels[k] = v
+		}
+	}
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -146,11 +156,8 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 			RevisionHistoryLimit: int32p(10),
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Name: request.Service,
-					Labels: map[string]string{
-						"faas_function": request.Service,
-						// "uid":           fmt.Sprintf("%d", time.Now().Nanosecond()),
-					},
+					Name:   request.Service,
+					Labels: labels,
 				},
 				Spec: apiv1.PodSpec{
 					ImagePullSecrets: imagePullSecrets,
