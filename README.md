@@ -220,6 +220,18 @@ $ open http://$(minikube ip):31112/
 
 If you've ever used the *Kubernetes dashboard* then this UI is a similar concept. You can list, invoke and create new functions.
 
+#### Configuration
+
+**Environmental overrides:**
+
+Faas-Netes can be configured via environment variables.
+
+| Option                 | Usage             |
+|------------------------|--------------|
+| `enable_function_readiness_probe` | Boolean - enable a readiness probe to test functions. Default: `true`
+| `write_timeout`        | HTTP timeout for writing a response body from your function (in seconds). Default: `8`  |
+| `read_timeout`         | HTTP timeout for reading the payload from the client caller (in seconds). Default: `8` |
+
 #### Get involved
 
 *Please Star the FaaS and FaaS-netes Github repo.*
@@ -229,4 +241,3 @@ If you've ever used the *Kubernetes dashboard* then this UI is a similar concept
 Contributions are welcome - see the [contributing guide for OpenFaaS](https://github.com/openfaas/faas/blob/master/CONTRIBUTING.md).
 
 The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
-
