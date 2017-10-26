@@ -65,7 +65,7 @@ metadata:
     component: faas-controller
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: faas-controller
+  name: faas-controller-fn
   namespace: {{ $functionNs | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
