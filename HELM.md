@@ -4,6 +4,10 @@
 applications. It supports templating of configuration files, but also needs a server
 component installing called `tiller`.
 
+You can use this chart to install OpenFaaS to your cluster.
+
+> Submission to the [main helm chart repository](https://github.com/kubernetes/charts) is pending.
+
 ## Pre-reqs:
 
 Instructions for Kubernetes on Linux
@@ -56,7 +60,7 @@ To use defaults including the `default` Kubernetes namespace (recommended)
 $ helm upgrade --install --debug --reset-values --set async=false openfaas openfaas/
 ```
 
-For an advanced configuration with a separate function namespace:
+Optional: you can also a separate namespace for functions:
 
 ```
 $ kubectl create ns openfaas
@@ -68,9 +72,11 @@ $ helm upgrade --install --debug --namespace openfaas \
 
 If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
 
-### Deploy with ingress
+By default you will have NodePorts available for each service such as the API gateway and Prometheus
 
-NOTE: you need ingress controller in your k8s cluster for ingress resources to have any effect.
+### Deploy with an IngressController
+
+In order to make use of automatic ingress settings you will need an IngressController in your cluster such as Traefik or Nginx.
 
 Add `--set ingress.enabled` to enable ingress:
 
@@ -84,17 +90,13 @@ By default services will be exposed with following hostnames (can be changed, se
 * `prometheus.openfaas.local`
 * `alertmanager.openfaas.local`
 
+### Additional OpenFaaS Helm chart options:
 
-### OpenFaaS Helm chart options:
-
-```
-functionNamespace=defaults to the deployed namespace, kube namespace to create function deployments in
-async=true/false defaults to false, deploy nats if true
-armhf=true/false, defaults to false, use arm images if true (missing images for async)
-exposeServices=true/false, defaults to true, will always create `ClusterIP` services, and expose `NodePorts/LoadBalancer` if true (based on serviceType)
-serviceType=NodePort/LoadBalancer, defaults to NodePort, type of external service to use when exposeServices is set to true
-rbac=true/false defaults to true, if true create roles
-ingress.enabled=true/false defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
-```
-
+* `functionNamespace=defaults` - to the deployed namespace, kube namespace to create function deployments in
+* `async=true/false` - defaults to false, deploy nats if true
+* `armhf=true/false` - defaults to false, use arm images if true (missing images for async)
+* `exposeServices=true/false` - defaults to true, will always create `ClusterIP` services, and expose `NodePorts/LoadBalancer` if true (based on serviceType)
+* `serviceType=NodePort/LoadBalancer` - defaults to NodePort, type of external service to use when exposeServices is set to true
+* `rbac=true/false` - defaults to true, if true create roles
+`ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
 
