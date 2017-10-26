@@ -107,3 +107,12 @@ By default services will be exposed with following hostnames (can be changed, se
 * `rbac=true/false` - defaults to true, if true create roles
 `ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
 
+### Removing the OpenFaaS Helm chart
+
+All control plane components can be cleaned up with helm with:
+
+```bash
+helm delete --purge openfaas
+```
+
+Individual functions will need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
