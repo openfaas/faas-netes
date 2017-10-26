@@ -54,6 +54,13 @@ $ helm init --skip-refresh --upgrade --service-account tiller
 
 ---
 
+Clone the faas-netes repo including the helm chart:
+
+```
+$ git clone https://github.com/openfaas/faas-netes && \
+  cd faas-netes
+```
+
 To use defaults including the `default` Kubernetes namespace (recommended)
 
 ```
