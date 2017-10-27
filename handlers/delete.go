@@ -40,7 +40,7 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 		deployment, findDeployErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(request.FunctionName, getOpts)
 
 		if findDeployErr != nil {
-			if errors.IsNotFound(err) {
+			if errors.IsNotFound(findDeployErr) {
 				w.WriteHeader(http.StatusNotFound)
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
