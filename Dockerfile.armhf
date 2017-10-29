@@ -1,5 +1,4 @@
 FROM alexellis2/go-armhf:1.7.4
-#FROM golang:1.7.5
 
 RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
@@ -12,7 +11,7 @@ COPY server.go  .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes .
 
-FROM armhf/alpine:3.5
+FROM alpine:3.5
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 
