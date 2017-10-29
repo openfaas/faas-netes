@@ -37,6 +37,7 @@ func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) (
 			Name:            item.Name,
 			Replicas:        replicas,
 			Image:           item.Spec.Template.Spec.Containers[0].Image,
+			ReplicaCount:    int(item.Status.ReadyReplicas),
 			InvocationCount: 0,
 			Labels:          &labels,
 		}
