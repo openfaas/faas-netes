@@ -7,7 +7,7 @@ rbac: true
 
 # images
 images:
-  controller: functions/faas-netesd:0.3.1c
+  controller: functions/faas-netesd:0.3.3
   controllerArmhf: functions/faas-netesd-armhf
 
   gateway: functions/gateway:0.6.7
