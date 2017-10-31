@@ -27,7 +27,9 @@ const DefaultFunctionNamespace string = "default"
 
 // ValidateDeployRequest validates that the service name is valid for Kubernetes
 func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
-	var validDNS = regexp.MustCompile(`^[a-zA-Z\-]+$`)
+	// Regex for RFC-1123 validation:
+	// 	k8s.io/kubernetes/pkg/util/validation/validation.go
+	var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
 	matched := validDNS.MatchString(request.Service)
 	if matched {
 		return nil
