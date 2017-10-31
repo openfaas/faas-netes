@@ -16,8 +16,6 @@ func Test_ValidateDeployRequest_ValidCharacters(t *testing.T) {
 		value    string
 	}{
 		{"lower", "abz"},
-		{"upper", "ABZ"},
-		{"upper and lower mixed", "abz"},
 		{"includes hyphen", "test-function"},
 		{"can start with a digit", "1abz"},
 		{"can end with a digit", "abz1"},
