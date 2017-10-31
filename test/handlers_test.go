@@ -39,6 +39,8 @@ func Test_ValidateDeployRequest_InvalidCharacters(t *testing.T) {
 		scenario string
 		value    string
 	}{
+		{"upper", "ABZ"},
+		{"upper and lower mixed", "AbZ"},
 		{"includes hash", "#faas"},
 		{"includes underscore", "test_function"},
 		{"ends with hyphen", "testfunction-"},
