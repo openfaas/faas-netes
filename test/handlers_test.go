@@ -17,8 +17,10 @@ func Test_ValidateDeployRequest_ValidCharacters(t *testing.T) {
 	}{
 		{"lower", "abz"},
 		{"upper", "ABZ"},
-		{"upper and lower mixed", "AbZ"},
-		{"includes dashes", "test-function"},
+		{"upper and lower mixed", "abz"},
+		{"includes hyphen", "test-function"},
+		{"can start with a digit", "1abz"},
+		{"can end with a digit", "abz1"},
 	}
 
 	for _, testCase := range cases {
@@ -41,6 +43,8 @@ func Test_ValidateDeployRequest_InvalidCharacters(t *testing.T) {
 	}{
 		{"includes hash", "#faas"},
 		{"includes underscore", "test_function"},
+		{"ends with hyphen", "testfunction-"},
+		{"starts with hyphen", "-testfunction"},
 	}
 
 	for _, testCase := range cases {
