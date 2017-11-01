@@ -38,6 +38,9 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi  
 ---
 apiVersion: v1
 kind: Service
@@ -77,4 +80,7 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi  
 
