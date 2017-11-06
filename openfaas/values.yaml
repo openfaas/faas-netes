@@ -7,10 +7,10 @@ rbac: true
 
 # images
 images:
-  controller: functions/faas-netesd:0.3.3
+  controller: functions/faas-netesd:0.3.3a
   controllerArmhf: functions/faas-netesd-armhf
 
-  gateway: functions/gateway:0.6.7
+  gateway: functions/gateway:0.6.9
   gatewayArmhf: functions/gateway:0.6.7-armhf
 
   prometheus: prom/prometheus:v1.5.2
