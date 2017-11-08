@@ -41,6 +41,8 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			deployment.Spec.Template.Spec.Containers[0].Image = request.Image
 			deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
 
+			deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
+
 			labels := map[string]string{
 				"faas_function": request.Service,
 				"uid":           fmt.Sprintf("%d", time.Now().Nanosecond()),

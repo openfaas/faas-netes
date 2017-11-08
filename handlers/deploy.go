@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
@@ -21,6 +22,12 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
 )
+
+// WatchdogPort for the OpenFaaS function watchdog
+const WatchdogPort = 8080
+
+// InitialReplicas how many replicas to start of creating for a function
+const InitialReplicas = 1
 
 // DefaultFunctionNamespace define default work namespace
 const DefaultFunctionNamespace string = "default"
@@ -132,6 +139,10 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 		}
 	}
 
+	nodeSelector := createSelector(request.Constraints)
+
+	initialReplicas := int32p(InitialReplicas)
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -141,7 +152,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 			Name: request.Service,
 		},
 		Spec: v1beta1.DeploymentSpec{
-			Replicas: int32p(1),
+			Replicas: initialReplicas,
 			Strategy: v1beta1.DeploymentStrategy{
 				Type: v1beta1.RollingUpdateDeploymentStrategyType,
 				RollingUpdate: &v1beta1.RollingUpdateDeployment{
@@ -162,13 +173,14 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 					Labels: labels,
 				},
 				Spec: apiv1.PodSpec{
+					NodeSelector:     nodeSelector,
 					ImagePullSecrets: imagePullSecrets,
 					Containers: []apiv1.Container{
 						{
 							Name:  request.Service,
 							Image: request.Image,
 							Ports: []apiv1.ContainerPort{
-								{ContainerPort: int32(8080), Protocol: v1.ProtocolTCP},
+								{ContainerPort: int32(WatchdogPort), Protocol: v1.ProtocolTCP},
 							},
 							Env: envVars,
 							Resources: apiv1.ResourceRequirements{
@@ -241,4 +253,22 @@ func buildEnvVars(request requests.CreateFunctionRequest) []v1.EnvVar {
 
 func int32p(i int32) *int32 {
 	return &i
+}
+
+func createSelector(constraints []string) map[string]string {
+	selector := make(map[string]string)
+
+	log.Println(constraints)
+	if len(constraints) > 0 {
+		for _, constraint := range constraints {
+			parts := strings.Split(constraint, "=")
+
+			if len(parts) == 2 {
+				selector[parts[0]] = parts[1]
+			}
+		}
+	}
+
+	log.Println("selector: ", selector)
+	return selector
 }
