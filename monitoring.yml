@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: functions/prometheus:latest-k8s
+        image: prom/prometheus:v1.5.2
         command: ["prometheus","-config.file=/etc/prometheus/prometheus.yml", "-storage.local.path=/prometheus", "-storage.local.memory-chunks=10000", "--alertmanager.url=http://alertmanager.default:9093"]
         imagePullPolicy: Always
         ports:
@@ -41,12 +41,10 @@ metadata:
   labels:
     app: alertmanager
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 9093
       protocol: TCP
-      targetPort: 9093
-      nodePort: 31113
   selector:
     app: alertmanager
 ---
@@ -63,9 +61,9 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: functions/alertmanager:latest-k8s
+        image: prom/alertmanager:v0.7.1
         imagePullPolicy: Always
         command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
         ports:
-        - containerPort: 9003
+        - containerPort: 9093
           protocol: TCP
