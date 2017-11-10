@@ -5,12 +5,10 @@ metadata:
   labels:
     app: faas-netesd
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 8080
       protocol: TCP
-      targetPort: 8080
-      nodePort: 31111
   selector:
     app: faas-netesd
 ---
@@ -71,7 +69,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.6.7-armhf
+        image: functions/gateway:0.6.9-armhf
 #k8s-monitoring-dev
         imagePullPolicy: Always
         env:

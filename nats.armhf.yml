@@ -6,12 +6,10 @@ metadata:
   labels:
     app: nats
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 4222
       protocol: TCP
-      targetPort: 4222
-      nodePort: 31114
   selector:
     app: nats
 ---

@@ -8,10 +8,10 @@ rbac: true
 # images
 images:
   controller: functions/faas-netesd:0.3.3a
-  controllerArmhf: functions/faas-netesd-armhf
+  controllerArmhf: functions/faas-netesd:armhf-0.1
 
   gateway: functions/gateway:0.6.9
-  gatewayArmhf: functions/gateway:0.6.7-armhf
+  gatewayArmhf: functions/gateway:0.6.9-armhf
 
   prometheus: prom/prometheus:v1.5.2
   prometheusArmhf: alexellis2/prometheus-armhf:1.5.2
@@ -22,18 +22,14 @@ images:
   nats: nats-streaming:0.5.0
   natsArmhf:
 
-  queueWorker: functions/queue-worker:0.1
-  queueWorkerArmhf:
+  queueWorker: functions/queue-worker:0.2
+  queueWorkerArmhf: functions/queue-worker:0.2-armhf
 
 # ingress configuration
 ingress:
   enabled: false
   # Used to create Ingress record (should be used with exposeServices: false).
   hosts:
-    - host: faas-netesd.openfaas.local
-      serviceName: faas-netesd
-      servicePort: 8080
-      path: /
     - host: gateway.openfaas.local
       serviceName: gateway
       servicePort: 8080
@@ -41,10 +37,6 @@ ingress:
     - host: prometheus.openfaas.local
       serviceName: prometheus
       servicePort: 9090
-      path: /
-    - host: alertmanager.openfaas.local
-      serviceName: alertmanager
-      servicePort: 9093
       path: /
   annotations:
     kubernetes.io/ingress.class: nginx

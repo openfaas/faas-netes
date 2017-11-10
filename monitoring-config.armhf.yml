@@ -5,12 +5,10 @@ metadata:
   labels:
     app: alertmanager
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 9093
       protocol: TCP
-      targetPort: 9093
-      nodePort: 31113
   selector:
     app: alertmanager
 ---
@@ -31,7 +29,7 @@ spec:
         imagePullPolicy: Always
         command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
         ports:
-        - containerPort: 9003
+        - containerPort: 9093
           protocol: TCP
         volumeMounts:
         - mountPath: /alertmanager.yml
