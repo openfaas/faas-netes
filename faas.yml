@@ -33,7 +33,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        image: functions/faas-netesd:0.3.3a
+        image: functions/faas-netesd:0.3.4
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
