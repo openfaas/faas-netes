@@ -56,6 +56,15 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 			deployment.Spec.Template.Labels = labels
 			deployment.Spec.Template.ObjectMeta.Labels = labels
+
+			resources, resourceErr := createResources(request)
+			if resourceErr != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte(resourceErr.Error()))
+				return
+			}
+
+			deployment.Spec.Template.Spec.Containers[0].Resources = resources
 		}
 
 		if _, updateErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment); updateErr != nil {
