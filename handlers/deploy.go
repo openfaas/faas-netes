@@ -14,6 +14,8 @@ import (
 	"regexp"
 	"strings"
 
+	"k8s.io/apimachinery/pkg/api/resource"
+
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
@@ -70,7 +72,14 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		deploymentSpec := makeDeploymentSpec(request, config)
+		deploymentSpec, specErr := makeDeploymentSpec(request, config)
+
+		if specErr != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(specErr.Error()))
+			return
+		}
+
 		deploy := clientset.Extensions().Deployments(functionNamespace)
 
 		_, err = deploy.Create(deploymentSpec)
@@ -102,7 +111,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHandlerConfig) *v1beta1.Deployment {
+func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHandlerConfig) (*v1beta1.Deployment, error) {
 	envVars := buildEnvVars(request)
 	path := filepath.Join(os.TempDir(), ".lock")
 	probe := &apiv1.Probe{
@@ -143,6 +152,12 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 
 	initialReplicas := int32p(InitialReplicas)
 
+	resources, resourceErr := createResources(request)
+
+	if resourceErr != nil {
+		return nil, resourceErr
+	}
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -182,13 +197,8 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 							Ports: []apiv1.ContainerPort{
 								{ContainerPort: int32(WatchdogPort), Protocol: v1.ProtocolTCP},
 							},
-							Env: envVars,
-							Resources: apiv1.ResourceRequirements{
-								Limits: apiv1.ResourceList{
-								//v1.ResourceCPU:    resource.MustParse("100m"),
-								//v1.ResourceMemory: resource.MustParse("256Mi"),
-								},
-							},
+							Env:             envVars,
+							Resources:       resources,
 							ImagePullPolicy: v1.PullAlways,
 							LivenessProbe:   probe},
 					},
@@ -198,7 +208,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 			},
 		},
 	}
-	return deploymentSpec
+	return deploymentSpec, nil
 }
 
 func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
@@ -271,4 +281,30 @@ func createSelector(constraints []string) map[string]string {
 
 	log.Println("selector: ", selector)
 	return selector
+}
+
+func createResources(request requests.CreateFunctionRequest) (apiv1.ResourceRequirements, error) {
+	resources := apiv1.ResourceRequirements{
+		Limits:   apiv1.ResourceList{},
+		Requests: apiv1.ResourceList{},
+	}
+
+	if request.Limits != nil && len(request.Limits.Memory) > 0 {
+		qty, err := resource.ParseQuantity(request.Limits.Memory)
+		if err != nil {
+			return resources, err
+		}
+
+		resources.Limits.Memory().Add(qty)
+	}
+	if request.Requests != nil && len(request.Requests.Memory) > 0 {
+		qty, err := resource.ParseQuantity(request.Requests.Memory)
+		if err != nil {
+			return resources, err
+		}
+
+		resources.Requests.Memory().Add(qty)
+	}
+
+	return resources, nil
 }
