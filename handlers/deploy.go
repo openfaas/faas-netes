@@ -198,7 +198,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 								{ContainerPort: int32(WatchdogPort), Protocol: v1.ProtocolTCP},
 							},
 							Env:             envVars,
-							Resources:       resources,
+							Resources:       *resources,
 							ImagePullPolicy: v1.PullAlways,
 							LivenessProbe:   probe},
 					},
@@ -283,8 +283,8 @@ func createSelector(constraints []string) map[string]string {
 	return selector
 }
 
-func createResources(request requests.CreateFunctionRequest) (apiv1.ResourceRequirements, error) {
-	resources := apiv1.ResourceRequirements{
+func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceRequirements, error) {
+	resources := &apiv1.ResourceRequirements{
 		Limits:   apiv1.ResourceList{},
 		Requests: apiv1.ResourceList{},
 	}
@@ -294,16 +294,14 @@ func createResources(request requests.CreateFunctionRequest) (apiv1.ResourceRequ
 		if err != nil {
 			return resources, err
 		}
-
-		resources.Limits.Memory().Add(qty)
+		resources.Limits[apiv1.ResourceMemory] = qty
 	}
 	if request.Requests != nil && len(request.Requests.Memory) > 0 {
 		qty, err := resource.ParseQuantity(request.Requests.Memory)
 		if err != nil {
 			return resources, err
 		}
-
-		resources.Requests.Memory().Add(qty)
+		resources.Requests[apiv1.ResourceMemory] = qty
 	}
 
 	return resources, nil

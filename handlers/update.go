@@ -64,7 +64,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 				return
 			}
 
-			deployment.Spec.Template.Spec.Containers[0].Resources = resources
+			deployment.Spec.Template.Spec.Containers[0].Resources = *resources
 		}
 
 		if _, updateErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment); updateErr != nil {
