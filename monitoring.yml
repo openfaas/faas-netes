@@ -33,6 +33,12 @@ spec:
         ports:
         - containerPort: 9090
           protocol: TCP
+        resources:
+          requests:
+            memory: 512Mi
+          limits:
+            memory: 512Mi
+
 ---
 apiVersion: v1
 kind: Service
@@ -69,3 +75,8 @@ spec:
         ports:
         - containerPort: 9003
           protocol: TCP
+        resources:
+          requests:
+            memory: 20Mi
+          limits:
+            memory: 30Mi
