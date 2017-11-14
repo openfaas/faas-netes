@@ -25,11 +25,11 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// WatchdogPort for the OpenFaaS function watchdog
-const WatchdogPort = 8080
+// watchdogPort for the OpenFaaS function watchdog
+const watchdogPort = 8080
 
-// InitialReplicas how many replicas to start of creating for a function
-const InitialReplicas = 1
+// initialReplicasCount how many replicas to start of creating for a function
+const initialReplicasCount = 1
 
 // DefaultFunctionNamespace define default work namespace
 const DefaultFunctionNamespace string = "default"
@@ -150,7 +150,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 
 	nodeSelector := createSelector(request.Constraints)
 
-	initialReplicas := int32p(InitialReplicas)
+	initialReplicas := int32p(initialReplicasCount)
 
 	resources, resourceErr := createResources(request)
 
@@ -195,7 +195,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 							Name:  request.Service,
 							Image: request.Image,
 							Ports: []apiv1.ContainerPort{
-								{ContainerPort: int32(WatchdogPort), Protocol: v1.ProtocolTCP},
+								{ContainerPort: int32(watchdogPort), Protocol: v1.ProtocolTCP},
 							},
 							Env:             envVars,
 							Resources:       *resources,
@@ -226,10 +226,10 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 			Ports: []v1.ServicePort{
 				{
 					Protocol: v1.ProtocolTCP,
-					Port:     8080,
+					Port:     watchdogPort,
 					TargetPort: intstr.IntOrString{
 						Type:   intstr.Int,
-						IntVal: int32(8080),
+						IntVal: int32(watchdogPort),
 					},
 				},
 			},
