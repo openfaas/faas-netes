@@ -45,6 +45,10 @@ spec:
         image: {{ .Values.images.nats }}
         {{- end }}
         imagePullPolicy: Always
+        {{ if .Values.resources.enabled }}
+        resources:
+{{ toYaml .Values.resources.nats | indent 12 }}
+        {{ end }}
         ports:
         - containerPort: 4222
           protocol: TCP
@@ -83,5 +87,9 @@ spec:
         image: {{ .Values.images.queueWorker }}
         {{- end }}
         imagePullPolicy: Always
+        {{ if .Values.resources.enabled }}
+        resources:
+{{ toYaml .Values.resources.queueworker | indent 12 }}
+        {{ end }}
 ---
 {{- end }}

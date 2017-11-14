@@ -52,6 +52,10 @@ spec:
           - -storage.local.memory-chunks=10000
           - --alertmanager.url=http://alertmanager:9093
         imagePullPolicy: Always
+        {{ if .Values.resources.enabled }}
+        resources:
+{{ toYaml .Values.resources.prometheus | indent 12 }}
+        {{- end }}
         ports:
         - containerPort: 9090
           protocol: TCP
@@ -122,6 +126,10 @@ spec:
         image: {{ .Values.images.alertmanager }}
         {{- end }}
         imagePullPolicy: Always
+        {{ if .Values.resources.enabled }}
+        resources:
+{{ toYaml .Values.resources.alertmanager | indent 12 }}
+        {{- end }}
         command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
         ports:
         - containerPort: 9003
