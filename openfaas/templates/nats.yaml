@@ -83,5 +83,10 @@ spec:
         image: {{ .Values.images.queueWorker }}
         {{- end }}
         imagePullPolicy: Always
+        {{- if .Values.functionNamespace }}
+        env:
+        - name: faas_function_suffix
+          value: .{{ .Values.functionNamespace }}
+        {{- end }}
 ---
 {{- end }}
