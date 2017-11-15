@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
@@ -74,6 +75,21 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			}
 
 			deployment.Spec.Template.Spec.Containers[0].Resources = *resources
+
+			existingSecrets, err := getSecrets(clientset, functionNamespace, request.Secrets)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte(err.Error()))
+				return
+			}
+
+			err = UpdateSecrets(request, deployment, existingSecrets)
+			if err != nil {
+				log.Println(err)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte(err.Error()))
+				return
+			}
 		}
 
 		if _, updateErr := clientset.ExtensionsV1beta1().
