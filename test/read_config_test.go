@@ -4,9 +4,10 @@
 package test
 
 import (
-	"github.com/alexellis/faas-netes/types"
 	"testing"
 	"time"
+
+	"github.com/openfaas/faas-netes/types"
 )
 
 type EnvBucket struct {
