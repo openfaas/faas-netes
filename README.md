@@ -103,122 +103,15 @@ The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com
 Let's try it out:
 
 * Create a single-node cluster on our Mac
-* Deploy a function manually with `kubectl`
-* Build and deploy the FaaS-netes microservice
+* Deploy a function with the `faas-cli`
+* Deploy OpenFaaS with `helm`
 * Make calls to list the functions and invoke a function
 
 I'll give instructions for creating your cluster on a Mac with `minikube`, but you can also use `kubeadm` on Linux in the cloud by [following this tutorial](https://blog.alexellis.io/kubernetes-kubeadm-video/).
 
-**Create a cluster on Mac:**
+[Begin the Official tutorial on Medium](https://medium.com/@alexellisuk/getting-started-with-openfaas-on-minikube-634502c7acdf)
 
-```
-$ minikube start --vm-driver=xhyve
-```
-
-> You can also omit `--vm-driver=xhyve` if you want to use VirtualBox for your local cluster.
-
-**Deploy FaaS-netes and the API Gateway**
-
-```
-$ kubectl apply -f ./faas.yml,monitoring.yml
-```
-
-The `monitoring.yml` file provides Prometheus and AlertManager functionality for metrics and auto-scaling behaviour.
-
-If you're using `kubeadm` and *RBAC* then you can run in a cluster role for FaaS-netes:
-
-```
-$ kubectl apply -f ./rbac.yml
-```
-
-**Deploy a tester function**
-
-You have three options for deploying a function:
-
-* Via the OpenFaaS CLI 
-
-The CLI can build OpenFaaS functions into Docker images that you can share via the Docker Hub. These can also be deployed through the same tool using a YAML format.
-
-Available at: https://github.com/openfaas/faas-cli
-
-> Note: currently Kubernetes OpenFaaS functions can only be named a-zA-Z and dash (-).
-
-* Through the OpenFaaS UI
-
-The OpenFaaS UI is accessible in a web-browser on port 31112 with the IP of your node.
-
-See below for a screenshot.
-
-* Manual deployment + service with a label of "faas_function=<function_name>"
-
-```
-$ kubectl delete deployment/nodeinfo ; \
-  kubectl delete service/nodeinfo ; \
-  kubectl run --labels="faas_function=nodeinfo" nodeinfo --port 8080 --image functions/nodeinfo:latest ; \
-  kubectl expose deployment/nodeinfo
-```
-
-* The label `faas_function=<function_name>` marks this as a "function"
-
-### Now try it out
-
-**Function List**
-
-The function list is available on the gateway and is also used by the OpenFaaS UI.
-
-Find the gateway service:
-
-```
-$ kubectl get service gateway
-NAME      CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-gateway   10.106.11.234   <nodes>       8080:31112/TCP   1h
-```
-
-You can now use the node's IP address and port 31112 or the Cluster IP and port 8080.
-
-Using the internal IP:
-
-```
-$ minikube ssh 'curl -s 10.106.11.234:8080/system/functions'
-
-[{"name":"nodeinfo","image":"functions/nodeinfo:latest","invocationCount":0,"replicas":1}]
-```
-
-Or via the node's IP and NodePort we mapped (31112):
-
-```
-$ curl -s http://$(minikube ip):31112/system/functions
-
-[{"name":"nodeinfo","image":"functions/nodeinfo:latest","invocationCount":0,"replicas":1}]
-```
-
-**Invoke a function via the API Gateway**
-
-Using the IP from the previous step you can now invoke the `nodeinfo` function with a HTTP POST and an empty body.
-
-```
-curl -s --data "" http://$(minikube ip):31112/function/nodeinfo
-Hostname: nodeinfo-2186484981-lcm0m
-
-Platform: linux
-Arch: x64
-CPU count: 2
-Uptime: 19960
-```
-
-The `--data` flag turns the `curl` from a GET to a POST. Right now OpenFaaS functions are invoked via a POST to the API Gateway.
-
-> The nodeinfo function also supports a parameter of `verbose` to view network adapters - to try this set the `--data` flag to `verbose`.
-
-**Manually scale a function**
-
-Let's scale the deployment from 1 to 2 instances of the nodeinfo function:
-
-```
-$ kubectl scale deployment/nodeinfo --replicas=2
-```
-
-You can now use the `curl` example from above and you will see either of the two replicas.
+### Appendix
 
 **Auto-scale your functions**
 
