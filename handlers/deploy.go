@@ -112,7 +112,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 }
 
 func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHandlerConfig) (*v1beta1.Deployment, error) {
-	envVars := buildEnvVars(request)
+	envVars := buildEnvVars(&request)
 	path := filepath.Join(os.TempDir(), ".lock")
 	probe := &apiv1.Probe{
 		Handler: apiv1.Handler{
@@ -238,7 +238,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 	return serviceSpec
 }
 
-func buildEnvVars(request requests.CreateFunctionRequest) []v1.EnvVar {
+func buildEnvVars(request *requests.CreateFunctionRequest) []v1.EnvVar {
 	envVars := []v1.EnvVar{}
 
 	if len(request.EnvProcess) > 0 {
@@ -249,13 +249,12 @@ func buildEnvVars(request requests.CreateFunctionRequest) []v1.EnvVar {
 	}
 
 	for k, v := range request.EnvVars {
-		envVar := v1.EnvVar{
+		envVars = append(envVars, v1.EnvVar{
 			Name:  k,
 			Value: v,
-		}
-		envVars = append(envVars, envVar)
-
+		})
 	}
+
 	return envVars
 }
 
