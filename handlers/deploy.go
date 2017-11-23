@@ -242,21 +242,19 @@ func buildEnvVars(request requests.CreateFunctionRequest) []v1.EnvVar {
 	envVars := []v1.EnvVar{}
 
 	if len(request.EnvProcess) > 0 {
-		envVar := v1.EnvVar{
+		envVars = append(envVars, v1.EnvVar{
 			Name:  "fprocess",
 			Value: request.EnvProcess,
-		}
-		envVars = append(envVars, envVar)
+		})
 	}
 
 	for k, v := range request.EnvVars {
-		if len(request.EnvProcess) > 0 {
-			envVar := v1.EnvVar{
-				Name:  k,
-				Value: v,
-			}
-			envVars = append(envVars, envVar)
+		envVar := v1.EnvVar{
+			Name:  k,
+			Value: v,
 		}
+		envVars = append(envVars, envVar)
+
 	}
 	return envVars
 }
