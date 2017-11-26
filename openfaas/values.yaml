@@ -10,7 +10,7 @@ images:
   controller: functions/faas-netesd:0.3.4
   controllerArmhf: functions/faas-netesd-armhf
 
-  gateway: functions/gateway:0.6.9
+  gateway: functions/gateway:0.6.12
   gatewayArmhf: functions/gateway:0.6.7-armhf
 
   prometheus: prom/prometheus:v1.5.2
@@ -19,10 +19,10 @@ images:
   alertmanager: prom/alertmanager:v0.7.1
   alertmanagerArmhf: alexellis2/alertmanager-armhf:0.5.1
 
-  nats: nats-streaming:0.5.0
+  nats: nats-streaming:0.6.0
   natsArmhf:
 
-  queueWorker: functions/queue-worker:0.1
+  queueWorker: functions/queue-worker:0.4
   queueWorkerArmhf:
 
 # ingress configuration
