@@ -73,7 +73,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.6.9
+        image: functions/gateway:0.6.12
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
