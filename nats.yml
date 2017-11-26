@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name:  nats
-        image: nats-streaming:0.5.0
+        image: nats-streaming:0.6.0
         imagePullPolicy: Always
         ports:
         - containerPort: 4222
@@ -57,6 +57,6 @@ spec:
     spec:
       containers:
       - name:  queue-worker
-        image: functions/queue-worker:0.1 
+        image: functions/queue-worker:0.4 
         imagePullPolicy: Always
 
