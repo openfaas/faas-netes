@@ -219,6 +219,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name: request.Service,
+			Annotations: map[string]string{"prometheus.io.scrape": "false"},
 		},
 		Spec: v1.ServiceSpec{
 			Type:     v1.ServiceTypeClusterIP,
