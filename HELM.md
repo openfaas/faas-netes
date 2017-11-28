@@ -105,7 +105,7 @@ By default services will be exposed with following hostnames (can be changed, se
 * `exposeServices=true/false` - defaults to true, will always create `ClusterIP` services, and expose `NodePorts/LoadBalancer` if true (based on serviceType)
 * `serviceType=NodePort/LoadBalancer` - defaults to NodePort, type of external service to use when exposeServices is set to true
 * `rbac=true/false` - defaults to true, if true create roles
-`ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
+* `ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
 
 ### Removing the OpenFaaS Helm chart
 
