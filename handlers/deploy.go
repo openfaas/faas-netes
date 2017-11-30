@@ -23,6 +23,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
+	"strconv"
 )
 
 // watchdogPort for the OpenFaaS function watchdog
@@ -139,18 +140,25 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 			})
 	}
 
+	initialReplicas := int32p(initialReplicasCount)
+
 	labels := map[string]string{
 		"faas_function": request.Service,
 	}
+
 	if request.Labels != nil {
 		for k, v := range *request.Labels {
+			if k == "com.openfaas.scale.min" {
+				minReplicas, err := strconv.Atoi(v)
+				if err != nil && minReplicas > 0 {
+					initialReplicas = int32p(int32(minReplicas))
+				}
+			}
 			labels[k] = v
 		}
 	}
 
 	nodeSelector := createSelector(request.Constraints)
-
-	initialReplicas := int32p(initialReplicasCount)
 
 	resources, resourceErr := createResources(request)
 
@@ -218,7 +226,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 			APIVersion: "v1",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: request.Service,
+			Name:        request.Service,
 			Annotations: map[string]string{"prometheus.io.scrape": "false"},
 		},
 		Spec: v1.ServiceSpec{
