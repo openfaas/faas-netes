@@ -312,7 +312,7 @@ func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceReq
 func getMinReplicaCount(labels map[string]string) *int32 {
 	if value, exists := labels["com.openfaas.scale.min"]; exists {
 		minReplicas, err := strconv.Atoi(value)
-		if err != nil && minReplicas > 0 {
+		if err == nil && minReplicas > 0 {
 			return int32p(int32(minReplicas))
 		} else {
 			log.Println(err)
