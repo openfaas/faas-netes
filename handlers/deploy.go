@@ -147,13 +147,10 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, config *DeployHa
 	}
 
 	if request.Labels != nil {
+		if min := getMinReplicaCount(*request.Labels); min != nil {
+			initialReplicas = min
+		}
 		for k, v := range *request.Labels {
-			if k == "com.openfaas.scale.min" {
-				minReplicas, err := strconv.Atoi(v)
-				if err != nil && minReplicas > 0 {
-					initialReplicas = int32p(int32(minReplicas))
-				}
-			}
 			labels[k] = v
 		}
 	}
@@ -311,4 +308,17 @@ func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceReq
 	}
 
 	return resources, nil
+}
+
+func getMinReplicaCount(labels map[string]string) *int32 {
+	if value, exists := labels["com.openfaas.scale.min"]; exists {
+		minReplicas, err := strconv.Atoi(value)
+		if err != nil && minReplicas > 0 {
+			return int32p(int32(minReplicas))
+		} else {
+			log.Println(err)
+		}
+	}
+
+	return nil
 }
