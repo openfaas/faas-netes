@@ -7,12 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	v1 "k8s.io/api/core/v1"
-
 	"github.com/openfaas/faas/gateway/requests"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"strconv"
 )
 
 // MakeUpdateHandler update specified function
