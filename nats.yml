@@ -59,4 +59,9 @@ spec:
       - name:  queue-worker
         image: functions/queue-worker:0.4 
         imagePullPolicy: Always
+        env:
+        - name: max_inflight
+          value: "1"
+        - name: ack_timeout    # Max duration of any async task / request
+          value: "30s"
 
