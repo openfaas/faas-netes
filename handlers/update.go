@@ -12,6 +12,7 @@ import (
 	"github.com/openfaas/faas/gateway/requests"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"strconv"
 )
 
 // MakeUpdateHandler update specified function
@@ -52,6 +53,12 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 			if request.Labels != nil {
 				for k, v := range *request.Labels {
+					if k == "com.openfaas.scale.min" {
+						minReplicas, err := strconv.Atoi(v)
+						if err != nil && minReplicas > 0 {
+							deployment.Spec.Replicas = int32p(int32(minReplicas))
+						}
+					}
 					labels[k] = v
 				}
 			}
