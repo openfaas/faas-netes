@@ -16,6 +16,7 @@ import (
 // MakeUpdateHandler update specified function
 func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		defer r.Body.Close()
 
 		body, _ := ioutil.ReadAll(r.Body)
@@ -29,7 +30,10 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 		getOpts := metav1.GetOptions{}
 
-		deployment, findDeployErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(request.Service, getOpts)
+		deployment, findDeployErr := clientset.ExtensionsV1beta1().
+			Deployments(functionNamespace).
+			Get(request.Service, getOpts)
+
 		if findDeployErr != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(findDeployErr.Error()))
@@ -53,6 +57,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 				if min := getMinReplicaCount(*request.Labels); min != nil {
 					deployment.Spec.Replicas = min
 				}
+
 				for k, v := range *request.Labels {
 					labels[k] = v
 				}
@@ -71,7 +76,10 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			deployment.Spec.Template.Spec.Containers[0].Resources = *resources
 		}
 
-		if _, updateErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment); updateErr != nil {
+		if _, updateErr := clientset.ExtensionsV1beta1().
+			Deployments(functionNamespace).
+			Update(deployment); updateErr != nil {
+
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(updateErr.Error()))
 		}

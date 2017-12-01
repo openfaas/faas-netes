@@ -52,14 +52,14 @@ func MakeFunctionReader(functionNamespace string, clientset *kubernetes.Clientse
 		functions, err := getServiceList(functionNamespace, clientset)
 		if err != nil {
 			log.Println(err)
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
 			return
 		}
 
 		functionBytes, _ := json.Marshal(functions)
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 		w.Write(functionBytes)
 	}
 }

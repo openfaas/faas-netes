@@ -6,14 +6,13 @@ package handlers
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"math/rand"
 	"net"
 	"net/http"
 	"strconv"
 	"time"
-
-	"io/ioutil"
 
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas/gateway/requests"
@@ -36,9 +35,14 @@ func MakeProxy(functionNamespace string) http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
 
-		if r.Method == "POST" {
+		if r.Body != nil {
+			defer r.Body.Close()
+		}
+
+		switch r.Method {
+		case http.MethodGet,
+			http.MethodPost:
 
 			vars := mux.Vars(r)
 			service := vars["name"]
@@ -50,7 +54,6 @@ func MakeProxy(functionNamespace string) http.HandlerFunc {
 				log.Printf("[%s] took %f seconds\n", stamp, seconds)
 			}(time.Now())
 
-			watchdogPort := 8080
 			var addr string
 
 			entries, lookupErr := net.LookupIP(fmt.Sprintf("%s.%s", service, functionNamespace))
@@ -59,20 +62,18 @@ func MakeProxy(functionNamespace string) http.HandlerFunc {
 				addr = entries[index].String()
 			}
 
-			requestBody, _ := ioutil.ReadAll(r.Body)
-			defer r.Body.Close()
-
 			forwardReq := requests.NewForwardRequest(r.Method, *r.URL)
 
 			url := forwardReq.ToURL(addr, watchdogPort)
 
-			request, _ := http.NewRequest("POST", url, bytes.NewReader(requestBody))
+			request, _ := http.NewRequest(r.Method, url, r.Body)
 
 			copyHeaders(&request.Header, &r.Header)
 
 			defer request.Body.Close()
 
 			response, err := proxyClient.Do(request)
+
 			if err != nil {
 				log.Println(err.Error())
 				writeHead(service, http.StatusInternalServerError, w)
@@ -84,15 +85,8 @@ func MakeProxy(functionNamespace string) http.HandlerFunc {
 			clientHeader := w.Header()
 			copyHeaders(&clientHeader, &response.Header)
 
-			// TODO: copyHeaders removes the need for this line - test removal.
-			// Match header for strict services
-			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
-
-			responseBody, _ := ioutil.ReadAll(response.Body)
-
 			writeHead(service, http.StatusOK, w)
-			w.Write(responseBody)
-
+			io.Copy(w, response.Body)
 		}
 	}
 }
@@ -102,10 +96,10 @@ func writeHead(service string, code int, w http.ResponseWriter) {
 }
 
 func copyHeaders(destination *http.Header, source *http.Header) {
-	for k, vv := range *source {
-		vvClone := make([]string, len(vv))
-		copy(vvClone, vv)
-		(*destination)[k] = vvClone
+	for k, v := range *source {
+		vClone := make([]string, len(v))
+		copy(vClone, v)
+		(*destination)[k] = vClone
 	}
 }
 
