@@ -47,7 +47,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 		deployment, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(functionName, options)
 
 		if err != nil {
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Unable to lookup function deployment " + functionName))
 			log.Println(err)
 			return
@@ -59,7 +59,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 		_, err = clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment)
 
 		if err != nil {
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Unable to update function deployment " + functionName))
 			log.Println(err)
 			return
@@ -78,7 +78,7 @@ func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset
 
 		functions, err := getServiceList(functionNamespace, clientset)
 		if err != nil {
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 

@@ -12,7 +12,6 @@ import (
 	v1beta1 "k8s.io/api/extensions/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -37,7 +36,9 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 		getOpts := metav1.GetOptions{}
 
 		// This makes sure we don't delete non-labelled deployments
-		deployment, findDeployErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(request.FunctionName, getOpts)
+		deployment, findDeployErr := clientset.ExtensionsV1beta1().
+			Deployments(functionNamespace).
+			Get(request.FunctionName, getOpts)
 
 		if findDeployErr != nil {
 			if errors.IsNotFound(findDeployErr) {
@@ -74,7 +75,10 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 	foregroundPolicy := metav1.DeletePropagationForeground
 	opts := &metav1.DeleteOptions{PropagationPolicy: &foregroundPolicy}
 
-	if deployErr := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Delete(request.FunctionName, opts); deployErr != nil {
+	if deployErr := clientset.ExtensionsV1beta1().
+		Deployments(functionNamespace).
+		Delete(request.FunctionName, opts); deployErr != nil {
+
 		if errors.IsNotFound(deployErr) {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
@@ -84,7 +88,10 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 		return
 	}
 
-	if svcErr := clientset.CoreV1().Services(functionNamespace).Delete(request.FunctionName, opts); svcErr != nil {
+	if svcErr := clientset.CoreV1().
+		Services(functionNamespace).
+		Delete(request.FunctionName, opts); svcErr != nil {
+
 		if errors.IsNotFound(svcErr) {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
