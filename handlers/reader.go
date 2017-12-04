@@ -14,7 +14,7 @@ import (
 )
 
 func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) ([]requests.Function, error) {
-	var functions []requests.Function
+	functions := []requests.Function{}
 
 	listOpts := metav1.ListOptions{
 		LabelSelector: "faas_function",
@@ -25,6 +25,7 @@ func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) (
 	if err != nil {
 		return nil, err
 	}
+
 	for _, item := range res.Items {
 		var replicas uint64
 		if item.Spec.Replicas != nil {
