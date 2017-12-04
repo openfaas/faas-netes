@@ -375,19 +375,41 @@ func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceReq
 		Requests: apiv1.ResourceList{},
 	}
 
-	if request.Limits != nil && len(request.Limits.Memory) > 0 {
+	// No resources set return blank section
+	if request.Limits == nil {
+		return resources, nil
+	}
+
+	// Set Memory limits
+	if len(request.Limits.Memory) > 0 {
 		qty, err := resource.ParseQuantity(request.Limits.Memory)
 		if err != nil {
 			return resources, err
 		}
 		resources.Limits[apiv1.ResourceMemory] = qty
 	}
-	if request.Requests != nil && len(request.Requests.Memory) > 0 {
+	if len(request.Requests.Memory) > 0 {
 		qty, err := resource.ParseQuantity(request.Requests.Memory)
 		if err != nil {
 			return resources, err
 		}
 		resources.Requests[apiv1.ResourceMemory] = qty
+	}
+
+	// Set CPU limits
+	if len(request.Limits.CPU) > 0 {
+		qty, err := resource.ParseQuantity(request.Limits.CPU)
+		if err != nil {
+			return resources, err
+		}
+		resources.Limits[apiv1.ResourceCPU] = qty
+	}
+	if len(request.Requests.CPU) > 0 {
+		qty, err := resource.ParseQuantity(request.Requests.CPU)
+		if err != nil {
+			return resources, err
+		}
+		resources.Requests[apiv1.ResourceCPU] = qty
 	}
 
 	return resources, nil
@@ -398,9 +420,9 @@ func getMinReplicaCount(labels map[string]string) *int32 {
 		minReplicas, err := strconv.Atoi(value)
 		if err == nil && minReplicas > 0 {
 			return int32p(int32(minReplicas))
-		} else {
-			log.Println(err)
 		}
+
+		log.Println(err)
 	}
 
 	return nil
