@@ -33,7 +33,7 @@ data:
       - job_name: "gateway"
         scrape_interval: 5s
         dns_sd_configs:
-          - names: ['gateway']
+          - names: ['gateway.openfaas']
             port: 8080
             type: A
             refresh_interval: 5s
