@@ -34,7 +34,9 @@ func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
 
 	readTimeout := config.ReadTimeout
 	writeTimeout := config.WriteTimeout
+
 	tcpPort := 8080
+
 	if config.TCPPort != nil {
 		tcpPort = *config.TCPPort
 	}
