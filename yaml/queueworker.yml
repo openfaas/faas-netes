@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: queue-worker
+  namespace: openfaas
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: queue-worker
+    spec:
+      containers:
+      - name:  queue-worker
+        image: functions/queue-worker:0.4 
+        imagePullPolicy: Always
+        env:
+        - name: max_inflight
+          value: "1"
+        - name: ack_wait    # Max duration of any async task / request
+          value: "30s"
+        - name: faas_function_suffix
+          value: ".openfaas-fn"
+ 

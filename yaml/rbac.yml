@@ -1,7 +1,15 @@
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
+---
+apiVersion: v1
+kind: ServiceAccount
 metadata:
   name: faas-controller
+  namespace: openfaas
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: faas-controller
+  namespace: openfaas-fn
 rules:
 - apiGroups:
   - ""
@@ -35,14 +43,15 @@ rules:
   - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
-  name: faas-controller
+  name: faas-controller-fn
+  namespace: openfaas-fn
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: faas-controller
 subjects:
 - kind: ServiceAccount
   name: faas-controller
-  namespace: default
+  namespace: openfaas

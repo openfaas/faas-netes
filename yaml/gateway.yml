@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: openfaas
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: functions/gateway:0.6.14
+        imagePullPolicy: Always
+        env:
+        - name: functions_provider_url
+          value: "http://faas-netesd.openfaas.svc.cluster.local:8080/"
+        - name: faas_nats_address
+          value: "nats.openfaas"
+        - name: faas_nats_port
+          value: "4222"
+        - name: read_timeout
+          value: "10"
+        - name: write_timeout
+          value: "10"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            memory: 50Mi
+          limits:
+            memory: 50Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: openfaas
+  labels:
+    app: gateway
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31112
+  selector:
+    app: gateway
