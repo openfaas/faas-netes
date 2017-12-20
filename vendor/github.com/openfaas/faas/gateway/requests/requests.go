@@ -51,12 +51,13 @@ type FunctionResources struct {
 
 // Function exported for system/functions endpoint
 type Function struct {
-	Name            string  `json:"name"`
-	Image           string  `json:"image"`
-	InvocationCount float64 `json:"invocationCount"` // TODO: shouldn't this be int64?
-	Replicas        uint64  `json:"replicas"`
-	EnvProcess      string  `json:"envProcess"`
-	ReplicaCount    int     `json:"replicaCount"`
+	Name              string  `json:"name"`
+	Image             string  `json:"image"`
+	InvocationCount   float64 `json:"invocationCount"` // TODO: shouldn't this be int64?
+	Replicas          uint64  `json:"replicas"`
+	EnvProcess        string  `json:"envProcess"`
+	ReplicaCount      int     `json:"replicaCount"`
+	AvailableReplicas int     `json:"availableReplicas"`
 
 	// Labels are metadata for functions which may be used by the
 	// back-end for making scheduling or routing decisions
