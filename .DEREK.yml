@@ -3,6 +3,7 @@ maintainers:
  - rgee0
  - ericstoekl
  - austinfrey
+ - stefanprodan
 
 features:
  - dco_check
