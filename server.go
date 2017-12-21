@@ -53,14 +53,17 @@ func main() {
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
+		Health:         handlers.MakeHealthHandler(),
 	}
 
 	var port int
 	port = 8080
+
 	bootstrapConfig := bootTypes.FaaSConfig{
 		ReadTimeout:  cfg.ReadTimeout,
 		WriteTimeout: cfg.WriteTimeout,
 		TCPPort:      &port,
+		EnableHealth: true,
 	}
 
 	bootstrap.Serve(&bootstrapHandlers, &bootstrapConfig)
