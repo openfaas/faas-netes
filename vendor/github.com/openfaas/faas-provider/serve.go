@@ -12,15 +12,20 @@ import (
 	"github.com/openfaas/faas-provider/types"
 )
 
+var r *mux.Router
+
 // Mark this as a Golang "package"
 func init() {
+	r = mux.NewRouter()
+}
 
+// Router gives access to the underlying router for when new routes need to be added.
+func Router() *mux.Router {
+	return r
 }
 
 // Serve load your handlers into the correct OpenFaaS route spec. This function is blocking.
 func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
-	r := mux.NewRouter()
-
 	r.HandleFunc("/system/functions", handlers.FunctionReader).Methods("GET")
 	r.HandleFunc("/system/functions", handlers.DeployHandler).Methods("POST")
 	r.HandleFunc("/system/functions", handlers.DeleteHandler).Methods("DELETE")
@@ -32,11 +37,14 @@ func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
 	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}", handlers.FunctionProxy)
 	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}/", handlers.FunctionProxy)
 
+	if config.EnableHealth {
+		r.HandleFunc("/healthz", handlers.Health).Methods("GET")
+	}
+
 	readTimeout := config.ReadTimeout
 	writeTimeout := config.WriteTimeout
 
 	tcpPort := 8080
-
 	if config.TCPPort != nil {
 		tcpPort = *config.TCPPort
 	}
