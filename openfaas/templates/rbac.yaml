@@ -24,7 +24,7 @@ rules:
       - delete
       - update
   - apiGroups:
-    - extensions
+      - extensions
     resources:
       - deployments
     verbs:
