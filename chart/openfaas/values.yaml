@@ -1,8 +1,12 @@
 functionNamespace:
 async: false
 armhf: false
+
+# Service
 exposeServices: true
 serviceType: NodePort
+
+# RBAC
 rbac: true
 
 # images

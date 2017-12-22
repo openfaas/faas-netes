@@ -1,56 +1,22 @@
-# Helm
+# OpenFaaS - Serverless Functions Made Simple
 
-[Helm](https://github.com/kubernetes/helm) is a client CLI used to deploy Kubernetes
-applications. It supports templating of configuration files, but also needs a server
-component installing called `tiller`.
+![OpenFaaS Logo](https://blog.alexellis.io/content/images/2017/08/faas_side.png)
 
-You can use this chart to install OpenFaaS to your cluster.
+[OpenFaaS](https://github.com/openfaas/faas) (Functions as a Service) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
-> Submission to the [main helm chart repository](https://github.com/kubernetes/charts) is pending.
+**Highlights**
 
-## Pre-reqs:
+* Ease of use through UI portal and *one-click* install
+* Write functions in any language for Linux or Windows and package in Docker/OCI image format
+* Portable - runs on existing hardware or public/private cloud - [Kubernetes](https://github.com/openfaas/faas-netes) and Docker Swarm native
+* [CLI](http://github.com/openfaas/faas-cli) available with YAML format for templating and defining functions
+* Auto-scales as demand increases
 
-Instructions for latest Helm install
-
-On linux and Mac/Darwin:
-
-```
-$ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
-```
-
-Or via Homebrew on Mac:
-
-```
-$ brew install kubernetes-helm
-```
-
-* Create RBAC permissions for Tiller
-
-```
-kubectl -n kube-system create sa tiller \
- && kubectl create clusterrolebinding tiller \
-  --clusterrole cluster-admin \
-  --serviceaccount=kube-system:tiller
-```
-
-* Install the server-side Tiller component on your cluster
-
-```
-$ helm init --skip-refresh --upgrade --service-account tiller
-```
-
-## Deploy OpenFaaS via Helm
+## Deploy OpenFaaS
 
 **Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control. For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
 
 ---
-
-Clone the faas-netes repo including the helm chart:
-
-```
-$ git clone https://github.com/openfaas/faas-netes && \
-  cd faas-netes/chart
-```
 
 To use defaults including the `default` Kubernetes namespace (recommended)
 
@@ -88,7 +54,7 @@ By default services will be exposed with following hostnames (can be changed, se
 * `prometheus.openfaas.local`
 * `alertmanager.openfaas.local`
 
-### Additional OpenFaaS Helm chart options:
+### Additional OpenFaaS options:
 
 * `functionNamespace=defaults` - to the deployed namespace, kube namespace to create function deployments in
 * `async=true/false` - defaults to false, deploy nats if true
@@ -98,7 +64,7 @@ By default services will be exposed with following hostnames (can be changed, se
 * `rbac=true/false` - defaults to true, if true create roles
 * `ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
 
-### Removing the OpenFaaS Helm chart
+### Removing the OpenFaaS
 
 All control plane components can be cleaned up with helm with:
 
