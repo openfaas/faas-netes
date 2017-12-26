@@ -1,22 +1,22 @@
-{{- if .Values.async }}
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
+    component: faas-netesd
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nats
+  name: faas-netesd
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP
   ports:
-    - port: 4222
+    - port: 8080
       protocol: TCP
   selector:
-    app: nats
+    app: faas-netesd
 {{- if .Values.exposeServices }}
 ---
 apiVersion: v1
@@ -25,22 +25,22 @@ metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
+    component: faas-netesd
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nats-external
+  name: faas-netesd-external
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: {{ .Values.serviceType }}
   ports:
-    - port: 4222
+    - port: 8080
       protocol: TCP
-      targetPort: 4222
+      targetPort: 8080
       {{- if contains "NodePort" .Values.serviceType }}
-      nodePort: 31114
+      nodePort: 31111
       {{- end }}
   selector:
-    app: nats
+    app: faas-netesd
 {{- end }}
 ---
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
@@ -49,35 +49,30 @@ metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
+    component: faas-netesd
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nats
+  name: faas-netesd
   namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: nats
+        app: faas-netesd
     spec:
+      serviceAccountName: faas-controller
       containers:
-      - name:  nats
+      - name: faas-netesd
         {{- if .Values.armhf }}
-        image: {{ .Values.images.natsArmhf }}
+        image: {{ .Values.images.controllerArmhf }}
         {{- else }}
-        image: {{ .Values.images.nats }}
+        image: {{ .Values.images.controller }}
         {{- end }}
         imagePullPolicy: Always
+        env:
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
         ports:
-        - containerPort: 4222
+        - containerPort: 8080
           protocol: TCP
-        - containerPort: 8222
-          protocol: TCP
-        command: ["/nats-streaming-server"]
-        args:
-          - --store
-          - memory
-          - --cluster_id
-          - faas-cluster
-{{- end }}

@@ -1,4 +1,3 @@
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,6 +16,31 @@ spec:
       protocol: TCP
   selector:
     app: prometheus
+{{- if .Values.exposeServices }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: prometheus
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: prometheus-external
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: {{ .Values.serviceType }}
+  ports:
+    - port: 9090
+      protocol: TCP
+      targetPort: 9090
+      {{- if contains "NodePort" .Values.serviceType }}
+      nodePort: 31119
+      {{- end }}
+  selector:
+    app: prometheus
+{{- end }}
 ---
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
@@ -36,7 +60,7 @@ spec:
       labels:
         app: prometheus
       annotations:
-        checksum/prometheus-config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum | quote }}
+        checksum/prometheus-config: {{ include (print $.Template.BasePath "/prometheus-configmap.yaml") . | sha256sum | quote }}
     spec:
       containers:
       - name: prometheus
@@ -73,69 +97,3 @@ spec:
               - key: alert.rules
                 path: alert.rules
                 mode: 0644
----
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: {{ template "faas-netesd.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: alertmanager
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: alertmanager
-  namespace: {{ .Release.Namespace | quote }}
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9093
-      protocol: TCP
-  selector:
-    app: alertmanager
----
-apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    app: {{ template "faas-netesd.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: alertmanager
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: alertmanager
-  namespace: {{ .Release.Namespace | quote }}
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: alertmanager
-      annotations:
-        checksum/alertmanager-config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum | quote  }}
-    spec:
-      containers:
-      - name: alertmanager
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.alertmanagerArmhf }}
-        {{- else }}
-        image: {{ .Values.images.alertmanager }}
-        {{- end }}
-        imagePullPolicy: Always
-        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
-        ports:
-        - containerPort: 9003
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /alertmanager.yml
-          name: alertmanager-config
-          subPath: alertmanager.yml
-      volumes:
-        - name: alertmanager-config
-          configMap:
-            name: alertmanager-config
-            items:
-              - key: alertmanager.yml
-                path: alertmanager.yml
-                mode: 0644
----

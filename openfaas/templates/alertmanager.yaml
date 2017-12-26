@@ -1,22 +1,21 @@
-{{- if .Values.async }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
+    component: alertmanager
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nats
+  name: alertmanager
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP
   ports:
-    - port: 4222
+    - port: 9093
       protocol: TCP
   selector:
-    app: nats
+    app: alertmanager
 {{- if .Values.exposeServices }}
 ---
 apiVersion: v1
@@ -25,59 +24,64 @@ metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
+    component: alertmanager
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nats-external
+  name: alertmanager-external
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: {{ .Values.serviceType }}
   ports:
-    - port: 4222
+    - port: 9093
       protocol: TCP
-      targetPort: 4222
+      targetPort: 9093
       {{- if contains "NodePort" .Values.serviceType }}
-      nodePort: 31114
+      nodePort: 31113
       {{- end }}
   selector:
-    app: nats
+    app: alertmanager
 {{- end }}
----
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
     app: {{ template "faas-netesd.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
+    component: alertmanager
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nats
+  name: alertmanager
   namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: nats
+        app: alertmanager
+      annotations:
+        checksum/alertmanager-config: {{ include (print $.Template.BasePath "/alertmanager-configmap.yaml") . | sha256sum | quote  }}
     spec:
       containers:
-      - name:  nats
+      - name: alertmanager
         {{- if .Values.armhf }}
-        image: {{ .Values.images.natsArmhf }}
+        image: {{ .Values.images.alertmanagerArmhf }}
         {{- else }}
-        image: {{ .Values.images.nats }}
+        image: {{ .Values.images.alertmanager }}
         {{- end }}
         imagePullPolicy: Always
+        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
         ports:
-        - containerPort: 4222
+        - containerPort: 9003
           protocol: TCP
-        - containerPort: 8222
-          protocol: TCP
-        command: ["/nats-streaming-server"]
-        args:
-          - --store
-          - memory
-          - --cluster_id
-          - faas-cluster
-{{- end }}
+        volumeMounts:
+        - mountPath: /alertmanager.yml
+          name: alertmanager-config
+          subPath: alertmanager.yml
+      volumes:
+        - name: alertmanager-config
+          configMap:
+            name: alertmanager-config
+            items:
+              - key: alertmanager.yml
+                path: alertmanager.yml
+                mode: 0644
