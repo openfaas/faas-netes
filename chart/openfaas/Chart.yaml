@@ -6,7 +6,7 @@ sources:
 - https://github.com/openfaas/faas
 - https://github.com/openfaas/faas-netes
 home: https://www.openfaas.com
-icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo.png
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
 keywords:
 - functions
 - service
