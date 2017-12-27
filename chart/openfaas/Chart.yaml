@@ -11,7 +11,7 @@ keywords:
 - functions
 - service
 maintainers:
-- name: rimusz
-  email: rmocius@gmail.com
 - name: alexellis
   email: alex@openfaas.com
+- name: rimusz
+  email: rmocius@gmail.com
