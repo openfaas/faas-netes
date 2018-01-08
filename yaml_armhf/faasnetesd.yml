@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: faas-netesd
+  labels:
+    app: faas-netesd
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31111
+  selector:
+    app: faas-netesd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: faas-controller
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: faas-netesd
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: faas-netesd
+    spec:
+      serviceAccountName: faas-controller
+      containers:
+      - name: faas-netesd
+        image: functions/faas-netesd:armhf-0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            memory: 256Mi 
