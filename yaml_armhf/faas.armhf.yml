@@ -71,8 +71,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.6.7-armhf
-#k8s-monitoring-dev
+        image: functions/gateway:0.6.15-armhf
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
