@@ -18,11 +18,11 @@ In this README you'll find a technical overview and instructions for deploying F
 > Docker Swarm is also supported. 
 
 * Serverless framework for containers
-* Native Kubernetes support
+* Native Kubernetes integrations (API and ecosystem)
 * Built-in UI
-* YAML templates
-* Over 6.5k GitHub stars
-* Independent open-source project with 35 authors/contributors
+* YAML templates & helm chart
+* Over 9k GitHub stars
+* Independent open-source project with 70 authors/contributors
 
 You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
 
