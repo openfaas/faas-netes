@@ -1,4 +1,30 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-controller
+  namespace: {{ .Release.Namespace | quote }}
+---
+{{- if (ne .Release.Namespace $functionNs) }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-controller
+  namespace: {{ $functionNs | quote }}
+{{- end }}
+
 {{- if .Values.rbac }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
