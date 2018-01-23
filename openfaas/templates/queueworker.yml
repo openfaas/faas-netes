@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "faas-netesd.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: queue-worker
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: queue-worker
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: queue-worker
+    spec:
+      containers:
+      - name:  queue-worker
+        {{- if .Values.armhf }}
+        image: {{ .Values.images.queueWorkerArmhf }}
+        {{- else }}
+        image: {{ .Values.images.queueWorker }}
+        {{- end }}
+        imagePullPolicy: Always
+        {{- if .Values.functionNamespace }}
+        env:
+        - name: faas_function_suffix
+          value: .{{ .Values.functionNamespace }}
+        {{- end }}
+---

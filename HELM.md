@@ -15,15 +15,15 @@ Instructions for Kubernetes on Linux
 * Install Helm
 
 ```
-$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.2-linux-amd64.tar.gz && \
-  sudo tar -xvf helm-v2.6.2-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
+$ curl -sL https://storage.googleapis.com/kubernetes-helm/helm-v2.8.0-linux-amd64.tar.gz > /tmp/helm-v2.8.0-linux-amd64.tar.gz && \
+  sudo tar -xvf /tmp/helm-v2.8.0-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
 ```
 
 On Mac/Darwin:
 
 ```
-$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.2-darwin-amd64.tar.gz && \
-  sudo tar -xvf helm-v2.6.2-darwin-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
+$ curl -sL https://storage.googleapis.com/kubernetes-helm/helm-v2.8.0-darwin-amd64.tar.gz >  /tmp/helm-v2.8.0-darwin-amd64.tar.gz && \
+  sudo tar -xvf /tmp/helm-v2.8.0-darwin-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
 
 ```
 
@@ -48,9 +48,11 @@ kubectl -n kube-system create sa tiller \
 $ helm init --skip-refresh --upgrade --service-account tiller
 ```
 
+> Note: this step installs a server component in your cluster. It can take anywhere between a few seconds to a few minutes to be installed properly. You should see tiller appear on: `kubectl get pods -n kube-system`.
+
 ## Deploy OpenFaaS via Helm
 
-**Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control. For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
+**Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control (RBAC). For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
 
 ---
 
@@ -61,20 +63,19 @@ $ git clone https://github.com/openfaas/faas-netes && \
   cd faas-netes
 ```
 
-To use defaults including the `default` Kubernetes namespace (recommended)
+We recommend using a non-default namespace for OpenFaaS as below:
 
 ```
-$ helm upgrade --install --debug --reset-values --set async=false openfaas openfaas/
+$ kubectl create ns openfaas \
+  && kubectl create ns openfaas-fn
+
+$ helm upgrade --install --debug --namespace openfaas --reset-values --set async=true --set functionNamespace=openfaas-fn openfaas openfaas/
 ```
 
-Optional: you can also a separate namespace for functions:
+Optional: To use defaults including the `default` Kubernetes namespace (recommended)
 
 ```
-$ kubectl create ns openfaas
-$ kubectl create ns openfaas-fn
-
-$ helm upgrade --install --debug --namespace openfaas \
-  --reset-values --set async=false --set functionNamespace=openfaas-fn openfaas openfaas/
+$ helm upgrade --install --debug --reset-values --set async=true openfaas openfaas/
 ```
 
 If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).

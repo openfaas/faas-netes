@@ -1,50 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: {{ template "faas-netesd.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-netesd
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: faas-netesd
-  namespace: {{ .Release.Namespace | quote }}
-spec:
-  type: ClusterIP
-  ports:
-    - port: 8080
-      protocol: TCP
-  selector:
-    app: faas-netesd
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: {{ template "faas-netesd.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: faas-controller
-  namespace: {{ .Release.Namespace | quote }}
----
-{{- if (ne .Release.Namespace $functionNs) }}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: {{ template "faas-netesd.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: faas-controller
-  namespace: {{ $functionNs | quote }}
-{{- end }}
----
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -136,4 +91,3 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
----
