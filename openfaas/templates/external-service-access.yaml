@@ -12,14 +12,11 @@ metadata:
   name: faas-netesd-external
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  type: {{ .Values.serviceType }}
+  type: ClusterIP
   ports:
     - port: 8080
       protocol: TCP
       targetPort: 8080
-      {{- if contains "NodePort" .Values.serviceType }}
-      nodePort: 31111
-      {{- end }}
   selector:
     app: faas-netesd
 ---
@@ -81,14 +78,11 @@ metadata:
   name: alertmanager-external
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  type: {{ .Values.serviceType }}
+  type: ClusterIP
   ports:
     - port: 9093
       protocol: TCP
       targetPort: 9093
-      {{- if contains "NodePort" .Values.serviceType }}
-      nodePort: 31113
-      {{- end }}
   selector:
     app: alertmanager
 ---
@@ -105,14 +99,11 @@ metadata:
   name: nats-external
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  type: {{ .Values.serviceType }}
+  type: ClusterIP
   ports:
     - port: 4222
       protocol: TCP
       targetPort: 4222
-      {{- if contains "NodePort" .Values.serviceType }}
-      nodePort: 31114
-      {{- end }}
   selector:
     app: nats
 {{- end }}
