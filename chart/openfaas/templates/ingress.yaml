@@ -2,9 +2,9 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "faas-netesd.name" . }}-ingress
+  name: {{ template "openfaas.name" . }}-ingress
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

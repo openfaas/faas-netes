@@ -2,7 +2,7 @@ apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: queue-worker
     heritage: {{ .Release.Service }}

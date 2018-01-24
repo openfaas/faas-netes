@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: faas-netesd
     heritage: {{ .Release.Service }}
@@ -24,7 +24,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: gateway
     heritage: {{ .Release.Service }}
@@ -47,7 +47,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: prometheus
     heritage: {{ .Release.Service }}
@@ -70,7 +70,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: alertmanager
     heritage: {{ .Release.Service }}
@@ -91,7 +91,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: nats
     heritage: {{ .Release.Service }}
