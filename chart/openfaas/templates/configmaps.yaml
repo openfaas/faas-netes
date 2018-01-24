@@ -3,7 +3,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: prometheus-config
     heritage: {{ .Release.Service }}
@@ -70,7 +70,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: alertmanager-config
     heritage: {{ .Release.Service }}

@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: faas-netesd
     heritage: {{ .Release.Service }}
@@ -23,7 +23,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: faas-controller
     heritage: {{ .Release.Service }}
@@ -36,7 +36,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: {{ template "faas-netesd.name" . }}
+    app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: faas-controller
     heritage: {{ .Release.Service }}
