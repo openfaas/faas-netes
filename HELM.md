@@ -117,3 +117,7 @@ helm delete --purge openfaas
 ```
 
 Individual functions will need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
+
+### Troubleshooting
+
+```Error: UPGRADE FAILED: "openfaas" has no deployed releases``` - You likely have a partially installed version that didn't complete. Remove the chart using ```helm delete --purge openfaas```
