@@ -21,7 +21,7 @@
 To use defaults including the `default` Kubernetes namespace (recommended)
 
 ```
-$ helm upgrade --install --set async=true openfaas openfaas/
+$ helm upgrade --install openfaas openfaas/
 ```
 
 Optional: you can also a separate namespace for functions:
@@ -31,7 +31,7 @@ $ kubectl create ns openfaas
 $ kubectl create ns openfaas-fn
 
 $ helm upgrade --install --namespace openfaas \
-  --set async=true --set functionNamespace=openfaas-fn openfaas openfaas/
+    --set functionNamespace=openfaas-fn openfaas openfaas/
 ```
 
 If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
@@ -45,7 +45,7 @@ In order to make use of automatic ingress settings you will need an IngressContr
 Add `--set ingress.enabled` to enable ingress:
 
 ```
-$ helm upgrade --install --set async=true --set ingress.enabled=true openfaas openfaas/
+$ helm upgrade --install --set ingress.enabled=true openfaas openfaas/
 ```
 
 By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
@@ -61,7 +61,7 @@ Additional OpenFaaS options.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace | `default` |
-| `async` | Deploys NATS | `false` |
+| `async` | Deploys NATS | `true` |
 | `armhf` | Use arm images |  `false` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
