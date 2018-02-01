@@ -5,6 +5,7 @@ package requests
 
 // CreateFunctionRequest create a function in the swarm.
 type CreateFunctionRequest struct {
+
 	// Service corresponds to a Docker Service
 	Service string `json:"service"`
 
@@ -28,10 +29,11 @@ type CreateFunctionRequest struct {
 	// Constraints are specific to back-end orchestration platform
 	Constraints []string `json:"constraints"`
 
-	// Secrets defines a list of secrets in the backend needed to deploy the function.
+	// Secrets list of secrets to be made available to function
 	Secrets []string `json:"secrets"`
 
-	// Labels for deployments/services
+	// Labels are metadata for functions which may be used by the
+	// back-end for making scheduling or routing decisions
 	Labels *map[string]string `json:"labels"`
 
 	// Limits for function
@@ -47,38 +49,17 @@ type FunctionResources struct {
 	CPU    string `json:"cpu"`
 }
 
-// DeleteFunctionRequest delete a deployed function
-type DeleteFunctionRequest struct {
-	FunctionName string `json:"functionName"`
-}
-
-// PrometheusInnerAlertLabel PrometheusInnerAlertLabel
-type PrometheusInnerAlertLabel struct {
-	AlertName    string `json:"alertname"`
-	FunctionName string `json:"function_name"`
-}
-
-// PrometheusInnerAlert PrometheusInnerAlert
-type PrometheusInnerAlert struct {
-	Status string                    `json:"status"`
-	Labels PrometheusInnerAlertLabel `json:"labels"`
-}
-
-// PrometheusAlert as produced by AlertManager
-type PrometheusAlert struct {
-	Status   string                 `json:"status"`
-	Receiver string                 `json:"receiver"`
-	Alerts   []PrometheusInnerAlert `json:"alerts"`
-}
-
 // Function exported for system/functions endpoint
 type Function struct {
-	Name            string             `json:"name"`
-	Image           string             `json:"image"`
-	InvocationCount float64            `json:"invocationCount"` // TODO: shouldn't this be int64?
-	Replicas        uint64             `json:"replicas"`
-	EnvProcess      string             `json:"envProcess"`
-	Labels          *map[string]string `json:"labels"`
+	Name            string  `json:"name"`
+	Image           string  `json:"image"`
+	InvocationCount float64 `json:"invocationCount"` // TODO: shouldn't this be int64?
+	Replicas        uint64  `json:"replicas"`
+	EnvProcess      string  `json:"envProcess"`
+
+	// Labels are metadata for functions which may be used by the
+	// back-end for making scheduling or routing decisions
+	Labels *map[string]string `json:"labels"`
 }
 
 // AsyncReport is the report from a function executed on a queue worker.
@@ -86,4 +67,9 @@ type AsyncReport struct {
 	FunctionName string  `json:"name"`
 	StatusCode   int     `json:"statusCode"`
 	TimeTaken    float64 `json:"timeTaken"`
+}
+
+// DeleteFunctionRequest delete a deployed function
+type DeleteFunctionRequest struct {
+	FunctionName string `json:"functionName"`
 }

@@ -33,6 +33,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
+	"golang.org/x/net/http2"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -175,6 +176,24 @@ func (r *Request) Resource(resource string) *Request {
 		return r
 	}
 	r.resource = resource
+	return r
+}
+
+// BackOff sets the request's backoff manager to the one specified,
+// or defaults to the stub implementation if nil is provided
+func (r *Request) BackOff(manager BackoffManager) *Request {
+	if manager == nil {
+		r.backoffMgr = &NoBackoff{}
+		return r
+	}
+
+	r.backoffMgr = manager
+	return r
+}
+
+// Throttle receives a rate-limiter and sets or replaces an existing request limiter
+func (r *Request) Throttle(limiter flowcontrol.RateLimiter) *Request {
+	r.throttle = limiter
 	return r
 }
 
@@ -322,11 +341,14 @@ func (r *Request) setParam(paramName, value string) *Request {
 	return r
 }
 
-func (r *Request) SetHeader(key, value string) *Request {
+func (r *Request) SetHeader(key string, values ...string) *Request {
 	if r.headers == nil {
 		r.headers = http.Header{}
 	}
-	r.headers.Set(key, value)
+	r.headers.Del(key)
+	for _, value := range values {
+		r.headers.Add(key, value)
+	}
 	return r
 }
 
@@ -429,7 +451,7 @@ func (r *Request) URL() *url.URL {
 // finalURLTemplate is similar to URL(), but will make all specific parameter values equal
 // - instead of name or namespace, "{name}" and "{namespace}" will be used, and all query
 // parameters will be reset. This creates a copy of the request so as not to change the
-// underyling object.  This means some useful request info (like the types of field
+// underlying object.  This means some useful request info (like the types of field
 // selectors in use) will be lost.
 // TODO: preserve field selector keys
 func (r Request) finalURLTemplate() url.URL {
@@ -741,8 +763,29 @@ func (r *Request) DoRaw() ([]byte, error) {
 func (r *Request) transformResponse(resp *http.Response, req *http.Request) Result {
 	var body []byte
 	if resp.Body != nil {
-		if data, err := ioutil.ReadAll(resp.Body); err == nil {
+		data, err := ioutil.ReadAll(resp.Body)
+		switch err.(type) {
+		case nil:
 			body = data
+		case http2.StreamError:
+			// This is trying to catch the scenario that the server may close the connection when sending the
+			// response body. This can be caused by server timeout due to a slow network connection.
+			// TODO: Add test for this. Steps may be:
+			// 1. client-go (or kubectl) sends a GET request.
+			// 2. Apiserver sends back the headers and then part of the body
+			// 3. Apiserver closes connection.
+			// 4. client-go should catch this and return an error.
+			glog.V(2).Infof("Stream error %#v when reading response body, may be caused by closed connection.", err)
+			streamErr := fmt.Errorf("Stream error %#v when reading response body, may be caused by closed connection. Please retry.", err)
+			return Result{
+				err: streamErr,
+			}
+		default:
+			glog.Errorf("Unexpected error when reading response body: %#v", err)
+			unexpectedErr := fmt.Errorf("Unexpected error %#v when reading response body. Please retry.", err)
+			return Result{
+				err: unexpectedErr,
+			}
 		}
 	}
 
@@ -798,6 +841,25 @@ func (r *Request) transformResponse(resp *http.Response, req *http.Request) Resu
 	}
 }
 
+// truncateBody decides if the body should be truncated, based on the glog Verbosity.
+func truncateBody(body string) string {
+	max := 0
+	switch {
+	case bool(glog.V(10)):
+		return body
+	case bool(glog.V(9)):
+		max = 10240
+	case bool(glog.V(8)):
+		max = 1024
+	}
+
+	if len(body) <= max {
+		return body
+	}
+
+	return body[:max] + fmt.Sprintf(" [truncated %d chars]", len(body)-max)
+}
+
 // glogBody logs a body output that could be either JSON or protobuf. It explicitly guards against
 // allocating a new string for the body output unless necessary. Uses a simple heuristic to determine
 // whether the body is printable.
@@ -806,9 +868,9 @@ func glogBody(prefix string, body []byte) {
 		if bytes.IndexFunc(body, func(r rune) bool {
 			return r < 0x0a
 		}) != -1 {
-			glog.Infof("%s:\n%s", prefix, hex.Dump(body))
+			glog.Infof("%s:\n%s", prefix, truncateBody(hex.Dump(body)))
 		} else {
-			glog.Infof("%s: %s", prefix, string(body))
+			glog.Infof("%s: %s", prefix, truncateBody(string(body)))
 		}
 	}
 }
@@ -889,7 +951,7 @@ func isTextResponse(resp *http.Response) bool {
 func checkWait(resp *http.Response) (int, bool) {
 	switch r := resp.StatusCode; {
 	// any 500 error code and 429 can trigger a wait
-	case r == errors.StatusTooManyRequests, r >= 500:
+	case r == http.StatusTooManyRequests, r >= 500:
 	default:
 		return 0, false
 	}
