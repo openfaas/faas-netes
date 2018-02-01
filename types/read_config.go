@@ -26,6 +26,22 @@ type HasEnv interface {
 type ReadConfig struct {
 }
 
+func parseIntOrDurationValue(val string, fallback time.Duration) time.Duration {
+       if len(val) > 0 {
+               parsedVal, parseErr := strconv.Atoi(val)
+               if parseErr == nil && parsedVal >= 0 {
+                       return time.Duration(parsedVal) * time.Second
+               }
+       }
+
+       duration, durationErr := time.ParseDuration(val)
+       if durationErr != nil {
+               return fallback
+       }
+
+       return duration
+}
+
 func parseIntValue(val string, fallback int) int {
 	if len(val) > 0 {
 		parsedVal, parseErr := strconv.Atoi(val)
@@ -47,12 +63,14 @@ func parseBoolValue(val string, fallback bool) bool {
 func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg := BootstrapConfig{}
 
-	readTimeout := parseIntValue(hasEnv.Getenv("read_timeout"), 8)
-	writeTimeout := parseIntValue(hasEnv.Getenv("write_timeout"), 8)
 	enableProbe := parseBoolValue(hasEnv.Getenv("enable_function_readiness_probe"), true)
 
-	cfg.ReadTimeout = time.Duration(readTimeout) * time.Second
-	cfg.WriteTimeout = time.Duration(writeTimeout) * time.Second
+       readTimeout := parseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*8)
+       writeTimeout := parseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*8)
+
+       cfg.ReadTimeout = readTimeout
+       cfg.WriteTimeout = writeTimeout
+
 	cfg.EnableFunctionReadinessProbe = enableProbe
 
 	return cfg
