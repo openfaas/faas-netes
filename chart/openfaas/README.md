@@ -21,7 +21,7 @@
 To use defaults including the `default` Kubernetes namespace (recommended)
 
 ```
-$ helm upgrade --install --debug --reset-values --set async=false openfaas openfaas/
+$ helm upgrade --install --set async=true openfaas openfaas/
 ```
 
 Optional: you can also a separate namespace for functions:
@@ -30,8 +30,8 @@ Optional: you can also a separate namespace for functions:
 $ kubectl create ns openfaas
 $ kubectl create ns openfaas-fn
 
-$ helm upgrade --install --debug --namespace openfaas \
-  --reset-values --set async=false --set functionNamespace=openfaas-fn openfaas openfaas/
+$ helm upgrade --install --namespace openfaas \
+  --set async=true --set functionNamespace=openfaas-fn openfaas openfaas/
 ```
 
 If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
@@ -45,7 +45,7 @@ In order to make use of automatic ingress settings you will need an IngressContr
 Add `--set ingress.enabled` to enable ingress:
 
 ```
-$ helm upgrade --install --debug --reset-values --set async=false --set ingress.enabled=true openfaas openfaas/
+$ helm upgrade --install --set async=true --set ingress.enabled=true openfaas openfaas/
 ```
 
 By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
@@ -54,19 +54,26 @@ By default services will be exposed with following hostnames (can be changed, se
 * `prometheus.openfaas.local`
 * `alertmanager.openfaas.local`
 
-### Additional OpenFaaS options:
+## Configuration
 
-* `functionNamespace=defaults` - to the deployed namespace, kube namespace to create function deployments in
-* `async=true/false` - defaults to false, deploy nats if true
-* `armhf=true/false` - defaults to false, use arm images if true (missing images for async)
-* `exposeServices=true/false` - defaults to true, will always create `ClusterIP` services, and expose `NodePorts/LoadBalancer` if true (based on serviceType)
-* `serviceType=NodePort/LoadBalancer` - defaults to NodePort, type of external service to use when exposeServices is set to true
-* `rbac=true/false` - defaults to true, if true create roles
-* `ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
+Additional OpenFaaS options.
 
-### Removing the OpenFaaS
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `functionNamespace` | Functions namespace | `default` |
+| `async` | Deploys NATS | `false` |
+| `armhf` | Use arm images |  `false` |
+| `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
+| `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
+| `ingress.enabled` | Create ingress resources | `false` |
+| `rbac` | Enable RBAC | `false` |
 
-All control plane components can be cleaned up with helm with:
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
+See values.yaml for detailed configuration.
+
+## Removing the OpenFaaS
+
+All control plane components can be cleaned up with helm:
 
 ```
 $ helm delete --purge openfaas
