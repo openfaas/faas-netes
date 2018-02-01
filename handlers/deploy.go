@@ -185,8 +185,9 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 			RevisionHistoryLimit: int32p(10),
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Name:   request.Service,
-					Labels: labels,
+					Name:        request.Service,
+					Labels:      labels,
+					Annotations: map[string]string{"prometheus.io.scrape": "false"},
 				},
 				Spec: apiv1.PodSpec{
 					NodeSelector: nodeSelector,
