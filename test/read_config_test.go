@@ -44,7 +44,7 @@ func TestRead_EmptyTimeoutConfig(t *testing.T) {
 	}
 }
 
-func TestRead_ReadAndWriteTimeoutConfig(t *testing.T) {
+func TestRead_ReadAndWriteIntegerTimeoutConfig(t *testing.T) {
 	defaults := NewEnvBucket()
 	defaults.Setenv("read_timeout", "10")
 	defaults.Setenv("write_timeout", "60")
@@ -60,6 +60,24 @@ func TestRead_ReadAndWriteTimeoutConfig(t *testing.T) {
 		t.Logf("WriteTimeout incorrect, got: %d\n", config.WriteTimeout)
 		t.Fail()
 	}
+}
+
+func TestRead_ReadAndWriteDurationTimeoutConfig(t *testing.T) {
+       defaults := NewEnvBucket()
+       defaults.Setenv("read_timeout", "10s")
+       defaults.Setenv("write_timeout", "60s")
+
+       readConfig := types.ReadConfig{}
+       config := readConfig.Read(defaults)
+
+       if (config.ReadTimeout) != time.Duration(10)*time.Second {
+               t.Logf("ReadTimeout incorrect, got: %d\n", config.ReadTimeout)
+               t.Fail()
+       }
+       if (config.WriteTimeout) != time.Duration(60)*time.Second {
+               t.Logf("WriteTimeout incorrect, got: %d\n", config.WriteTimeout)
+               t.Fail()
+       }
 }
 
 func TestRead_EmptyProbeConfig(t *testing.T) {
@@ -81,7 +99,7 @@ func TestRead_EnableFunctionReadinessProbeConfig(t *testing.T) {
 	config := readConfig.Read(defaults)
 
 	if config.EnableFunctionReadinessProbe {
-		t.Logf("EnableFunctionReadinessProbe incorrect, got: %s\n", config.EnableFunctionReadinessProbe)
+               t.Logf("EnableFunctionReadinessProbe incorrect, got: %v\n", config.EnableFunctionReadinessProbe)
 		t.Fail()
 	}
 }
@@ -94,7 +112,7 @@ func TestRead_EnableFunctionReadinessProbeConfig_true(t *testing.T) {
 	config := readConfig.Read(defaults)
 
 	if !config.EnableFunctionReadinessProbe {
-		t.Logf("EnableFunctionReadinessProbe incorrect, got: %s\n", config.EnableFunctionReadinessProbe)
+               t.Logf("EnableFunctionReadinessProbe incorrect, got: %v\n", config.EnableFunctionReadinessProbe)
 		t.Fail()
 	}
 }

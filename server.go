@@ -46,7 +46,7 @@ func main() {
 	}
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:  handlers.MakeProxy(functionNamespace),
+               FunctionProxy:  handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),
 		DeleteHandler:  handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, clientset, deployConfig),
 		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),

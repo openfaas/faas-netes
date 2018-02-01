@@ -19,16 +19,16 @@ import (
 )
 
 // MakeProxy creates a proxy for HTTP web requests which can be routed to a function.
-func MakeProxy(functionNamespace string) http.HandlerFunc {
+func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc {
 	proxyClient := http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
 			DialContext: (&net.Dialer{
-				Timeout:   3 * time.Second,
-				KeepAlive: 0,
+                               Timeout:   timeout,
+                               KeepAlive: 1 * time.Second,
 			}).DialContext,
-			MaxIdleConns:          1,
-			DisableKeepAlives:     true,
+                       // MaxIdleConns:          1,
+                       // DisableKeepAlives:     false,
 			IdleConnTimeout:       120 * time.Millisecond,
 			ExpectContinueTimeout: 1500 * time.Millisecond,
 		},
