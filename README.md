@@ -13,9 +13,9 @@ This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfa
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster. 
+In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster.
 
-> Docker Swarm is also supported. 
+> Docker Swarm is also supported.
 
 * Serverless framework for containers
 * Native Kubernetes integrations (API and ecosystem)
@@ -104,7 +104,7 @@ Let's try it out:
 
 * Create a single-node cluster on our Mac
 * Deploy a function with the `faas-cli`
-* Deploy OpenFaaS with `helm`
+* Deploy OpenFaaS with [helm](HELM.md)
 * Make calls to list the functions and invoke a function
 
 I'll give instructions for creating your cluster on a Mac with `minikube`, but you can also use `kubeadm` on Linux in the cloud by [following this tutorial](https://blog.alexellis.io/kubernetes-kubeadm-video/).
@@ -123,7 +123,7 @@ Here's an example you can use to generate load:
 ip=$(minikube ip); while [ true ] ; do curl $ip:31112/function/nodeinfo -d "" ; done
 ```
 
-Prometheus is exposed on a NodePort of 31119 which shows the function invocation rate. 
+Prometheus is exposed on a NodePort of 31119 which shows the function invocation rate.
 
 ```
 $ open http://$(minikube ip):31119/
