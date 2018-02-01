@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.6.15-armhf
+        image: functions/gateway:0.7.0-armhf
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
@@ -41,4 +41,4 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 256Mi 
+            memory: 100Mi 
