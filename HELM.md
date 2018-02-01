@@ -4,27 +4,20 @@
 applications. It supports templating of configuration files, but also needs a server
 component installing called `tiller`.
 
-You can use this chart to install OpenFaaS to your cluster.
+For more information on using Helm, refer to the Helm's [documentation](https://docs.helm.sh/using_helm/#quickstart-guide).
+
+You can use this [chart](chart/openfaas) to install OpenFaaS to your cluster.
 
 > Submission to the [main helm chart repository](https://github.com/kubernetes/charts) is pending.
 
 ## Pre-reqs:
 
-Instructions for Kubernetes on Linux
+* Instructions for latest Helm install
 
-* Install Helm
-
-```
-$ curl -sL https://storage.googleapis.com/kubernetes-helm/helm-v2.8.0-linux-amd64.tar.gz > /tmp/helm-v2.8.0-linux-amd64.tar.gz && \
-  sudo tar -xvf /tmp/helm-v2.8.0-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
-```
-
-On Mac/Darwin:
+On Linux and Mac/Darwin:
 
 ```
-$ curl -sL https://storage.googleapis.com/kubernetes-helm/helm-v2.8.0-darwin-amd64.tar.gz >  /tmp/helm-v2.8.0-darwin-amd64.tar.gz && \
-  sudo tar -xvf /tmp/helm-v2.8.0-darwin-amd64.tar.gz --strip-components=1 -C /usr/local/bin/
-
+$ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 ```
 
 Or via Homebrew on Mac:
@@ -52,68 +45,4 @@ $ helm init --skip-refresh --upgrade --service-account tiller
 
 ## Deploy OpenFaaS via Helm
 
-**Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control (RBAC). For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
-
----
-
-Clone the faas-netes repo including the helm chart:
-
-```
-$ git clone https://github.com/openfaas/faas-netes && \
-  cd faas-netes
-```
-
-We recommend using a non-default namespace for OpenFaaS as below:
-
-```
-$ kubectl create ns openfaas \
-  && kubectl create ns openfaas-fn
-
-$ helm upgrade --install --debug --namespace openfaas --reset-values --set async=true --set functionNamespace=openfaas-fn openfaas chart/openfaas/
-```
-
-Optional: To use defaults including the `default` Kubernetes namespace (recommended)
-
-```
-$ helm upgrade --install --debug --reset-values --set async=true openfaas chart/openfaas/
-```
-
-If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
-
-By default you will have NodePorts available for each service such as the API gateway and Prometheus
-
-### Deploy with an IngressController
-
-In order to make use of automatic ingress settings you will need an IngressController in your cluster such as Traefik or Nginx.
-
-Add `--set ingress.enabled` to enable ingress:
-
-```
-$ helm upgrade --install --debug --reset-values --set async=false --set ingress.enabled=true openfaas chart/openfaas/
-```
-
-By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
-* `faas-netesd.openfaas.local`
-* `gateway.openfaas.local`
-* `prometheus.openfaas.local`
-* `alertmanager.openfaas.local`
-
-### Additional OpenFaaS Helm chart options:
-
-* `functionNamespace=defaults` - to the deployed namespace, kube namespace to create function deployments in
-* `async=true/false` - defaults to false, deploy nats if true
-* `armhf=true/false` - defaults to false, use arm images if true (missing images for async)
-* `exposeServices=true/false` - defaults to true, will always create `ClusterIP` services, and expose `NodePorts/LoadBalancer` if true (based on serviceType)
-* `serviceType=NodePort/LoadBalancer` - defaults to NodePort, type of external service to use when exposeServices is set to true
-* `rbac=true/false` - defaults to true, if true create roles
-* `ingress.enabled=true/false` - defaults to false, set to true to create ingress resources. See openfaas/values.yaml for detailed Ingress configuration.
-
-### Removing the OpenFaaS Helm chart
-
-All control plane components can be cleaned up with helm with:
-
-```bash
-helm delete --purge openfaas
-```
-
-Individual functions will need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
+How to install chart please follow install instructions in chart's [readme](chart/openfaas/README.md).
