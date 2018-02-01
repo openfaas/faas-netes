@@ -1,6 +1,6 @@
 functionNamespace:
 
-async: false
+async: true
 armhf: false
 
 exposeServices: true
