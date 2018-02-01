@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net"
 	"net/http"
 	"strconv"
@@ -24,11 +23,11 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
 			DialContext: (&net.Dialer{
-                               Timeout:   timeout,
-                               KeepAlive: 1 * time.Second,
+				Timeout:   timeout,
+				KeepAlive: 1 * time.Second,
 			}).DialContext,
-                       // MaxIdleConns:          1,
-                       // DisableKeepAlives:     false,
+			// MaxIdleConns:          1,
+			// DisableKeepAlives:     false,
 			IdleConnTimeout:       120 * time.Millisecond,
 			ExpectContinueTimeout: 1500 * time.Millisecond,
 		},
@@ -54,17 +53,9 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 				log.Printf("[%s] took %f seconds\n", stamp, seconds)
 			}(time.Now())
 
-			var addr string
-
-			entries, lookupErr := net.LookupIP(fmt.Sprintf("%s.%s", service, functionNamespace))
-			if lookupErr == nil && len(entries) > 0 {
-				index := randomInt(0, len(entries))
-				addr = entries[index].String()
-			}
-
 			forwardReq := requests.NewForwardRequest(r.Method, *r.URL)
 
-			url := forwardReq.ToURL(addr, watchdogPort)
+			url := forwardReq.ToURL(fmt.Sprintf("%s.%s", service, functionNamespace), watchdogPort)
 
 			request, _ := http.NewRequest(r.Method, url, r.Body)
 
@@ -101,9 +92,4 @@ func copyHeaders(destination *http.Header, source *http.Header) {
 		copy(vClone, v)
 		(*destination)[k] = vClone
 	}
-}
-
-func randomInt(min, max int) int {
-	rand.Seed(time.Now().Unix())
-	return rand.Intn(max-min) + min
 }
