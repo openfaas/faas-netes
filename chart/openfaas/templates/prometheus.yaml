@@ -47,10 +47,7 @@ spec:
         {{- end }}
         command:
           - prometheus
-          - -config.file=/etc/prometheus/prometheus.yml
-          - -storage.local.path=/prometheus
-          - -storage.local.memory-chunks=10000
-          - --alertmanager.url=http://alertmanager:9093
+          - --config.file=/etc/prometheus/prometheus.yml
         imagePullPolicy: Always
         ports:
         - containerPort: 9090
