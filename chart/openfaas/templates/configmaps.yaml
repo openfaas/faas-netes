@@ -49,22 +49,28 @@ data:
             type: A
             refresh_interval: 5s
 
-  alert.rules: |
-    ALERT service_down
-      IF up == 0
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - alertmanager:9093
 
-    ALERT APIHighInvocationRate
-      IF sum ( rate(gateway_function_invocation_total{code="200"}[10s]) ) by (function_name) > 5
-      FOR 5s
-      LABELS {
-        service = "gateway",
-        severity = "major",
-        value = "{{ "{{" }}$value{{ "}}" }}"
-      }
-      ANNOTATIONS {
-        summary = "High invocation total on {{ "{{" }} $labels.instance {{ "}}" }}",
-        description =  "High invocation total on {{ "{{" }} $labels.instance {{ "}}" }}"
-      }
+  alert.rules: |
+    groups:
+      - name: prometheus/alert.rules
+        rules:
+        - alert: service_down
+          expr: up == 0
+        - alert: APIHighInvocationRate
+          expr: sum(rate(gateway_function_invocation_total{code="200"}[10s])) BY (function_name) > 5
+          for: 5s
+          labels:
+            service: gateway
+            severity: major
+            value: '{{ "{{" }}$value{{ "}}" }}'
+          annotations:
+            description: High invocation total on "{{ "{{" }}$labels.instance{{ "}}" }}"
+            summary: High invocation total on "{{ "{{" }}$labels.instance{{ "}}" }}"
 ---
 kind: ConfigMap
 apiVersion: v1
