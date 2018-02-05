@@ -1,0 +1,55 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus-config
+  namespace: openfaas
+data:
+  prometheus.yml: |
+    # my global config
+    global:
+      scrape_interval:     15s # By default, scrape targets every 15 seconds.
+      evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+      # scrape_timeout is set to the global default (10s).
+      # Attach these labels to any time series or alerts when communicating with
+      # external systems (federation, remote storage, Alertmanager).
+      external_labels:
+          monitor: 'faas-monitor'
+    # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+    rule_files:
+        - 'alert.rules'
+    # A scrape configuration containing exactly one endpoint to scrape:
+    # Here it's Prometheus itself.
+    scrape_configs:
+      # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+      - job_name: 'prometheus'
+        # Override the global default and scrape targets from this job every 5 seconds.
+        scrape_interval: 5s
+        # metrics_path defaults to '/metrics'
+        # scheme defaults to 'http'.
+        static_configs:
+          - targets: ['localhost:9090']
+      - job_name: "gateway"
+        scrape_interval: 5s
+        dns_sd_configs:
+          - names: ['gateway.openfaas']
+            port: 8080
+            type: A
+            refresh_interval: 5s
+  alert.rules: |
+    ALERT service_down
+      IF up == 0
+    ALERT APIHighInvocationRate
+      IF sum ( rate(gateway_function_invocation_total{code="200"}[10s]) ) by (function_name) > 5
+      FOR 5s
+      LABELS {
+        service = "gateway",
+        severity = "major",
+        value = "{{$value}}"
+      }
+      ANNOTATIONS {
+        summary = "High invocation total on {{ $labels.instance }}",
+        description =  "High invocation total on {{ $labels.instance }}"
+      }
+---
