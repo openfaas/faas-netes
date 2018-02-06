@@ -67,6 +67,8 @@ Additional OpenFaaS options.
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `rbac` | Enable RBAC | `false` |
+| `faasnetesd.readTimeout` | queue-worker read timeout| `60` |
+| `faasnetesd.writeTimeout` | queue-worker write timeout | `60` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
