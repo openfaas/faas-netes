@@ -7,6 +7,10 @@ exposeServices: true
 serviceType: NodePort
 rbac: true
 
+faasnetesd:
+  readTimeout : 60
+  writeTimeout : 60
+
 # images
 images:
   controller: functions/faas-netesd:0.4.2
