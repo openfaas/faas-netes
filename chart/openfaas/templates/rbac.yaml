@@ -1,6 +1,18 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.rbac }}
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-controller
+  namespace: {{ $functionNs | quote }}
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
