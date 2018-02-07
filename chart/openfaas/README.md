@@ -30,11 +30,10 @@ Optional: you can also a separate namespace for functions:
 $ kubectl create ns openfaas
 $ kubectl create ns openfaas-fn
 
-$ helm upgrade --install --namespace openfaas \
-    --set functionNamespace=openfaas-fn openfaas openfaas/
+$ helm upgrade --install openfaas openfaas/ \
+    --namespace openfaas \
+    --set functionNamespace=openfaas-fn
 ```
-
-If you would like to enable asynchronous functions then use `--set async=true`. You can read more about asynchronous functions in the [OpenFaaS guides](https://github.com/openfaas/faas/tree/master/guide).
 
 By default you will have NodePorts available for each service such as the API gateway and Prometheus
 
@@ -45,7 +44,8 @@ In order to make use of automatic ingress settings you will need an IngressContr
 Add `--set ingress.enabled` to enable ingress:
 
 ```
-$ helm upgrade --install --set ingress.enabled=true openfaas openfaas/
+$ helm upgrade --install openfaas openfaas/ \
+    --set ingress.enabled=true
 ```
 
 By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
@@ -67,8 +67,11 @@ Additional OpenFaaS options.
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `rbac` | Enable RBAC | `false` |
-| `faasnetesd.readTimeout` | queue-worker read timeout| `60` |
-| `faasnetesd.writeTimeout` | queue-worker write timeout | `60` |
+| `faasnetesd.readTimeout` | Queue worker read timeout | `20` |
+| `faasnetesd.writeTimeout` | Queue worker write timeout | `20` |
+| `gateway.readTimeout` | Queue worker read timeout | `20` |
+| `gateway.writeTimeout` | Queue worker write timeout | `20` |
+| `queueWorker.ackWait` | Max duration of any async task/request | `30` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.

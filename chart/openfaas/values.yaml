@@ -8,8 +8,15 @@ serviceType: NodePort
 rbac: true
 
 faasnetesd:
-  readTimeout : 60
-  writeTimeout : 60
+  readTimeout : 20
+  writeTimeout : 20
+
+gateway:
+  readTimeout : 20
+  writeTimeout : 20
+
+queueWorker:
+  ackWait : 30
 
 # images
 images:
