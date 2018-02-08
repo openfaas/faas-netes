@@ -39,11 +39,7 @@ spec:
     spec:
       containers:
       - name:  nats
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.natsArmhf }}
-        {{- else }}
         image: {{ .Values.images.nats }}
-        {{- end }}
         imagePullPolicy: Always
         ports:
         - containerPort: 4222
