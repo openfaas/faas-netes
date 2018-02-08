@@ -62,7 +62,6 @@ Additional OpenFaaS options.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace | `default` |
 | `async` | Deploys NATS | `true` |
-| `armhf` | Use arm images |  `false` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `ingress.enabled` | Create ingress resources | `false` |
@@ -70,6 +69,8 @@ Additional OpenFaaS options.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
+
+ > A note on armhf and arm64 - please see the plain YAML files provided. There is no official Tiller image for Helm.
 
 ## Removing the OpenFaaS
 
