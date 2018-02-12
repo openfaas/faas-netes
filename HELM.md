@@ -29,10 +29,10 @@ $ brew install kubernetes-helm
 * Create RBAC permissions for Tiller
 
 ```
-kubectl -n kube-system create sa tiller \
+$ kubectl -n kube-system create sa tiller \
  && kubectl create clusterrolebinding tiller \
-  --clusterrole cluster-admin \
-  --serviceaccount=kube-system:tiller
+      --clusterrole cluster-admin \
+      --serviceaccount=kube-system:tiller
 ```
 
 * Install the server-side Tiller component on your cluster
