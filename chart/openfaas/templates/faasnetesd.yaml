@@ -37,7 +37,9 @@ spec:
       labels:
         app: faas-netesd
     spec:
+      {{- if .Values.rbac }}
       serviceAccountName: faas-controller
+      {{- end }}
       containers:
       - name: faas-netesd
         {{- if .Values.armhf }}
