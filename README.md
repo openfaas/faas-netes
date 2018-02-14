@@ -103,8 +103,19 @@ The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com
 Let's try it out:
 
 * Create a single-node cluster on our Mac
+
+&nbsp;&nbsp;&nbsp;**Note:** If you plan to use helm, we recommend using `kubeadm` bootstrapper for minikube, which makes it easier to work with RBAC-enabled cluster. Add `--bootstrapper=kubeadm` to your `minikube start` command, like so:
+```
+minikube start --bootstrapper=kubeadm --kubernetes-version=v1.8.4
+```
+
 * Deploy a function with the `faas-cli`
 * Deploy OpenFaaS with [helm](HELM.md)
+
+&nbsp;&nbsp;&nbsp;**Note:** If you used `kubeadm` bootstrapper in minikube, run following command to ensure Helm has privileges to create resources in your cluster:
+```
+kubectl create clusterrolebinding tiller-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
+```
 * Make calls to list the functions and invoke a function
 
 I'll give instructions for creating your cluster on a Mac with `minikube`, but you can also use `kubeadm` on Linux in the cloud by [following this tutorial](https://blog.alexellis.io/kubernetes-kubeadm-video/).
