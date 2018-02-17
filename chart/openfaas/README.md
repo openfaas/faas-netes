@@ -29,7 +29,7 @@ $ helm upgrade --install openfaas openfaas/ \
    --set functionNamespace=openfaas-fn
 ```
 
-Or to use the default namespace:
+Or to use the default namespace (not recommended):
 
 ```
 $ helm upgrade --install openfaas openfaas/ \
