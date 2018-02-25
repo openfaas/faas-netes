@@ -55,8 +55,8 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 
 	enableProbe := parseBoolValue(hasEnv.Getenv("enable_function_readiness_probe"), true)
 
-	readTimeout := parseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*8)
-	writeTimeout := parseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*8)
+	readTimeout := parseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*10)
+	writeTimeout := parseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*10)
 
 	cfg.ReadTimeout = readTimeout
 	cfg.WriteTimeout = writeTimeout
