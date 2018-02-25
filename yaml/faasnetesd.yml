@@ -43,6 +43,6 @@ spec:
         - name: function_namespace
           value: openfaas-fn
         - name: read_timeout
-          value: "10"
+          value: "20s"
         - name: write_timeout
-          value: "10"
+          value: "20s"
