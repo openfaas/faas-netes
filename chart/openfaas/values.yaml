@@ -8,12 +8,12 @@ serviceType: NodePort
 rbac: true
 
 faasnetesd:
-  readTimeout : "20"
-  writeTimeout : "20"
+  readTimeout : "20s"
+  writeTimeout : "20s"
 
 gateway:
-  readTimeout : "20"
-  writeTimeout : "20"
+  readTimeout : "20s"
+  writeTimeout : "20s"
 
 queueWorker:
   ackWait : "30s"
@@ -23,7 +23,7 @@ images:
   controller: functions/faas-netesd:0.4.2
   controllerArmhf: functions/faas-netesd-armhf
 
-  gateway: functions/gateway:0.7.0
+  gateway: functions/gateway:0.7.2
   gatewayArmhf: functions/gateway:0.7.0-armhf
 
   prometheus: prom/prometheus:v2.1.0
