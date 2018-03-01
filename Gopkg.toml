@@ -5,7 +5,7 @@
 
 [[constraint]]
   name = "github.com/openfaas/faas"
-  version = "0.7.0"
+  version = "0.7.3"
 
 [[constraint]]
   name = "github.com/openfaas/faas-provider"
