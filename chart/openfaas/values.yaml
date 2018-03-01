@@ -20,10 +20,10 @@ queueWorker:
 
 # images
 images:
-  controller: functions/faas-netesd:0.4.2
+  controller: functions/faas-netesd:0.4.4
   controllerArmhf: functions/faas-netesd-armhf
 
-  gateway: functions/gateway:0.7.2
+  gateway: functions/gateway:0.7.3
   gatewayArmhf: functions/gateway:0.7.0-armhf
 
   prometheus: prom/prometheus:v2.1.0
