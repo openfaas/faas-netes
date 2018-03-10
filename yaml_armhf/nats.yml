@@ -1,17 +1,16 @@
----
 apiVersion: v1
 kind: Service
 metadata:
   name: nats
+  namespace: openfaas
   labels:
     app: nats
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 4222
       protocol: TCP
       targetPort: 4222
-      nodePort: 31114
   selector:
     app: nats
 ---
@@ -19,6 +18,7 @@ apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
   name: nats
+  namespace: openfaas
 spec:
   replicas: 1
   template:
@@ -41,22 +41,3 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
-
-
----
-apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
-kind: Deployment
-metadata:
-  name: queue-worker
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: queue-worker
-    spec:
-      containers:
-      - name:  queue-worker
-        image: alexellis2/nats-queue-worker:0.1-armhf
-        imagePullPolicy: Always
-
