@@ -71,7 +71,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 // MakeReplicaReader reads the amount of replicas for a deployment
 func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Update replicas")
+		log.Println("Read replicas")
 
 		vars := mux.Vars(r)
 		functionName := vars["name"]
