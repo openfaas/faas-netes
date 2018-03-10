@@ -29,8 +29,10 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: functions/prometheus:latest-k8s
-        command: ["prometheus","-config.file=/etc/prometheus/prometheus.yml", "-storage.local.path=/prometheus", "-storage.local.memory-chunks=10000", "--alertmanager.url=http://alertmanager.openfaas:9093"]
+        image: prom/prometheus:v2.2.2
+        command:
+          - prometheus
+          - --config.file=/etc/prometheus/prometheus.yml
         imagePullPolicy: Always
         ports:
         - containerPort: 9090
