@@ -26,7 +26,7 @@ images:
   gateway: functions/gateway:0.7.3
   gatewayArmhf: functions/gateway:0.7.0-armhf
 
-  prometheus: prom/prometheus:v2.2.2
+  prometheus: prom/prometheus:v2.2.0
   prometheusArmhf: alexellis2/prometheus-armhf:1.5.2
 
   alertmanager: prom/alertmanager:v0.15.0-rc.0
