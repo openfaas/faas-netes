@@ -16,7 +16,9 @@ spec:
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
-          value: "http://faas-netesd.openfaas.svc.cluster.local:8080/"
+          value: "http://faas-netesd.openfaas.svc.cluster.local.:8080/" # Final `.` specifies an absolute address
+        - name: functions_dns_suffix
+          value: "svc.cluster.local."
         - name: faas_nats_address
           value: "nats.openfaas"
         - name: faas_nats_port

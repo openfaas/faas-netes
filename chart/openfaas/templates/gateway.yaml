@@ -63,7 +63,9 @@ spec:
         - name: write_timeout
           value: "{{ .Values.gateway.writeTimeout }}"
         - name: functions_provider_url
-          value: "http://faas-netesd.{{ .Release.Namespace }}:8080/"
+          value: "http://faas-netesd.{{ .Release.Namespace }}.svc.cluster.local.:8080/"
+        - name: functions_dns_suffix
+          value: "svc.cluster.local."
         {{- if .Values.async }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}"
