@@ -20,7 +20,7 @@ spec:
         - name: functions_dns_suffix
           value: "svc.cluster.local."
         - name: faas_nats_address
-          value: "nats.openfaas"
+          value: "nats.openfaas.svc.cluster.local."
         - name: faas_nats_port
           value: "4222"
         - name: read_timeout

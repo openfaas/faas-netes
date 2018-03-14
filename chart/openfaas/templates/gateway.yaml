@@ -68,7 +68,7 @@ spec:
           value: "svc.cluster.local."
         {{- if .Values.async }}
         - name: faas_nats_address
-          value: "nats.{{ .Release.Namespace }}"
+          value: "nats.{{ .Release.Namespace }}.svc.cluster.local."
         - name: faas_nats_port
           value: "4222"
         {{- end }}

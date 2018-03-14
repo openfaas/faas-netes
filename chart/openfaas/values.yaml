@@ -20,7 +20,7 @@ queueWorker:
 
 # images
 images:
-  controller: functions/faas-netesd:0.4.4
+  controller: functions/faas-netesd:0.4.5
   controllerArmhf: functions/faas-netesd-armhf
 
   gateway: functions/gateway:0.7.3
