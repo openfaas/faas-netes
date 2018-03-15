@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.7.0-armhf
+        image: functions/gateway:0.7.3-armhf
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
