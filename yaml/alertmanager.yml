@@ -28,9 +28,12 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: functions/alertmanager:latest-k8s
+        image: prom/alertmanager:v0.15.0-rc.0
         imagePullPolicy: Always
-        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
+        command:
+          - /bin/alertmanager
+          - --config.file=/alertmanager.yml
+          - --storage.path=/alertmanager
         ports:
         - containerPort: 9003
           protocol: TCP

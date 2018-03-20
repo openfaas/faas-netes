@@ -26,10 +26,10 @@ images:
   gateway: functions/gateway:0.7.3
   gatewayArmhf: functions/gateway:0.7.0-armhf
 
-  prometheus: prom/prometheus:v2.1.0
+  prometheus: prom/prometheus:v2.2.0
   prometheusArmhf: alexellis2/prometheus-armhf:1.5.2
 
-  alertmanager: prom/alertmanager:v0.7.1
+  alertmanager: prom/alertmanager:v0.15.0-rc.0
   alertmanagerArmhf: alexellis2/alertmanager-armhf:0.5.1
 
   nats: nats-streaming:0.6.0
