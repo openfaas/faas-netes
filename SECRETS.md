@@ -11,21 +11,6 @@ _Note_: You can transparently use both types of secrets simultaneously for a fun
 
 ## Image-Pull Secrets
 
-### Create an image-pull secret:
-
-Set the following environmental variables:
-
-* $DOCKER_USERNAME
-* $DOCKER_PASSWORD
-* $DOCKER_EMAIL
-
-```
-$ kubectl create secret docker-registry dockerhub \
-    --docker-username=$DOCKER_USERNAME \
-    --docker-password=$DOCKER_PASSWORD \
-    --docker-email=$DOCKER_EMAIL
-```
-
 ### Deploy a function from a private Docker image
 
 ```
@@ -34,58 +19,81 @@ $ docker tag functions/alpine:latest $DOCKER_USERNAME/private-alpine:latest
 $ docker push $DOCKER_USERNAME/private-alpine:latest
 ```
 
-Now log into the Hub and make your image `private-alpine` private.
+Now log into the [Hub](https://hub.docker.com) and make your image `private-alpine` private.
 
-### Attempt to deploy the image
+### Create your openfaas project
 
-You should see that the pod is not scheduled.
-
-```
-curl -X POST -d \
-'{"image": "alexellis2/private-alpine:latest", "envProcess": "sha512sum", "service": "shametoo", "secrets": []}' $(minikube ip):31111/system/functions
+```sh
+$ mkdir privatefuncs && cd privatefuncs
+$ touch stack.yaml
 ```
 
-### Now invoke the faas-netes back-end directly
+In your favoriate editor, open `stack.yaml` and add
 
-Now update the function to use the new secret:
+```yaml
+provider:
+  name: faas
+  gateway: http://localhost:8080
 
+functions:
+  protectedapi:
+    lang: Dockerfile
+    skip_build: true
+    image: username/private-alpine:latest
 ```
-curl -X POST -d \
-'{"image": "alexellis2/private-alpine:latest", "envProcess": "sha512sum", "service": "shametoo", "secrets": ["dockerhub"]}' $(minikube ip):31111/system/functions
-```
 
-You will now see that your function from a private registry has been deployed.
+### Deploy the function
+
+If you try to deploy using `faas-cli deploy` it will fail because Kubernetes can not pull the image.
+You can verify this in the Kubernetes dashboard or via the CLI using the `kubectl describe` command.
+
+To deploy the function, we need to create the [Image Pull Secret](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+
+1.  Set the following environmental variables:
+
+    * $DOCKER_USERNAME
+    * $DOCKER_PASSWORD
+    * $DOCKER_EMAIL
+
+2.  Then run this command to create the needed secret
+
+    ```sh
+    $ kubectl create secret docker-registry dockerhub \
+        --docker-username=$DOCKER_USERNAME \
+        --docker-password=$DOCKER_PASSWORD \
+        --docker-email=$DOCKER_EMAIL
+    ```
+
+3.  Update your stack file to include the secret:
+
+    ```yaml
+     provider:
+       name: faas
+       gateway: http://localhost:8080
+
+     functions:
+       protectedapi:
+         lang: Dockerfile
+         skip_build: true
+         image: username/private-alpine:latest
+         secrets:
+          - dockerhub
+    ```
+
+Now you can again deploy the project using `faas-cli deploy`. Now when you inspect the Kubernetes pods, you will see that it can pull the docker image.
 
 ## Application Secrets
 
 ### Create a secret
 
-Consider a function that requires access to a database and that you have store the username and password credentials in `dbusername.txt` and `dbpass.txt`. Using the Kuberenetes documentation as a basis, we can create a secret in Kubernetes
+What if that previous function also requires access to a database and that you have store the username and password credentials in `dbusername.txt` and `dbpass.txt`. Using the Kuberenetes documentation as a basis, we can create a secret in Kubernetes
 
 ```sh
 kubectl create secret generic db-user-pass --from-file=./dbusername.txt --from-file=./dbpass.txt
 secret "db-user-pass" created
 ```
 
-### Deploy the your function
-
-Just as in the example for image-pull secrets, we simply add the name of the secret to the deploy request.
-
-```
-curl -X POST -d \
-'{"image": "yourexample/db-fnc-alpine:latest", "envProcess": "./secretFunc", "service": "secret-func", "secrets": ['db-user-pass']}' $(minikube ip):31111/system/functions
-```
-
-## Secrets in the YAML stack file
-
-Using Kubernetes secrets in your OpenFaaS stack file is easy, you only need to list the secrets you want to use and OpenFaaS will attach them for you.
-
-For example, we can combine the ideas from the previous sections and assume you have a function that
-
-1.  requires a database password, _and_
-2.  is in a private Docker Hub repository.
-
-After adding your secrets to Kubernetes like you did in the previous sections, your stack file would look like
+### Update your yaml
 
 ```yaml
 provider:
@@ -98,8 +106,10 @@ functions:
     skip_build: true
     image: username/private-alpine:latest
     secrets:
-       - db-user-pass
-       - dockerhub
+    - dockerhub
+    - db-user-pass
 ```
 
-Notice that you do not need to do anything special to indicate the type of each secret. OpenFaaS will infer that the `dockerhub` is an Image Pull Secret automatically.
+### Deploy the function
+
+You can again use `faas-cli deploy` to deploy your function. Now, when you use `kubectl describe pod <pod-name>` you should see the `db-user-pass` referenced in the `Mounts` and `Volumes` sections of the output.
