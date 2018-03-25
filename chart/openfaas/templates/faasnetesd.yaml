@@ -40,11 +40,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.controllerArmhf }}
-        {{- else }}
         image: {{ .Values.images.controller }}
-        {{- end }}
         imagePullPolicy: Always
         env:
         - name: function_namespace
