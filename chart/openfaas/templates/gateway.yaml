@@ -51,11 +51,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.gatewayArmhf }}
-        {{- else }}
         image: {{ .Values.images.gateway }}
-        {{- end }}
         imagePullPolicy: Always
         env:
         - name: read_timeout

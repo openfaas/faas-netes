@@ -40,11 +40,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.prometheusArmhf }}
-        {{- else }}
         image: {{ .Values.images.prometheus }}
-        {{- end }}
         command:
           - prometheus
           - --config.file=/etc/prometheus/prometheus.yml

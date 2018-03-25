@@ -39,11 +39,7 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.alertmanagerArmhf }}
-        {{- else }}
         image: {{ .Values.images.alertmanager }}
-        {{- end }}
         imagePullPolicy: Always
         command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
         ports:

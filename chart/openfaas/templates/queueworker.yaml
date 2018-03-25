@@ -19,11 +19,7 @@ spec:
     spec:
       containers:
       - name:  queue-worker
-        {{- if .Values.armhf }}
-        image: {{ .Values.images.queueWorkerArmhf }}
-        {{- else }}
         image: {{ .Values.images.queueWorker }}
-        {{- end }}
         imagePullPolicy: Always
         {{- if .Values.functionNamespace }}
         env:

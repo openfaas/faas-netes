@@ -64,7 +64,6 @@ Additional OpenFaaS options.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace | `default` |
 | `async` | Deploys NATS | `true` |
-| `armhf` | Use arm images |  `false` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `ingress.enabled` | Create ingress resources | `false` |
