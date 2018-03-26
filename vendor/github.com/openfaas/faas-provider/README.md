@@ -25,6 +25,7 @@ I.e.:
 		FunctionReader: handlers.MakeFunctionReader(clientset),
 		ReplicaReader:  handlers.MakeReplicaReader(clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(clientset),
+		InfoHandler:    handlers.MakeInfoHandler(),
 	}
 	var port int
 	port = 8080

@@ -5,13 +5,15 @@ RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
 WORKDIR /go/src/github.com/openfaas/faas-netes
 
-COPY vendor     vendor
-COPY handlers	handlers
-COPY types      types
-COPY server.go  .
+COPY . .
 
 RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
-  && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes .
+  && VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
+  && GIT_COMMIT=$(git rev-list -1 HEAD) \
+  && CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w \
+    -X github.com/openfaas/faas-netes/version.GitCommit=${GIT_COMMIT}\
+    -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
+    -a -installsuffix cgo -o faas-netes .
 
 FROM debian:stretch
 #FROM alpine:3.5

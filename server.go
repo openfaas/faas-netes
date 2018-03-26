@@ -9,6 +9,7 @@ import (
 
 	"github.com/openfaas/faas-netes/handlers"
 	"github.com/openfaas/faas-netes/types"
+	"github.com/openfaas/faas-netes/version"
 	"github.com/openfaas/faas-provider"
 	bootTypes "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes"
@@ -54,6 +55,7 @@ func main() {
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
 		Health:         handlers.MakeHealthHandler(),
+		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 	}
 
 	var port int
