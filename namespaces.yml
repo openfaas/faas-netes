@@ -2,8 +2,12 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: openfaas
+  labels:
+    frontend: "true"
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: openfaas-fn
+  labels:
+    backend: "true"

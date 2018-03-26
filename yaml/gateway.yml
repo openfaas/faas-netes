@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: gateway
@@ -12,29 +12,35 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.7.3
+        image: functions/gateway:0.7.8
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
           value: "http://faas-netesd.openfaas.svc.cluster.local.:8080/" # Final `.` specifies an absolute address
-        - name: functions_dns_suffix
-          value: "svc.cluster.local."
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local."
         - name: faas_nats_port
           value: "4222"
+        - name: direct_functions
+          value: "true"                             # Functions are invoked directly over the overlay network
+        - name: direct_functions_suffix
+          value: "openfaas-fn.svc.cluster.local."   # contains K8s namespace
         - name: read_timeout
-          value: "20s"
+          value: "35s"
         - name: write_timeout
-          value: "20s"
+          value: "35s"
+        - name: upstream_timeout  # Must be smaller than read/write_timeout
+          value: "30s"
+
         ports:
         - containerPort: 8080
           protocol: TCP
+
         resources:
           requests:
-            memory: 100Mi
+            memory: 250Mi
           limits:
-            memory: 100Mi
+            memory: 250Mi   # Adjust to suit needs of deployment
 ---
 apiVersion: v1
 kind: Service
