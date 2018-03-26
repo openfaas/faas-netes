@@ -74,12 +74,12 @@ Additional OpenFaaS options.
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `ingress.enabled` | Create ingress resources | `false` |
-| `rbac` | Enable RBAC | `false` |
-| `faasnetesd.readTimeout` | Queue worker read timeout | `20` |
-| `faasnetesd.writeTimeout` | Queue worker write timeout | `20` |
-| `gateway.readTimeout` | Queue worker read timeout | `20` |
-| `gateway.writeTimeout` | Queue worker write timeout | `20` |
-| `queueWorker.ackWait` | Max duration of any async task/request | `30` |
+| `rbac` | Enable RBAC | `true` |
+| `faasnetesd.readTimeout` | Queue worker read timeout | `20s` |
+| `faasnetesd.writeTimeout` | Queue worker write timeout | `20s` |
+| `gateway.readTimeout` | Queue worker read timeout | `20s` |
+| `gateway.writeTimeout` | Queue worker write timeout | `20s` |
+| `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
