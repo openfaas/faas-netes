@@ -41,7 +41,10 @@ spec:
       - name: alertmanager
         image: {{ .Values.images.alertmanager }}
         imagePullPolicy: Always
-        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
+        command:
+          - "alertmanager"
+          - "--config.file=/alertmanager.yml"
+          - "--storage.path=/alertmanager"
         ports:
         - containerPort: 9003
           protocol: TCP
