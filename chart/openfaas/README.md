@@ -23,11 +23,20 @@ You can create a separate namespace for OpenFaaS core services and functions (re
 ```
 $ kubectl create ns openfaas
 $ kubectl create ns openfaas-fn
+```
 
+This command should be run from within the `faas-netes/chart` folder or equivalent:
+
+```
 $ helm upgrade --install openfaas openfaas/ \
    --namespace openfaas \
    --set functionNamespace=openfaas-fn
 ```
+
+By default NodePorts will be created for the API Gateway and Prometheus.
+
+> Note: If you're running on a cloud such as AKS or GKE you will need to pass an additional flag of `--set serviceType=LoadBalancer` to tell `helm` to create LoadBalancer objects instead. An alternative to using multiple LoadBalancers is to install an Ingress controller.
+
 
 Or to use the default namespace (not recommended):
 
@@ -36,8 +45,6 @@ $ helm upgrade --install openfaas openfaas/ \
    --namespace default \
    --set functionNamespace=default
 ```
-
-By default you will have NodePorts available for each service such as the API gateway and Prometheus
 
 ### Deploy with an IngressController
 
