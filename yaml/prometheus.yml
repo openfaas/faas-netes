@@ -12,13 +12,10 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: functions/prometheus:latest-k8s
+        image: prom/prometheus:v2.2.0
         command: 
           - "prometheus"
-          - "-config.file=/etc/prometheus/prometheus.yml"
-          - "-storage.local.path=/prometheus" 
-          - "-storage.local.memory-chunks=10000"
-          - "--alertmanager.url=http://alertmanager.openfaas:9093"
+          - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: Always
         ports:
         - containerPort: 9090
@@ -32,9 +29,9 @@ spec:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config
           subPath: prometheus.yml
-        - mountPath: /etc/prometheus/alert.rules
+        - mountPath: /etc/prometheus/alert.rules.yml
           name: prometheus-config
-          subPath: alert.rules
+          subPath: alert.rules.yml
       volumes:
         - name: prometheus-config
           configMap:
@@ -43,8 +40,8 @@ spec:
               - key: prometheus.yml
                 path: prometheus.yml
                 mode: 0644
-              - key: alert.rules
-                path: alert.rules
+              - key: alert.rules.yml
+                path: alert.rules.yml
                 mode: 0644
 ---
 apiVersion: v1
