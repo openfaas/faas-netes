@@ -12,20 +12,20 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: functions/alertmanager:latest-k8s
+        image: prom/alertmanager:v0.15.0-rc.0
         imagePullPolicy: Always
         command: 
-          - "/bin/alertmanager"
-          - "-config.file=/alertmanager.yml"
-          - "-storage.path=/alertmanager"
+          - "alertmanager"
+          - "--config.file=/alertmanager.yml"
+          - "--storage.path=/alertmanager"
         ports:
         - containerPort: 9003
           protocol: TCP
         resources:
           requests:
-            memory: 20Mi
+            memory: 25Mi
           limits:
-            memory: 30Mi
+            memory: 50Mi
         volumeMounts:
         - mountPath: /alertmanager.yml
           name: alertmanager-config
