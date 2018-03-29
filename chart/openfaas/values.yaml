@@ -19,12 +19,12 @@ queueWorker:
 
 # images
 images:
-  controller: functions/faas-netesd:0.4.5
-  gateway: functions/gateway:0.7.3
+  controller: functions/faas-netesd:0.4.6
+  gateway: functions/gateway:0.7.8
   prometheus: prom/prometheus:v2.2.0
   alertmanager: prom/alertmanager:v0.15.0-rc.0
   nats: nats-streaming:0.6.0
-  queueWorker: functions/queue-worker:0.4
+  queueWorker: functions/queue-worker:0.4.3
 
 # ingress configuration
 ingress:
