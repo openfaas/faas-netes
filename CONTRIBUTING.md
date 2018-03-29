@@ -9,6 +9,7 @@ This project is licensed under the MIT License.
 ### Helm
 
 Any changes to the helm chart will also need a corresponding change in the [Chart.yml](https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/Chart.yaml) file to bump up the version.
+For version updates please review the [Semantic Versioning](https://semver.org/spec/v0.1.0.html) guidelines.
 
 ### ARM builds
 
