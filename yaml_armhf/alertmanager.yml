@@ -1,3 +1,44 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: openfaas
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: functions/alertmanager:0.15.0-rc.0-armhf
+        imagePullPolicy: Always
+        command: 
+          - "alertmanager"
+          - "--config.file=/alertmanager.yml"
+          - "--storage.path=/alertmanager"
+        ports:
+        - containerPort: 9003
+          protocol: TCP
+        resources:
+          requests:
+            memory: 25Mi
+          limits:
+            memory: 50Mi
+        volumeMounts:
+        - mountPath: /alertmanager.yml
+          name: alertmanager-config
+          subPath: alertmanager.yml
+      volumes:
+        - name: alertmanager-config
+          configMap:
+            name: alertmanager-config
+            items:
+              - key: alertmanager.yml
+                path: alertmanager.yml
+                mode: 0644
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,41 +54,3 @@ spec:
       targetPort: 9093
   selector:
     app: alertmanager
----
-apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
-kind: Deployment
-metadata:
-  name: alertmanager
-  namespace: openfaas
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: alertmanager
-    spec:
-      containers:
-      - name: alertmanager
-        image: alexellis2/alertmanager-armhf:0.5.1
-        imagePullPolicy: Always
-        command: ["/bin/alertmanager","-config.file=/alertmanager.yml", "-storage.path=/alertmanager"]
-        ports:
-        - containerPort: 9003
-          protocol: TCP
-        resources:
-          requests:
-            memory: 20Mi
-          limits:
-            memory: 30Mi
-        volumeMounts:
-        - mountPath: /alertmanager.yml
-          name: alertmanager-config
-          subPath: alertmanager.yml
-      volumes:
-        - name: alertmanager-config
-          configMap:
-            name: alertmanager-config
-            items:
-              - key: alertmanager.yml
-                path: alertmanager.yml
-                mode: 0644
