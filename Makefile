@@ -15,9 +15,6 @@ build-arm64:
 build-armhf:
 	docker build -t functions/faas-netesd:$(TAG)-armhf . -f Dockerfile.armhf
 
-build-legacy:
-	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}"  -t functions/faas-netesd:$(TAG) . -f Dockerfile.non-multi --squash=${SQUASH}
-
 build:
 	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t functions/faas-netesd:$(TAG) . --squash=${SQUASH}
 

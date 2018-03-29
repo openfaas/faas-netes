@@ -1,5 +1,4 @@
-FROM alexellis2/golang:1.9-arm64 as build
-#FROM golang:1.7.5
+FROM golang:1.9.2 as build
 ENV GOPATH=/go/
 RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
@@ -15,10 +14,9 @@ RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
     -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
     -a -installsuffix cgo -o faas-netes .
 
-FROM debian:stretch
-#FROM alpine:3.5
-#RUN apk --no-cache add ca-certificates
-RUN apt-get update -qy && apt-get -qy install ca-certificates
+
+FROM alpine:3.7
+RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 
 EXPOSE 8080
