@@ -30,7 +30,7 @@ If you'd like to know more about the OpenFaaS project head over to - https://git
 
 ## Get started
 
-If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://github.com/openfaas/faas/blob/master/guide/deployment_k8s.md) or read on for a technical overview.
+If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://docs.openfaas.com/deployment/kubernetes/) or read on for a technical overview.
 
 To try our `helm` chart click here: [helm guide](https://github.com/openfaas/faas-netes/blob/master/HELM.md).
 
