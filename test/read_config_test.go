@@ -116,3 +116,29 @@ func TestRead_EnableFunctionReadinessProbeConfig_true(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestRead_ImagePullPolicy_set(t *testing.T) {
+	defaults := NewEnvBucket()
+	defaults.Setenv("image_pull_policy", "IfNotPresent")
+
+	readConfig := types.ReadConfig{}
+	config := readConfig.Read(defaults)
+
+	if (config.ImagePullPolicy) != "IfNotPresent" {
+		t.Logf("ImagePullPolicy incorrect, got: %v\n", config.ImagePullPolicy)
+		t.Fail()
+	}
+}
+
+func TestRead_ImagePullPolicy_empty(t *testing.T) {
+	defaults := NewEnvBucket()
+	defaults.Setenv("image_pull_policy", "")
+
+	readConfig := types.ReadConfig{}
+	config := readConfig.Read(defaults)
+
+	if (config.ImagePullPolicy) != "Always" {
+		t.Logf("ImagePullPolicy incorrect, got: %v\n", config.ImagePullPolicy)
+		t.Fail()
+	}
+}

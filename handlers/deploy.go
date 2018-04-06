@@ -47,6 +47,7 @@ func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
 // DeployHandlerConfig specify options for Deployments
 type DeployHandlerConfig struct {
 	EnableFunctionReadinessProbe bool
+	ImagePullPolicy              string
 }
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
@@ -156,6 +157,16 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		return nil, resourceErr
 	}
 
+	var imagePullPolicy apiv1.PullPolicy
+	switch config.ImagePullPolicy {
+	case "Never":
+		imagePullPolicy = apiv1.PullNever
+	case "IfNotPresent":
+		imagePullPolicy = apiv1.PullIfNotPresent
+	default:
+		imagePullPolicy = apiv1.PullAlways
+	}
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -197,7 +208,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							},
 							Env:             envVars,
 							Resources:       *resources,
-							ImagePullPolicy: v1.PullAlways,
+							ImagePullPolicy: imagePullPolicy,
 							LivenessProbe:   probe,
 							ReadinessProbe:  probe,
 						},

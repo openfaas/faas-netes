@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/openfaas/faas/gateway/requests"
-	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -43,7 +42,11 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 		if len(deployment.Spec.Template.Spec.Containers) > 0 {
 			deployment.Spec.Template.Spec.Containers[0].Image = request.Image
-			deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
+
+			// Disabling update support to prevent unexpected mutations of deployed functions,
+			// since imagePullPolicy is now configurable. This could be reconsidered later depending
+			// on desired behavior, but will need to be updated to take config.
+			//deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
 
 			deployment.Spec.Template.Spec.Containers[0].Env = buildEnvVars(&request)
 

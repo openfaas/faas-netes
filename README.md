@@ -51,6 +51,7 @@ FaaS-netes can be configured via environment variables.
 | `enable_function_readiness_probe` | Boolean - enable a readiness probe to test functions. Default: `true`               |
 | `write_timeout`        | HTTP timeout for writing a response body from your function (in seconds). Default: `8`         |
 | `read_timeout`         | HTTP timeout for reading the payload from the client caller (in seconds). Default: `8`         |
+| `image_pull_policy`    | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`.  Default: `Always` |
 
 **Readiness checking**
 
@@ -63,6 +64,15 @@ By default all OpenFaaS functions and services are deployed to the `default` nam
 **Asynchronous processing**
 
 To enable asynchronous processing use the helm chart configuration.
+
+**Image pull policy**
+
+By default, deployed functions will use an [imagePullPolicy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) of `Always`, which ensures functions using static image tags are refreshed during an update.
+If this is not desired behavior, set the `image_pull_policy` environment variable to an alternative.  `IfNotPresent` is particularly useful when developing locally with minikube.
+In this case, you can set your local environment to [use minikube's docker](https://kubernetes.io/docs/getting-started-guides/minikube/#reusing-the-docker-daemon) so `faas-cli build` builds directly into minikube's image store.
+`faas-cli push` is unnecessary in this workflow - use `faas-cli build` then `faas-cli deploy`.
+
+Note: When set to `Never`, **only** local (or pulled) images will work.  When set to `IfNotPresent`, function deployments may not be updated when using static image tags.
 
 ### Technical overview
 
