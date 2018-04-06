@@ -28,8 +28,10 @@
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 * Docker version `docker version` (e.g. Docker 17.0.05 ):
 
-* Are you using Docker Swarm or Kubernetes (FaaS-netes)?
+* What version and distriubtion of Kubernetes are you using? `kubectl version`
 
 * Operating System and version (e.g. Linux, Windows, MacOS):
 
 * Link to your project or a code example to reproduce issue:
+
+* What network driver are you using and what CIDR? i.e. Weave net / Flannel
