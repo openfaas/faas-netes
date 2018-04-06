@@ -49,6 +49,13 @@ func parseBoolValue(val string, fallback bool) bool {
 	return fallback
 }
 
+func parseString(val string, fallback string) string {
+	if len(val) > 0 {
+		return val
+	}
+	return fallback
+}
+
 // Read fetches config from environmental variables.
 func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg := BootstrapConfig{}
@@ -58,10 +65,14 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	readTimeout := parseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*10)
 	writeTimeout := parseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*10)
 
+	imagePullPolicy := parseString(hasEnv.Getenv("image_pull_policy"), "Always")
+
 	cfg.ReadTimeout = readTimeout
 	cfg.WriteTimeout = writeTimeout
 
 	cfg.EnableFunctionReadinessProbe = enableProbe
+
+	cfg.ImagePullPolicy = imagePullPolicy
 
 	return cfg
 }
@@ -71,4 +82,5 @@ type BootstrapConfig struct {
 	EnableFunctionReadinessProbe bool
 	ReadTimeout                  time.Duration
 	WriteTimeout                 time.Duration
+	ImagePullPolicy              string
 }

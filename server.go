@@ -44,6 +44,7 @@ func main() {
 
 	deployConfig := &handlers.DeployHandlerConfig{
 		EnableFunctionReadinessProbe: cfg.EnableFunctionReadinessProbe,
+		ImagePullPolicy:              cfg.ImagePullPolicy,
 	}
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
