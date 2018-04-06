@@ -19,7 +19,7 @@ queueWorker:
 
 # images
 images:
-  controller: functions/faas-netesd:0.4.6
+  controller: functions/faas-netesd:0.4.8
   gateway: functions/gateway:0.7.8
   prometheus: prom/prometheus:v2.2.0
   alertmanager: prom/alertmanager:v0.15.0-rc.0
