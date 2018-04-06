@@ -49,6 +49,8 @@ spec:
           value: "{{ .Values.faasnetesd.readTimeout }}"
         - name: write_timeout
           value: "{{ .Values.faasnetesd.writeTimeout }}"
+        - name: image_pull_policy
+          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
         ports:
         - containerPort: 8080
           protocol: TCP

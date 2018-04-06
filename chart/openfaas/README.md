@@ -77,6 +77,7 @@ Additional OpenFaaS options.
 | `rbac` | Enable RBAC | `true` |
 | `faasnetesd.readTimeout` | Queue worker read timeout | `20s` |
 | `faasnetesd.writeTimeout` | Queue worker write timeout | `20s` |
+| `faasnetesd.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `gateway.readTimeout` | Queue worker read timeout | `20s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `20s` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
