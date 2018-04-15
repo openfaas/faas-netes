@@ -108,7 +108,7 @@ The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com
 
 ### Explore OpenFaaS / FaaS-netes with minikube
 
-> These instructions may be out of sync with the latest changes. If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://github.com/openfaas/faas/blob/master/guide/deployment_k8s.md).
+> These instructions may be out of sync with the latest changes. If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://docs.openfaas.com/deployment/kubernetes/).
 
 Let's try it out:
 
