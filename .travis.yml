@@ -3,7 +3,7 @@ sudo: required
 language: go
 
 go:
-  - 1.8.x
+  - 1.9.x
   
 install:
   - echo "Please don't go get"
@@ -18,7 +18,7 @@ before_script:
 after_success:
     - if [ ! -z "$TRAVIS_TAG" ] ; then 
         docker tag $DOCKER_NS/faas-netesd:latest $DOCKER_NS/faas-netesd:$TRAVIS_TAG;
-        docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD;
+        echo $DOCKER_PASSWORD | docker login -u=$DOCKER_USERNAME --password-stdin;
         docker push $DOCKER_NS/faas-netesd:$TRAVIS_TAG;
         fi
 
