@@ -21,8 +21,8 @@ In this README you'll find a technical overview and instructions for deploying F
 * Native Kubernetes integrations (API and ecosystem)
 * Built-in UI
 * YAML templates & helm chart
-* Over 9k GitHub stars
-* Independent open-source project with 70 authors/contributors
+* Over 11k GitHub stars
+* Independent open-source project with over 90 authors/contributors
 
 You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
 
@@ -76,7 +76,7 @@ Note: When set to `Never`, **only** local (or pulled) images will work.  When se
 
 ### Technical overview
 
-The code in this repository is a daemon or micro-service which can provide the basic functionality the FaaS Gateway requires:
+The code in this repository is a daemon or micro-service which can provide the basic functionality the OpenFaaS API Gateway  requires:
 
 * List functions
 * Deploy function
@@ -96,6 +96,11 @@ So rather than inflating the original project's source-code this micro-service w
 
 There is no planned support for dual orchestrators - i.e. Swarm and K8s at the same time on the same host/network.
 
+
+### Deploy OpenFaaS
+
+> These instructions may be out of sync with the latest changes. If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://docs.openfaas.com/deployment/kubernetes).
+
 ### Get involved
 
 *Please Star the FaaS and FaaS-netes Github repo.*
@@ -107,8 +112,6 @@ Contributions are welcome - see the [contributing guide for OpenFaaS](https://gi
 The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
 
 ### Explore OpenFaaS / FaaS-netes with minikube
-
-> These instructions may be out of sync with the latest changes. If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://github.com/openfaas/faas/blob/master/guide/deployment_k8s.md).
 
 Let's try it out:
 
