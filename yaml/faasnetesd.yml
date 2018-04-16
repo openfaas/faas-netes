@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        image: functions/faas-netesd:0.4.6
+        image: functions/faas-netesd:0.4.8
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -30,6 +30,8 @@ spec:
           value: "20s"
         - name: write_timeout
           value: "20s"
+        - name: image_pull_policy
+          value: "Always"
 ---
 apiVersion: v1
 kind: Service
