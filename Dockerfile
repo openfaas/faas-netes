@@ -1,4 +1,4 @@
-FROM golang:1.9.2
+FROM golang:1.9.4 as builder
 
 RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
@@ -30,7 +30,7 @@ EXPOSE 8080
 ENV http_proxy      ""
 ENV https_proxy     ""
 
-COPY --from=0 /go/src/github.com/openfaas/faas-netes/faas-netes    .
+COPY --from=builder /go/src/github.com/openfaas/faas-netes/faas-netes    .
 RUN chown -R app:app ./
 
 USER app
