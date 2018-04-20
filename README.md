@@ -5,17 +5,17 @@ faas-netes
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenFaaS](https://img.shields.io/badge/openfaas-serverless-blue.svg)](https://www.openfaas.com)
 
-This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfaas/faas) backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestation frameworks such as Nomad,  Mesos/Marathon or even a cloud-managed back-end such as Hyper.sh or Azure ACI.
+This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfaas/faas) backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestration frameworks such as Nomad,  Mesos/Marathon or even a cloud-managed back-end such as Hyper.sh or Azure ACI.
 
-**Update:** [Watch the demo and intro to the CNCF Serverless Workgroup](https://youtu.be/SwRjPiqpFTk?t=1m8s)
+> OpenFaaS also runs well on managed Kubernetes services like AKS and GKE. See our list of tutorials in the documentation site for more.
+
+**Watch a video demo from [TechFieldDay Extra at Dockercon](https://www.youtube.com/watch?v=C3agSKv2s_w&list=PLlIapFDp305AiwA17mUNtgi5-u23eHm5j&index=1)**
 
 [OpenFaaS](https://github.com/openfaas/faas) is an event-driven serverless framework for containers. Any container for Windows or Linux can be leveraged as a serverless function. OpenFaaS is quick and easy to deploy (less than 60 secs) and lets you avoid writing boiler-plate code.
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster.
-
-> Docker Swarm is also supported.
+In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster. (Docker Swarm is also supported in the main project)
 
 * Serverless framework for containers
 * Native Kubernetes integrations (API and ecosystem)
@@ -24,15 +24,11 @@ In this README you'll find a technical overview and instructions for deploying F
 * Over 11k GitHub stars
 * Independent open-source project with over 90 authors/contributors
 
-You can watch my intro from [the Dockercon closing keynote with Alexa, Twitter and Github demos](https://www.youtube.com/watch?v=-h2VTE9WnZs&t=910s) or a [complete walk-through of FaaS-netes](https://www.youtube.com/watch?v=0DbrLsUvaso) showing Prometheus, auto-scaling, the UI and CLI in action.
-
-If you'd like to know more about the OpenFaaS project head over to - https://github.com/openfaas/faas
-
 ## Get started
 
-If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://docs.openfaas.com/deployment/kubernetes/) or read on for a technical overview.
-
-To try our `helm` chart click here: [helm guide](https://github.com/openfaas/faas-netes/blob/master/HELM.md).
+* [Deploy on Kubernetes](https://docs.openfaas.com/deployment)
+* [Read the docs](https://docs.openfaas.com)
+* [Join the community](https://docs.openfaas.com/community)
 
 ### How is this project different from others?
 
@@ -40,11 +36,9 @@ To try our `helm` chart click here: [helm guide](https://github.com/openfaas/faa
 
 ## Reference guide
 
-### Configuration
+### Configuration via Environmental variables
 
 FaaS-netes can be configured via environment variables.
-
-**Environmental variables:**
 
 | Option                 | Usage                                                                                          |
 |------------------------|------------------------------------------------------------------------------------------------|
@@ -53,19 +47,19 @@ FaaS-netes can be configured via environment variables.
 | `read_timeout`         | HTTP timeout for reading the payload from the client caller (in seconds). Default: `8`         |
 | `image_pull_policy`    | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`.  Default: `Always` |
 
-**Readiness checking**
+### Readiness checking
 
 The readiness checking for functions assumes you are using our function watchdog which writes a .lock file in the default "tempdir" within a container. To see this in action you can delete the .lock file in a running Pod with `kubectl exec` and the function will be re-scheduled.
 
-**Namespaces**
+### Namespaces
 
-By default all OpenFaaS functions and services are deployed to the `default` namespace. To use a separate namespace for functions and the services use the Helm chart.
+By default all OpenFaaS functions and services are deployed to the `openfaas` and `openfaas-fn` namespaces. To alter the namespace use the `helm` chart.
 
-**Asynchronous processing**
+### Ingress
 
-To enable asynchronous processing use the helm chart configuration.
+To configure ingress see the `helm` chart. By default NodePorts are used. These are listed in the [deployment guide](https://docs.openfaas.com/deployment).
 
-**Image pull policy**
+### Image pull policy
 
 By default, deployed functions will use an [imagePullPolicy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) of `Always`, which ensures functions using static image tags are refreshed during an update.
 If this is not desired behavior, set the `image_pull_policy` environment variable to an alternative.  `IfNotPresent` is particularly useful when developing locally with minikube.
@@ -73,104 +67,3 @@ In this case, you can set your local environment to [use minikube's docker](http
 `faas-cli push` is unnecessary in this workflow - use `faas-cli build` then `faas-cli deploy`.
 
 Note: When set to `Never`, **only** local (or pulled) images will work.  When set to `IfNotPresent`, function deployments may not be updated when using static image tags.
-
-### Technical overview
-
-The code in this repository is a daemon or micro-service which can provide the basic functionality the OpenFaaS API Gateway  requires:
-
-* List functions
-* Deploy function
-* Delete function
-* Invoke function synchronously
-
-Any other metrics or UI components will be maintained separately in the main OpenFaaS project.
-
-**Motivation for separate micro-service:**
-
-* Kubernetes go-client is 41MB with only a few lines of code
-* After including the go-client the code takes > 2mins to compile
-
-So rather than inflating the original project's source-code this micro-service will act as a co-operator or plug-in. Some additional changes will be needed in the main OpenFaaS project to switch between implementations.
-
-![](https://pbs.twimg.com/media/DFh7i-ZXkAAZkw4.jpg:large)
-
-There is no planned support for dual orchestrators - i.e. Swarm and K8s at the same time on the same host/network.
-
-
-### Deploy OpenFaaS
-
-> These instructions may be out of sync with the latest changes. If you're looking to just get OpenFaaS deployed on Kubernetes follow the [OpenFaaS and Kubernetes Deployment Guide](https://docs.openfaas.com/deployment/kubernetes).
-
-### Get involved
-
-*Please Star the FaaS and FaaS-netes Github repo.*
-
-* [Main OpenFaaS repo](https://github.com/openfaas/faas)
-
-Contributions are welcome - see the [contributing guide for OpenFaaS](https://github.com/openfaas/faas/blob/master/CONTRIBUTING.md).
-
-The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows how to use Prometheus and the auto-scaling in action.
-
-### Explore OpenFaaS / FaaS-netes with minikube
-
-Let's try it out:
-
-* Create a single-node cluster on our Mac
-
-&nbsp;&nbsp;&nbsp;**Note:** If you plan to use helm, we recommend using `kubeadm` bootstrapper for minikube, which makes it easier to work with RBAC-enabled cluster. Add `--bootstrapper=kubeadm` to your `minikube start` command, like so:
-```
-minikube start --bootstrapper=kubeadm --kubernetes-version=v1.8.4
-```
-
-* Deploy a function with the `faas-cli`
-* Deploy OpenFaaS with [helm](HELM.md)
-
-&nbsp;&nbsp;&nbsp;**Note:** If you used `kubeadm` bootstrapper in minikube, run following command to ensure Helm has privileges to create resources in your cluster:
-```
-kubectl create clusterrolebinding tiller-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
-```
-* Make calls to list the functions and invoke a function
-
-I'll give instructions for creating your cluster on a Mac with `minikube`, but you can also use `kubeadm` on Linux in the cloud by [following this tutorial](https://blog.alexellis.io/kubernetes-kubeadm-video/).
-
-[Begin the Official tutorial on Medium](https://medium.com/@alexellisuk/getting-started-with-openfaas-on-minikube-634502c7acdf)
-
-### Appendix
-
-**Auto-scale your functions**
-
-Given enough load (> 5 requests/second) OpenFaaS will auto-scale your service, you can test this out by opening up the Prometheus web-page and then generating load with Apache Bench or a while/true/curl bash loop.
-
-Here's an example you can use to generate load:
-
-```
-ip=$(minikube ip); while [ true ] ; do curl $ip:31112/function/nodeinfo -d "" ; done
-```
-
-Prometheus is exposed on a NodePort of 31119 which shows the function invocation rate.
-
-```
-$ open http://$(minikube ip):31119/
-```
-
-Here's an example for use with the Prometheus UI:
-
-```
-rate(gateway_function_invocation_total[20s])
-```
-
-> It shows the rate the function has been invoked over a 20 second window.
-
-The [OpenFaaS complete walk-through on Kubernetes Video](https://www.youtube.com/watch?v=0DbrLsUvaso) shows auto-scaling in action and how to use the Prometheus UI.
-
-**Test out the UI**
-
-You can also access the OpenFaaS UI through the node's IP address and the NodePort we exposed earlier.
-
-```
-$ open http://$(minikube ip):31112/
-```
-
-![](https://pbs.twimg.com/media/DFkUuH1XsAAtNJ6.jpg:medium)
-
-If you've ever used the *Kubernetes dashboard* then this UI is a similar concept. You can list, invoke and create new functions.
