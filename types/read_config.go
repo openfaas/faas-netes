@@ -26,6 +26,16 @@ type HasEnv interface {
 type ReadConfig struct {
 }
 
+func parseIntValue(val string, fallback int) int {
+	if len(val) > 0 {
+		parsedVal, parseErr := strconv.Atoi(val)
+		if parseErr == nil && parsedVal >= 0 {
+			return parsedVal
+		}
+	}
+	return fallback
+}
+
 func parseIntOrDurationValue(val string, fallback time.Duration) time.Duration {
 	if len(val) > 0 {
 		parsedVal, parseErr := strconv.Atoi(val)
@@ -74,6 +84,9 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 
 	cfg.ImagePullPolicy = imagePullPolicy
 
+	defaultTCPPort := 8080
+	cfg.Port = parseIntValue(hasEnv.Getenv("port"), defaultTCPPort)
+
 	return cfg
 }
 
@@ -83,4 +96,5 @@ type BootstrapConfig struct {
 	ReadTimeout                  time.Duration
 	WriteTimeout                 time.Duration
 	ImagePullPolicy              string
+	Port                         int
 }

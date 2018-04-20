@@ -60,7 +60,7 @@ func main() {
 	}
 
 	var port int
-	port = 8080
+	port = cfg.Port
 
 	bootstrapConfig := bootTypes.FaaSConfig{
 		ReadTimeout:  cfg.ReadTimeout,

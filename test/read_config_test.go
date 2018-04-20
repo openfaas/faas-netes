@@ -4,6 +4,7 @@
 package test
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -40,6 +41,28 @@ func TestRead_EmptyTimeoutConfig(t *testing.T) {
 	}
 	if (config.WriteTimeout) != defaultVal {
 		t.Logf("WriteTimeout want: %s, got %s", defaultVal.String(), config.ReadTimeout.String())
+		t.Fail()
+	}
+
+	wantPort := 8080
+
+	if config.Port != wantPort {
+		t.Logf("Port want: %d, got %d", wantPort, config.Port)
+		t.Fail()
+	}
+}
+
+func TestRead_ReadPortConfig(t *testing.T) {
+	defaults := NewEnvBucket()
+	wantPort := 8082
+
+	defaults.Setenv("port", fmt.Sprintf("%d", wantPort))
+
+	readConfig := types.ReadConfig{}
+	config := readConfig.Read(defaults)
+
+	if config.Port != wantPort {
+		t.Logf("Port incorrect, want: %d, got: %d\n", wantPort, config.Port)
 		t.Fail()
 	}
 }
