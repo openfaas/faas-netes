@@ -27,8 +27,10 @@ In this README you'll find a technical overview and instructions for deploying F
 ## Get started
 
 * [Deploy on Kubernetes](https://docs.openfaas.com/deployment)
-* [Read the docs](https://docs.openfaas.com)
+* [Visit the website](https://www.openfaas.com)
 * [Join the community](https://docs.openfaas.com/community)
+
+> Note: a CRD-based Kubernetes controller is also available for OpenFaaS in the incubator program - [faas-o6s](https://github.com/openfaas-incubator/faas-o6s/).
 
 ### How is this project different from others?
 
