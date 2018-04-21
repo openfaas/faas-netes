@@ -49,6 +49,7 @@ spec:
       labels:
         app: gateway
     spec:
+      serviceAccountName: faas-controller
       containers:
       - name: gateway
         image: {{ .Values.images.gateway }}
@@ -70,5 +71,20 @@ spec:
         {{- end }}
         ports:
         - containerPort: 8080
+          protocol: TCP
+      - name: faas-netesd
+        image: {{ .Values.images.controller }}
+        imagePullPolicy: Always
+        env:
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
+        - name: read_timeout
+          value: "{{ .Values.faasnetesd.readTimeout }}"
+        - name: write_timeout
+          value: "{{ .Values.faasnetesd.writeTimeout }}"
+        - name: image_pull_policy
+          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        ports:
+        - containerPort: 8081
           protocol: TCP
 ---
