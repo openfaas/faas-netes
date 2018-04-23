@@ -293,7 +293,7 @@ func createSelector(constraints []string) map[string]string {
 		}
 	}
 
-	log.Println("selector: ", selector)
+	// log.Println("selector: ", selector)
 	return selector
 }
 
@@ -303,20 +303,16 @@ func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceReq
 		Requests: apiv1.ResourceList{},
 	}
 
-	// No resources set return blank section
-	if request.Limits == nil {
-		return resources, nil
-	}
-
 	// Set Memory limits
-	if len(request.Limits.Memory) > 0 {
+	if request.Limits != nil && len(request.Limits.Memory) > 0 {
 		qty, err := resource.ParseQuantity(request.Limits.Memory)
 		if err != nil {
 			return resources, err
 		}
 		resources.Limits[apiv1.ResourceMemory] = qty
 	}
-	if len(request.Requests.Memory) > 0 {
+
+	if request.Requests != nil && len(request.Requests.Memory) > 0 {
 		qty, err := resource.ParseQuantity(request.Requests.Memory)
 		if err != nil {
 			return resources, err
@@ -325,14 +321,15 @@ func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceReq
 	}
 
 	// Set CPU limits
-	if len(request.Limits.CPU) > 0 {
+	if request.Limits != nil && len(request.Limits.CPU) > 0 {
 		qty, err := resource.ParseQuantity(request.Limits.CPU)
 		if err != nil {
 			return resources, err
 		}
 		resources.Limits[apiv1.ResourceCPU] = qty
 	}
-	if len(request.Requests.CPU) > 0 {
+
+	if request.Requests != nil && len(request.Requests.CPU) > 0 {
 		qty, err := resource.ParseQuantity(request.Requests.CPU)
 		if err != nil {
 			return resources, err
