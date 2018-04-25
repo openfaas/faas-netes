@@ -82,7 +82,17 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 			},
 		}
 
-		deployment.Spec.Template.Spec.Volumes = append(deployment.Spec.Template.Spec.Volumes, projectedSecrets)
+		existingVolumes := deployment.Spec.Template.Spec.Volumes
+		existingVolumeIndex := -1
+		for i, v := range existingVolumes {
+			if v.Name == volumeName {
+				existingVolumeIndex = i
+			}
+		}
+		if existingVolumeIndex > -1 {
+			existingVolumes = append(existingVolumes[:existingVolumeIndex], existingVolumes[existingVolumeIndex+1:]...)
+		}
+		deployment.Spec.Template.Spec.Volumes = append(existingVolumes, projectedSecrets)
 
 		// add mount secret as a file
 		updatedContainers := []apiv1.Container{}
@@ -92,7 +102,19 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 				ReadOnly:  true,
 				MountPath: "/run/secrets",
 			}
-			container.VolumeMounts = append(container.VolumeMounts, mount)
+
+			existingVolumeMounts := container.VolumeMounts
+			existingVolumeMountIndex := -1
+			for i, v := range existingVolumeMounts {
+				if v.Name == volumeName {
+					existingVolumeMountIndex = i
+				}
+			}
+			if existingVolumeMountIndex > -1 {
+				existingVolumeMounts = append(existingVolumeMounts[:existingVolumeMountIndex], existingVolumeMounts[existingVolumeMountIndex+1:]...)
+			}
+
+			container.VolumeMounts = append(existingVolumeMounts, mount)
 			updatedContainers = append(updatedContainers, container)
 		}
 
