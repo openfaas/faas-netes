@@ -83,14 +83,10 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 		}
 
 		existingVolumes := deployment.Spec.Template.Spec.Volumes
-		existingVolumeIndex := -1
 		for i, v := range existingVolumes {
 			if v.Name == volumeName {
-				existingVolumeIndex = i
+				existingVolumes = append(existingVolumes[:i], existingVolumes[i+1:]...)
 			}
-		}
-		if existingVolumeIndex > -1 {
-			existingVolumes = append(existingVolumes[:existingVolumeIndex], existingVolumes[existingVolumeIndex+1:]...)
 		}
 		deployment.Spec.Template.Spec.Volumes = append(existingVolumes, projectedSecrets)
 
@@ -104,14 +100,10 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 			}
 
 			existingVolumeMounts := container.VolumeMounts
-			existingVolumeMountIndex := -1
 			for i, v := range existingVolumeMounts {
 				if v.Name == volumeName {
-					existingVolumeMountIndex = i
+					existingVolumeMounts = append(existingVolumeMounts[:i], existingVolumeMounts[i+1:]...)
 				}
-			}
-			if existingVolumeMountIndex > -1 {
-				existingVolumeMounts = append(existingVolumeMounts[:existingVolumeMountIndex], existingVolumeMounts[existingVolumeMountIndex+1:]...)
 			}
 
 			container.VolumeMounts = append(existingVolumeMounts, mount)
