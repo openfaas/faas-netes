@@ -20,7 +20,7 @@ queueWorker:
 # images
 images:
   controller: functions/faas-netesd:0.5.0
-  gateway: functions/gateway:0.7.9
+  gateway: functions/gateway:0.8.0
   prometheus: prom/prometheus:v2.2.0
   alertmanager: prom/alertmanager:v0.15.0-rc.0
   nats: nats-streaming:0.6.0
