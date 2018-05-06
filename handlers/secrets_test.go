@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/openfaas/faas/gateway/requests"
@@ -9,7 +10,7 @@ import (
 )
 
 func Test_UpdateSecrets(t *testing.T) {
-	t.Run("Handles nil secrets slice", func(t *testing.T) {
+	t.Run("No volume added if request secrets is nil", func(t *testing.T) {
 		request := requests.CreateFunctionRequest{
 			Service: "testfunc",
 			Secrets: nil,
@@ -39,7 +40,7 @@ func Test_UpdateSecrets(t *testing.T) {
 
 	})
 
-	t.Run("Handles nil secrets slice", func(t *testing.T) {
+	t.Run("No volume added if request secrets is the empty slice", func(t *testing.T) {
 		request := requests.CreateFunctionRequest{
 			Service: "testfunc",
 			Secrets: []string{},
@@ -135,11 +136,52 @@ func Test_UpdateSecrets(t *testing.T) {
 		validateNewSecretVolumesAndMounts(t, deployment)
 
 	})
+
+	t.Run("Removes secrets volumes if the request is empty or nil", func(t *testing.T) {
+		request := requests.CreateFunctionRequest{
+			Service: "testfunc",
+			Secrets: []string{"pullsecret", "testsecret"},
+		}
+		existingSecrets := map[string]*apiv1.Secret{
+			"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+			"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+		}
+
+		deployment := &v1beta1.Deployment{
+			Spec: v1beta1.DeploymentSpec{
+				Template: apiv1.PodTemplateSpec{
+					Spec: apiv1.PodSpec{
+						Containers: []apiv1.Container{
+							{Name: "testfunc", Image: "alpine:latest"},
+						},
+					},
+				},
+			},
+		}
+		err := UpdateSecrets(request, deployment, existingSecrets)
+		if err != nil {
+			t.Errorf("unexpected error %s", err.Error())
+		}
+
+		validateNewSecretVolumesAndMounts(t, deployment)
+
+		request = requests.CreateFunctionRequest{
+			Service: "testfunc",
+			Secrets: []string{},
+		}
+		err = UpdateSecrets(request, deployment, existingSecrets)
+		if err != nil {
+			t.Errorf("unexpected error %s", err.Error())
+		}
+
+		validateEmptySecretVolumesAndMounts(t, deployment)
+	})
 }
 
 func validateEmptySecretVolumesAndMounts(t *testing.T, deployment *v1beta1.Deployment) {
 	numVolumes := len(deployment.Spec.Template.Spec.Volumes)
 	if numVolumes != 0 {
+		fmt.Printf("%+v", deployment.Spec.Template.Spec.Volumes)
 		t.Errorf("Incorrect number of volumes: expected 0, got %d", numVolumes)
 	}
 

@@ -71,47 +71,56 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 		}
 	}
 
-	if len(secretVolumeProjections) > 0 {
-		volumeName := fmt.Sprintf("%s-projected-secrets", request.Service)
-		projectedSecrets := apiv1.Volume{
-			Name: volumeName,
-			VolumeSource: apiv1.VolumeSource{
-				Projected: &apiv1.ProjectedVolumeSource{
-					Sources: secretVolumeProjections,
-				},
+	volumeName := fmt.Sprintf("%s-projected-secrets", request.Service)
+	projectedSecrets := apiv1.Volume{
+		Name: volumeName,
+		VolumeSource: apiv1.VolumeSource{
+			Projected: &apiv1.ProjectedVolumeSource{
+				Sources: secretVolumeProjections,
 			},
-		}
-
-		existingVolumes := deployment.Spec.Template.Spec.Volumes
-		for i, v := range existingVolumes {
-			if v.Name == volumeName {
-				existingVolumes = append(existingVolumes[:i], existingVolumes[i+1:]...)
-			}
-		}
-		deployment.Spec.Template.Spec.Volumes = append(existingVolumes, projectedSecrets)
-
-		// add mount secret as a file
-		updatedContainers := []apiv1.Container{}
-		for _, container := range deployment.Spec.Template.Spec.Containers {
-			mount := apiv1.VolumeMount{
-				Name:      volumeName,
-				ReadOnly:  true,
-				MountPath: "/run/secrets",
-			}
-
-			existingVolumeMounts := container.VolumeMounts
-			for i, v := range existingVolumeMounts {
-				if v.Name == volumeName {
-					existingVolumeMounts = append(existingVolumeMounts[:i], existingVolumeMounts[i+1:]...)
-				}
-			}
-
-			container.VolumeMounts = append(existingVolumeMounts, mount)
-			updatedContainers = append(updatedContainers, container)
-		}
-
-		deployment.Spec.Template.Spec.Containers = updatedContainers
+		},
 	}
+
+	// remove the existing secrets volume, if we can find it. The update volume will be
+	// added below
+	existingVolumes := deployment.Spec.Template.Spec.Volumes
+	for i, v := range existingVolumes {
+		if v.Name == volumeName {
+			existingVolumes = append(existingVolumes[:i], existingVolumes[i+1:]...)
+		}
+	}
+
+	deployment.Spec.Template.Spec.Volumes = existingVolumes
+	if len(secretVolumeProjections) > 0 {
+		deployment.Spec.Template.Spec.Volumes = append(existingVolumes, projectedSecrets)
+	}
+
+	// add mount secret as a file
+	updatedContainers := []apiv1.Container{}
+	for _, container := range deployment.Spec.Template.Spec.Containers {
+		mount := apiv1.VolumeMount{
+			Name:      volumeName,
+			ReadOnly:  true,
+			MountPath: "/run/secrets",
+		}
+
+		// remove the existing secrets volume mount, if we can find it. We update it later.
+		existingVolumeMounts := container.VolumeMounts
+		for i, v := range existingVolumeMounts {
+			if v.Name == volumeName {
+				existingVolumeMounts = append(existingVolumeMounts[:i], existingVolumeMounts[i+1:]...)
+			}
+		}
+
+		container.VolumeMounts = existingVolumeMounts
+		if len(secretVolumeProjections) > 0 {
+			container.VolumeMounts = append(existingVolumeMounts, mount)
+		}
+
+		updatedContainers = append(updatedContainers, container)
+	}
+
+	deployment.Spec.Template.Spec.Containers = updatedContainers
 
 	return nil
 }
