@@ -9,7 +9,7 @@ import (
 	v1beta1 "k8s.io/api/extensions/v1beta1"
 )
 
-func Test_UpdateSecrets(t *testing.T) {
+func Test_UpdateSecretsAddOrUpdatesTheVolumeSpec(t *testing.T) {
 	t.Run("No volume added if request secrets is nil", func(t *testing.T) {
 		request := requests.CreateFunctionRequest{
 			Service: "testfunc",
