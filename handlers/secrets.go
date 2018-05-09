@@ -83,13 +83,7 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 
 	// remove the existing secrets volume, if we can find it. The update volume will be
 	// added below
-	existingVolumes := deployment.Spec.Template.Spec.Volumes
-	for i, v := range existingVolumes {
-		if v.Name == volumeName {
-			existingVolumes = append(existingVolumes[:i], existingVolumes[i+1:]...)
-		}
-	}
-
+	existingVolumes := removeVolume(volumeName, deployment.Spec.Template.Spec.Volumes)
 	deployment.Spec.Template.Spec.Volumes = existingVolumes
 	if len(secretVolumeProjections) > 0 {
 		deployment.Spec.Template.Spec.Volumes = append(existingVolumes, projectedSecrets)
@@ -105,16 +99,9 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 		}
 
 		// remove the existing secrets volume mount, if we can find it. We update it later.
-		existingVolumeMounts := container.VolumeMounts
-		for i, v := range existingVolumeMounts {
-			if v.Name == volumeName {
-				existingVolumeMounts = append(existingVolumeMounts[:i], existingVolumeMounts[i+1:]...)
-			}
-		}
-
-		container.VolumeMounts = existingVolumeMounts
+		container.VolumeMounts = removeVolumeMount(volumeName, container.VolumeMounts)
 		if len(secretVolumeProjections) > 0 {
-			container.VolumeMounts = append(existingVolumeMounts, mount)
+			container.VolumeMounts = append(container.VolumeMounts, mount)
 		}
 
 		updatedContainers = append(updatedContainers, container)
@@ -123,4 +110,26 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 	deployment.Spec.Template.Spec.Containers = updatedContainers
 
 	return nil
+}
+
+// removeVolume returns a Volume slice with any volumes matching volumeName removed
+func removeVolume(volumeName string, volumes []apiv1.Volume) []apiv1.Volume {
+	for i, v := range volumes {
+		if v.Name == volumeName {
+			volumes = append(volumes[:i], volumes[i+1:]...)
+		}
+	}
+
+	return volumes
+}
+
+// removeVolumeMount returns a VolumeMount slice with any mounts matching volumeName removed
+func removeVolumeMount(volumeName string, mounts []apiv1.VolumeMount) []apiv1.VolumeMount {
+	for i, v := range mounts {
+		if v.Name == volumeName {
+			mounts = append(mounts[:i], mounts[i+1:]...)
+		}
+	}
+
+	return mounts
 }
