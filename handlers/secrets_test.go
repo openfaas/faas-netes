@@ -9,173 +9,171 @@ import (
 	v1beta1 "k8s.io/api/extensions/v1beta1"
 )
 
-func Test_UpdateSecretsAddOrUpdatesTheVolumeSpec(t *testing.T) {
-	t.Run("No volume added if request secrets is nil", func(t *testing.T) {
-		request := requests.CreateFunctionRequest{
-			Service: "testfunc",
-			Secrets: nil,
-		}
-		existingSecrets := map[string]*apiv1.Secret{
-			"pullsecret": {Type: apiv1.SecretTypeDockercfg},
-			"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
-		}
+func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsNil(t *testing.T) {
+	request := requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: nil,
+	}
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
 
-		deployment := &v1beta1.Deployment{
-			Spec: v1beta1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
+	deployment := &v1beta1.Deployment{
+		Spec: v1beta1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
 					},
 				},
 			},
-		}
-		err := UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
+		},
+	}
+	err := UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
 
-		validateEmptySecretVolumesAndMounts(t, deployment)
+	validateEmptySecretVolumesAndMounts(t, deployment)
 
-	})
+}
 
-	t.Run("No volume added if request secrets is the empty slice", func(t *testing.T) {
-		request := requests.CreateFunctionRequest{
-			Service: "testfunc",
-			Secrets: []string{},
-		}
-		existingSecrets := map[string]*apiv1.Secret{
-			"pullsecret": {Type: apiv1.SecretTypeDockercfg},
-			"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
-		}
+func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsEmpty(t *testing.T) {
+	request := requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: []string{},
+	}
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
 
-		deployment := &v1beta1.Deployment{
-			Spec: v1beta1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
+	deployment := &v1beta1.Deployment{
+		Spec: v1beta1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
 					},
 				},
 			},
-		}
-		err := UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
+		},
+	}
+	err := UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
 
-		validateEmptySecretVolumesAndMounts(t, deployment)
+	validateEmptySecretVolumesAndMounts(t, deployment)
 
-	})
+}
 
-	t.Run("Adds New Secrets Volume", func(t *testing.T) {
-		request := requests.CreateFunctionRequest{
-			Service: "testfunc",
-			Secrets: []string{"pullsecret", "testsecret"},
-		}
-		existingSecrets := map[string]*apiv1.Secret{
-			"pullsecret": {Type: apiv1.SecretTypeDockercfg},
-			"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
-		}
+func Test_UpdateSecrets_AddNewSecretVolume(t *testing.T) {
+	request := requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: []string{"pullsecret", "testsecret"},
+	}
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
 
-		deployment := &v1beta1.Deployment{
-			Spec: v1beta1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
+	deployment := &v1beta1.Deployment{
+		Spec: v1beta1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
 					},
 				},
 			},
-		}
-		err := UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
+		},
+	}
+	err := UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
 
-		validateNewSecretVolumesAndMounts(t, deployment)
+	validateNewSecretVolumesAndMounts(t, deployment)
 
-	})
+}
 
-	t.Run("Replaces Previous SecretMount with new mount", func(t *testing.T) {
-		request := requests.CreateFunctionRequest{
-			Service: "testfunc",
-			Secrets: []string{"pullsecret", "testsecret"},
-		}
-		existingSecrets := map[string]*apiv1.Secret{
-			"pullsecret": {Type: apiv1.SecretTypeDockercfg},
-			"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
-		}
+func Test_UpdateSecrets_ReplacesPreviousSecretMountWithNewMount(t *testing.T) {
+	request := requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: []string{"pullsecret", "testsecret"},
+	}
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
 
-		deployment := &v1beta1.Deployment{
-			Spec: v1beta1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
+	deployment := &v1beta1.Deployment{
+		Spec: v1beta1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
 					},
 				},
 			},
-		}
-		err := UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
-		// mimic the deployment already existing and deployed with the same secrets by running
-		// UpdateSecrets twice, the first run represents the original deployment, the second run represents
-		// retrieving the deployment from the k8s api and applying the update to it
-		err = UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
+		},
+	}
+	err := UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
+	// mimic the deployment already existing and deployed with the same secrets by running
+	// UpdateSecrets twice, the first run represents the original deployment, the second run represents
+	// retrieving the deployment from the k8s api and applying the update to it
+	err = UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
 
-		validateNewSecretVolumesAndMounts(t, deployment)
+	validateNewSecretVolumesAndMounts(t, deployment)
 
-	})
+}
 
-	t.Run("Removes secrets volumes if the request is empty or nil", func(t *testing.T) {
-		request := requests.CreateFunctionRequest{
-			Service: "testfunc",
-			Secrets: []string{"pullsecret", "testsecret"},
-		}
-		existingSecrets := map[string]*apiv1.Secret{
-			"pullsecret": {Type: apiv1.SecretTypeDockercfg},
-			"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
-		}
+func Test_UpdateSecrets_RemovesSecretsVolumeIfRequestSecretsIsEmptyOrNil(t *testing.T) {
+	request := requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: []string{"pullsecret", "testsecret"},
+	}
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
 
-		deployment := &v1beta1.Deployment{
-			Spec: v1beta1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
+	deployment := &v1beta1.Deployment{
+		Spec: v1beta1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
 					},
 				},
 			},
-		}
-		err := UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
+		},
+	}
+	err := UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
 
-		validateNewSecretVolumesAndMounts(t, deployment)
+	validateNewSecretVolumesAndMounts(t, deployment)
 
-		request = requests.CreateFunctionRequest{
-			Service: "testfunc",
-			Secrets: []string{},
-		}
-		err = UpdateSecrets(request, deployment, existingSecrets)
-		if err != nil {
-			t.Errorf("unexpected error %s", err.Error())
-		}
+	request = requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: []string{},
+	}
+	err = UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
 
-		validateEmptySecretVolumesAndMounts(t, deployment)
-	})
+	validateEmptySecretVolumesAndMounts(t, deployment)
 }
 
 func validateEmptySecretVolumesAndMounts(t *testing.T, deployment *v1beta1.Deployment) {
