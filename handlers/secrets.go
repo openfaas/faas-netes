@@ -112,24 +112,30 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 	return nil
 }
 
-// removeVolume returns a Volume slice with any volumes matching volumeName removed
+// removeVolume returns a Volume slice with any volumes matching volumeName removed.
+// Uses the filter without allocation technique
+// https://github.com/golang/go/wiki/SliceTricks#filtering-without-allocating
 func removeVolume(volumeName string, volumes []apiv1.Volume) []apiv1.Volume {
-	for i, v := range volumes {
-		if v.Name == volumeName {
-			volumes = append(volumes[:i], volumes[i+1:]...)
+	newVolumes := volumes[:0]
+	for _, v := range volumes {
+		if v.Name != volumeName {
+			newVolumes = append(newVolumes, v)
 		}
 	}
 
-	return volumes
+	return newVolumes
 }
 
 // removeVolumeMount returns a VolumeMount slice with any mounts matching volumeName removed
+// Uses the filter without allocation technique
+// https://github.com/golang/go/wiki/SliceTricks#filtering-without-allocating
 func removeVolumeMount(volumeName string, mounts []apiv1.VolumeMount) []apiv1.VolumeMount {
-	for i, v := range mounts {
-		if v.Name == volumeName {
-			mounts = append(mounts[:i], mounts[i+1:]...)
+	newMounts := mounts[:0]
+	for _, v := range mounts {
+		if v.Name != volumeName {
+			newMounts = append(newMounts, v)
 		}
 	}
 
-	return mounts
+	return newMounts
 }
