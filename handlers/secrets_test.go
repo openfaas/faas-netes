@@ -69,6 +69,56 @@ func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsEmpty(t *testing.T) {
 
 }
 
+func Test_UpdateSecrets_RemovesAllCopiesOfExitingSecretsVolumes(t *testing.T) {
+	volumeName := "testfunc-projected-secrets"
+	request := requests.CreateFunctionRequest{
+		Service: "testfunc",
+		Secrets: []string{},
+	}
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
+
+	deployment := &v1beta1.Deployment{
+		Spec: v1beta1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{
+							Name:  "testfunc",
+							Image: "alpine:latest",
+							VolumeMounts: []apiv1.VolumeMount{
+								{
+									Name: volumeName,
+								},
+								{
+									Name: volumeName,
+								},
+							},
+						},
+					},
+					Volumes: []apiv1.Volume{
+						{
+							Name: volumeName,
+						},
+						{
+							Name: volumeName,
+						},
+					},
+				},
+			},
+		},
+	}
+	err := UpdateSecrets(request, deployment, existingSecrets)
+	if err != nil {
+		t.Errorf("unexpected error %s", err.Error())
+	}
+
+	validateEmptySecretVolumesAndMounts(t, deployment)
+
+}
+
 func Test_UpdateSecrets_AddNewSecretVolume(t *testing.T) {
 	request := requests.CreateFunctionRequest{
 		Service: "testfunc",
