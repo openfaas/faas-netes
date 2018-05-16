@@ -67,6 +67,10 @@ spec:
           value: "nats.{{ .Release.Namespace }}.svc.cluster.local."
         - name: faas_nats_port
           value: "4222"
+        - name: direct_functions
+          value: "true"
+        - name: direct_functions_suffix
+          value: "{{ $functionNs }}.svc.cluster.local."
         {{- end }}
         ports:
         - containerPort: 8080
