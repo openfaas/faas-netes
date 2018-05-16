@@ -29,3 +29,10 @@ install-async:
 
 install-armhf:
 	kubectl apply -f faas.armhf.yml,monitoring.armhf.yml,rbac.yml
+
+.PHONY: charts
+charts:
+	cd chart && helm package openfaas/
+	mv chart/*.tgz docs/
+	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
+
