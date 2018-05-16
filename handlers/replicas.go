@@ -11,7 +11,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas-netes/types"
-	"github.com/openfaas/faas/gateway/requests"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -76,26 +75,18 @@ func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset
 		vars := mux.Vars(r)
 		functionName := vars["name"]
 
-		functions, err := getServiceList(functionNamespace, clientset)
+		function, err := getService(functionNamespace, functionName, clientset)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		var found *requests.Function
-		for _, function := range functions {
-			if function.Name == functionName {
-				found = &function
-				break
-			}
-		}
-
-		if found == nil {
+		if function == nil {
 			w.WriteHeader(404)
 			return
 		}
 
-		functionBytes, _ := json.Marshal(found)
+		functionBytes, _ := json.Marshal(function)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		w.Write(functionBytes)
