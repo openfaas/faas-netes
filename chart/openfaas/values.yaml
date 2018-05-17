@@ -9,10 +9,12 @@ rbac: true
 faasnetesd:
   readTimeout : "20s"
   writeTimeout : "20s"
+  imagePullPolicy : "Always"    # Image pull policy for deployed functions
 
 gateway:
   readTimeout : "20s"
   writeTimeout : "20s"
+  upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
 
 queueWorker:
   ackWait : "30s"
