@@ -65,7 +65,7 @@ By default services will be exposed with following hostnames (can be changed, se
 
 ## Configuration
 
-Additional OpenFaaS options.
+Additional OpenFaaS options in `values.yaml`.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -80,6 +80,7 @@ Additional OpenFaaS options.
 | `faasnetesd.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `gateway.readTimeout` | Queue worker read timeout | `20s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `20s` |
+| `gateway.upstreamTimeout` | Maximum duration of upstream function call | `20s` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
