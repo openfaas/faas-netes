@@ -2,7 +2,28 @@ apiVersion: v1
 entries:
   openfaas:
   - apiVersion: v1
-    created: 2018-05-16T15:12:13.743741135+03:00
+    created: 2018-05-20T21:09:22.132390111+01:00
+    description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
+    digest: 49fdd14e168a14e83c4aa61674f44b7eeeca35ed98251d5abc0aa31fdcea8858
+    home: https://www.openfaas.com
+    icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+    keywords:
+    - functions
+    - service
+    maintainers:
+    - email: alex@openfaas.com
+      name: alexellis
+    - email: rmocius@gmail.com
+      name: rimusz
+    name: openfaas
+    sources:
+    - https://github.com/openfaas/faas
+    - https://github.com/openfaas/faas-netes
+    urls:
+    - https://openfaas.github.io/faas-netes/openfaas-1.0.17.tgz
+    version: 1.0.17
+  - apiVersion: v1
+    created: 2018-05-20T21:09:22.132016742+01:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: f8e694e8b868524bfa8fec82239becb60d0e17b9384076856df0a303012138da
     home: https://www.openfaas.com
@@ -23,9 +44,9 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.16.tgz
     version: 1.0.16
   - apiVersion: v1
-    created: 2018-05-16T15:12:13.74320185+03:00
+    created: 2018-05-20T21:09:22.13165264+01:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
-    digest: f98aaa8ed8e6edb8c4c86002973ed76e86b6952f6062ea92f3dee86c5f61ba56
+    digest: 8b69ee7b5de254eb8d9f2a8db2574e74e6d9dccf995e06cb9a2316b780c678ca
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -44,7 +65,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.15.tgz
     version: 1.0.15
   - apiVersion: v1
-    created: 2018-05-16T15:12:13.741914364+03:00
+    created: 2018-05-20T21:09:22.13127987+01:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e484ee66f94d3893ab4af2159a4514dac6e072639bae6f3bbe9801ae68112f78
     home: https://www.openfaas.com
@@ -64,4 +85,4 @@ entries:
     urls:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.14.tgz
     version: 1.0.14
-generated: 2018-05-16T15:12:13.740279785+03:00
+generated: 2018-05-20T21:09:22.13079819+01:00
