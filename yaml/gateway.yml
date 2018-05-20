@@ -12,8 +12,16 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.8.0
+        image: functions/gateway:0.8.1
         imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 2
+
         env:
         - name: functions_provider_url
           value: "http://faas-netesd.openfaas.svc.cluster.local.:8080/" # Final `.` specifies an absolute address
