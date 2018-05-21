@@ -20,7 +20,7 @@ spec:
       containers:
       - name: gateway
         image: {{ .Values.images.gateway }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         livenessProbe:
           httpGet:
             path: /healthz

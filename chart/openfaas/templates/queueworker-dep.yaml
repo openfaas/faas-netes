@@ -20,7 +20,7 @@ spec:
       containers:
       - name:  queue-worker
         image: {{ .Values.images.queueWorker }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.functionNamespace }}
         env:
         - name: faas_function_suffix

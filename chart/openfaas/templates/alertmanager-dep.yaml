@@ -21,7 +21,7 @@ spec:
       containers:
       - name: alertmanager
         image: {{ .Values.images.alertmanager }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"

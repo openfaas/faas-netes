@@ -21,7 +21,7 @@ spec:
       containers:
       - name: faas-netesd
         image: {{ .Values.images.controller }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         env:
         - name: function_namespace
           value: {{ $functionNs | quote }}
