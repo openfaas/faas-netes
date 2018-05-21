@@ -24,7 +24,7 @@ spec:
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         ports:
         - containerPort: 9090
           protocol: TCP

@@ -20,7 +20,7 @@ spec:
       containers:
       - name:  nats
         image: {{ .Values.images.nats }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         ports:
         - containerPort: 4222
           protocol: TCP

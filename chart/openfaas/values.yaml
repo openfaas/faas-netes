@@ -19,7 +19,10 @@ gateway:
 queueWorker:
   ackWait : "30s"
 
-# images
+# image pull policy for openfaas components, can change to `IfNotPresent` in offline env
+openfaasImagePullPolicy: "Always"
+
+# images of openfaas components
 images:
   controller: functions/faas-netesd:0.5.5
   gateway: functions/gateway:0.8.2

@@ -94,6 +94,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.writeTimeout` | Queue worker write timeout | `20s` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call | `20s` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
+| `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
