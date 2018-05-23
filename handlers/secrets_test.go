@@ -269,4 +269,8 @@ func validateNewSecretVolumesAndMounts(t *testing.T, deployment *v1beta1.Deploym
 	if mount.Name != "testfunc-projected-secrets" {
 		t.Errorf("Incorrect volume mounts: expected \"testfunc-projected-secrets\", got \"%s\"", mount.Name)
 	}
+
+	if mount.MountPath != secretsMountPath {
+		t.Errorf("Incorrect volume mount path: expected \"%s\", got \"%s\"", secretsMountPath, mount.MountPath)
+	}
 }
