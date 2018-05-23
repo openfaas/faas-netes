@@ -10,6 +10,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+const (
+	secretsMountPath = "/var/openfaas/secrets"
+)
+
 // getSecrets queries Kubernetes for a list of secrets by name in the given k8s namespace.
 func getSecrets(clientset *kubernetes.Clientset, namespace string, secretNames []string) (map[string]*apiv1.Secret, error) {
 	secrets := map[string]*apiv1.Secret{}
@@ -95,7 +99,7 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 		mount := apiv1.VolumeMount{
 			Name:      volumeName,
 			ReadOnly:  true,
-			MountPath: "/run/secrets",
+			MountPath: secretsMountPath,
 		}
 
 		// remove the existing secrets volume mount, if we can find it. We update it later.
