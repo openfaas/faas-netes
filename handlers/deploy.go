@@ -176,6 +176,11 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 			Name: request.Service,
 		},
 		Spec: v1beta1.DeploymentSpec{
+			Selector: &metav1.LabelSelector{
+				MatchLabels: map[string]string{
+					"faas_function": request.Service,
+				},
+			},
 			Replicas: initialReplicas,
 			Strategy: v1beta1.DeploymentStrategy{
 				Type: v1beta1.RollingUpdateDeploymentStrategyType,
@@ -238,8 +243,10 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 			Annotations: map[string]string{"prometheus.io.scrape": "false"},
 		},
 		Spec: v1.ServiceSpec{
-			Type:     v1.ServiceTypeClusterIP,
-			Selector: map[string]string{"faas_function": request.Service},
+			Type: v1.ServiceTypeClusterIP,
+			Selector: map[string]string{
+				"faas_function": request.Service,
+			},
 			Ports: []v1.ServicePort{
 				{
 					Protocol: v1.ProtocolTCP,
