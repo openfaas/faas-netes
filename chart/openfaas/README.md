@@ -18,14 +18,32 @@
 
 ---
 
-You can create a separate namespace for OpenFaaS core services and functions (recommended):
+We recommend creating two namespaces, one for the OpenFaaS core services and one for the functions:
 
 ```
-$ kubectl create ns openfaas
-$ kubectl create ns openfaas-fn
+$ kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
 ```
 
-This command should be run from within the `faas-netes/chart` folder or equivalent:
+You will now have `openfaas` and `openfaas-fn`. If you want to change the names or to install into multiple installations then edit `namespaces.yml` from the `faas-netes` repo.
+
+Add the OpenFaaS `helm` chart:
+
+```bash
+$ helm repo add openfaas https://openfaas.github.io/faas-netes/
+"openfaas" has been added to your repositories
+```
+
+Now deploy OpenFaaS from the helm chart repo:
+
+```
+$ helm upgrade openfaas --install openfaas/openfaas \
+    --namespace openfaas  \
+    --set functionNamespace=openfaas-fn
+```
+
+## Deploy for development / testing
+
+You can run the following command from within the `faas-netes/chart` folder in the `faas-netes` repo.
 
 ```
 $ helm upgrade --install openfaas openfaas/ \
@@ -33,31 +51,25 @@ $ helm upgrade --install openfaas openfaas/ \
    --set functionNamespace=openfaas-fn
 ```
 
+## Exposing services
+
+
+### NodePorts
+
 By default NodePorts will be created for the API Gateway and Prometheus.
 
-> Note: If you're running on a cloud such as AKS or GKE you will need to pass an additional flag of `--set serviceType=LoadBalancer` to tell `helm` to create LoadBalancer objects instead. An alternative to using multiple LoadBalancers is to install an Ingress controller.
+### LB
 
-
-Or to use the default namespace (not recommended):
-
-```
-$ helm upgrade --install openfaas openfaas/ \
-   --namespace default \
-   --set functionNamespace=default
-```
+If you're running on a cloud such as AKS or GKE you will need to pass an additional flag of `--set serviceType=LoadBalancer` to tell `helm` to create LoadBalancer objects instead. An alternative to using multiple LoadBalancers is to install an Ingress controller.
 
 ### Deploy with an IngressController
 
 In order to make use of automatic ingress settings you will need an IngressController in your cluster such as Traefik or Nginx.
 
-Add `--set ingress.enabled` to enable ingress:
-
-```
-$ helm upgrade --install openfaas openfaas/ \
-    --set ingress.enabled=true
-```
+Add `--set ingress.enabled` to enable ingress pass `--set ingress.enabled=true` when running the installation via `helm`.
 
 By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
+
 * `faas-netesd.openfaas.local`
 * `gateway.openfaas.local`
 * `prometheus.openfaas.local`
@@ -94,4 +106,11 @@ All control plane components can be cleaned up with helm:
 $ helm delete --purge openfaas
 ```
 
-Individual functions will need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
+Follow this by the following to remove all other associated objects:
+
+```
+$ kubectl delete namespace/openfaas
+$ kubectl delete namespace/openfaas-fn
+```
+
+In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
