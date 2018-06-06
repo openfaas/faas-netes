@@ -40,7 +40,7 @@ spec:
         - name: upstream_timeout  # Must be smaller than read/write_timeout
           value: "30s"
         - name: basic_auth
-          value: "true"
+          value: "false"
         - name: secret_mount_path
           value: "/etc/openfaas"
 
