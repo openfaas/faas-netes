@@ -67,7 +67,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 				}
 			}
 
-			deployment.Spec.Template.Labels = labels
+			deployment.Labels = labels
 			deployment.Spec.Template.ObjectMeta.Labels = labels
 
 			resources, resourceErr := createResources(request)
