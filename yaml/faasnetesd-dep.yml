@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        image: functions/faas-netesd:0.5.4
+        image: functions/faas-netesd:0.5.5
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -32,4 +32,3 @@ spec:
           value: "20s"
         - name: image_pull_policy
           value: "Always"
-
