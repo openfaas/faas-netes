@@ -29,4 +29,4 @@ data:
       webhook_configs:
         - url: http://gateway.openfaas:8080/system/alert
           send_resolved: true
----
+

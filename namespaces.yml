@@ -3,11 +3,11 @@ kind: Namespace
 metadata:
   name: openfaas
   labels:
-    frontend: "true"
+    role: openfaas-system
+    access: openfaas-system
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: openfaas-fn
-  labels:
-    backend: "true"
+

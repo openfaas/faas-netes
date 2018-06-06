@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: functions/gateway:0.8.1
+        image: functions/gateway:0.8.2
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -39,6 +39,10 @@ spec:
           value: "35s"
         - name: upstream_timeout  # Must be smaller than read/write_timeout
           value: "30s"
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/etc/openfaas"
 
         ports:
         - containerPort: 8080
@@ -49,20 +53,3 @@ spec:
             memory: 250Mi
           limits:
             memory: 250Mi   # Adjust to suit needs of deployment
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: gateway
-  namespace: openfaas
-  labels:
-    app: gateway
-spec:
-  type: NodePort
-  ports:
-    - port: 8080
-      protocol: TCP
-      targetPort: 8080
-      nodePort: 31112
-  selector:
-    app: gateway
