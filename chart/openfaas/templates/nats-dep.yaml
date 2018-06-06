@@ -1,24 +1,4 @@
 {{- if .Values.async }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: {{ template "openfaas.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: nats
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: nats
-  namespace: {{ .Release.Namespace | quote }}
-spec:
-  type: ClusterIP
-  ports:
-    - port: 4222
-      protocol: TCP
-  selector:
-    app: nats
----
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
