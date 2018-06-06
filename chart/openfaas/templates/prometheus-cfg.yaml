@@ -1,4 +1,3 @@
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -57,42 +56,3 @@ data:
           annotations:
             description: High invocation total on "{{ "{{" }}$labels.instance{{ "}}" }}"
             summary: High invocation total on "{{ "{{" }}$labels.instance{{ "}}" }}"
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  labels:
-    app: {{ template "openfaas.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: alertmanager-config
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: alertmanager-config
-  namespace: {{ .Release.Namespace | quote }}
-data:
-  alertmanager.yml: |
-    route:
-      group_by: ['alertname', 'cluster', 'service']
-      group_wait: 5s
-      group_interval: 10s
-      repeat_interval: 30s
-      receiver: scale-up
-      routes:
-      - match:
-          service: gateway
-          receiver: scale-up
-          severity: major
-
-    inhibit_rules:
-    - source_match:
-        severity: 'critical'
-      target_match:
-        severity: 'warning'
-      equal: ['alertname', 'cluster', 'service']
-
-    receivers:
-    - name: 'scale-up'
-      webhook_configs:
-        - url: http://gateway.{{ .Release.Namespace }}:8080/system/alert
-          send_resolved: true
----
