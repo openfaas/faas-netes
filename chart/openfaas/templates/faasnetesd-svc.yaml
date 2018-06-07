@@ -15,4 +15,4 @@ spec:
     - port: 8080
       protocol: TCP
   selector:
-    app: faas-netesda
+    app: faas-netesd
