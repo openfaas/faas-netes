@@ -51,6 +51,18 @@ $ helm upgrade --install openfaas openfaas/ \
    --set functionNamespace=openfaas-fn
 ```
 
+## Activate basic auth for gateway
+
+Create a Kubernetes secret named `basic-auth` in `openfaas` namespace :
+
+```
+k create secret generic basic-auth --from-literal=user=test --from-literal=password=test
+```
+
+Activate basic auth by putting `gateway.basicAuth` to `true` and then deploy your chart.
+
+Now you need to login with `faas login` and in your browser if you use the web UI.
+
 ## Exposing services
 
 
@@ -93,6 +105,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.readTimeout` | Queue worker read timeout | `20s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `20s` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call | `20s` |
+| `gateway.basicAuth` | Activate basic auth | `false` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
