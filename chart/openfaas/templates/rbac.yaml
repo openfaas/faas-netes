@@ -1,30 +1,7 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if (ne .Release.Namespace $functionNs) }}
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: {{ template "openfaas.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: faas-controller
-  namespace: {{ $functionNs | quote }}
-{{- end }}
-{{- if .Values.rbac }}
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  labels:
-    app: {{ template "openfaas.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  name: faas-controller
+
+{{/* Generate role rules */}}
+{{ define "openfaas.role.rules" }}
 rules:
   - apiGroups:
       - ""
@@ -56,9 +33,24 @@ rules:
       - get
       - list
       - watch
+{{ end }}
+
+{{- if .Values.rbac }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-controller
+  namespace: {{ .Release.Namespace | quote }}
+{{ include "openfaas.role.rules" . }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
   labels:
     app: {{ template "openfaas.name" . }}
@@ -70,7 +62,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: faas-controller
 subjects:
   - kind: ServiceAccount
@@ -79,7 +71,20 @@ subjects:
 ---
 {{- if (ne .Release.Namespace $functionNs) }}
 apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
+kind: Role
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: faas-controller
+  namespace: {{ $functionNs | quote }}
+{{ include "openfaas.role.rules" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
 metadata:
   labels:
     app: {{ template "openfaas.name" . }}
@@ -91,7 +96,7 @@ metadata:
   namespace: {{ $functionNs | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: faas-controller
 subjects:
   - kind: ServiceAccount
