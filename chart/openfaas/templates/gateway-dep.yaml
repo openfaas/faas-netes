@@ -31,14 +31,14 @@ spec:
         {{- if .Values.gateway.basicAuth }}
         volumeMounts:
         - name: basic-auth
-          mountPath: "/secrets"
+          mountPath: "/var/run/openfaas/secrets"
           readOnly: true
         {{- end }}
         env:
         - name: basic_auth
           value: "{{ .Values.gateway.basicAuth }}"
         - name: secret_mount_path
-          value: /secrets
+          value: /var/run/openfaas/secrets
         - name: read_timeout
           value: "{{ .Values.gateway.readTimeout }}"
         - name: write_timeout

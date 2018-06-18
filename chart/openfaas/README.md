@@ -56,7 +56,7 @@ $ helm upgrade --install openfaas openfaas/ \
 Create a Kubernetes secret named `basic-auth` in `openfaas` namespace :
 
 ```
-k create secret generic basic-auth --from-literal=user=test --from-literal=password=test
+kubectl create secret generic basic-auth --from-literal=user=test --from-literal=password=test
 ```
 
 Activate basic auth by putting `gateway.basicAuth` to `true` and then deploy your chart.
