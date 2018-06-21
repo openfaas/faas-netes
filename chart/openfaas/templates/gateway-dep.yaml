@@ -19,6 +19,8 @@ spec:
     spec:
       {{- if .Values.operator.create }}
       serviceAccountName: openfaas-operator
+      {{- else }}
+      serviceAccountName: faas-controller
       {{- end }}
       {{- if .Values.securityContext }}
       securityContext:
@@ -49,17 +51,14 @@ spec:
           value: "{{ .Values.gateway.writeTimeout }}"
         - name: upstream_timeout
           value: "{{ .Values.gateway.upstreamTimeout }}"
-        {{- if .Values.operator.create }}
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
-        {{ else }}
-        - name: functions_provider_url
-          value: "http://faas-netesd.{{ .Release.Namespace }}.svc.cluster.local.:8080/"
-        {{- end }}
         - name: direct_functions
           value: "true"
         - name: direct_functions_suffix
           value: "{{ $functionNs }}.svc.cluster.local."
+        - name: functions_dns_suffix
+          value: "svc.cluster.local."
         {{- if .Values.async }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.cluster.local."
@@ -94,6 +93,21 @@ spec:
           - -logtostderr
           - -v=2
         env:
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
+        - name: read_timeout
+          value: "{{ .Values.faasnetesd.readTimeout }}"
+        - name: write_timeout
+          value: "{{ .Values.faasnetesd.writeTimeout }}"
+        - name: image_pull_policy
+          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+      {{- else }}
+      - name: faas-netesd
+        image: {{ .Values.images.controller }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        env:
+        - name: port
+          value: "8081"
         - name: function_namespace
           value: {{ $functionNs | quote }}
         - name: read_timeout
