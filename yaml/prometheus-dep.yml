@@ -12,8 +12,8 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: prom/prometheus:v2.2.0
-        command: 
+        image: prom/prometheus:v2.3.1
+        command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: Always
