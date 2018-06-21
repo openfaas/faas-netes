@@ -8,7 +8,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 808
+    - port: 8080
       protocol: TCP
       targetPort: 8080
       nodePort: 31112
