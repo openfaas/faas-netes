@@ -1,4 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if eq .Values.operator.create false }}
 apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -34,3 +35,4 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+{{- end }}
