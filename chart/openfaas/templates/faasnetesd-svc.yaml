@@ -1,3 +1,4 @@
+{{- if eq .Values.operator.create false }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,3 +17,4 @@ spec:
       protocol: TCP
   selector:
     app: faas-netesd
+{{- end }}

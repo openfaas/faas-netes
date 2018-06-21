@@ -1,4 +1,5 @@
 {{- if .Values.exposeServices }}
+{{- if eq .Values.operator.create false }}
 ---
 apiVersion: v1
 kind: Service
@@ -19,4 +20,5 @@ spec:
       targetPort: 8080
   selector:
     app: faas-netesd
+{{- end }}
 {{- end }}
