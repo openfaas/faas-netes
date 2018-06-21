@@ -11,7 +11,7 @@ metadata:
   name: queue-worker
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.queueWorker.replicas }}
   template:
     metadata:
       labels:
