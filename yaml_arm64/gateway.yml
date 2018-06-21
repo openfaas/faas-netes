@@ -16,7 +16,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
-          value: "http://faas-netesd.openfaas.svc.cluster.local:8080/"
+          value: "http://127.0.0.1:8081/"
         - name: faas_nats_address
           value: "nats.openfaas"
         - name: faas_nats_port
@@ -33,6 +33,26 @@ spec:
             memory: 100Mi
           limits:
             memory: 100Mi
+      - name: faas-netesd
+        image: functions/faas-netesd:0.4.3-arm64
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        resources:
+          requests:
+            memory: 50Mi
+          limits:
+            memory: 50Mi
+        env:
+        - name: port
+          value: "8081"
+        - name: function_namespace
+          value: openfaas-fn
+        - name: read_timeout
+          value: "10"
+        - name: write_timeout
+          value: "10"
 ---
 apiVersion: v1
 kind: Service

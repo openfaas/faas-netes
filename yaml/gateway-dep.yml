@@ -24,7 +24,7 @@ spec:
 
         env:
         - name: functions_provider_url
-          value: "http://faas-netesd.openfaas.svc.cluster.local.:8080/" # Final `.` specifies an absolute address
+          value: "http://127.0.0.1:8081/" # Final `.` specifies an absolute address
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local."
         - name: faas_nats_port
@@ -53,3 +53,20 @@ spec:
             memory: 250Mi
           limits:
             memory: 250Mi   # Adjust to suit needs of deployment
+      - name: faas-netesd
+        image: {{ .Values.images.controller }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        env:
+        - name: port
+          value: "8081"
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
+        - name: read_timeout
+          value: "{{ .Values.faasnetesd.readTimeout }}"
+        - name: write_timeout
+          value: "{{ .Values.faasnetesd.writeTimeout }}"
+        - name: image_pull_policy
+          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        ports:
+        - containerPort: 8081
+          protocol: TCP
