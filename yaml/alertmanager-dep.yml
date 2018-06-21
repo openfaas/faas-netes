@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.15.0-rc.0
+        image: prom/alertmanager:v0.15.0
         imagePullPolicy: Always
         command: 
           - "alertmanager"
