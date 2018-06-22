@@ -28,8 +28,17 @@ spec:
           initialDelaySeconds: 2
           periodSeconds: 10
           timeoutSeconds: 2
-
+        {{- if .Values.gateway.basicAuth }}
+        volumeMounts:
+        - name: basic-auth
+          mountPath: "/var/run/openfaas/secrets"
+          readOnly: true
+        {{- end }}
         env:
+        - name: basic_auth
+          value: "{{ .Values.gateway.basicAuth }}"
+        - name: secret_mount_path
+          value: /var/run/openfaas/secrets
         - name: read_timeout
           value: "{{ .Values.gateway.readTimeout }}"
         - name: write_timeout
@@ -53,3 +62,14 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+      {{- if .Values.gateway.basicAuth }}
+      volumes:
+      - name: basic-auth
+        secret:
+          secretName: basic-auth
+          items:
+          - key: user
+            path: basic-auth-user
+          - key: password
+            path: basic-auth-password
+      {{- end }}
