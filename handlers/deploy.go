@@ -161,7 +161,10 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		FailureThreshold:    3,
 	}
 
-	initialReplicas := getMinReplicaCount(request.Labels)
+	initialReplicas, replicaErr := getMinReplicaCount(request.Labels)
+	if replicaErr != nil {
+		return nil, replicaErr
+	}
 	labels := buildLabels(request.Service, request.Labels)
 	nodeSelector := createSelector(request.Constraints)
 	resources, resourceErr := createResources(request)

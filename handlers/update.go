@@ -77,7 +77,12 @@ func updateDeploymentSpec(
 
 		deployment.Labels = labels
 		deployment.Spec.Template.ObjectMeta.Labels = labels
-		deployment.Spec.Replicas = getMinReplicaCount(request.Labels)
+
+		replicaCount, replicaErr := getMinReplicaCount(request.Labels)
+		if replicaErr != nil {
+			return replicaErr, http.StatusBadRequest
+		}
+		deployment.Spec.Replicas = replicaCount
 
 		deployment.Annotations = annotations
 		deployment.Spec.Template.Annotations = annotations

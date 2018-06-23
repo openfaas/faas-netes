@@ -1,6 +1,9 @@
 package handlers
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func Test_getMinReplicaCount(t *testing.T) {
 	scenarios := []struct {
@@ -27,7 +30,10 @@ func Test_getMinReplicaCount(t *testing.T) {
 
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
-			output := getMinReplicaCount(s.labels)
+			output, err := getMinReplicaCount(s.labels)
+			if err != nil {
+				t.Errorf("getMinReplicaCount should not error on an empty or valid label")
+			}
 			if output == nil {
 				t.Errorf("getMinReplicaCount should not return nil pointer")
 			}
@@ -35,6 +41,47 @@ func Test_getMinReplicaCount(t *testing.T) {
 			value := int(*output)
 			if value != s.output {
 				t.Errorf("expected: %d, got %d", s.output, value)
+			}
+		})
+	}
+}
+
+func Test_getMinReplicaCount_Error(t *testing.T) {
+	scenarios := []struct {
+		name   string
+		labels *map[string]string
+		msg    string
+	}{
+		{
+			name:   "negative values should return an error",
+			labels: &map[string]string{FunctionMinReplicaCount: "-2"},
+			msg:    "replica count must be a positive integer",
+		},
+		{
+			name:   "zero values should return an error",
+			labels: &map[string]string{FunctionMinReplicaCount: "0"},
+			msg:    "replica count must be a positive integer",
+		},
+		{
+			name:   "decimal values should return an error",
+			labels: &map[string]string{FunctionMinReplicaCount: "10.5"},
+			msg:    "could not parse the minimum replica value",
+		},
+		{
+			name:   "non-integer values should return an error",
+			labels: &map[string]string{FunctionMinReplicaCount: "test"},
+			msg:    "could not parse the minimum replica value",
+		},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			output, err := getMinReplicaCount(s.labels)
+			if output != nil {
+				t.Errorf("getMinReplicaCount should return nil value on invalid input")
+			}
+			if !strings.Contains(err.Error(), s.msg) {
+				t.Errorf("unexpected error: expected '%s', got '%s'", s.msg, err.Error())
 			}
 		})
 	}

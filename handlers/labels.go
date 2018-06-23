@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 )
@@ -42,20 +42,24 @@ func buildLabels(functionName string, requestLables *map[string]string) map[stri
 
 // getMinReplicaCount extracts the functions minimum replica count from the user's
 // request labels. If the value is not found, this will return the default value, 1.
-func getMinReplicaCount(labels *map[string]string) *int32 {
+func getMinReplicaCount(labels *map[string]string) (*int32, error) {
 	if labels == nil {
-		return int32p(initialReplicasCount)
+		return int32p(initialReplicasCount), nil
 	}
 
 	l := *labels
 	if value, exists := l[FunctionMinReplicaCount]; exists {
 		minReplicas, err := strconv.Atoi(value)
-		if err == nil && minReplicas > 0 {
-			return int32p(int32(minReplicas))
+		if err != nil {
+			return nil, errors.New("could not parse the minimum replica value")
 		}
 
-		log.Println(err)
+		if minReplicas > 0 {
+			return int32p(int32(minReplicas)), nil
+		}
+
+		return nil, errors.New("replica count must be a positive integer")
 	}
 
-	return int32p(initialReplicasCount)
+	return int32p(initialReplicasCount), nil
 }
