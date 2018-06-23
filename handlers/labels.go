@@ -24,9 +24,9 @@ const (
 	FunctionVersionUID = "com.openfaas.uid"
 )
 
-// parseLabels will copy the user request labels and ensure that any required internal labels
+// buildLabels will copy the user request labels and ensure that any required internal labels
 // are set appropriately.
-func parseLabels(functionName string, requestLables *map[string]string) map[string]string {
+func buildLabels(functionName string, requestLables *map[string]string) map[string]string {
 	labels := map[string]string{}
 	if requestLables != nil {
 		for k, v := range *requestLables {

@@ -162,7 +162,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	}
 
 	initialReplicas := getMinReplicaCount(request.Labels)
-	labels := parseLabels(request.Service, request.Labels)
+	labels := buildLabels(request.Service, request.Labels)
 	nodeSelector := createSelector(request.Constraints)
 	resources, resourceErr := createResources(request)
 

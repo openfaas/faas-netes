@@ -69,7 +69,7 @@ func Test_parseLabels(t *testing.T) {
 
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
-			output := parseLabels(s.functionName, s.labels)
+			output := buildLabels(s.functionName, s.labels)
 			if output == nil {
 				t.Errorf("parseLabels should not return nil map")
 			}

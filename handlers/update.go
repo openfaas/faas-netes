@@ -72,7 +72,7 @@ func updateDeploymentSpec(
 
 		deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
 
-		labels := parseLabels(request.Service, request.Labels)
+		labels := buildLabels(request.Service, request.Labels)
 		labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
 
 		deployment.Labels = labels
