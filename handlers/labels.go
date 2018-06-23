@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"strconv"
+	"time"
 )
 
 const (
@@ -17,6 +19,9 @@ const (
 	// FunctionMinReplicaCount is a label that user's can set and will be passed to Kubernetes
 	// as the Deployment replicas value.
 	FunctionMinReplicaCount = "com.openfaas.scale.min"
+	// FunctionVersionUID is the lable key used to store the uid value for the deploy/update of a
+	// function, this is currently a unix timestamp.
+	FunctionVersionUID = "com.openfaas.uid"
 )
 
 // parseLabels will copy the user request labels and ensure that any required internal labels
@@ -30,6 +35,7 @@ func parseLabels(functionName string, requestLables *map[string]string) map[stri
 	}
 
 	labels[FunctionNameLabel] = functionName
+	labels[FunctionVersionUID] = fmt.Sprintf("%d", time.Now().Nanosecond())
 
 	return labels
 }

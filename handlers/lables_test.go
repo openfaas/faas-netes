@@ -60,7 +60,7 @@ func Test_parseLabels(t *testing.T) {
 			output:       map[string]string{FunctionNameLabel: "testFunc"},
 		},
 		{
-			name:         "non-empty map does not overwrite the function name label",
+			name:         "non-empty map does not overwrite the openfaas internal labels",
 			labels:       &map[string]string{FunctionNameLabel: "anotherValue", "customLabel": "test"},
 			functionName: "testFunc",
 			output:       map[string]string{FunctionNameLabel: "testFunc", "customLabel": "test"},
@@ -79,8 +79,13 @@ func Test_parseLabels(t *testing.T) {
 				t.Errorf("parseLabels should always set the function name: expected %s, got %s", s.functionName, outputFuncName)
 			}
 
-			for key, value := range output {
-				expectedValue := s.output[key]
+			_, ok := output[FunctionVersionUID]
+			if !ok {
+				t.Errorf("parseLabels should set the FunctionVersionUID label")
+			}
+
+			for key, expectedValue := range s.output {
+				value := output[key]
 				if value != expectedValue {
 					t.Errorf("Incorrect output label for %s, expected: %s, got %s", key, expectedValue, value)
 				}
