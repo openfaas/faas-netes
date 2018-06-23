@@ -193,7 +193,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		Spec: v1beta1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					OFFunctionNameLabel: request.Service,
+					FunctionNameLabel: request.Service,
 				},
 			},
 			Replicas: initialReplicas,
@@ -266,7 +266,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *corev1.Service {
 		Spec: corev1.ServiceSpec{
 			Type: corev1.ServiceTypeClusterIP,
 			Selector: map[string]string{
-				OFFunctionNameLabel: request.Service,
+				FunctionNameLabel: request.Service,
 			},
 			Ports: []corev1.ServicePort{
 				{

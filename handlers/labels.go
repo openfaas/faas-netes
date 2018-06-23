@@ -10,13 +10,13 @@ const (
 	// also used as the default return value for getMinReplicaCount
 	initialReplicasCount = 1
 
-	// OFFunctionNameLabel is the label key used by OpenFaaS to store the function name
+	// FunctionNameLabel is the label key used by OpenFaaS to store the function name
 	// on the resources managed by OpenFaaS for that function.  This key is also used to
 	// denote that a resource is a "Function"
-	OFFunctionNameLabel = "faas_function"
-	// OFFunctionMinReplicaCount is a label that user's can set and will be passed to Kubernetes
+	FunctionNameLabel = "faas_function"
+	// FunctionMinReplicaCount is a label that user's can set and will be passed to Kubernetes
 	// as the Deployment replicas value.
-	OFFunctionMinReplicaCount = "com.openfaas.scale.min"
+	FunctionMinReplicaCount = "com.openfaas.scale.min"
 )
 
 // parseLabels will copy the user request labels and ensure that any required internal labels
@@ -29,7 +29,7 @@ func parseLabels(functionName string, requestLables *map[string]string) map[stri
 		}
 	}
 
-	labels[OFFunctionNameLabel] = functionName
+	labels[FunctionNameLabel] = functionName
 
 	return labels
 }
@@ -42,7 +42,7 @@ func getMinReplicaCount(labels *map[string]string) *int32 {
 	}
 
 	l := *labels
-	if value, exists := l[OFFunctionMinReplicaCount]; exists {
+	if value, exists := l[FunctionMinReplicaCount]; exists {
 		minReplicas, err := strconv.Atoi(value)
 		if err == nil && minReplicas > 0 {
 			return int32p(int32(minReplicas))

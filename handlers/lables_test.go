@@ -20,7 +20,7 @@ func Test_getMinReplicaCount(t *testing.T) {
 		},
 		{
 			name:   "empty map returns default",
-			labels: &map[string]string{OFFunctionMinReplicaCount: "2"},
+			labels: &map[string]string{FunctionMinReplicaCount: "2"},
 			output: 2,
 		},
 	}
@@ -51,19 +51,19 @@ func Test_parseLabels(t *testing.T) {
 			name:         "nil map returns just the function name",
 			labels:       nil,
 			functionName: "testFunc",
-			output:       map[string]string{OFFunctionNameLabel: "testFunc"},
+			output:       map[string]string{FunctionNameLabel: "testFunc"},
 		},
 		{
 			name:         "empty map returns just the function name",
 			labels:       &map[string]string{},
 			functionName: "testFunc",
-			output:       map[string]string{OFFunctionNameLabel: "testFunc"},
+			output:       map[string]string{FunctionNameLabel: "testFunc"},
 		},
 		{
 			name:         "non-empty map does not overwrite the function name label",
-			labels:       &map[string]string{OFFunctionNameLabel: "anotherValue", "customLabel": "test"},
+			labels:       &map[string]string{FunctionNameLabel: "anotherValue", "customLabel": "test"},
 			functionName: "testFunc",
-			output:       map[string]string{OFFunctionNameLabel: "testFunc", "customLabel": "test"},
+			output:       map[string]string{FunctionNameLabel: "testFunc", "customLabel": "test"},
 		},
 	}
 
@@ -74,7 +74,7 @@ func Test_parseLabels(t *testing.T) {
 				t.Errorf("parseLabels should not return nil map")
 			}
 
-			outputFuncName := output[OFFunctionNameLabel]
+			outputFuncName := output[FunctionNameLabel]
 			if outputFuncName != s.functionName {
 				t.Errorf("parseLabels should always set the function name: expected %s, got %s", s.functionName, outputFuncName)
 			}
