@@ -72,23 +72,12 @@ func updateDeploymentSpec(
 
 		deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
 
-		labels := map[string]string{
-			"faas_function": request.Service,
-			"uid":           fmt.Sprintf("%d", time.Now().Nanosecond()),
-		}
-
-		if request.Labels != nil {
-			if min := getMinReplicaCount(*request.Labels); min != nil {
-				deployment.Spec.Replicas = min
-			}
-
-			for k, v := range *request.Labels {
-				labels[k] = v
-			}
-		}
+		labels := parseLabels(request.Service, request.Labels)
+		labels["uid"] = fmt.Sprintf("%d", time.Now().Nanosecond())
 
 		deployment.Labels = labels
 		deployment.Spec.Template.ObjectMeta.Labels = labels
+		deployment.Spec.Replicas = getMinReplicaCount(request.Labels)
 
 		deployment.Annotations = annotations
 		deployment.Spec.Template.Annotations = annotations
