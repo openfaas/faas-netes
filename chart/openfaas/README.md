@@ -41,6 +41,17 @@ $ helm upgrade openfaas --install openfaas/openfaas \
     --set functionNamespace=openfaas-fn
 ```
 
+## OpenFaaS Operator / CRD controller
+
+If you would like to work with CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time. The OpenFaaS Operator is suitable for development and testing and may replace the faas-netes controller in the future.
+
+To use it, add the flag: `--set operator.create=true` when installing with Helm.
+
+### faas-netes vs OpenFaaS Operator
+
+The faas-netes controller is the most tested, stable and supported version of the OpenFaaS integration with Kubernetes. In contrast the OpenFaaS Operator is based upon the codebase and features from `faas-netes`, but offers a tighter integration with Kubernetes through 
+CustomResourceDefinitions. This means you can type in `kubectl get functions` for instance.
+
 ## Deploy for development / testing
 
 You can run the following command from within the `faas-netes/chart` folder in the `faas-netes` repo.
@@ -52,7 +63,6 @@ $ helm upgrade --install openfaas openfaas/ \
 ```
 
 ## Exposing services
-
 
 ### NodePorts
 
@@ -81,6 +91,7 @@ Additional OpenFaaS options in `values.yaml`.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `operator` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `functionNamespace` | Functions namespace | `default` |
 | `async` | Deploys NATS | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |

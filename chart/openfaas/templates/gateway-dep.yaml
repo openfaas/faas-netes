@@ -43,7 +43,7 @@ spec:
           value: "{{ .Values.gateway.upstreamTimeout }}"
         {{- if .Values.operator.create }}
         - name: functions_provider_url
-          value: "http://localhost:8081/"
+          value: "http://127.0.0.1:8081/"
         {{ else }}
         - name: functions_provider_url
           value: "http://faas-netesd.{{ .Release.Namespace }}.svc.cluster.local.:8080/"
