@@ -21,3 +21,4 @@ spec:
   selector:
     app: {{ template "openfaas.name" . }}
 {{- end }}
+{{- end }}
