@@ -53,12 +53,6 @@ spec:
           value: "{{ .Values.gateway.upstreamTimeout }}"
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
-        - name: direct_functions
-          value: "true"
-        - name: direct_functions_suffix
-          value: "{{ $functionNs }}.svc.cluster.local."
-        - name: functions_dns_suffix
-          value: "svc.cluster.local."
         {{- if .Values.async }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.cluster.local."
@@ -101,6 +95,9 @@ spec:
           value: "{{ .Values.faasnetesd.writeTimeout }}"
         - name: image_pull_policy
           value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        ports:
+        - containerPort: 8081
+          protocol: TCP
       {{- else }}
       - name: faas-netesd
         image: {{ .Values.images.controller }}
