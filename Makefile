@@ -10,13 +10,13 @@ local-go:
 local: 	local-fmt 	local-go
 
 build-arm64:
-	docker build -t functions/faas-netesd:$(TAG)-arm64 . -f Dockerfile.arm64
+	docker build -t openfaas/faas-netesd:$(TAG)-arm64 . -f Dockerfile.arm64
 
 build-armhf:
-	docker build -t functions/faas-netesd:$(TAG)-armhf . -f Dockerfile.armhf
+	docker build -t openfaas/faas-netesd:$(TAG)-armhf . -f Dockerfile.armhf
 
 build:
-	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t functions/faas-netesd:$(TAG) . --squash=${SQUASH}
+	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netesd:$(TAG) . --squash=${SQUASH}
 
 push:
 	docker push alexellis2/faas-netes:$(TAG)
