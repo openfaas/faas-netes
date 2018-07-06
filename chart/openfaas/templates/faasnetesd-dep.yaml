@@ -21,7 +21,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: faas-netesd
-        image: {{ .Values.images.controller }}
+        image: {{ .Values.faasnetesd.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         env:
         - name: function_namespace

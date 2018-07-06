@@ -7,17 +7,20 @@ serviceType: NodePort
 rbac: true
 
 faasnetesd:
+  image: functions/faas-netesd:0.5.5
   readTimeout : "20s"
   writeTimeout : "20s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
 
 gateway:
+  image: openfaas/gateway:0.8.4
   readTimeout : "20s"
   writeTimeout : "20s"
   upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
   replicas: 1
 
 queueWorker:
+  image: functions/queue-worker:0.4.3
   ackWait : "30s"
   replicas: 1
 
@@ -26,17 +29,18 @@ openfaasImagePullPolicy: "Always"
 
 # replaces faas-netes with openfaas-operator
 operator:
+  image: functions/openfaas-operator:0.8.0
   create: false
 
-# images of openfaas components
-images:
-  controller: functions/faas-netesd:0.5.5
-  gateway: openfaas/gateway:0.8.4
-  prometheus: prom/prometheus:v2.3.1
-  alertmanager: prom/alertmanager:v0.15.0
-  nats: nats-streaming:0.6.0
-  queueWorker: functions/queue-worker:0.4.3
-  operator: functions/openfaas-operator:0.8.0
+# monitoring and auto-scaling components
+prometheus:
+  image: prom/prometheus:v2.3.1
+alertmanager:
+  image: prom/alertmanager:v0.15.0
+
+# async provider
+nats:
+  image: nats-streaming:0.6.0
 
 # ingress configuration
 ingress:

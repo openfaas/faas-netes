@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: {{ .Values.images.prometheus }}
+        image: {{ .Values.prometheus.image }}
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
