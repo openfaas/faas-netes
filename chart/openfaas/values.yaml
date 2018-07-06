@@ -31,12 +31,12 @@ operator:
 # images of openfaas components
 images:
   controller: functions/faas-netesd:0.5.5
-  gateway: functions/gateway:0.8.2
+  gateway: openfaas/gateway:0.8.4
   prometheus: prom/prometheus:v2.3.1
   alertmanager: prom/alertmanager:v0.15.0
   nats: nats-streaming:0.6.0
   queueWorker: functions/queue-worker:0.4.3
-  operator: functions/openfaas-operator:0.7.0
+  operator: functions/openfaas-operator:0.8.0
 
 # ingress configuration
 ingress:
