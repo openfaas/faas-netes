@@ -43,7 +43,9 @@ $ helm upgrade openfaas --install openfaas/openfaas \
 
 ## OpenFaaS Operator / CRD controller
 
-If you would like to work with CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time. The OpenFaaS Operator is suitable for development and testing and may replace the faas-netes controller in the future.
+If you would like to work with CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time.
+The OpenFaaS Operator is suitable for development and testing and may replace the faas-netes controller in the future.
+The Operator is compatible with Kubernetes 1.9 or later.
 
 To use it, add the flag: `--set operator.create=true` when installing with Helm.
 
