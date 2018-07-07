@@ -2,7 +2,30 @@ apiVersion: v1
 entries:
   openfaas:
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.338667369+01:00
+    created: 2018-07-07T14:32:36.670568148+03:00
+    description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
+    digest: 853676aec1bfd8eba526ca21b145d105b7b5ce7ac4fe639baff9821dfee234d3
+    home: https://www.openfaas.com
+    icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+    keywords:
+    - functions
+    - service
+    maintainers:
+    - email: alex@openfaas.com
+      name: alexellis
+    - email: rmocius@gmail.com
+      name: rimusz
+    - email: stefan.prodan@gmail.com
+      name: stefanprodan
+    name: openfaas
+    sources:
+    - https://github.com/openfaas/faas
+    - https://github.com/openfaas/faas-netes
+    urls:
+    - https://openfaas.github.io/faas-netes/openfaas-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v1
+    created: 2018-07-07T14:32:36.669832327+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 652ff06c8188502f83f0def4a4bb33a6b4b0c6d8e3a408782e875423ae42220c
     home: https://www.openfaas.com
@@ -25,7 +48,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.0.tgz
     version: 1.1.0
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.338181433+01:00
+    created: 2018-07-07T14:32:36.668648527+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8a1ebc077d40cb4e31945e57cdf69a71c5c8ebe8cff7d1c976e8e862ad9710eb
     home: https://www.openfaas.com
@@ -46,7 +69,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.21.tgz
     version: 1.0.21
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.337668371+01:00
+    created: 2018-07-07T14:32:36.667550038+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 3f28fd8eb6dd411a612e4092f1d569377dcfea9b247c40357b6ca93d2633f99c
     home: https://www.openfaas.com
@@ -67,7 +90,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.20.tgz
     version: 1.0.20
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.33723769+01:00
+    created: 2018-07-07T14:32:36.665122154+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 655e12161299bfe0dad9a8c76a80619a133d1b6413924b1b26bd1980c9334bb2
     home: https://www.openfaas.com
@@ -88,7 +111,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.19.tgz
     version: 1.0.19
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.336787628+01:00
+    created: 2018-07-07T14:32:36.663494623+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b5485851da4921afc87ac73d8004570cd1f17219440944b76e3d187043d46f7a
     home: https://www.openfaas.com
@@ -109,7 +132,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.18.tgz
     version: 1.0.18
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.33641191+01:00
+    created: 2018-07-07T14:32:36.662342129+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 49fdd14e168a14e83c4aa61674f44b7eeeca35ed98251d5abc0aa31fdcea8858
     home: https://www.openfaas.com
@@ -130,7 +153,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.17.tgz
     version: 1.0.17
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.336014158+01:00
+    created: 2018-07-07T14:32:36.661347033+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: f8e694e8b868524bfa8fec82239becb60d0e17b9384076856df0a303012138da
     home: https://www.openfaas.com
@@ -151,7 +174,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.16.tgz
     version: 1.0.16
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.335551025+01:00
+    created: 2018-07-07T14:32:36.660371126+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8b69ee7b5de254eb8d9f2a8db2574e74e6d9dccf995e06cb9a2316b780c678ca
     home: https://www.openfaas.com
@@ -172,7 +195,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.15.tgz
     version: 1.0.15
   - apiVersion: v1
-    created: 2018-07-07T09:13:39.335137844+01:00
+    created: 2018-07-07T14:32:36.659364461+03:00
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e484ee66f94d3893ab4af2159a4514dac6e072639bae6f3bbe9801ae68112f78
     home: https://www.openfaas.com
@@ -192,4 +215,4 @@ entries:
     urls:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.14.tgz
     version: 1.0.14
-generated: 2018-07-07T09:13:39.3344785+01:00
+generated: 2018-07-07T14:32:36.657739592+03:00
