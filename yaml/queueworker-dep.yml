@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name:  queue-worker
-        image: functions/queue-worker:0.4.3
+        image: openfaas/queue-worker:0.4.8
         imagePullPolicy: Always
         env:
         - name: max_inflight      # Max number of items in-flight
