@@ -25,7 +25,7 @@ after_success:
         echo $DOCKER_PASSWORD | docker login -u=$DOCKER_USERNAME --password-stdin;
         docker push $DOCKER_NS/faas-netesd:$TRAVIS_TAG;
 
-        docker tag $DOCKER_NS/faas-netesd:latest-dev quay.io/$DOCKER_NS/faas-netesd:$TRAVIS_TAG;
+        docker tag $DOCKER_NS/faas-netesd:latest quay.io/$DOCKER_NS/faas-netesd:$TRAVIS_TAG;
         echo $QUAY_PASSWORD | docker login -u=$QUAY_USERNAME --password-stdin quay.io;
         docker push quay.io/$DOCKER_NS/faas-netesd:$TRAVIS_TAG;
 
