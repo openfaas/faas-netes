@@ -20,9 +20,11 @@ spec:
       {{- if .Values.operator.create }}
       serviceAccountName: openfaas-operator
       {{- end }}
+      {{- if .Values.securityContext }}
       securityContext:
         readOnlyRootFilesystem: true
         runAsUser: 10001
+      {{- end }}
       containers:
       - name: gateway
         image: {{ .Values.gateway.image }}
