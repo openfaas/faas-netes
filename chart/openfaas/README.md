@@ -87,6 +87,32 @@ By default services will be exposed with following hostnames (can be changed, se
 * `prometheus.openfaas.local`
 * `alertmanager.openfaas.local`
 
+### Secure the Gateway administrative API and UI with basic auth
+
+In order to enable basic auth first you need to create a secret named basic-auth in the openfaas namespace:
+
+```bash
+# generate a random password
+password=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
+
+kubectl -n openfaas create secret generic basic-auth \
+--from-literal=basic-auth-user=admin \
+--from-literal=basic-auth-password=$password 
+```
+
+Update the Helm release and enable basic auth with:
+
+```
+helm upgrade --reuse-values openfaas openfaas/openfaas \
+    --set basic_auth=true
+```
+
+Save your credentials in faas-cli store:
+
+```bash
+echo $password | faas-cli login -g http://GATEWAY-URL -u admin --password-stdin
+```
+
 ## Configuration
 
 Additional OpenFaaS options in `values.yaml`.
