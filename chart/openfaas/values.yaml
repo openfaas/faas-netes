@@ -5,6 +5,8 @@ async: true
 exposeServices: true
 serviceType: NodePort
 rbac: true
+securityContext: true
+basic_auth: false
 
 faasnetesd:
   image: openfaas/faas-netesd:0.5.7

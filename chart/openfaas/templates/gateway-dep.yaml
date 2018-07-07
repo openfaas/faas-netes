@@ -20,9 +20,17 @@ spec:
       {{- if .Values.operator.create }}
       serviceAccountName: openfaas-operator
       {{- end }}
+      {{- if .Values.securityContext }}
       securityContext:
         readOnlyRootFilesystem: true
         runAsUser: 10001
+      {{- end }}
+      {{- if .Values.basic_auth }}
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
+      {{- end }}
       containers:
       - name: gateway
         image: {{ .Values.gateway.image }}
@@ -61,6 +69,18 @@ spec:
           value: "true"
         - name: direct_functions_suffix
           value: "{{ $functionNs }}.svc.cluster.local."
+        {{- end }}
+        {{- if .Values.basic_auth }}
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/var/secrets"
+        {{- end }}
+        {{- if .Values.basic_auth }}
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         {{- end }}
         ports:
         - containerPort: 8080
