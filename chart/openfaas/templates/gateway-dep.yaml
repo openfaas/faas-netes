@@ -100,8 +100,8 @@ spec:
           protocol: TCP
       {{- else }}
       - name: faas-netesd
-        image: {{ .Values.images.controller }}
-        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        image: {{ .Values.faasnetesd.image }}
+        imagePullPolicy: {{ .Values.faasnetesd.imagePullPolicy | quote }}
         env:
         - name: port
           value: "8081"
