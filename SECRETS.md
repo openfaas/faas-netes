@@ -21,7 +21,7 @@ $ docker push $DOCKER_USERNAME/private-alpine:latest
 
 Now log into the [Hub](https://hub.docker.com) and make your image `private-alpine` private.
 
-### Create your openfaas project
+### Create a function
 
 ```sh
 $ mkdir privatefuncs && cd privatefuncs

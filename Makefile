@@ -1,13 +1,10 @@
 TAG?=latest
 SQUASH?=false
 
-local-fmt:
-	gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*")
+all: build
 
-local-go:
+local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
-
-local: 	local-fmt 	local-go
 
 build-arm64:
 	docker build -t openfaas/faas-netesd:$(TAG)-arm64 . -f Dockerfile.arm64
