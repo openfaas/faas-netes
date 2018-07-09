@@ -36,10 +36,13 @@ $ helm repo add openfaas https://openfaas.github.io/faas-netes/
 Now deploy OpenFaaS from the helm chart repo:
 
 ```
-$ helm upgrade openfaas --install openfaas/openfaas \
+$ helm repo update \
+ && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn
 ```
+
+The above command will also update your helm repo to pull in any new releases.
 
 ## OpenFaaS Operator / CRD controller
 
@@ -119,7 +122,7 @@ Additional OpenFaaS options in `values.yaml`.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `operator` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
+| `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `functionNamespace` | Functions namespace | `default` |
 | `async` | Deploys NATS | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
