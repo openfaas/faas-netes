@@ -310,38 +310,62 @@ func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceReq
 		Requests: apiv1.ResourceList{},
 	}
 
-	// Set Memory limits
-	if request.Limits != nil && len(request.Limits.Memory) > 0 {
-		qty, err := resource.ParseQuantity(request.Limits.Memory)
-		if err != nil {
-			return resources, err
+	if request.Limits != nil {
+		if len(request.Limits.Memory) > 0 {
+			// Set Memory limits
+			qty, err := resource.ParseQuantity(request.Limits.Memory)
+			if err != nil {
+				return resources, err
+			}
+			resources.Limits[apiv1.ResourceMemory] = qty
 		}
-		resources.Limits[apiv1.ResourceMemory] = qty
+		if len(request.Limits.CPU) > 0 {
+			// Set CPU limits
+			qty, err := resource.ParseQuantity(request.Limits.CPU)
+			if err != nil {
+				return resources, err
+			}
+			resources.Limits[apiv1.ResourceCPU] = qty
+		}
+		if len(request.Limits.Others) > 0 {
+			// Set other extended resources
+			for extresource, value := range request.Limits.Others {
+				qty, err := resource.ParseQuantity(value)
+				if err != nil {
+					return resources, err
+				}
+				resources.Limits[apiv1.ResourceName(extresource)] = qty
+			}
+		}
 	}
 
-	if request.Requests != nil && len(request.Requests.Memory) > 0 {
-		qty, err := resource.ParseQuantity(request.Requests.Memory)
-		if err != nil {
-			return resources, err
+	if request.Requests != nil {
+		if len(request.Requests.Memory) > 0 {
+			// Set Memory limits
+			qty, err := resource.ParseQuantity(request.Requests.Memory)
+			if err != nil {
+				return resources, err
+			}
+			resources.Requests[apiv1.ResourceMemory] = qty
 		}
-		resources.Requests[apiv1.ResourceMemory] = qty
-	}
-
-	// Set CPU limits
-	if request.Limits != nil && len(request.Limits.CPU) > 0 {
-		qty, err := resource.ParseQuantity(request.Limits.CPU)
-		if err != nil {
-			return resources, err
+		if len(request.Requests.CPU) > 0 {
+			// Set CPU limits
+			qty, err := resource.ParseQuantity(request.Requests.CPU)
+			if err != nil {
+				return resources, err
+			}
+			resources.Requests[apiv1.ResourceCPU] = qty
 		}
-		resources.Limits[apiv1.ResourceCPU] = qty
-	}
-
-	if request.Requests != nil && len(request.Requests.CPU) > 0 {
-		qty, err := resource.ParseQuantity(request.Requests.CPU)
-		if err != nil {
-			return resources, err
+		if len(request.Requests.Others) > 0 {
+			// Set other extended resources
+			for extresource, value := range request.Requests.Others {
+				qty, err := resource.ParseQuantity(value)
+				if err != nil {
+					return resources, err
+				}
+				resources.Requests[apiv1.ResourceName(extresource)] = qty
+			}
 		}
-		resources.Requests[apiv1.ResourceCPU] = qty
 	}
 
 	return resources, nil
