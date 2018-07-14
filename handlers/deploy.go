@@ -245,10 +245,24 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							ImagePullPolicy: imagePullPolicy,
 							LivenessProbe:   livenessProbe,
 							ReadinessProbe:  readinessProbe,
+							SecurityContext: &v1.SecurityContext{
+								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
+							},
+							VolumeMounts: []v1.VolumeMount{
+								{Name: "temp", MountPath: "/tmp", ReadOnly: false},
+							},
 						},
 					},
 					RestartPolicy: v1.RestartPolicyAlways,
 					DNSPolicy:     v1.DNSClusterFirst,
+					Volumes: []v1.Volume{
+						{
+							Name: "temp",
+							VolumeSource: v1.VolumeSource{
+								EmptyDir: &v1.EmptyDirVolumeSource{},
+							},
+						},
+					},
 				},
 			},
 		},
