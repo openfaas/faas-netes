@@ -25,6 +25,7 @@ queueWorker:
   image: openfaas/queue-worker:0.4.8
   ackWait : "30s"
   replicas: 1
+  writeDebug: false
 
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"

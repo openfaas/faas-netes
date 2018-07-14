@@ -21,11 +21,13 @@ spec:
       - name:  queue-worker
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.functionNamespace }}
         env:
+        {{- if .Values.functionNamespace }}
         - name: faas_function_suffix
           value: .{{ .Values.functionNamespace }}
         - name: ack_wait    # Max duration of any async task / request
           value: {{ .Values.queueWorker.ackWait }}
         {{- end }}
+        - name: write_debug # Write output of async function invocation in queue-worker logs
+          value: "{{ .Values.queueWorker.writeDebug }}"
 {{- end }}
