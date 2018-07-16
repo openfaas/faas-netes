@@ -44,7 +44,7 @@ FaaS-netes can be configured via environment variables.
 
 | Option                 | Usage                                                                                          |
 |------------------------|------------------------------------------------------------------------------------------------|
-| `enable_function_readiness_probe` | Boolean - enable a readiness probe to test functions. Default: `true`               |
+| `httpProbe`            | Boolean - use http probe type for function readiness and liveness. Default: `false`            |
 | `write_timeout`        | HTTP timeout for writing a response body from your function (in seconds). Default: `8`         |
 | `read_timeout`         | HTTP timeout for reading the payload from the client caller (in seconds). Default: `8`         |
 | `image_pull_policy`    | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`.  Default: `Always` |
