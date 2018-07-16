@@ -167,6 +167,9 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		imagePullPolicy = apiv1.PullAlways
 	}
 
+	// TODO: Will be replaced by flag in
+	isReadOnly := true
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -216,10 +219,24 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							ImagePullPolicy: imagePullPolicy,
 							LivenessProbe:   probe,
 							ReadinessProbe:  probe,
+							SecurityContext: &v1.SecurityContext{
+								ReadOnlyRootFilesystem: &isReadOnly,
+							},
+							VolumeMounts: []v1.VolumeMount{
+								{Name: "temp", MountPath: "/tmp", ReadOnly: false},
+							},
 						},
 					},
 					RestartPolicy: v1.RestartPolicyAlways,
 					DNSPolicy:     v1.DNSClusterFirst,
+					Volumes: []v1.Volume{
+						{
+							Name: "temp",
+							VolumeSource: v1.VolumeSource{
+								EmptyDir: &v1.EmptyDirVolumeSource{},
+							},
+						},
+					},
 				},
 			},
 		},
