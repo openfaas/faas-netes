@@ -85,7 +85,7 @@ Add `--set ingress.enabled` to enable ingress pass `--set ingress.enabled=true` 
 
 By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
 
-* `faas-netesd.openfaas.local`
+* `faas-netes.openfaas.local`
 * `gateway.openfaas.local`
 * `prometheus.openfaas.local`
 * `alertmanager.openfaas.local`

@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: faas-netesd
+  name: faas-netes
   namespace: openfaas
   labels:
-    app: faas-netesd
+    app: faas-netes
 spec:
   type: ClusterIP
   ports:

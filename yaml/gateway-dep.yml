@@ -54,8 +54,8 @@ spec:
             memory: 250Mi
           limits:
             memory: 250Mi   # Adjust to suit needs of deployment
-      - name: faas-netesd
-        image: openfaas/faas-netesd:0.5.7
+      - name: faas-netes
+        image: openfaas/faas-netes:0.5.7
         imagePullPolicy: Always
         env:
         - name: port

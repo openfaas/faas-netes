@@ -34,8 +34,8 @@ spec:
             memory: 100Mi
           limits:
             memory: 100Mi
-      - name: faas-netesd
-        image: functions/faas-netesd:0.4.3-arm64
+      - name: faas-netes
+        image: functions/faas-netes:0.4.3-arm64
         imagePullPolicy: Always
         ports:
         - containerPort: 8081

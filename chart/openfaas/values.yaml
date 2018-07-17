@@ -9,7 +9,7 @@ securityContext: true
 basic_auth: false
 
 faasnetesd:
-  image: openfaas/faas-netesd:0.5.7
+  image: openfaas/faas-netes:0.5.7
   readTimeout : "20s"
   writeTimeout : "20s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -49,8 +49,8 @@ ingress:
   enabled: false
   # Used to create Ingress record (should be used with exposeServices: false).
   hosts:
-    - host: faas-netesd.openfaas.local
-      serviceName: faas-netesd
+    - host: faas-netes.openfaas.local
+      serviceName: faas-netes
       servicePort: 8080
       path: /
     - host: gateway.openfaas.local

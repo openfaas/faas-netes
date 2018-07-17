@@ -7,10 +7,10 @@ metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-netesd
+    component: faas-netes
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: faas-netesd-external
+  name: faas-netes-external
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP

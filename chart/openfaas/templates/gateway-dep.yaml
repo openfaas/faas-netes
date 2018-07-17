@@ -99,7 +99,7 @@ spec:
         - containerPort: 8081
           protocol: TCP
       {{- else }}
-      - name: faas-netesd
+      - name: faas-netes
         image: {{ .Values.faasnetesd.image }}
         imagePullPolicy: {{ .Values.faasnetesd.imagePullPolicy | quote }}
         env:
