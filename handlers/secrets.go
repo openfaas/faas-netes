@@ -120,6 +120,10 @@ func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.D
 // Uses the filter without allocation technique
 // https://github.com/golang/go/wiki/SliceTricks#filtering-without-allocating
 func removeVolume(volumeName string, volumes []apiv1.Volume) []apiv1.Volume {
+	if volumes == nil {
+		return []apiv1.Volume{}
+	}
+
 	newVolumes := volumes[:0]
 	for _, v := range volumes {
 		if v.Name != volumeName {
@@ -134,6 +138,10 @@ func removeVolume(volumeName string, volumes []apiv1.Volume) []apiv1.Volume {
 // Uses the filter without allocation technique
 // https://github.com/golang/go/wiki/SliceTricks#filtering-without-allocating
 func removeVolumeMount(volumeName string, mounts []apiv1.VolumeMount) []apiv1.VolumeMount {
+	if mounts == nil {
+		return []apiv1.VolumeMount{}
+	}
+
 	newMounts := mounts[:0]
 	for _, v := range mounts {
 		if v.Name != volumeName {

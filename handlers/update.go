@@ -49,7 +49,8 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			//deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
 
 			deployment.Spec.Template.Spec.Containers[0].Env = buildEnvVars(&request)
-			deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
+
+			configureReadOnlyRootFilesystem(request, deployment)
 
 			deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
 
