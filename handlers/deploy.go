@@ -248,24 +248,27 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							SecurityContext: &v1.SecurityContext{
 								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 							},
-							VolumeMounts: []v1.VolumeMount{
-								{Name: "temp", MountPath: "/tmp", ReadOnly: false},
-							},
 						},
 					},
 					RestartPolicy: v1.RestartPolicyAlways,
 					DNSPolicy:     v1.DNSClusterFirst,
-					Volumes: []v1.Volume{
-						{
-							Name: "temp",
-							VolumeSource: v1.VolumeSource{
-								EmptyDir: &v1.EmptyDirVolumeSource{},
-							},
-						},
-					},
 				},
 			},
 		},
+	}
+
+	if request.ReadOnlyRootFilesystem {
+		deploymentSpec.Spec.Template.Spec.Containers[0].VolumeMounts = []v1.VolumeMount{
+			{Name: "temp", MountPath: "/tmp", ReadOnly: false},
+		}
+		deploymentSpec.Spec.Template.Spec.Volumes = []v1.Volume{
+			{
+				Name: "temp",
+				VolumeSource: v1.VolumeSource{
+					EmptyDir: &v1.EmptyDirVolumeSource{},
+				},
+			},
+		}
 	}
 
 	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
