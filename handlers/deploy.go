@@ -257,19 +257,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		},
 	}
 
-	if request.ReadOnlyRootFilesystem {
-		deploymentSpec.Spec.Template.Spec.Containers[0].VolumeMounts = []v1.VolumeMount{
-			{Name: "temp", MountPath: "/tmp", ReadOnly: false},
-		}
-		deploymentSpec.Spec.Template.Spec.Volumes = []v1.Volume{
-			{
-				Name: "temp",
-				VolumeSource: v1.VolumeSource{
-					EmptyDir: &v1.EmptyDirVolumeSource{},
-				},
-			},
-		}
-	}
+	configureReadOnlyRootFilesystem(request, deploymentSpec)
 
 	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
 		return nil, err
@@ -404,4 +392,44 @@ func getMinReplicaCount(labels map[string]string) *int32 {
 	}
 
 	return nil
+}
+
+// configureReadOnlyRootFilesystem will create or update the required settings and mounts to ensure
+// that the ReadOnlyRootFilesystem setting works as expected, meaning:
+// 1. when ReadOnlyRootFilesystem is true, the security context of the container will have ReadOnlyRootFilesystem also
+//    marked as true and a new `/tmp` folder mount will be added to the deployment spec
+// 2. when ReadOnlyRootFilesystem is false, the security context of the container will also have ReadOnlyRootFilesystem set
+//    to false and there will be no mount for the `/tmp` folder
+//
+// This method is safe for both create and update operations.
+func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *v1beta1.Deployment) {
+	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
+		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
+	} else {
+		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &v1.SecurityContext{
+			ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
+		}
+	}
+
+	existingVolumes := removeVolume("temp", deployment.Spec.Template.Spec.Volumes)
+	deployment.Spec.Template.Spec.Volumes = existingVolumes
+
+	existingMounts := removeVolumeMount("temp", deployment.Spec.Template.Spec.Containers[0].VolumeMounts)
+	deployment.Spec.Template.Spec.Containers[0].VolumeMounts = existingMounts
+
+	if request.ReadOnlyRootFilesystem {
+		deployment.Spec.Template.Spec.Volumes = append(
+			existingVolumes,
+			v1.Volume{
+				Name: "temp",
+				VolumeSource: v1.VolumeSource{
+					EmptyDir: &v1.EmptyDirVolumeSource{},
+				},
+			},
+		)
+		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(
+			existingMounts,
+			v1.VolumeMount{Name: "temp", MountPath: "/tmp", ReadOnly: false},
+		)
+	}
 }
