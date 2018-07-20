@@ -135,6 +135,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.readTimeout` | Queue worker read timeout | `20s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `20s` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call | `20s` |
+| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `false` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 

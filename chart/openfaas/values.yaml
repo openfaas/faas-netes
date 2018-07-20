@@ -20,6 +20,7 @@ gateway:
   writeTimeout : "20s"
   upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
   replicas: 1
+  scaleFromZero: false
 
 queueWorker:
   image: openfaas/queue-worker:0.4.8
