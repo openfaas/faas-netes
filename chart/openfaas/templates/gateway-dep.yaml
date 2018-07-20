@@ -75,6 +75,8 @@ spec:
           readOnly: true
           mountPath: "/var/secrets"
         {{- end }}
+        - name: scale_from_zero
+          value: "{{ .Values.gateway.scaleFromZero }}"
         ports:
         - containerPort: 8080
           protocol: TCP
