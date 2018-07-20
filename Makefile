@@ -17,10 +17,13 @@ build:
 push:
 	docker push alexellis2/faas-netes:$(TAG)
 
-install:
+namespaces:
+	kubectl apply -f namespaces.yml
+
+install: namespaces
 	kubectl apply -f yaml/
 
-install-armhf:
+install-armhf: namespaces
 	kubectl apply -f yaml_armhf/
 
 .PHONY: charts
