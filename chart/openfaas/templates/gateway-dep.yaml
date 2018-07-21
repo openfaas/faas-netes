@@ -69,14 +69,14 @@ spec:
         - name: secret_mount_path
           value: "/var/secrets"
         {{- end }}
+        - name: scale_from_zero
+          value: "{{ .Values.gateway.scaleFromZero }}"
         {{- if .Values.basic_auth }}
         volumeMounts:
         - name: auth
           readOnly: true
           mountPath: "/var/secrets"
         {{- end }}
-        - name: scale_from_zero
-          value: "{{ .Values.gateway.scaleFromZero }}"
         ports:
         - containerPort: 8080
           protocol: TCP
