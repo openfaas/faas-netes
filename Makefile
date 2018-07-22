@@ -1,5 +1,4 @@
 TAG?=latest
-SQUASH?=false
 
 all: build
 
@@ -18,14 +17,14 @@ build:
 push:
 	docker push alexellis2/faas-netes:$(TAG)
 
-install:
-	kubectl apply -f faas.yml,monitoring.yml,rbac.yml
+namespaces:
+	kubectl apply -f namespaces.yml
 
-install-async:
-	kubectl apply -f faas.async.yml,monitoring.yml,rbac.yml,nats.yml
+install: namespaces
+	kubectl apply -f yaml/
 
-install-armhf:
-	kubectl apply -f faas.armhf.yml,monitoring.armhf.yml,rbac.yml
+install-armhf: namespaces
+	kubectl apply -f yaml_armhf/
 
 .PHONY: charts
 charts:

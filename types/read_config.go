@@ -70,7 +70,15 @@ func parseString(val string, fallback string) string {
 func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg := BootstrapConfig{}
 
-	enableProbe := parseBoolValue(hasEnv.Getenv("enable_function_readiness_probe"), true)
+	httpProbe := parseBoolValue(hasEnv.Getenv("http_probe"), false)
+
+	readinessProbeInitialDelaySeconds := parseIntValue(hasEnv.Getenv("readiness_probe_initial_delay_seconds"), 3)
+	readinessProbeTimeoutSeconds := parseIntValue(hasEnv.Getenv("readiness_probe_timeout_seconds"), 1)
+	readinessProbePeriodSeconds := parseIntValue(hasEnv.Getenv("readiness_probe_period_seconds"), 10)
+
+	livenessProbeInitialDelaySeconds := parseIntValue(hasEnv.Getenv("liveness_probe_initial_delay_seconds"), 3)
+	livenessProbeTimeoutSeconds := parseIntValue(hasEnv.Getenv("liveness_probe_timeout_seconds"), 1)
+	livenessProbePeriodSeconds := parseIntValue(hasEnv.Getenv("liveness_probe_period_seconds"), 10)
 
 	readTimeout := parseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*10)
 	writeTimeout := parseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*10)
@@ -80,7 +88,15 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg.ReadTimeout = readTimeout
 	cfg.WriteTimeout = writeTimeout
 
-	cfg.EnableFunctionReadinessProbe = enableProbe
+	cfg.HTTPProbe = httpProbe
+
+	cfg.ReadinessProbeInitialDelaySeconds = readinessProbeInitialDelaySeconds
+	cfg.ReadinessProbeTimeoutSeconds = readinessProbeTimeoutSeconds
+	cfg.ReadinessProbePeriodSeconds = readinessProbePeriodSeconds
+
+	cfg.LivenessProbeInitialDelaySeconds = livenessProbeInitialDelaySeconds
+	cfg.LivenessProbeTimeoutSeconds = livenessProbeTimeoutSeconds
+	cfg.LivenessProbePeriodSeconds = livenessProbePeriodSeconds
 
 	cfg.ImagePullPolicy = imagePullPolicy
 
@@ -92,9 +108,17 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 
 // BootstrapConfig for the process.
 type BootstrapConfig struct {
-	EnableFunctionReadinessProbe bool
-	ReadTimeout                  time.Duration
-	WriteTimeout                 time.Duration
-	ImagePullPolicy              string
-	Port                         int
+	// HTTPProbe when set to true switches readiness and liveness probe to
+	// access /_/health over HTTP instead of accessing /tmp/.lock.
+	HTTPProbe                         bool
+	ReadinessProbeInitialDelaySeconds int
+	ReadinessProbeTimeoutSeconds      int
+	ReadinessProbePeriodSeconds       int
+	LivenessProbeInitialDelaySeconds  int
+	LivenessProbeTimeoutSeconds       int
+	LivenessProbePeriodSeconds        int
+	ReadTimeout                       time.Duration
+	WriteTimeout                      time.Duration
+	ImagePullPolicy                   string
+	Port                              int
 }

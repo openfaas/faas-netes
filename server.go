@@ -40,11 +40,20 @@ func main() {
 
 	log.Printf("HTTP Read Timeout: %s\n", cfg.ReadTimeout)
 	log.Printf("HTTP Write Timeout: %s\n", cfg.WriteTimeout)
-	log.Printf("Function Readiness Probe Enabled: %v\n", cfg.EnableFunctionReadinessProbe)
 
 	deployConfig := &handlers.DeployHandlerConfig{
-		EnableFunctionReadinessProbe: cfg.EnableFunctionReadinessProbe,
-		ImagePullPolicy:              cfg.ImagePullPolicy,
+		HTTPProbe: cfg.HTTPProbe,
+		FunctionReadinessProbeConfig: &handlers.FunctionProbeConfig{
+			InitialDelaySeconds: int32(cfg.ReadinessProbeInitialDelaySeconds),
+			TimeoutSeconds:      int32(cfg.ReadinessProbeTimeoutSeconds),
+			PeriodSeconds:       int32(cfg.ReadinessProbePeriodSeconds),
+		},
+		FunctionLivenessProbeConfig: &handlers.FunctionProbeConfig{
+			InitialDelaySeconds: int32(cfg.LivenessProbeInitialDelaySeconds),
+			TimeoutSeconds:      int32(cfg.LivenessProbeTimeoutSeconds),
+			PeriodSeconds:       int32(cfg.LivenessProbePeriodSeconds),
+		},
+		ImagePullPolicy: cfg.ImagePullPolicy,
 	}
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
