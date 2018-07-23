@@ -50,6 +50,8 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 			deployment.Spec.Template.Spec.Containers[0].Env = buildEnvVars(&request)
 
+			configureReadOnlyRootFilesystem(request, deployment)
+
 			deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
 
 			labels := map[string]string{

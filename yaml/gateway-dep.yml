@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: functions/gateway:0.8.2
+        image: openfaas/gateway:0.8.7
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -44,6 +44,8 @@ spec:
           value: "false"
         - name: secret_mount_path
           value: "/etc/openfaas"
+        - name: scale_from_zero
+          value: "false"
 
         ports:
         - containerPort: 8080
@@ -55,7 +57,7 @@ spec:
           limits:
             memory: 250Mi   # Adjust to suit needs of deployment
       - name: faas-netesd
-        image: functions/faas-netesd:0.5.5
+        image: openfaas/faas-netesd:0.5.7
         imagePullPolicy: Always
         env:
         - name: port

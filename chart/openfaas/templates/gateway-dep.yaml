@@ -69,6 +69,8 @@ spec:
         - name: secret_mount_path
           value: "/var/secrets"
         {{- end }}
+        - name: scale_from_zero
+          value: "{{ .Values.gateway.scaleFromZero }}"
         {{- if .Values.basic_auth }}
         volumeMounts:
         - name: auth
@@ -113,6 +115,20 @@ spec:
           value: "{{ .Values.faasnetesd.writeTimeout }}"
         - name: image_pull_policy
           value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        - name: http_probe
+          value: "{{ .Values.faasnetesd.httpProbe }}"
+        - name: readiness_probe_initial_delay_seconds
+          value: "{{ .Values.faasnetesd.readinessProbe.initialDelaySeconds }}"
+        - name: readiness_probe_timeout_seconds
+          value: "{{ .Values.faasnetesd.readinessProbe.timeoutSeconds }}"
+        - name: readiness_probe_period_seconds
+          value: "{{ .Values.faasnetesd.readinessProbe.periodSeconds }}"
+        - name: liveness_probe_initial_delay_seconds
+          value: "{{ .Values.faasnetesd.livenessProbe.initialDelaySeconds }}"
+        - name: liveness_probe_timeout_seconds
+          value: "{{ .Values.faasnetesd.livenessProbe.timeoutSeconds }}"
+        - name: liveness_probe_period_seconds
+          value: "{{ .Values.faasnetesd.livenessProbe.periodSeconds }}"
         ports:
         - containerPort: 8081
           protocol: TCP

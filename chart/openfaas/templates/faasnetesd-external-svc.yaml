@@ -17,7 +17,7 @@ spec:
   ports:
     - port: 8081
       protocol: TCP
-      targetPort: 8080
+      targetPort: 8081
   selector:
     app: {{ template "openfaas.name" . }}
 {{- end }}
