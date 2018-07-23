@@ -4,9 +4,17 @@ language: go
 
 go:
   - 1.9.x
-  
+
+env:
+  global:
+    - HELM_URL=https://storage.googleapis.com/kubernetes-helm
+    - HELM_TAR=helm-v2.4.1-linux-amd64.tar.gz
+
 install:
-  - echo "Please don't go get"
+  - wget -q ${HELM_URL}/${HELM_TAR}
+  - tar xzfv ${HELM_TAR}
+  - PATH=`pwd`/linux-amd64/:$PATH
+  - helm init --client-only
 
 services:
   - docker
@@ -14,6 +22,16 @@ services:
 before_script:
 - bash contrib/set_travis_experimental_mode.sh
 - curl -sSL get.docker.com | sudo -E sh
+
+script:
+  - make build
+  - >
+     for chart in `ls ./chart`; do
+      helm lint ./chart/${chart}
+      if [ $? != 0 ]; then
+       travis_terminate 1
+      fi
+     done
 
 after_success:
     - if [ -z $DOCKER_NS ] ; then
@@ -30,6 +48,3 @@ after_success:
         docker push quay.io/$DOCKER_NS/faas-netes:$TRAVIS_TAG;
 
         fi
-
-script:
-  - make build
