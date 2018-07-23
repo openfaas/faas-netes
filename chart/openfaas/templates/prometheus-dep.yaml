@@ -25,6 +25,16 @@ spec:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: 9090
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
+          timeoutSeconds: 30
         ports:
         - containerPort: 9090
           protocol: TCP
