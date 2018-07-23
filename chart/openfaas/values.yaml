@@ -80,4 +80,8 @@ ingress:
   tls:
     # Secrets must be manually created in the namespace.
 
+nodeSelector: {}
 
+tolerations: []
+
+affinity: {}
