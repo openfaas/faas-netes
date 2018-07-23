@@ -24,7 +24,7 @@ faasnetesd:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.8.7
+  image: openfaas/gateway:0.8.9
   readTimeout : "20s"
   writeTimeout : "20s"
   upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
@@ -41,7 +41,7 @@ openfaasImagePullPolicy: "Always"
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: functions/openfaas-operator:0.8.0
+  image: openfaas/openfaas-operator:0.8.1
   create: false
 
 # monitoring and auto-scaling components
