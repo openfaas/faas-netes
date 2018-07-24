@@ -30,6 +30,8 @@ gateway:
   upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
   replicas: 1
   scaleFromZero: false
+  # change the port when creating multiple releases in the same baremetal cluster
+  nodePort: 31112
 
 queueWorker:
   image: openfaas/queue-worker:0.4.8
@@ -43,6 +45,8 @@ openfaasImagePullPolicy: "Always"
 operator:
   image: openfaas/openfaas-operator:0.8.2
   create: false
+  # set this to false when creating multiple releases in the same cluster
+  # must be true for the first one only
   createCRD: true
 
 # monitoring and auto-scaling components
