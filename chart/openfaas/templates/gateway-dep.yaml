@@ -20,7 +20,7 @@ spec:
       {{- if .Values.operator.create }}
       serviceAccountName: {{ .Release.Name }}-operator
       {{- else }}
-      serviceAccountName: faas-controller
+      serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
       {{- if .Values.securityContext }}
       securityContext:

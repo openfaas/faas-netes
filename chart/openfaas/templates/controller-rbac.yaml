@@ -1,6 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if eq .Values.operator.create false }}
-{{- if (ne .Release.Namespace $functionNs) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -11,9 +10,8 @@ metadata:
     component: faas-controller
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: faas-controller
-  namespace: {{ $functionNs | quote }}
-{{- end }}
+  name: {{ .Release.Name }}-controller
+  namespace: {{ .Release.Namespace | quote }}
 {{- if .Values.rbac }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -25,7 +23,7 @@ metadata:
     component: faas-controller
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: faas-controller
+  name: {{ .Release.Name }}-controller
 rules:
   - apiGroups:
       - ""
@@ -67,15 +65,15 @@ metadata:
     component: faas-controller
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: faas-controller
+  name: {{ .Release.Name }}-controller
   namespace: {{ .Release.Namespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: faas-controller
+  name: {{ .Release.Name }}-controller
 subjects:
   - kind: ServiceAccount
-    name: faas-controller
+    name: {{ .Release.Name }}-controller
     namespace: {{ .Release.Namespace | quote }}
 ---
 {{- if (ne .Release.Namespace $functionNs) }}
@@ -88,15 +86,15 @@ metadata:
     component: faas-controller
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: faas-controller-fn
+  name: {{ .Release.Name }}-controller-fn
   namespace: {{ $functionNs | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: faas-controller
+  name: {{ .Release.Name }}-controller
 subjects:
   - kind: ServiceAccount
-    name: faas-controller
+    name: {{ .Release.Name }}-controller
     namespace: {{ .Release.Namespace | quote }}
 {{- end }}
 {{- end }}
