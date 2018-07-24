@@ -18,7 +18,7 @@ spec:
         app: gateway
     spec:
       {{- if .Values.operator.create }}
-      serviceAccountName: openfaas-operator
+      serviceAccountName: {{ .Release.Name }}-operator
       {{- else }}
       serviceAccountName: faas-controller
       {{- end }}

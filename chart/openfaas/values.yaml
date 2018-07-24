@@ -41,8 +41,9 @@ openfaasImagePullPolicy: "Always"
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/openfaas-operator:0.8.1
+  image: openfaas/openfaas-operator:0.8.2
   create: false
+  createCRD: true
 
 # monitoring and auto-scaling components
 prometheus:
