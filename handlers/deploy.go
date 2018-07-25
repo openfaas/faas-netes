@@ -196,6 +196,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		imagePullPolicy = apiv1.PullAlways
 	}
 
+	annotations := buildAnnotations(request)
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -203,6 +204,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name: request.Service,
+			Annotations: annotations,
 		},
 		Spec: v1beta1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
@@ -229,7 +231,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 				ObjectMeta: metav1.ObjectMeta{
 					Name:        request.Service,
 					Labels:      labels,
-					Annotations: map[string]string{"prometheus.io.scrape": "false"},
+					Annotations: annotations,
 				},
 				Spec: apiv1.PodSpec{
 					NodeSelector: nodeSelector,
@@ -267,6 +269,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 }
 
 func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
+
 	serviceSpec := &v1.Service{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Service",
@@ -274,7 +277,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        request.Service,
-			Annotations: map[string]string{"prometheus.io.scrape": "false"},
+			Annotations: buildAnnotations(request),
 		},
 		Spec: v1.ServiceSpec{
 			Type: v1.ServiceTypeClusterIP,
@@ -294,6 +297,18 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 		},
 	}
 	return serviceSpec
+}
+
+func buildAnnotations(request requests.CreateFunctionRequest) map[string]string {
+	var annotations map[string]string
+	if request.Annotations != nil {
+		annotations = *request.Annotations
+	} else {
+		annotations = map[string]string{}
+	}
+
+	annotations["prometheus.io.scrape"] = "false"
+	return annotations
 }
 
 func buildEnvVars(request *requests.CreateFunctionRequest) []v1.EnvVar {
