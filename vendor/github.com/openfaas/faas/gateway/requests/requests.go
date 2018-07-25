@@ -47,10 +47,11 @@ type CreateFunctionRequest struct {
 	ReadOnlyRootFilesystem bool `json:"readOnlyRootFilesystem"`
 }
 
-// FunctionResources Memory and CPU
+// FunctionResources Memory, CPU and other extended resources
 type FunctionResources struct {
 	Memory string `json:"memory"`
 	CPU    string `json:"cpu"`
+	Others  map[string]string
 }
 
 // Function exported for system/functions endpoint
