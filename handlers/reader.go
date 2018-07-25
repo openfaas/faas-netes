@@ -97,6 +97,7 @@ func readFunction(item v1beta1.Deployment) *requests.Function {
 		AvailableReplicas: uint64(item.Status.AvailableReplicas),
 		InvocationCount:   0,
 		Labels:            &labels,
+		Annotations: 	   &item.Spec.Template.Annotations,
 	}
 
 	return &function

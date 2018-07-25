@@ -130,6 +130,49 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Enabled(t *testing.T) {
 	readOnlyRootEnabled(t, deployment)
 }
 
+func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
+	request := requests.CreateFunctionRequest{}
+
+	annotations := buildAnnotations(request)
+
+	if len(annotations) != 1 {
+		t.Errorf("want: %d annotations got: %d", 1, len(annotations))
+	}
+
+	v, ok := annotations["prometheus.io.scrape"]
+	if !ok {
+		t.Errorf("missing prometheus.io.scrape key")
+	}
+
+	if v != "false" {
+		t.Errorf("want: %s for annotation prometheus.io.scrape got: %s", "false", v)
+	}
+}
+
+func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
+	request := requests.CreateFunctionRequest{
+		Annotations: &map[string]string{
+			"date-created": "Wed 25 Jul 21:26:22 BST 2018",
+			"foo" : "bar",
+		},
+	}
+
+	annotations := buildAnnotations(request)
+
+	if len(annotations) != 3 {
+		t.Errorf("want: %d annotations got: %d", 1, len(annotations))
+	}
+
+	v, ok := annotations["date-created"]
+	if !ok {
+		t.Errorf("missing date-created key")
+	}
+
+	if v != "Wed 25 Jul 21:26:22 BST 2018" {
+		t.Errorf("want: %s for annotation date-created got: %s", "Wed 25 Jul 21:26:22 BST 2018", v)
+	}
+}
+
 func readOnlyRootDisabled(t *testing.T, deployment *v1beta1.Deployment) {
 	if len(deployment.Spec.Template.Spec.Volumes) != 0 {
 		t.Error("Volumes should be empty if ReadOnlyRootFilesystem is false")
