@@ -62,13 +62,13 @@ spec:
           value: "http://127.0.0.1:8081/"
         {{- if .Values.async }}
         - name: faas_nats_address
-          value: "nats.{{ .Release.Namespace }}.svc.cluster.local."
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}."
         - name: faas_nats_port
           value: "4222"
         - name: direct_functions
           value: "true"
         - name: direct_functions_suffix
-          value: "{{ $functionNs }}.svc.cluster.local."
+          value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}."
         {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
