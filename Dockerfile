@@ -10,6 +10,7 @@ RUN curl -sL https://github.com/alexellis/license-check/releases/download/0.2.2/
     && chmod +x /usr/bin/license-check
 RUN license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
+    && go test ./test/ \
     && VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
     && GIT_COMMIT=$(git rev-list -1 HEAD) \
     && CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w \
