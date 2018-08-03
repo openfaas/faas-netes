@@ -107,35 +107,35 @@ func TestRead_EmptyProbeConfig(t *testing.T) {
 	defaults := NewEnvBucket()
 	readConfig := types.ReadConfig{}
 	config := readConfig.Read(defaults)
-
-	if !config.EnableFunctionReadinessProbe {
-		t.Log("EnableFunctionReadinressProbe incorrect")
+	want := false
+	if config.HTTPProbe != want {
+		t.Logf("EnableFunctionReadinressProbe incorrect, want: %t, got: %t", want, config.HTTPProbe)
 		t.Fail()
 	}
 }
 
-func TestRead_EnableFunctionReadinessProbeConfig(t *testing.T) {
+func TestRead_HTTPProbeConfig(t *testing.T) {
 	defaults := NewEnvBucket()
-	defaults.Setenv("enable_function_readiness_probe", "false")
+	defaults.Setenv("http_probe", "false")
 
 	readConfig := types.ReadConfig{}
 	config := readConfig.Read(defaults)
 
-	if config.EnableFunctionReadinessProbe {
-		t.Logf("EnableFunctionReadinessProbe incorrect, got: %v\n", config.EnableFunctionReadinessProbe)
+	if config.HTTPProbe {
+		t.Logf("HTTPProbe incorrect, got: %v\n", config.HTTPProbe)
 		t.Fail()
 	}
 }
 
-func TestRead_EnableFunctionReadinessProbeConfig_true(t *testing.T) {
+func TestRead_HTTPProbeConfig_true(t *testing.T) {
 	defaults := NewEnvBucket()
-	defaults.Setenv("enable_function_readiness_probe", "true")
+	defaults.Setenv("http_probe", "true")
 
 	readConfig := types.ReadConfig{}
 	config := readConfig.Read(defaults)
 
-	if !config.EnableFunctionReadinessProbe {
-		t.Logf("EnableFunctionReadinessProbe incorrect, got: %v\n", config.EnableFunctionReadinessProbe)
+	if !config.HTTPProbe {
+		t.Logf("HTTPProbe incorrect, got: %v\n", config.HTTPProbe)
 		t.Fail()
 	}
 }
