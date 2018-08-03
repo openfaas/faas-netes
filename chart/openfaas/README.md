@@ -138,6 +138,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `false` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
+| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.

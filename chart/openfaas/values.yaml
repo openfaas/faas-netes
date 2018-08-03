@@ -90,3 +90,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+kubernetesDNSDomain: cluster.local
