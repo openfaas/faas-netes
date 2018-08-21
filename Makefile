@@ -33,5 +33,6 @@ charts:
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 
 ci-armhf:
-	(./build.sh $(TAG)-armhf)
+	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
+
 
