@@ -32,3 +32,6 @@ charts:
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 
+ci-armhf:
+	(./build.sh $(TAG)-armhf)
+
