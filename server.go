@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+
 	functionNamespace := "default"
 
 	if namespace, exists := os.LookupEnv("function_namespace"); exists {
