@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: functions/gateway:0.8.1-armhf
+        image: openfaas/gateway:0.8.12-armhf
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
@@ -23,9 +23,11 @@ spec:
         - name: faas_nats_port
           value: "4222"
         - name: read_timeout
-          value: "20s"
+          value: "60s"
         - name: write_timeout
-          value: "20s"
+          value: "60s"
+        - name: basic_auth
+          value: "false"
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -35,7 +37,7 @@ spec:
           limits:
             memory: 100Mi
       - name: faas-netesd
-        image: functions/faas-netesd:0.5.2-armhf
+        image: openfaas/faas-netes:0.6.0-armhf
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
@@ -51,9 +53,9 @@ spec:
         - name: function_namespace
           value: openfaas-fn
         - name: read_timeout
-          value: "20s"
+          value: "50s"
         - name: write_timeout
-          value: "20s"
+          value: "60s"
 ---
 apiVersion: v1
 kind: Service
