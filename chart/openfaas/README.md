@@ -33,6 +33,7 @@ $ helm repo add openfaas https://openfaas.github.io/faas-netes/
 "openfaas" has been added to your repositories
 ```
 
+<<<<<<< HEAD
 Generate secrets so that we can enable basic authentication for the gateway:
 
 ```bash
@@ -52,14 +53,32 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 
 > Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
 
+=======
+In order to secure the Gateway administrative API and UI you have to create a secret named `basic-auth` in the openfaas namespace:
+
+```bash
+# generate a random password
+password=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
+
+kubectl -n openfaas create secret generic basic-auth \
+--from-literal=basic-auth-user=admin \
+--from-literal=basic-auth-password=$password 
+```
+
+>>>>>>> Move basic auth setup in the main install section
 Now deploy OpenFaaS from the helm chart repo:
 
 ```
 $ helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
+<<<<<<< HEAD
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn
+=======
+    --set functionNamespace=openfaas-fn \
+    --set basic_auth=true
+>>>>>>> Move basic auth setup in the main install section
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -76,6 +95,12 @@ Now log in:
 
 ``` bash
 echo -n $PASSWORD | faas-cli login -g http://$OPENFAAS_URL -u admin --password-stdin
+```
+
+Save your credentials in faas-cli store:
+
+```bash
+echo $password | faas-cli login -g http://GATEWAY-URL -u admin --password-stdin
 ```
 
 ## OpenFaaS Operator / CRD controller
@@ -120,10 +145,15 @@ Add `--set ingress.enabled` to enable ingress pass `--set ingress.enabled=true` 
 By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
 
 * `gateway.openfaas.local`
+<<<<<<< HEAD
 
 ### SSL / TLS
 
 If you require TLS/SSL then please make use of an IngressController. A full guide is provided to [enable TLS for the OpenFaaS Gateway using cert-manager and Let's Encrypt](https://docs.openfaas.com/reference/ssl/kubernetes-with-cert-manager/).
+=======
+* `prometheus.openfaas.local`
+* `alertmanager.openfaas.local`
+>>>>>>> Move basic auth setup in the main install section
 
 ## Configuration
 
