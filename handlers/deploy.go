@@ -17,7 +17,7 @@ import (
 
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/core/v1"
+	corev1 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/extensions/v1beta1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -240,20 +240,20 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							Name:  request.Service,
 							Image: request.Image,
 							Ports: []apiv1.ContainerPort{
-								{ContainerPort: int32(watchdogPort), Protocol: v1.ProtocolTCP},
+								{ContainerPort: int32(watchdogPort), Protocol: corev1.ProtocolTCP},
 							},
 							Env:             envVars,
 							Resources:       *resources,
 							ImagePullPolicy: imagePullPolicy,
 							LivenessProbe:   livenessProbe,
 							ReadinessProbe:  readinessProbe,
-							SecurityContext: &v1.SecurityContext{
+							SecurityContext: &corev1.SecurityContext{
 								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 							},
 						},
 					},
-					RestartPolicy: v1.RestartPolicyAlways,
-					DNSPolicy:     v1.DNSClusterFirst,
+					RestartPolicy: corev1.RestartPolicyAlways,
+					DNSPolicy:     corev1.DNSClusterFirst,
 				},
 			},
 		},
@@ -268,9 +268,9 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	return deploymentSpec, nil
 }
 
-func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
+func makeServiceSpec(request requests.CreateFunctionRequest) *corev1.Service {
 
-	serviceSpec := &v1.Service{
+	serviceSpec := &corev1.Service{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Service",
 			APIVersion: "v1",
@@ -279,15 +279,15 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 			Name:        request.Service,
 			Annotations: buildAnnotations(request),
 		},
-		Spec: v1.ServiceSpec{
-			Type: v1.ServiceTypeClusterIP,
+		Spec: corev1.ServiceSpec{
+			Type: corev1.ServiceTypeClusterIP,
 			Selector: map[string]string{
 				"faas_function": request.Service,
 			},
-			Ports: []v1.ServicePort{
+			Ports: []corev1.ServicePort{
 				{
 					Name:     "http",
-					Protocol: v1.ProtocolTCP,
+					Protocol: corev1.ProtocolTCP,
 					Port:     watchdogPort,
 					TargetPort: intstr.IntOrString{
 						Type:   intstr.Int,
@@ -313,18 +313,18 @@ func buildAnnotations(request requests.CreateFunctionRequest) map[string]string 
 	return annotations
 }
 
-func buildEnvVars(request *requests.CreateFunctionRequest) []v1.EnvVar {
-	envVars := []v1.EnvVar{}
+func buildEnvVars(request *requests.CreateFunctionRequest) []corev1.EnvVar {
+	envVars := []corev1.EnvVar{}
 
 	if len(request.EnvProcess) > 0 {
-		envVars = append(envVars, v1.EnvVar{
+		envVars = append(envVars, corev1.EnvVar{
 			Name:  "fprocess",
 			Value: request.EnvProcess,
 		})
 	}
 
 	for k, v := range request.EnvVars {
-		envVars = append(envVars, v1.EnvVar{
+		envVars = append(envVars, corev1.EnvVar{
 			Name:  k,
 			Value: v,
 		})
@@ -423,7 +423,7 @@ func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, dep
 	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
 		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
 	} else {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &v1.SecurityContext{
+		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{
 			ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 		}
 	}
@@ -437,16 +437,20 @@ func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, dep
 	if request.ReadOnlyRootFilesystem {
 		deployment.Spec.Template.Spec.Volumes = append(
 			existingVolumes,
-			v1.Volume{
+			corev1.Volume{
 				Name: "temp",
-				VolumeSource: v1.VolumeSource{
-					EmptyDir: &v1.EmptyDirVolumeSource{},
+				VolumeSource: corev1.VolumeSource{
+					EmptyDir: &corev1.EmptyDirVolumeSource{},
 				},
 			},
 		)
+
 		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(
 			existingMounts,
-			v1.VolumeMount{Name: "temp", MountPath: "/tmp", ReadOnly: false},
+			corev1.VolumeMount{
+				Name:      "temp",
+				MountPath: "/tmp",
+				ReadOnly:  false},
 		)
 	}
 }
