@@ -24,7 +24,7 @@ spec:
         {{- if .Values.functionNamespace }}
         env:
         - name: faas_function_suffix
-          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}."
+          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: ack_wait    # Max duration of any async task / request
           value: {{ .Values.queueWorker.ackWait }}
         {{- end }}
