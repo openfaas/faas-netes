@@ -62,13 +62,13 @@ spec:
           value: "http://127.0.0.1:8081/"
         {{- if .Values.async }}
         - name: faas_nats_address
-          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}."
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: faas_nats_port
           value: "4222"
         - name: direct_functions
           value: "true"
         - name: direct_functions_suffix
-          value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}."
+          value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
@@ -85,17 +85,13 @@ spec:
           mountPath: "/var/secrets"
         {{- end }}
         ports:
-        - containerPort: 8080
+        - name: http
+          containerPort: 8080
           protocol: TCP
       {{- if .Values.operator.create }}
       - name: operator
         image: {{ .Values.operator.image }}
         imagePullPolicy: Always
-        {{- if .Values.securityContext }}
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 10001
-        {{- end }}
         command:
           - ./openfaas-operator
           - -logtostderr
