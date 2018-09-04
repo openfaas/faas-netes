@@ -48,19 +48,5 @@ spec:
                 memory:
                   type: string
                   pattern: "^[0-9]+(Mi|Gi)"
-            secrets:
-              type: array
-              items:
-                type: string
-            constraints:
-              type: array
-              items:
-                type: string
-            environment:
-              type: object
-            labels:
-              type: object
-            annotations:
-              type: object
 {{- end }}
 {{- end }}
