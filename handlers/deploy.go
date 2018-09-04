@@ -203,7 +203,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 			APIVersion: "extensions/v1beta1",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: request.Service,
+			Name:        request.Service,
 			Annotations: annotations,
 		},
 		Spec: v1beta1.DeploymentSpec{
@@ -286,6 +286,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 			},
 			Ports: []v1.ServicePort{
 				{
+					Name:     "http",
 					Protocol: v1.ProtocolTCP,
 					Port:     watchdogPort,
 					TargetPort: intstr.IntOrString{
@@ -296,6 +297,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *v1.Service {
 			},
 		},
 	}
+
 	return serviceSpec
 }
 
