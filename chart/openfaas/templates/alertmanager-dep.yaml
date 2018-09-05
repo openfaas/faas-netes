@@ -27,15 +27,17 @@ spec:
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
         livenessProbe:
-          httpGet:
-            path: /#/status
-            port: 9093
-          timeoutSeconds: 30
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - wget --quiet --tries=1 --spider http://localhost:9093/-/ready || exit 1
         readinessProbe:
-          httpGet:
-            path: /#/status
-            port: 9093
-          timeoutSeconds: 30
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - wget --quiet --tries=1 --spider http://localhost:9093/-/ready || exit 1
         ports:
         - containerPort: 9093
           protocol: TCP

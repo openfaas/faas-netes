@@ -38,19 +38,17 @@ spec:
           runAsUser: 10001
         {{- end }}
         livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 2
-          periodSeconds: 10
-          timeoutSeconds: 2
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - wget --quiet --tries=1 --spider http://localhost:8080/healthz || exit 1
         readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 2
-          periodSeconds: 10
-          timeoutSeconds: 2
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - wget --quiet --tries=1 --spider http://localhost:8080/healthz || exit 1
         env:
         - name: read_timeout
           value: "{{ .Values.gateway.readTimeout }}"
