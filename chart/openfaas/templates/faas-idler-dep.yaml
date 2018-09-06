@@ -1,0 +1,55 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: faas-idler
+  app: {{ template "openfaas.name" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.faasIdler.replicas }}
+  template:
+    metadata:
+      labels:
+        app: faas-idler
+    spec:
+      containers:
+        - name: faas-idler
+          image: {{ .Values.faasIdler.image }}
+          imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+          env:
+            - name: gateway_url
+              value: "http://gateway.{{ .Release.Namespace }}:8080/"
+            - name: prometheus_host
+              value: "prometheus.{{ .Release.Namespace }}"
+            - name: prometheus_port
+              value: "9090"
+            - name: inactivity_duration
+              value: {{ .Values.faasIdler.inactivityDuration }}
+            - name: reconcile_interval
+              value: {{ .Values.faasIdler.reconcileInterval }}
+          command:
+            - /home/app/faas-idler
+            - -dry-run={{ .Values.faasIdler.dryRun }}
+
+{{- if .Values.basic_auth }}
+          volumeMounts:
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets/"
+      volumes:
+        - name: auth
+          secret:
+            secretName: basic-auth
+
+{{- end }}
+{{- with .Values.nodeSelector }}
+    nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+        tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}

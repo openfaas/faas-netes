@@ -49,7 +49,7 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 
 * To use NodePorts (default) pass no additional flags
 * To use a LoadBalancer add `--set serviceType=LoadBalancer`
-* To use an IngressController add `--set ingress.enabled=true` 
+* To use an IngressController add `--set ingress.enabled=true`
 
 > Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
 
@@ -147,11 +147,15 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.readTimeout` | Queue worker read timeout | `20s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `20s` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call | `20s` |
-| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `false` |
+| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
+| `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `5m` |
+| `faasIdler.reconcileInterval` | The time between each of reconciliation | `30s` |
+| `faasIdler.dryRun` | When set to false the OpenFaaS API will be called to scale down idle functions, by default this is set to only print in the logs. | `true` |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
