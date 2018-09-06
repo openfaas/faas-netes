@@ -29,7 +29,7 @@ gateway:
   writeTimeout : "20s"
   upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
   replicas: 1
-  scaleFromZero: false
+  scaleFromZero: true
   # change the port when creating multiple releases in the same baremetal cluster
   nodePort: 31112
 
@@ -72,6 +72,14 @@ ingress:
     kubernetes.io/ingress.class: nginx
   tls:
     # Secrets must be manually created in the namespace.
+
+# faas-idler configuration
+faasIdler:
+  replicas: 1
+  image: openfaas/faas-idler:0.1.7
+  inactivityDuration: 5m
+  reconcileInterval: 30s
+  dryRun: true
 
 nodeSelector: {}
 
