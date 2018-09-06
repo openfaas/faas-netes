@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: openfaas/gateway:0.9.0
+        image: openfaas/gateway:0.9.1
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
