@@ -33,16 +33,50 @@ $ helm repo add openfaas https://openfaas.github.io/faas-netes/
 "openfaas" has been added to your repositories
 ```
 
+Generate secrets so that we can enable basic authentication for the gateway:
+
+```bash
+# generate a random password
+PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
+
+kubectl -n openfaas create secret generic basic-auth \
+--from-literal=basic-auth-user=admin \
+--from-literal=basic-auth-password="$PASSWORD"
+```
+
+Now decide how you want to expose the services and edit the `helm upgrade` command as required.
+
+* To use NodePorts (default) pass no additional flags
+* To use a LoadBalancer add `--set serviceType=LoadBalancer`
+* To use an IngressController add `--set ingress.enabled=true` 
+
+> Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
+
 Now deploy OpenFaaS from the helm chart repo:
 
 ```
 $ helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
+    --set basic_auth=true \
     --set functionNamespace=openfaas-fn
 ```
 
-The above command will also update your helm repo to pull in any new releases.
+> The above command will also update your helm repo to pull in any new releases.
+
+Once all the services are up and running, log into your gateway using the OpenFaaS CLI. This will cache your credentials into your `~/.openfaas/config.yml` file.
+
+Fetch your public IP or NodePort via `kubectl get svc -n openfaas gateway-external -o wide` and set it as an environmental variable as below:
+
+```bash
+export OPENFAAS_URL=http://...
+```
+
+Now log in:
+
+``` bash
+echo -n $PASSWORD | faas-cli login -g http://$OPENFAAS_URL -u admin --password-stdin
+```
 
 ## OpenFaaS Operator / CRD controller
 
@@ -90,32 +124,6 @@ By default services will be exposed with following hostnames (can be changed, se
 * `prometheus.openfaas.local`
 * `alertmanager.openfaas.local`
 
-### Secure the Gateway administrative API and UI with basic auth
-
-In order to enable basic auth first you need to create a secret named basic-auth in the openfaas namespace:
-
-```bash
-# generate a random password
-password=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
-
-kubectl -n openfaas create secret generic basic-auth \
---from-literal=basic-auth-user=admin \
---from-literal=basic-auth-password=$password 
-```
-
-Update the Helm release and enable basic auth with:
-
-```
-helm upgrade --reuse-values openfaas openfaas/openfaas \
-    --set basic_auth=true
-```
-
-Save your credentials in faas-cli store:
-
-```bash
-echo $password | faas-cli login -g http://GATEWAY-URL -u admin --password-stdin
-```
-
 ## Configuration
 
 Additional OpenFaaS options in `values.yaml`.
@@ -129,6 +137,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `rbac` | Enable RBAC | `true` |
+| `basic_auth` | Enable basic authentication on the Gateway | `false` |
 | `faasnetesd.readTimeout` | Queue worker read timeout | `20s` |
 | `faasnetesd.writeTimeout` | Queue worker write timeout | `20s` |
 | `faasnetesd.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
