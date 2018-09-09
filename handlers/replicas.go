@@ -52,8 +52,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 			return
 		}
 
-		var replicas int32
-		replicas = int32(req.Replicas)
+		replicas := int32(req.Replicas)
 		deployment.Spec.Replicas = &replicas
 		_, err = clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment)
 
