@@ -31,11 +31,12 @@ const watchdogPort = 8080
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
 
+// Regex for RFC-1123 validation:
+// 	k8s.io/kubernetes/pkg/util/validation/validation.go
+var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
+
 // ValidateDeployRequest validates that the service name is valid for Kubernetes
 func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
-	// Regex for RFC-1123 validation:
-	// 	k8s.io/kubernetes/pkg/util/validation/validation.go
-	var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
 	matched := validDNS.MatchString(request.Service)
 	if matched {
 		return nil
