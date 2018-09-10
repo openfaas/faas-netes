@@ -24,7 +24,7 @@ faasnetesd:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.9.1
+  image: openfaas/gateway:0.9.2
   readTimeout : "20s"
   writeTimeout : "20s"
   upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
@@ -64,21 +64,9 @@ ingress:
   enabled: false
   # Used to create Ingress record (should be used with exposeServices: false).
   hosts:
-    - host: faas-netes.openfaas.local
-      serviceName: faas-netes
-      servicePort: 8080
-      path: /
     - host: gateway.openfaas.local
       serviceName: gateway
       servicePort: 8080
-      path: /
-    - host: prometheus.openfaas.local
-      serviceName: prometheus
-      servicePort: 9090
-      path: /
-    - host: alertmanager.openfaas.local
-      serviceName: alertmanager
-      servicePort: 9093
       path: /
   annotations:
     kubernetes.io/ingress.class: nginx
