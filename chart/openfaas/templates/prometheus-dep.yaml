@@ -28,15 +28,23 @@ spec:
         livenessProbe:
           exec:
             command:
-            - /bin/sh
-            - -c
-            - wget --quiet --tries=1 --spider http://localhost:9090/-/healthy || exit 1
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9090/-/healthy
+          timeoutSeconds: 30
         readinessProbe:
           exec:
             command:
-            - /bin/sh
-            - -c
-            - wget --quiet --tries=1 --spider http://localhost:9090/-/ready || exit 1
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9090/-/healthy
+          timeoutSeconds: 30
         ports:
         - containerPort: 9090
           protocol: TCP

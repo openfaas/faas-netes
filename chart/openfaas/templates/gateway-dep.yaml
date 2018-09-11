@@ -40,15 +40,23 @@ spec:
         livenessProbe:
           exec:
             command:
-            - /bin/sh
-            - -c
-            - wget --quiet --tries=1 --spider http://localhost:8080/healthz || exit 1
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=5
+            - --spider
+            - http://localhost:8080/healthz
+          timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
-            - /bin/sh
-            - -c
-            - wget --quiet --tries=1 --spider http://localhost:8080/healthz || exit 1
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=5
+            - --spider
+            - http://localhost:8080/healthz
+          timeoutSeconds: 5
         env:
         - name: read_timeout
           value: "{{ .Values.gateway.readTimeout }}"
