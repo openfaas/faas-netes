@@ -13,7 +13,7 @@ faasnetesd:
   readTimeout : "20s"
   writeTimeout : "20s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
-  httpProbe: false              # Setting to true will use a lock file for readiness and liveness
+  httpProbe: false              # Setting to true will use a lock file for readiness and liveness (incompatible with Istio)
   readinessProbe:
     initialDelaySeconds: 0
     timeoutSeconds: 1

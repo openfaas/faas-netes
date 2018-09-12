@@ -11,6 +11,7 @@
 * Portable - runs on existing hardware or public/private cloud - [Kubernetes](https://github.com/openfaas/faas-netes) and Docker Swarm native
 * [CLI](http://github.com/openfaas/faas-cli) available with YAML format for templating and defining functions
 * Auto-scales as demand increases
+* Compatible with Istio mTLS (all health checks are done with exec wget)
 
 ## Deploy OpenFaaS
 
