@@ -78,12 +78,6 @@ Now log in:
 echo -n $PASSWORD | faas-cli login -g http://$OPENFAAS_URL -u admin --password-stdin
 ```
 
-Save your credentials in faas-cli store:
-
-```bash
-echo $password | faas-cli login -g http://GATEWAY-URL -u admin --password-stdin
-```
-
 ## OpenFaaS Operator / CRD controller
 
 If you would like to work with CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time.
