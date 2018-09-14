@@ -17,16 +17,34 @@ spec:
       labels:
         app: queue-worker
     spec:
+      {{- if .Values.basic_auth }}
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
+      {{- end }}
       containers:
       - name:  queue-worker
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.functionNamespace }}
         env:
+        {{- if .Values.functionNamespace }}
         - name: faas_function_suffix
           value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- end }}
         - name: ack_wait    # Max duration of any async task / request
           value: {{ .Values.queueWorker.ackWait }}
+        {{- if .Values.basic_auth }}
+        - name: secret_mount_path
+          value: "/var/secrets"
+        - name: basic_auth
+          value: "true"
+        {{- end }}
+        {{- if .Values.basic_auth }}
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
