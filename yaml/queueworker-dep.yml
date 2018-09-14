@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name:  queue-worker
-        image: openfaas/queue-worker:0.4.9
+        image: openfaas/queue-worker:0.5.2
         imagePullPolicy: Always
         env:
         - name: max_inflight      # Max number of items in-flight
@@ -21,3 +21,7 @@ spec:
           value: "30s"
         - name: faas_function_suffix
           value: ".openfaas-fn.svc.cluster.local."  # absolute DNS will suppress search domains
+        - name: basic_auth
+          value: "false"
+        - name: secret_mount_path
+          value: "/etc/openfaas"
