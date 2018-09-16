@@ -39,8 +39,6 @@ spec:
           value: "/var/secrets"
         - name: basic_auth
           value: "true"
-        {{- end }}
-        {{- if .Values.basic_auth }}
         volumeMounts:
         - name: auth
           readOnly: true
