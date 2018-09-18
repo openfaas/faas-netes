@@ -59,6 +59,8 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 			w.Write([]byte("Not a function: " + request.FunctionName))
 			return
 		}
+
+		w.WriteHeader(http.StatusAccepted)
 	}
 }
 
