@@ -63,6 +63,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 			return
 		}
 
+		w.WriteHeader(http.StatusAccepted)
 	}
 }
 
@@ -81,13 +82,13 @@ func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset
 		}
 
 		if function == nil {
-			w.WriteHeader(404)
+			w.WriteHeader(http.StatusNotFound)
 			return
 		}
 
 		functionBytes, _ := json.Marshal(function)
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 		w.Write(functionBytes)
 	}
 }

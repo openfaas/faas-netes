@@ -38,6 +38,8 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 			w.WriteHeader(status)
 			w.Write([]byte(err.Error()))
 		}
+
+		w.WriteHeader(http.StatusAccepted)
 	}
 }
 
@@ -118,7 +120,7 @@ func updateDeploymentSpec(
 		return updateErr, http.StatusInternalServerError
 	}
 
-	return nil, http.StatusOK
+	return nil, http.StatusAccepted
 }
 
 func updateService(
@@ -146,5 +148,5 @@ func updateService(
 		return updateErr, http.StatusInternalServerError
 	}
 
-	return nil, http.StatusOK
+	return nil, http.StatusAccepted
 }
