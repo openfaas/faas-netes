@@ -5,42 +5,41 @@ faas-netes
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenFaaS](https://img.shields.io/badge/openfaas-serverless-blue.svg)](https://www.openfaas.com)
 
-This is a plugin to enable Kubernetes as an [OpenFaaS](https://github.com/openfaas/faas) backend. The existing CLI and UI are fully compatible. It also opens up the possibility for other plugins to be built for orchestration frameworks such as Nomad,  Mesos/Marathon or even a cloud-managed back-end such as Hyper.sh or Azure ACI.
+`faas-netes` is an OpenFaaS provider which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). The existing REST API, CLI and UI are fully compatible.
 
-> OpenFaaS also runs well on managed Kubernetes services like AKS and GKE. See our list of tutorials in the documentation site for more.
+> OpenFaaS also runs well on managed Kubernetes services like AKS, EKS and GKE. See our list of tutorials in the documentation site for more.
 
 **Watch a video demo from [TechFieldDay Extra at Dockercon](https://www.youtube.com/watch?v=C3agSKv2s_w&list=PLlIapFDp305AiwA17mUNtgi5-u23eHm5j&index=1)**
 
-[OpenFaaS](https://github.com/openfaas/faas) is an event-driven serverless framework for containers. Any container for Windows or Linux can be leveraged as a serverless function. OpenFaaS is quick and easy to deploy (less than 60 secs) and lets you avoid writing boiler-plate code.
+[OpenFaaS (Functions as a Service)](https://github.com/openfaas/faas) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-In this README you'll find a technical overview and instructions for deploying FaaS on a Kubernetes cluster. (Docker Swarm is also supported in the main project)
+In this README you'll find a technical overview and instructions for deploying to a Kubernetes cluster. (Docker Swarm is also supported along with Hashicorp Nomad)
 
-* Serverless framework for containers
+* Framework for deploying serverless workloads
 * Native Kubernetes integrations (API and ecosystem)
 * Built-in UI
 * YAML templates & helm chart
-* Over 11k GitHub stars
-* Independent open-source project with over 90 authors/contributors
+* Over 13.5k GitHub stars
+* Independent open-source project with over 130 contributors
+* Operator available to use Custom Resource Definitions (CRDs) [openfaas-operator](https://github.com/openfaas-incubator/openfaas-operator/)
 
 ## Get started
 
-* [Deploy on Kubernetes](https://docs.openfaas.com/deployment)
+* Tutorial: [Deploy on Kubernetes with helm/YAML](https://docs.openfaas.com/deployment)
 * [Visit the website](https://www.openfaas.com)
 * [Join the community](https://docs.openfaas.com/community)
 
-> Note: a CRD-based Kubernetes controller is also available for OpenFaaS in the incubator program - [faas-o6s](https://github.com/openfaas-incubator/faas-o6s/).
-
 ### How is this project different from others?
 
-* [Read an Introduction to OpenFaaS here](https://blog.alexellis.io/introducing-functions-as-a-service/).
+* [Read an Introduction to OpenFaaS here](https://blog.alexellis.io/introducing-functions-as-a-service/)
 
 ## Reference guide
 
 ### Configuration via Environmental variables
 
-FaaS-netes can be configured via environment variables.
+faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./charts/openfaas/).
 
 | Option                 | Usage                                                                                          |
 |------------------------|------------------------------------------------------------------------------------------------|
