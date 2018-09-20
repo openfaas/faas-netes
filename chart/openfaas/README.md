@@ -126,6 +126,16 @@ By default services will be exposed with following hostnames (can be changed, se
 
 If you require TLS/SSL then please make use of an IngressController. A full guide is provided to [enable TLS for the OpenFaaS Gateway using cert-manager and Let's Encrypt](https://docs.openfaas.com/reference/ssl/kubernetes-with-cert-manager/).
 
+## Zero scale
+
+Scaling up from zero replicas is enabled by default, to turn it off set `zero_scale` to false in the helm chart.
+
+Scaling to zero is done by the `faas-idler` component and by default will only carry out a dry-run. Pass the following to helm to enable scaling to zero replicas of idle functions. You will also need to [read the docs](https://docs.openfaas.com/architecture/autoscaling/#zero-scale) on how to configure functions to opt into scaling down.
+
+```
+--set faasIdler.dryRun=false
+```
+
 ## Configuration
 
 Additional OpenFaaS options in `values.yaml`.
