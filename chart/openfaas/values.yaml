@@ -76,7 +76,7 @@ ingress:
 # faas-idler configuration
 faasIdler:
   replicas: 1
-  image: openfaas/faas-idler:0.1.7
+  image: openfaas/faas-idler:0.1.9
   inactivityDuration: 5m
   reconcileInterval: 30s
   dryRun: true
