@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: openfaas/gateway:0.9.5
+        image: openfaas/gateway:0.9.6
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -35,11 +35,11 @@ spec:
         - name: direct_functions_suffix
           value: "openfaas-fn.svc.cluster.local."   # contains K8s namespace
         - name: read_timeout
-          value: "35s"
+          value: "65s"
         - name: write_timeout
-          value: "35s"
+          value: "65s"
         - name: upstream_timeout  # Must be smaller than read/write_timeout
-          value: "30s"
+          value: "60s"
         - name: basic_auth
           value: "false"
         - name: secret_mount_path
@@ -57,7 +57,7 @@ spec:
           limits:
             memory: 250Mi   # Adjust to suit needs of deployment
       - name: faas-netes
-        image: openfaas/faas-netes:0.6.2
+        image: openfaas/faas-netes:0.6.3
         imagePullPolicy: Always
         env:
         - name: port
@@ -65,9 +65,9 @@ spec:
         - name: function_namespace
           value: openfaas-fn
         - name: read_timeout
-          value: "10"
+          value: "60s"
         - name: write_timeout
-          value: "10"
+          value: "60s"
         ports:
         - containerPort: 8081
           protocol: TCP

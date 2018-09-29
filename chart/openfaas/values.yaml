@@ -9,9 +9,9 @@ securityContext: true
 basic_auth: false
 
 faasnetesd:
-  image: openfaas/faas-netes:0.6.2
-  readTimeout : "20s"
-  writeTimeout : "20s"
+  image: openfaas/faas-netes:0.6.3
+  readTimeout : "60s"
+  writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
   httpProbe: false              # Setting to true will use a lock file for readiness and liveness (incompatible with Istio)
   readinessProbe:
@@ -24,10 +24,10 @@ faasnetesd:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.9.5
-  readTimeout : "20s"
-  writeTimeout : "20s"
-  upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
+  image: openfaas/gateway:0.9.6
+  readTimeout : "65s"
+  writeTimeout : "65s"
+  upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
   replicas: 1
   scaleFromZero: true
   # change the port when creating multiple releases in the same baremetal cluster
@@ -35,7 +35,7 @@ gateway:
 
 queueWorker:
   image: openfaas/queue-worker:0.5.2
-  ackWait : "30s"
+  ackWait : "60s"
   replicas: 1
 
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
