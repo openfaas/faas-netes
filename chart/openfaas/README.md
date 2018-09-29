@@ -150,16 +150,16 @@ Additional OpenFaaS options in `values.yaml`.
 | `ingress.enabled` | Create ingress resources | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `basic_auth` | Enable basic authentication on the Gateway | `false` |
-| `faasnetesd.readTimeout` | Queue worker read timeout | `20s` |
-| `faasnetesd.writeTimeout` | Queue worker write timeout | `20s` |
+| `faasnetesd.readTimeout` | Queue worker read timeout | `60s` |
+| `faasnetesd.writeTimeout` | Queue worker write timeout | `60s` |
 | `faasnetesd.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
-| `gateway.readTimeout` | Queue worker read timeout | `20s` |
-| `gateway.writeTimeout` | Queue worker write timeout | `20s` |
-| `gateway.upstreamTimeout` | Maximum duration of upstream function call | `20s` |
+| `gateway.readTimeout` | Queue worker read timeout | `65s` |
+| `gateway.writeTimeout` | Queue worker write timeout | `65s` |
+| `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
-| `queueWorker.ackWait` | Max duration of any async task/request | `30s` |
+| `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `5m` |
