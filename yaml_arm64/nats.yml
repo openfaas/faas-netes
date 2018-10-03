@@ -11,6 +11,11 @@ spec:
     - port: 4222
       protocol: TCP
       targetPort: 4222
+      name: clients
+    - port: 8222
+      protocol: TCP
+      targetPort: 8222
+      name: monitoring
   selector:
     app: nats
 ---
@@ -28,7 +33,7 @@ spec:
     spec:
       containers:
       - name:  nats
-        image: nats-streaming:0.6.0
+        image: nats-streaming:0.11.0
         imagePullPolicy: Always
         ports:
         - containerPort: 4222
@@ -41,3 +46,5 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
+          - -m
+          - "8222"
