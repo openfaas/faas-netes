@@ -16,6 +16,10 @@ spec:
   ports:
     - port: 4222
       protocol: TCP
+      name: clients
+    - port: 8222
+      protocol: TCP
+      name: monitoring
   selector:
     app: nats
 {{- end }}

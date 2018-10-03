@@ -32,6 +32,8 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
+          - -m
+          - "8222"
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
