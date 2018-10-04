@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name:  queue-worker
-        image: openfaas/queue-worker:0.4.9-armhf
+        image: openfaas/queue-worker:0.5.3-armhf
         imagePullPolicy: Always
         env:
         - name: max_inflight
@@ -21,4 +21,8 @@ spec:
           value: "30s"
         - name: faas_function_suffix
           value: ".openfaas-fn"
+        - name: basic_auth
+          value: "false"
+        - name: secret_mount_path
+          value: "/etc/openfaas"
  
