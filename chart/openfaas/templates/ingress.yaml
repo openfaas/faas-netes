@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled -}}
+{{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -14,14 +15,14 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host.host }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . }}
       http:
         paths:
-          - path: {{ $host.path }}
+          - path: {{ $ingressPath }}
             backend:
-              serviceName: {{ $host.serviceName }}
-              servicePort: {{ $host.servicePort }}
+              serviceName: gateway
+              servicePort: http
     {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:

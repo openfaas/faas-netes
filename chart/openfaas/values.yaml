@@ -63,11 +63,9 @@ nats:
 ingress:
   enabled: false
   # Used to create Ingress record (should be used with exposeServices: false).
+  path: /
   hosts:
-    - host: gateway.openfaas.local
-      serviceName: gateway
-      servicePort: 8080
-      path: /
+    - gateway.openfaas.local
   annotations:
     kubernetes.io/ingress.class: nginx
   tls:
