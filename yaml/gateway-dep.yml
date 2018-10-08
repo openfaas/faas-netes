@@ -59,6 +59,13 @@ spec:
       - name: faas-netes
         image: openfaas/faas-netes:0.6.3
         imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 2
         env:
         - name: port
           value: "8081"

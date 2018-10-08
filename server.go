@@ -65,7 +65,7 @@ func main() {
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
-		Health:         handlers.MakeHealthHandler(),
+		Health:         handlers.MakeHealthHandler(clientset),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 	}
 

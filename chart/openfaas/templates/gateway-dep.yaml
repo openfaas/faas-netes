@@ -118,6 +118,13 @@ spec:
       - name: faas-netes
         image: {{ .Values.faasnetesd.image }}
         imagePullPolicy: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 2
         env:
         - name: port
           value: "8081"
