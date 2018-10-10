@@ -17,8 +17,11 @@
 
 **Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control. For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
 
----
 
+**Note:** If you can not use helm with Tiller, [skip below](#deployment-with-helm-template) for alternative install instructions.
+
+---
+### Install
 We recommend creating two namespaces, one for the OpenFaaS core services and one for the functions:
 
 ```
@@ -65,6 +68,7 @@ $ helm repo update \
 
 > The above command will also update your helm repo to pull in any new releases.
 
+### Verify the installation
 Once all the services are up and running, log into your gateway using the OpenFaaS CLI. This will cache your credentials into your `~/.openfaas/config.yml` file.
 
 Fetch your public IP or NodePort via `kubectl get svc -n openfaas gateway-external -o wide` and set it as an environmental variable as below:
@@ -89,8 +93,33 @@ To use it, add the flag: `--set operator.create=true` when installing with Helm.
 
 ### faas-netes vs OpenFaaS Operator
 
-The faas-netes controller is the most tested, stable and supported version of the OpenFaaS integration with Kubernetes. In contrast the OpenFaaS Operator is based upon the codebase and features from `faas-netes`, but offers a tighter integration with Kubernetes through 
-CustomResourceDefinitions. This means you can type in `kubectl get functions` for instance.
+The faas-netes controller is the most tested, stable and supported version of the OpenFaaS integration with Kubernetes. In contrast the OpenFaaS Operator is based upon the codebase and features from `faas-netes`, but offers a tighter integration with Kubernetes through CustomResourceDefinitions. This means you can type in `kubectl get functions` for instance.
+
+## Deployment with `helm template`
+This option is good for those that have issues with installing Tiller, the server/cluster component of helm. Using the `helm` CLI, we can pre-render and then apply the templates using `kubectl`.
+
+1. Clone the faas-netes repository
+    ```sh
+    $ git clone https://github.com/openfaas/faas-netes.git
+    ```
+
+2. Render the chart to a Kubernetes manifest called `openfaas.yaml`
+    ```
+    $ helm template faas-netes/chart/openfaas \
+        --name openfaas \
+        --namespace openfaas  \
+        --set basic_auth=true \
+        --set functionNamespace=openfaas-fn > $HOME/openfaas.yaml
+    ```
+    You can set the values and overrides just as you would in the install/upgrade commands above.
+
+3. Install the components using `kubectl`
+    ```
+    $ kubectl apply -f faas-netes/namespaces.yml
+    $ kubectl apply -f $HOME/openfaas.yaml
+    ```
+
+Now [verify your installation](#verify-the-install).
 
 ## Deploy for development / testing
 
