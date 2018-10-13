@@ -2,8 +2,9 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: faas-idler
-  app: {{ template "openfaas.name" . }}
   namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ template "openfaas.name" . }}
 spec:
   replicas: {{ .Values.faasIdler.replicas }}
   template:
