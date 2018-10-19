@@ -34,7 +34,7 @@ gateway:
   nodePort: 31112
 
 queueWorker:
-  image: openfaas/queue-worker:0.5.2
+  image: openfaas/queue-worker:0.5.4
   ackWait : "60s"
   replicas: 1
 
