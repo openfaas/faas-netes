@@ -12,9 +12,9 @@ spec:
       protocol: TCP
       targetPort: 4222
       name: clients
-    - port: 8222
-      protocol: TCP
-      targetPort: 8222
-      name: monitoring
+    # - port: 8222
+    #   protocol: TCP
+    #   targetPort: 8222
+    #   name: monitoring
   selector:
     app: nats

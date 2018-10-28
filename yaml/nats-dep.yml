@@ -17,13 +17,13 @@ spec:
         ports:
         - containerPort: 4222
           protocol: TCP
-        - containerPort: 8222
-          protocol: TCP
+        # - containerPort: 8222
+        #   protocol: TCP
         command: ["/nats-streaming-server"]
         args:
           - --store
           - memory
           - --cluster_id
           - faas-cluster
-          - -m
-          - "8222"
+          # - -m
+          # - "8222"
