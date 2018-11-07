@@ -135,7 +135,7 @@ $ helm upgrade --install openfaas openfaas/ \
 
 ### NodePorts
 
-By default NodePorts will be created for the API Gateway and Prometheus.
+By default a NodePort will be created for the API Gateway.
 
 ### LB
 
