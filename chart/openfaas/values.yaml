@@ -52,6 +52,8 @@ operator:
 # monitoring and auto-scaling components
 prometheus:
   image: prom/prometheus:v2.3.1
+  # change the port when creating multiple releases in the same cluster
+  nodePort: 31119
 alertmanager:
   image: prom/alertmanager:v0.15.0
 
