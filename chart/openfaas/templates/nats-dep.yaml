@@ -24,16 +24,20 @@ spec:
         ports:
         - containerPort: 4222
           protocol: TCP
-        # - containerPort: 8222
-        #   protocol: TCP
+        {{- if .Values.nats.enableMonitoring }}
+        - containerPort: 8222
+          protocol: TCP
+        {{- end }}
         command: ["/nats-streaming-server"]
         args:
           - --store
           - memory
           - --cluster_id
           - faas-cluster
-          # - -m
-          # - "8222"
+          {{- if .Values.nats.enableMonitoring }}
+          - -m
+          - "8222"
+          {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
