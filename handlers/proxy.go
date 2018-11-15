@@ -4,7 +4,6 @@
 package handlers
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -34,11 +33,6 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		if r.Body != nil {
-			defer r.Body.Close()
-		}
-
 		switch r.Method {
 		case http.MethodPost,
 			http.MethodPut,
@@ -71,8 +65,7 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 			if err != nil {
 				log.Println(err.Error())
 				writeHead(service, http.StatusInternalServerError, w)
-				buf := bytes.NewBufferString("Can't reach service: " + service)
-				w.Write(buf.Bytes())
+				fmt.Fprintln(w, "Can't reach service: ", service)
 				return
 			}
 

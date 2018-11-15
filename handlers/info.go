@@ -17,10 +17,6 @@ const (
 //MakeInfoHandler creates handler for /system/info endpoint
 func MakeInfoHandler(version, sha string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Body != nil {
-			defer r.Body.Close()
-		}
-
 		infoRequest := types.InfoRequest{
 			Orchestration: OrchestrationIdentifier,
 			Provider:      ProviderName,

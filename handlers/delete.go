@@ -17,8 +17,6 @@ import (
 // MakeDeleteHandler delete a function
 func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
-
 		request := requests.DeleteFunctionRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {

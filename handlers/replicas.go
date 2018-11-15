@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -23,16 +24,14 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 		functionName := vars["name"]
 
 		req := types.ScaleServiceRequest{}
-		if r.Body != nil {
-			defer r.Body.Close()
-			err := json.NewDecoder(r.Body).Decode(&req)
-			if err != nil {
-				w.WriteHeader(http.StatusBadRequest)
-				msg := "Cannot parse request. Please pass valid JSON."
-				w.Write([]byte(msg))
-				log.Println(msg, err)
-				return
-			}
+
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			msg := "Cannot parse request. Please pass valid JSON."
+			fmt.Fprintln(w, msg)
+			log.Println(msg, err)
+			return
 		}
 
 		options := metav1.GetOptions{

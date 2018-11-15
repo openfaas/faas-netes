@@ -15,9 +15,6 @@ import (
 // MakeUpdateHandler update specified function
 func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		defer r.Body.Close()
-
 		request := requests.CreateFunctionRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {

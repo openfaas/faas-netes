@@ -62,8 +62,6 @@ type DeployHandlerConfig struct {
 // MakeDeployHandler creates a handler to create new functions in the cluster
 func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset, config *DeployHandlerConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
-
 		request := requests.CreateFunctionRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
@@ -116,6 +114,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 		}
 
 		log.Println("Created service - " + request.Service)
+		body, _ := json.Marshal(request)
 		log.Println(string(body))
 
 		w.WriteHeader(http.StatusAccepted)
