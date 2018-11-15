@@ -5,7 +5,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/openfaas/faas/gateway/requests"
@@ -20,10 +19,8 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
-		body, _ := ioutil.ReadAll(r.Body)
-
 		request := requests.DeleteFunctionRequest{}
-		err := json.Unmarshal(body, &request)
+		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return

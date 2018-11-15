@@ -5,7 +5,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -26,13 +25,12 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 		req := types.ScaleServiceRequest{}
 		if r.Body != nil {
 			defer r.Body.Close()
-			bytesIn, _ := ioutil.ReadAll(r.Body)
-			marshalErr := json.Unmarshal(bytesIn, &req)
-			if marshalErr != nil {
+			err := json.NewDecoder(r.Body).Decode(&req)
+			if err != nil {
 				w.WriteHeader(http.StatusBadRequest)
 				msg := "Cannot parse request. Please pass valid JSON."
 				w.Write([]byte(msg))
-				log.Println(msg, marshalErr)
+				log.Println(msg, err)
 				return
 			}
 		}

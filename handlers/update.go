@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -19,10 +18,8 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 		defer r.Body.Close()
 
-		body, _ := ioutil.ReadAll(r.Body)
-
 		request := requests.CreateFunctionRequest{}
-		err := json.Unmarshal(body, &request)
+		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return

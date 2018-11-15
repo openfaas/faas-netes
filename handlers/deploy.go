@@ -6,7 +6,6 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -65,10 +64,8 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
-		body, _ := ioutil.ReadAll(r.Body)
-
 		request := requests.CreateFunctionRequest{}
-		err := json.Unmarshal(body, &request)
+		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return
