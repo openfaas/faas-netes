@@ -24,7 +24,7 @@ faasnetesd:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.9.10
+  image: openfaas/gateway:0.9.11
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
