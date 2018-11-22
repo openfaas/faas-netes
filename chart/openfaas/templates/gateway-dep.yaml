@@ -97,7 +97,7 @@ spec:
       {{- if .Values.operator.create }}
       - name: operator
         image: {{ .Values.operator.image }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - ./openfaas-operator
           - -logtostderr
