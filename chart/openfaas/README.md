@@ -189,7 +189,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
-| `nats.enableMonitoring` | Enable the NATS monitoring endpoints  | `false` |
+| `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` | `false` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `5m` |
