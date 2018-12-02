@@ -1,4 +1,4 @@
-FROM golang:1.9.7 as build
+FROM golang:1.10 as build
 
 RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
@@ -13,7 +13,7 @@ RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags 
         -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
         -a -installsuffix cgo -o faas-netes .
 
-FROM alpine:3.7 as ship
+FROM alpine:3.8 as ship
 
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
