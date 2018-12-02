@@ -1,3 +1,4 @@
+.PHONY: build local build-arm64 build-armhf push namespaces install install-armhf charts ci-armhf-build ci-armhf-push ci-arm64-build ci-arm64-push
 TAG?=latest
 
 all: build
@@ -26,7 +27,6 @@ install: namespaces
 install-armhf: namespaces
 	kubectl apply -f yaml_armhf/
 
-.PHONY: charts
 charts:
 	cd chart && helm package openfaas/
 	mv chart/*.tgz docs/
@@ -37,3 +37,9 @@ ci-armhf-build:
 
 ci-armhf-push:
 	docker push openfaas/faas-netes:$(TAG)-armhf
+
+ci-arm64-build:
+	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
+
+ci-arm64-push:
+	docker push openfaas/faas-netes:$(TAG)-arm64
