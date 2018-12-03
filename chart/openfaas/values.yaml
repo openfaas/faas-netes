@@ -9,14 +9,14 @@ securityContext: true
 basic_auth: false
 
 faasnetesd:
-  image: openfaas/faas-netes:0.6.3
+  image: openfaas/faas-netes:0.6.4
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
   httpProbe: false              # Setting to true will use a lock file for readiness and liveness (incompatible with Istio)
   readinessProbe:
     initialDelaySeconds: 0
-    timeoutSeconds: 1
+    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
     periodSeconds: 1
   livenessProbe:
     initialDelaySeconds: 3
@@ -43,7 +43,7 @@ openfaasImagePullPolicy: "Always"
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/openfaas-operator:0.8.10
+  image: openfaas/openfaas-operator:0.8.12
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
@@ -80,7 +80,7 @@ faasIdler:
   image: openfaas/faas-idler:0.1.9
   inactivityDuration: 5m
   reconcileInterval: 30s
-  dryRun: true
+  dryRun: true                          # Set to true to enable the idler to apply changes and scale to zero
 
 nodeSelector: {}
 

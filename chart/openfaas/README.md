@@ -11,12 +11,12 @@
 * Portable - runs on existing hardware or public/private cloud - [Kubernetes](https://github.com/openfaas/faas-netes) and Docker Swarm native
 * [CLI](http://github.com/openfaas/faas-cli) available with YAML format for templating and defining functions
 * Auto-scales as demand increases
-* Compatible with Istio mTLS (all health checks are done with exec wget)
+* Scales to zero and back again
+* Compatible with [Istio Service Mesh](https://istio.io). mTLS supported via `exec` health checks.
 
 ## Deploy OpenFaaS
 
 **Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control. For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
-
 
 **Note:** If you can not use helm with Tiller, [skip below](#deployment-with-helm-template) for alternative install instructions.
 
@@ -195,7 +195,6 @@ Additional OpenFaaS options in `values.yaml`.
 | `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `5m` |
 | `faasIdler.reconcileInterval` | The time between each of reconciliation | `30s` |
 | `faasIdler.dryRun` | When set to false the OpenFaaS API will be called to scale down idle functions, by default this is set to only print in the logs. | `true` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
