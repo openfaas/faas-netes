@@ -80,7 +80,7 @@ export OPENFAAS_URL=http://...
 Now log in:
 
 ``` bash
-echo -n $PASSWORD | faas-cli login -g $OPENFAAS_URL -u admin --password-stdin
+echo -n $PASSWORD | faas-cli login -g $OPENFAAS_URL:8080 -u admin --password-stdin
 ```
 
 ## OpenFaaS Operator / CRD controller
