@@ -39,7 +39,7 @@ In this README you'll find a technical overview and instructions for deploying t
 
 ### Configuration via Environmental variables
 
-faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./charts/openfaas/).
+faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
 
 | Option                 | Usage                                                                                           |
 |------------------------|-------------------------------------------------------------------------------------------------|
