@@ -41,6 +41,8 @@ spec:
           value: "/var/secrets"
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
+        - name: faas_nats_address
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         volumeMounts:
         - name: auth
           readOnly: true
