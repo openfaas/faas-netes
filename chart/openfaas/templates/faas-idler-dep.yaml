@@ -9,6 +9,8 @@ spec:
   replicas: {{ .Values.faasIdler.replicas }}
   template:
     metadata:
+      annotations:
+        prometheus.io.scrape: "false"
       labels:
         app: faas-idler
     spec:
