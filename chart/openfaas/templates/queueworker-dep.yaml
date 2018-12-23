@@ -14,6 +14,8 @@ spec:
   replicas: {{ .Values.queueWorker.replicas }}
   template:
     metadata:
+      annotations:
+        prometheus.io.scrape: "false"
       labels:
         app: queue-worker
     spec:
