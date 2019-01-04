@@ -10,7 +10,7 @@ import (
 	"github.com/openfaas/faas-netes/handlers"
 	"github.com/openfaas/faas-netes/types"
 	"github.com/openfaas/faas-netes/version"
-	"github.com/openfaas/faas-provider"
+	bootstrap "github.com/openfaas/faas-provider"
 	bootTypes "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -67,6 +67,7 @@ func main() {
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
 		Health:         handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
+		SecretHandler:  handlers.MakeSecretHandler(),
 	}
 
 	var port int
