@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
@@ -13,6 +14,16 @@ import (
 const (
 	secretsMountPath = "/var/openfaas/secrets"
 )
+
+// MakeSecretHandler makes a handler for Create/List/Delete/Update of
+//secrets in the Kubernetes API
+func MakeSecretHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+		w.WriteHeader(http.StatusNotImplemented)
+		w.Write([]byte("Not implemented\n"))
+	}
+}
 
 // getSecrets queries Kubernetes for a list of secrets by name in the given k8s namespace.
 func getSecrets(clientset *kubernetes.Clientset, namespace string, secretNames []string) (map[string]*apiv1.Secret, error) {
