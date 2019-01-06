@@ -67,7 +67,7 @@ func main() {
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset),
 		Health:         handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
-		SecretHandler:  handlers.MakeSecretHandler(),
+		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),
 	}
 
 	var port int

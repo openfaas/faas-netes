@@ -1,6 +1,8 @@
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+// Package requests package provides a client SDK or library for
+// the OpenFaaS gateway REST API
 package requests
 
 // CreateFunctionRequest create a function in the swarm.
@@ -87,4 +89,10 @@ type AsyncReport struct {
 // DeleteFunctionRequest delete a deployed function
 type DeleteFunctionRequest struct {
 	FunctionName string `json:"functionName"`
+}
+
+// Secret for underlying orchestrator
+type Secret struct {
+	Name  string `json:"name"`
+	Value string `json:"value,omitempty"`
 }
