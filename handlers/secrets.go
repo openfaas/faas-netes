@@ -1,28 +1,148 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/extensions/v1beta1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
 const (
 	secretsMountPath = "/var/openfaas/secrets"
+	secretLabel      = "app.kubernetes.io/managed-by"
+	secretLabelValue = "openfaas"
 )
 
 // MakeSecretHandler makes a handler for Create/List/Delete/Update of
 //secrets in the Kubernetes API
-func MakeSecretHandler() http.HandlerFunc {
+func MakeSecretHandler(namespace string, kube kubernetes.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
-		w.WriteHeader(http.StatusNotImplemented)
-		w.Write([]byte("Not implemented\n"))
+		if r.Body != nil {
+			defer r.Body.Close()
+		}
+
+		switch r.Method {
+		case http.MethodGet:
+			selector := fmt.Sprintf("%s=%s", secretLabel, secretLabelValue)
+			res, err := kube.CoreV1().Secrets(namespace).List(metav1.ListOptions{LabelSelector: selector})
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("Secrets query error: %v\n", err)
+				return
+			}
+
+			secrets := []requests.Secret{}
+			for _, item := range res.Items {
+				secret := requests.Secret{
+					Name: item.Name,
+				}
+				secrets = append(secrets, secret)
+			}
+			secretsBytes, err := json.Marshal(secrets)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("Secrets json marshal error: %v\n", err)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			w.Write(secretsBytes)
+		case http.MethodPost:
+			secret, err := parseSecret(namespace, r.Body)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				log.Printf("Secret unmarshal error: %v\n", err)
+				return
+			}
+			_, err = kube.CoreV1().Secrets(namespace).Create(secret)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("Secret create error: %v\n", err)
+				return
+			}
+			log.Printf("Secret %s create\n", secret.GetName())
+			w.WriteHeader(http.StatusAccepted)
+		case http.MethodPut:
+			newSecret, err := parseSecret(namespace, r.Body)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				log.Printf("Secret unmarshal error: %v\n", err)
+				return
+			}
+			secret, err := kube.CoreV1().Secrets(namespace).Get(newSecret.GetName(), metav1.GetOptions{})
+			if errors.IsNotFound(err) {
+				w.WriteHeader(http.StatusNotFound)
+				log.Printf("Secret update error: %s not found\n", newSecret.GetName())
+				return
+			}
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("Secret query error: %v\n", err)
+				return
+			}
+			secret.StringData = newSecret.StringData
+			_, err = kube.CoreV1().Secrets(namespace).Update(secret)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("Secret update error: %v\n", err)
+				return
+			}
+			log.Printf("Secret %s updated", secret.GetName())
+			w.WriteHeader(http.StatusAccepted)
+		case http.MethodDelete:
+			secret, err := parseSecret(namespace, r.Body)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				log.Printf("Secret unmarshal error: %v\n", err)
+				return
+			}
+			opts := &metav1.DeleteOptions{}
+			err = kube.CoreV1().Secrets(namespace).Delete(secret.GetName(), opts)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Printf("Secret %s delete error: %v\n", secret.GetName(), err)
+				return
+			}
+			log.Printf("Secret %s deleted\n", secret.GetName())
+			w.WriteHeader(http.StatusAccepted)
+		default:
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
 	}
+}
+
+func parseSecret(namespace string, r io.Reader) (*apiv1.Secret, error) {
+	body, _ := ioutil.ReadAll(r)
+	req := requests.Secret{}
+	err := json.Unmarshal(body, &req)
+	if err != nil {
+		return nil, err
+	}
+	secret := &apiv1.Secret{
+		Type: apiv1.SecretTypeOpaque,
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      req.Name,
+			Namespace: namespace,
+			Labels: map[string]string{
+				secretLabel: secretLabelValue,
+			},
+		},
+		StringData: map[string]string{
+			req.Name: req.Value,
+		},
+	}
+
+	return secret, nil
 }
 
 // getSecrets queries Kubernetes for a list of secrets by name in the given k8s namespace.
