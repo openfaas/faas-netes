@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 
+	typedV1 "k8s.io/client-go/kubernetes/typed/core/v1"
+
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/extensions/v1beta1"
@@ -30,95 +32,113 @@ func MakeSecretHandler(namespace string, kube kubernetes.Interface) http.Handler
 			defer r.Body.Close()
 		}
 
+		client := kube.CoreV1().Secrets(namespace)
+
 		switch r.Method {
 		case http.MethodGet:
-			selector := fmt.Sprintf("%s=%s", secretLabel, secretLabelValue)
-			res, err := kube.CoreV1().Secrets(namespace).List(metav1.ListOptions{LabelSelector: selector})
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("Secrets query error: %v\n", err)
-				return
-			}
-
-			secrets := []requests.Secret{}
-			for _, item := range res.Items {
-				secret := requests.Secret{
-					Name: item.Name,
-				}
-				secrets = append(secrets, secret)
-			}
-			secretsBytes, err := json.Marshal(secrets)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("Secrets json marshal error: %v\n", err)
-				return
-			}
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			w.Write(secretsBytes)
+			getSecretsHandler(client, w, r)
 		case http.MethodPost:
-			secret, err := parseSecret(namespace, r.Body)
-			if err != nil {
-				w.WriteHeader(http.StatusBadRequest)
-				log.Printf("Secret unmarshal error: %v\n", err)
-				return
-			}
-			_, err = kube.CoreV1().Secrets(namespace).Create(secret)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("Secret create error: %v\n", err)
-				return
-			}
-			log.Printf("Secret %s create\n", secret.GetName())
-			w.WriteHeader(http.StatusAccepted)
+			createSecretHandler(client, namespace, w, r)
 		case http.MethodPut:
-			newSecret, err := parseSecret(namespace, r.Body)
-			if err != nil {
-				w.WriteHeader(http.StatusBadRequest)
-				log.Printf("Secret unmarshal error: %v\n", err)
-				return
-			}
-			secret, err := kube.CoreV1().Secrets(namespace).Get(newSecret.GetName(), metav1.GetOptions{})
-			if errors.IsNotFound(err) {
-				w.WriteHeader(http.StatusNotFound)
-				log.Printf("Secret update error: %s not found\n", newSecret.GetName())
-				return
-			}
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("Secret query error: %v\n", err)
-				return
-			}
-			secret.StringData = newSecret.StringData
-			_, err = kube.CoreV1().Secrets(namespace).Update(secret)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("Secret update error: %v\n", err)
-				return
-			}
-			log.Printf("Secret %s updated", secret.GetName())
-			w.WriteHeader(http.StatusAccepted)
+			replaceSecretHandler(client, namespace, w, r)
 		case http.MethodDelete:
-			secret, err := parseSecret(namespace, r.Body)
-			if err != nil {
-				w.WriteHeader(http.StatusBadRequest)
-				log.Printf("Secret unmarshal error: %v\n", err)
-				return
-			}
-			opts := &metav1.DeleteOptions{}
-			err = kube.CoreV1().Secrets(namespace).Delete(secret.GetName(), opts)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("Secret %s delete error: %v\n", secret.GetName(), err)
-				return
-			}
-			log.Printf("Secret %s deleted\n", secret.GetName())
-			w.WriteHeader(http.StatusAccepted)
+			deleteSecretHandler(client, namespace, w, r)
 		default:
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 	}
+}
+
+func getSecretsHandler(kube typedV1.SecretInterface, w http.ResponseWriter, r *http.Request) {
+	selector := fmt.Sprintf("%s=%s", secretLabel, secretLabelValue)
+	res, err := kube.List(metav1.ListOptions{LabelSelector: selector})
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Secrets query error: %v\n", err)
+		return
+	}
+
+	secrets := []requests.Secret{}
+	for _, item := range res.Items {
+		secret := requests.Secret{
+			Name: item.Name,
+		}
+		secrets = append(secrets, secret)
+	}
+	secretsBytes, err := json.Marshal(secrets)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Secrets json marshal error: %v\n", err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(secretsBytes)
+}
+
+func createSecretHandler(kube typedV1.SecretInterface, namespace string, w http.ResponseWriter, r *http.Request) {
+	secret, err := parseSecret(namespace, r.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Printf("Secret unmarshal error: %v\n", err)
+		return
+	}
+	_, err = kube.Create(secret)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Secret create error: %v\n", err)
+		return
+	}
+	log.Printf("Secret %s create\n", secret.GetName())
+	w.WriteHeader(http.StatusAccepted)
+}
+
+func replaceSecretHandler(kube typedV1.SecretInterface, namespace string, w http.ResponseWriter, r *http.Request) {
+	newSecret, err := parseSecret(namespace, r.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Printf("Secret unmarshal error: %v\n", err)
+		return
+	}
+	secret, err := kube.Get(newSecret.GetName(), metav1.GetOptions{})
+	if errors.IsNotFound(err) {
+		w.WriteHeader(http.StatusNotFound)
+		log.Printf("Secret update error: %s not found\n", newSecret.GetName())
+		return
+	}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Secret query error: %v\n", err)
+		return
+	}
+	secret.StringData = newSecret.StringData
+	_, err = kube.Update(secret)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Secret update error: %v\n", err)
+		return
+	}
+	log.Printf("Secret %s updated", secret.GetName())
+	w.WriteHeader(http.StatusAccepted)
+}
+
+func deleteSecretHandler(kube typedV1.SecretInterface, namespace string, w http.ResponseWriter, r *http.Request) {
+	secret, err := parseSecret(namespace, r.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Printf("Secret unmarshal error: %v\n", err)
+		return
+	}
+	opts := &metav1.DeleteOptions{}
+	err = kube.Delete(secret.GetName(), opts)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Secret %s delete error: %v\n", secret.GetName(), err)
+		return
+	}
+	log.Printf("Secret %s deleted\n", secret.GetName())
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func parseSecret(namespace string, r io.Reader) (*apiv1.Secret, error) {
