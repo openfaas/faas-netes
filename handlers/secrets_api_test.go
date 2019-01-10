@@ -87,6 +87,21 @@ func Test_SecretsHandler(t *testing.T) {
 		}
 	})
 
+	t.Run("update non-existing secrets returns 404", func(t *testing.T) {
+		newSecretValue := "newtestsecretvalue"
+		secretName := "testsecret-doesnotexist"
+		payload := fmt.Sprintf(`{"name": "%s", "value": "%s"}`, secretName, newSecretValue)
+		req := httptest.NewRequest("PUT", "http://example.com/foo", strings.NewReader(payload))
+		w := httptest.NewRecorder()
+
+		secretsHandler(w, req)
+
+		resp := w.Result()
+		if resp.StatusCode != http.StatusNotFound {
+			t.Errorf("expected status code '%d', got '%d'", http.StatusNotFound, resp.StatusCode)
+		}
+	})
+
 	t.Run("list managed secrets only", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "http://example.com/foo", nil)
 		w := httptest.NewRecorder()
@@ -133,6 +148,20 @@ func Test_SecretsHandler(t *testing.T) {
 		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
 		if err == nil {
 			t.Errorf("want not found error, got secret payload '%s'", actualSecret)
+		}
+	})
+
+	t.Run("delete missing secret returns 404", func(t *testing.T) {
+		secretName := "testsecret-doesnotexist"
+		payload := fmt.Sprintf(`{"name": "%s"}`, secretName)
+		req := httptest.NewRequest("DELETE", "http://example.com/foo", strings.NewReader(payload))
+		w := httptest.NewRecorder()
+
+		secretsHandler(w, req)
+
+		resp := w.Result()
+		if resp.StatusCode != http.StatusNotFound {
+			t.Errorf("expected status code '%d', got '%d'", http.StatusNotFound, resp.StatusCode)
 		}
 	})
 }

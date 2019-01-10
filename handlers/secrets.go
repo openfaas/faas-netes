@@ -13,7 +13,7 @@ import (
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/extensions/v1beta1"
-	"k8s.io/apimachinery/pkg/api/errors"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -102,7 +102,7 @@ func replaceSecretHandler(kube typedV1.SecretInterface, namespace string, w http
 		return
 	}
 	secret, err := kube.Get(newSecret.GetName(), metav1.GetOptions{})
-	if errors.IsNotFound(err) {
+	if isNotFound(err) {
 		w.WriteHeader(http.StatusNotFound)
 		log.Printf("Secret update error: %s not found\n", newSecret.GetName())
 		return
@@ -132,7 +132,10 @@ func deleteSecretHandler(kube typedV1.SecretInterface, namespace string, w http.
 	}
 	opts := &metav1.DeleteOptions{}
 	err = kube.Delete(secret.GetName(), opts)
-	if err != nil {
+	if isNotFound(err) {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	} else if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("Secret %s delete error: %v\n", secret.GetName(), err)
 		return
@@ -301,4 +304,10 @@ func removeVolumeMount(volumeName string, mounts []apiv1.VolumeMount) []apiv1.Vo
 	}
 
 	return newMounts
+}
+
+// isNotFound tests if the error is a kubernetes API error that indicates that the object
+// was not found or does not exist
+func isNotFound(err error) bool {
+	return k8serrors.IsNotFound(err) || k8serrors.IsGone(err)
 }
