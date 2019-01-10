@@ -9,7 +9,7 @@ securityContext: true
 basic_auth: false
 
 faasnetesd:
-  image: openfaas/faas-netes:0.6.4
+  image: openfaas/faas-netes:0.7.0
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -24,7 +24,7 @@ faasnetesd:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.9.11
+  image: openfaas/gateway:0.9.14
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
