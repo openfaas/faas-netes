@@ -53,6 +53,11 @@ spec:
         - mountPath: /alertmanager.yml
           name: alertmanager-config
           subPath: alertmanager.yml
+        {{- if .Values.basic_auth }}
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        {{- end }}
       volumes:
         - name: alertmanager-config
           configMap:
@@ -61,6 +66,11 @@ spec:
               - key: alertmanager.yml
                 path: alertmanager.yml
                 mode: 0644
+        {{- if .Values.basic_auth }}
+        - name: auth
+          secret:
+            secretName: basic-auth
+        {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

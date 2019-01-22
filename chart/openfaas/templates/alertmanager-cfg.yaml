@@ -35,3 +35,9 @@ data:
       webhook_configs:
         - url: http://gateway.{{ .Release.Namespace }}:8080/system/alert
           send_resolved: true
+          {{- if .Values.basic_auth }}
+          http_config:
+            basic_auth:
+              username: admin
+              password_file: /var/secrets/basic-auth-password
+          {{- end -}}
