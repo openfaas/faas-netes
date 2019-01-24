@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: functions/prometheus:2.2.0-armhf
+        image: functions/prometheus:2.3.1-arm64
         command: 
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
