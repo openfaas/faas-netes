@@ -1,0 +1,32 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: alertmanager
+  name: alertmanager-config
+  namespace: openfaas
+data:
+  alertmanager.yml: |
+    route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 5s
+      group_interval: 10s
+      repeat_interval: 30s
+      receiver: scale-up
+      routes:
+      - match:
+          service: gateway
+          receiver: scale-up
+          severity: major
+    inhibit_rules:
+    - source_match:
+        severity: 'critical'
+      target_match:
+        severity: 'warning'
+      equal: ['alertname', 'cluster', 'service']
+    receivers:
+    - name: 'scale-up'
+      webhook_configs:
+        - url: http://gateway.openfaas:8080/system/alert
+          send_resolved: true
+---
