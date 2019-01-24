@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: functions/alertmanager:0.15.0-rc.0-armhf
+        image: functions/alertmanager:0.15.0-rc.0-arm64
         imagePullPolicy: Always
         command: 
           - "alertmanager"
