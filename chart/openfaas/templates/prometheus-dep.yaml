@@ -18,6 +18,7 @@ spec:
       annotations:
         checksum/prometheus-config: {{ include (print $.Template.BasePath "/prometheus-cfg.yaml") . | sha256sum | quote }}
     spec:
+      serviceAccountName: {{ .Release.Name }}-prometheus
       containers:
       - name: prometheus
         image: {{ .Values.prometheus.image }}
