@@ -10,6 +10,7 @@ spec:
       labels:
         app: prometheus
     spec:
+      serviceAccountName: openfaas-prometheus
       containers:
       - name: prometheus
         image: prom/prometheus:v2.3.1
