@@ -16,6 +16,7 @@ spec:
       labels:
         app: prometheus
       annotations:
+        sidecar.istio.io/inject: "false"
         checksum/prometheus-config: {{ include (print $.Template.BasePath "/prometheus-cfg.yaml") . | sha256sum | quote }}
     spec:
       serviceAccountName: {{ .Release.Name }}-prometheus
