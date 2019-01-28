@@ -43,20 +43,3 @@ spec:
               - key: alert.rules.yml
                 path: alert.rules.yml
                 mode: 0644
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: prometheus
-  namespace: openfaas
-  labels:
-    app: prometheus
-spec:
-  type: NodePort
-  ports:
-    - port: 9090
-      protocol: TCP
-      targetPort: 9090
-      nodePort: 31119
-  selector:
-    app: prometheus

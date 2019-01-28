@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: functions/alertmanager:0.15.0-rc.0-arm64
+        image: functions/alertmanager:0.15.0-rc.0-armhf
         imagePullPolicy: Always
         command: 
           - "alertmanager"
@@ -38,19 +38,3 @@ spec:
               - key: alertmanager.yml
                 path: alertmanager.yml
                 mode: 0644
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: alertmanager
-  namespace: openfaas
-  labels:
-    app: alertmanager
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9093
-      protocol: TCP
-      targetPort: 9093
-  selector:
-    app: alertmanager
