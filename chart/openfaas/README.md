@@ -119,7 +119,7 @@ This option is good for those that have issues with installing Tiller, the serve
     $ kubectl apply -f $HOME/openfaas.yaml
     ```
 
-Now [verify your installation](#verify-the-install).
+Now [verify your installation](#verify-the-installation).
 
 ## Deploy for development / testing
 
