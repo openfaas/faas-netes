@@ -32,6 +32,8 @@ gateway:
   scaleFromZero: true
   # change the port when creating multiple releases in the same baremetal cluster
   nodePort: 31112
+  maxIdleConns: 1024
+  maxIdleConnsPerHost: 1024
 
 queueWorker:
   image: openfaas/queue-worker:0.5.4

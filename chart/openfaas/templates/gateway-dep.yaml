@@ -84,6 +84,10 @@ spec:
         {{- end }}
         - name: scale_from_zero
           value: "{{ .Values.gateway.scaleFromZero }}"
+        - name: max_idle_conns
+          value: "{{ .Values.gateway.maxIdleConns }}"
+        - name: max_idle_conns_per_host
+          value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
         {{- if .Values.basic_auth }}
         volumeMounts:
         - name: auth

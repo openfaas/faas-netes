@@ -46,7 +46,10 @@ spec:
           value: "/etc/openfaas"
         - name: scale_from_zero
           value: "false"
-
+        - name: max_idle_conns
+          value: "1024"
+        - name: max_idle_conns_per_host
+          value: "1024"
         ports:
         - containerPort: 8080
           protocol: TCP

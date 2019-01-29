@@ -187,6 +187,8 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.writeTimeout` | Queue worker write timeout | `65s` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
+| `gateway.max_idle_conns` | Set max idle connections from gateway to functions | `1024` |
+| `gateway.max_idle_conns_per_host` | Set max idle connections from gateway to functions per host | `1024` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
 | `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` | `false` |
