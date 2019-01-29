@@ -13,4 +13,5 @@ metadata:
   name: openfaas-fn
   labels:
     istio-injection: enabled
+    role: openfaas-fn
 
