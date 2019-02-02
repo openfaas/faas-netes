@@ -51,7 +51,7 @@ operator:
 
 # monitoring and auto-scaling components
 prometheus:
-  image: prom/prometheus:v2.6.1
+  image: prom/prometheus:v2.7.1
 alertmanager:
   image: prom/alertmanager:v0.15.0
 
