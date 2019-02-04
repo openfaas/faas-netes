@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: openfaas/gateway:0.9.10-armhf
+        image: openfaas/gateway:0.11.0-armhf
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
