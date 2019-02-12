@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name:  queue-worker
-        image: openfaas/queue-worker:0.4.9-armhf
+        image: openfaas/queue-worker:0.7.0-armhf
         imagePullPolicy: Always
         env:
         - name: max_inflight
