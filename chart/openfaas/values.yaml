@@ -24,7 +24,7 @@ faasnetesd:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.11.0
+  image: openfaas/gateway:0.11.1
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -36,7 +36,7 @@ gateway:
   maxIdleConnsPerHost: 1024
 
 queueWorker:
-  image: openfaas/queue-worker:0.5.4
+  image: openfaas/queue-worker:0.7.0
   ackWait : "60s"
   replicas: 1
 
