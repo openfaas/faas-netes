@@ -70,7 +70,6 @@ data:
           labels:
             service: gateway
             severity: major
-            value: '{{ "{{" }}$value{{ "}}" }}'
           annotations:
-            description: High invocation total on "{{ "{{" }}$labels.instance{{ "}}" }}"
-            summary: High invocation total on "{{ "{{" }}$labels.instance{{ "}}" }}"
+            description: High invocation total on "{{ "{{" }}$labels.function_name{{ "}}" }}"
+            summary: High invocation total on "{{ "{{" }}$labels.function_name{{ "}}" }}"
