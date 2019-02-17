@@ -55,7 +55,7 @@ operator:
 prometheus:
   image: prom/prometheus:v2.7.1
 alertmanager:
-  image: prom/alertmanager:v0.15.0
+  image: prom/alertmanager:v0.16.1
 
 # async provider
 nats:
