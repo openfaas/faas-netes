@@ -5,15 +5,9 @@ language: go
 go:
   - 1.10.x
 
-env:
-  global:
-    - HELM_URL=https://storage.googleapis.com/kubernetes-helm
-    - HELM_TAR=helm-v2.4.1-linux-amd64.tar.gz
-
 install:
-  - wget -q ${HELM_URL}/${HELM_TAR}
-  - tar xzfv ${HELM_TAR}
-  - PATH=`pwd`/linux-amd64/:$PATH
+  - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+  - helm version -c
   - helm init --client-only
 
 services:
