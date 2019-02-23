@@ -153,7 +153,7 @@ func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
 	request := requests.CreateFunctionRequest{
 		Annotations: &map[string]string{
 			"date-created": "Wed 25 Jul 21:26:22 BST 2018",
-			"foo" : "bar",
+			"foo":          "bar",
 		},
 	}
 
