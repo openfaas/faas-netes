@@ -1,4 +1,5 @@
 #!/bin/bash
 
-go get -u sigs.k8s.io/kind
+echo "go get -u sigs.k8s.io/kind"
 
+go get -u sigs.k8s.io/kind
