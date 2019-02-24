@@ -18,6 +18,52 @@
   revision = "de5bf2ad457846296e2031421a34e2568e304e35"
 
 [[projects]]
+  branch = "master"
+  digest = "1:fa1a28e153676b97d06145dd3e9d4cccce701f6346f6ebe32e38b3b71e7ac169"
+  name = "github.com/boz/go-lifecycle"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "29999c775d97f69d69f1d78538b9daf03aa05203"
+
+[[projects]]
+  branch = "master"
+  digest = "1:158314c3ac56f1109f3b7f01d941e097e1f6cb4aaeecb656b461f77635161a11"
+  name = "github.com/boz/go-logutil"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "aa42d2d42c9c2d60c64b14da9d76ce8f39c91d3e"
+
+[[projects]]
+  digest = "1:ceb6941b5f45706229bd0375da3822de8cf2f2f778f8cff258cacc7755c54039"
+  name = "github.com/boz/kail"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "88484542617fb889b3ae90259f8a750799128685"
+  version = "v0.10.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:34e58f285bee2d4e7043ffecdeca12ec517f14f1a765487930a97c6425073940"
+  name = "github.com/boz/kcache"
+  packages = [
+    ".",
+    "client",
+    "filter",
+    "join",
+    "nsname",
+    "types/daemonset",
+    "types/deployment",
+    "types/ingress",
+    "types/node",
+    "types/pod",
+    "types/replicaset",
+    "types/replicationcontroller",
+    "types/service",
+  ]
+  pruneopts = "UT"
+  revision = "b6b037c5139db3224b49ec9b65b83b0e2907c8a8"
+
+[[projects]]
   digest = "1:8ee7b41ace3ba875c17e38ba7780e7cf0d29882338637861e9f13f04f60ecc5c"
   name = "github.com/emicklei/go-restful"
   packages = [
@@ -27,6 +73,14 @@
   pruneopts = "UT"
   revision = "85d198d05a92d31823b852b4a5928114912e8949"
   version = "v2.9.0"
+
+[[projects]]
+  digest = "1:865079840386857c809b72ce300be7580cb50d3d3129ce11bf9aa6ca2bc1934a"
+  name = "github.com/fatih/color"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "5b77d2a35fb0ede96d138fc9a99f5c9b6aef11b4"
+  version = "v1.7.0"
 
 [[projects]]
   digest = "1:2cd7915ab26ede7d95b8749e6b1f933f1c6d5398030684e6505940a10f31cfda"
@@ -146,6 +200,14 @@
   version = "v1.6.2"
 
 [[projects]]
+  digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
+  version = "v1.4.0"
+
+[[projects]]
   branch = "master"
   digest = "1:b4395b2a4566c24459af3d04009b39cc21762fc77ec7bf7a1aa905c91e8f018d"
   name = "github.com/gregjones/httpcache"
@@ -185,6 +247,22 @@
   revision = "6243d8e04c3f819e79757e8bc3faa15c3cb27003"
 
 [[projects]]
+  digest = "1:c658e84ad3916da105a761660dcaeb01e63416c8ec7bc62256a9b411a05fcd67"
+  name = "github.com/mattn/go-colorable"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
+  version = "v0.0.9"
+
+[[projects]]
+  digest = "1:b5cf82c3199c040b82e2bb3fbcbcf6771c2759f9c6b839621b0714c822167581"
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a6dda38a851a575e6799957cdd53ffe0b3fdd90f"
+  version = "v0.0.5"
+
+[[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
   name = "github.com/modern-go/concurrent"
   packages = ["."]
@@ -209,16 +287,19 @@
   version = "0.9.14"
 
 [[projects]]
-  digest = "1:698444ab032d6e8528ae9171659941a2afea8003978c240e860936128e22a8c6"
+  branch = "feature-define-the-logging-interface"
+  digest = "1:caf00c14f6fc355af725fd794650c4d4c802a926b50f811ad42b41ca49c54c22"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
     "auth",
+    "httputils",
+    "logs",
     "types",
   ]
   pruneopts = "UT"
-  revision = "6a76a052deb12fd94b373c082963d8a8ad44d4d1"
-  version = "0.9.0"
+  revision = "06a8c5b1f53bd71bd039c56b95f46283ee3d485a"
+  source = "github.com/LucasRoesler/faas-provider"
 
 [[projects]]
   branch = "master"
@@ -235,6 +316,14 @@
   pruneopts = "UT"
   revision = "5f041e8faa004a95c88a202771f4cc3e991971e6"
   version = "v2.0.1"
+
+[[projects]]
+  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
 
 [[projects]]
   digest = "1:1b21a2b4058a779f290c7341cd93267492e0ecea6c8b54f64a4a5fd7ff131034"
@@ -256,6 +345,14 @@
   ]
   pruneopts = "UT"
   revision = "309822c5b9b9f80db67f016069a12628d94fad34"
+
+[[projects]]
+  branch = "master"
+  digest = "1:d0e9a312c4610a508569ab25e54d34600b1a96d19b1866ece104ffdf1c1b9d2c"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  pruneopts = "UT"
+  revision = "cd391775e71e684db52b63df9affd58269495083"
 
 [[projects]]
   branch = "master"
@@ -471,10 +568,14 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/boz/kail",
+    "github.com/boz/kcache/nsname",
     "github.com/gorilla/mux",
     "github.com/openfaas/faas-provider",
+    "github.com/openfaas/faas-provider/logs",
     "github.com/openfaas/faas-provider/types",
     "github.com/openfaas/faas/gateway/requests",
+    "github.com/pkg/errors",
     "k8s.io/api/apps/v1beta2",
     "k8s.io/api/core/v1",
     "k8s.io/apimachinery/pkg/api/errors",

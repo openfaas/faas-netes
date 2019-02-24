@@ -12,6 +12,7 @@ import (
 	"github.com/openfaas/faas-netes/types"
 	"github.com/openfaas/faas-netes/version"
 	bootstrap "github.com/openfaas/faas-provider"
+	"github.com/openfaas/faas-provider/logs"
 	bootTypes "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -75,6 +76,7 @@ func main() {
 		HealthHandler:  handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),
+		LogHandler:     logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, config, functionNamespace)),
 	}
 
 	var port int
