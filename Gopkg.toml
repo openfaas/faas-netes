@@ -9,7 +9,9 @@
 
 [[constraint]]
   name = "github.com/openfaas/faas-provider"
-  version = "0.9.0"
+  # version = "0.8.1"
+  source = "github.com/LucasRoesler/faas-provider"
+  branch = "feature-define-the-logging-interface"
 
 [[constraint]]
   name = "k8s.io/apimachinery"
@@ -22,3 +24,7 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[[constraint]]
+  name = "github.com/gorilla/websocket"
+  version = "1.4.0"
