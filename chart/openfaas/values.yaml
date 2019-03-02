@@ -8,7 +8,7 @@ rbac: true
 securityContext: true
 basic_auth: false
 
-faasnetesd:
+faasnetes:
   image: openfaas/faas-netes:0.7.0
   readTimeout : "60s"
   writeTimeout : "60s"

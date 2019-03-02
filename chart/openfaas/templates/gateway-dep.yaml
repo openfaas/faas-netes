@@ -113,43 +113,43 @@ spec:
         - name: function_namespace
           value: {{ $functionNs | quote }}
         - name: read_timeout
-          value: "{{ .Values.faasnetesd.readTimeout }}"
+          value: "{{ .Values.faasnetes.readTimeout }}"
         - name: write_timeout
-          value: "{{ .Values.faasnetesd.writeTimeout }}"
+          value: "{{ .Values.faasnetes.writeTimeout }}"
         - name: image_pull_policy
-          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+          value: {{ .Values.faasnetes.imagePullPolicy | quote }}
         ports:
         - containerPort: 8081
           protocol: TCP
       {{- else }}
       - name: faas-netes
-        image: {{ .Values.faasnetesd.image }}
-        imagePullPolicy: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        image: {{ .Values.faasnetes.image }}
+        imagePullPolicy: {{ .Values.faasnetes.imagePullPolicy | quote }}
         env:
         - name: port
           value: "8081"
         - name: function_namespace
           value: {{ $functionNs | quote }}
         - name: read_timeout
-          value: "{{ .Values.faasnetesd.readTimeout }}"
+          value: "{{ .Values.faasnetes.readTimeout }}"
         - name: write_timeout
-          value: "{{ .Values.faasnetesd.writeTimeout }}"
+          value: "{{ .Values.faasnetes.writeTimeout }}"
         - name: image_pull_policy
-          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+          value: {{ .Values.faasnetes.imagePullPolicy | quote }}
         - name: http_probe
-          value: "{{ .Values.faasnetesd.httpProbe }}"
+          value: "{{ .Values.faasnetes.httpProbe }}"
         - name: readiness_probe_initial_delay_seconds
-          value: "{{ .Values.faasnetesd.readinessProbe.initialDelaySeconds }}"
+          value: "{{ .Values.faasnetes.readinessProbe.initialDelaySeconds }}"
         - name: readiness_probe_timeout_seconds
-          value: "{{ .Values.faasnetesd.readinessProbe.timeoutSeconds }}"
+          value: "{{ .Values.faasnetes.readinessProbe.timeoutSeconds }}"
         - name: readiness_probe_period_seconds
-          value: "{{ .Values.faasnetesd.readinessProbe.periodSeconds }}"
+          value: "{{ .Values.faasnetes.readinessProbe.periodSeconds }}"
         - name: liveness_probe_initial_delay_seconds
-          value: "{{ .Values.faasnetesd.livenessProbe.initialDelaySeconds }}"
+          value: "{{ .Values.faasnetes.livenessProbe.initialDelaySeconds }}"
         - name: liveness_probe_timeout_seconds
-          value: "{{ .Values.faasnetesd.livenessProbe.timeoutSeconds }}"
+          value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
         - name: liveness_probe_period_seconds
-          value: "{{ .Values.faasnetesd.livenessProbe.periodSeconds }}"
+          value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
         ports:
         - containerPort: 8081
           protocol: TCP
