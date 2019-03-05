@@ -124,7 +124,7 @@ spec:
       {{- else }}
       - name: faas-netes
         image: {{ .Values.faasnetesd.image }}
-        imagePullPolicy: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy | quote }}
         env:
         - name: port
           value: "8081"
