@@ -179,9 +179,9 @@ Additional OpenFaaS options in `values.yaml`.
 | `ingress.enabled` | Create ingress resources | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `basic_auth` | Enable basic authentication on the Gateway | `false` |
-| `faasnetesd.readTimeout` | Queue worker read timeout | `60s` |
-| `faasnetesd.writeTimeout` | Queue worker write timeout | `60s` |
-| `faasnetesd.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
+| `faasnetes.readTimeout` | Queue worker read timeout | `60s` |
+| `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
+| `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
 | `gateway.readTimeout` | Queue worker read timeout | `65s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `65s` |
