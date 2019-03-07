@@ -23,9 +23,9 @@ script:
   - ./contrib/lint_chart.sh
   - ./contrib/get_kind.sh
   - ./contrib/create_kind_cluster.sh
-  - ./contrib/install_tiller.sh
   - ./contrib/deploy.sh
-  #- ./contrib/install_openfaas.sh
+  - ./contrib/get_faas.sh
+  - ./contrib/run_function.sh
 
 after_success:
     - if [ -z $DOCKER_NS ] ; then
