@@ -45,7 +45,7 @@ openfaasImagePullPolicy: "Always"
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/openfaas-operator:0.9.1
+  image: openfaas/openfaas-operator:0.9.2
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
