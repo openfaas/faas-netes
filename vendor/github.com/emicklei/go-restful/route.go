@@ -5,7 +5,6 @@ package restful
 // that can be found in the LICENSE file.
 
 import (
-	"bytes"
 	"net/http"
 	"strings"
 )
@@ -46,6 +45,9 @@ type Route struct {
 
 	// marks a route as deprecated
 	Deprecated bool
+
+	//Overrides the container.contentEncodingEnabled
+	contentEncodingEnabled *bool
 }
 
 // Initialize for Route
@@ -54,10 +56,9 @@ func (r *Route) postBuild() {
 }
 
 // Create Request and Response from their http versions
-func (r *Route) wrapRequestResponse(httpWriter http.ResponseWriter, httpRequest *http.Request) (*Request, *Response) {
-	params := r.extractParameters(httpRequest.URL.Path)
+func (r *Route) wrapRequestResponse(httpWriter http.ResponseWriter, httpRequest *http.Request, pathParams map[string]string) (*Request, *Response) {
 	wrappedRequest := NewRequest(httpRequest)
-	wrappedRequest.pathParameters = params
+	wrappedRequest.pathParameters = pathParams
 	wrappedRequest.selectedRoutePath = r.Path
 	wrappedResponse := NewResponse(httpWriter)
 	wrappedResponse.requestAccept = httpRequest.Header.Get(HEADER_Accept)
@@ -137,50 +138,6 @@ func (r Route) matchesContentType(mimeTypes string) bool {
 	return false
 }
 
-// Extract the parameters from the request url path
-func (r Route) extractParameters(urlPath string) map[string]string {
-	urlParts := tokenizePath(urlPath)
-	pathParameters := map[string]string{}
-	for i, key := range r.pathParts {
-		var value string
-		if i >= len(urlParts) {
-			value = ""
-		} else {
-			value = urlParts[i]
-		}
-		if strings.HasPrefix(key, "{") { // path-parameter
-			if colon := strings.Index(key, ":"); colon != -1 {
-				// extract by regex
-				regPart := key[colon+1 : len(key)-1]
-				keyPart := key[1:colon]
-				if regPart == "*" {
-					pathParameters[keyPart] = untokenizePath(i, urlParts)
-					break
-				} else {
-					pathParameters[keyPart] = value
-				}
-			} else {
-				// without enclosing {}
-				pathParameters[key[1:len(key)-1]] = value
-			}
-		}
-	}
-	return pathParameters
-}
-
-// Untokenize back into an URL path using the slash separator
-func untokenizePath(offset int, parts []string) string {
-	var buffer bytes.Buffer
-	for p := offset; p < len(parts); p++ {
-		buffer.WriteString(parts[p])
-		// do not end
-		if p < len(parts)-1 {
-			buffer.WriteString("/")
-		}
-	}
-	return buffer.String()
-}
-
 // Tokenize an URL path using the slash separator ; the result does not have empty tokens
 func tokenizePath(path string) []string {
 	if "/" == path {
@@ -192,4 +149,9 @@ func tokenizePath(path string) []string {
 // for debugging
 func (r Route) String() string {
 	return r.Method + " " + r.Path
+}
+
+// EnableContentEncoding (default=false) allows for GZIP or DEFLATE encoding of responses. Overrides the container.contentEncodingEnabled value.
+func (r Route) EnableContentEncoding(enabled bool) {
+	r.contentEncodingEnabled = &enabled
 }

@@ -54,8 +54,7 @@ func getSecretsHandler(kube typedV1.SecretInterface, w http.ResponseWriter, r *h
 	selector := fmt.Sprintf("%s=%s", secretLabel, secretLabelValue)
 	res, err := kube.List(metav1.ListOptions{LabelSelector: selector})
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Secrets query error: %v\n", err)
+		w.WriteHeader(processErrorReasons("query", err))
 		return
 	}
 
@@ -86,8 +85,7 @@ func createSecretHandler(kube typedV1.SecretInterface, namespace string, w http.
 	}
 	_, err = kube.Create(secret)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Secret create error: %v\n", err)
+		w.WriteHeader(processErrorReasons("create", err))
 		return
 	}
 	log.Printf("Secret %s create\n", secret.GetName())
@@ -115,8 +113,7 @@ func replaceSecretHandler(kube typedV1.SecretInterface, namespace string, w http
 	secret.StringData = newSecret.StringData
 	_, err = kube.Update(secret)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Secret update error: %v\n", err)
+		w.WriteHeader(processErrorReasons("update", err))
 		return
 	}
 	log.Printf("Secret %s updated", secret.GetName())
@@ -136,8 +133,7 @@ func deleteSecretHandler(kube typedV1.SecretInterface, namespace string, w http.
 		w.WriteHeader(http.StatusNotFound)
 		return
 	} else if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Secret %s delete error: %v\n", secret.GetName(), err)
+		w.WriteHeader(processErrorReasons("delete", err))
 		return
 	}
 	log.Printf("Secret %s deleted\n", secret.GetName())
@@ -310,4 +306,28 @@ func removeVolumeMount(volumeName string, mounts []apiv1.VolumeMount) []apiv1.Vo
 // was not found or does not exist
 func isNotFound(err error) bool {
 	return k8serrors.IsNotFound(err) || k8serrors.IsGone(err)
+}
+
+// processErrorReasons maps k8serrors.ReasonForError to http status codes
+func processErrorReasons(context string, err error) int {
+	switch {
+	case k8serrors.ReasonForError(err) == metav1.StatusReasonConflict:
+		log.Printf("Secret %s error reason: %s, %v\n", context, metav1.StatusReasonConflict, err)
+		return http.StatusConflict
+	case k8serrors.ReasonForError(err) == metav1.StatusReasonInvalid:
+		log.Printf("Secret %s error reason: %s, %v\n", context, metav1.StatusReasonInvalid, err)
+		return http.StatusUnprocessableEntity
+	case k8serrors.ReasonForError(err) == metav1.StatusReasonBadRequest:
+		log.Printf("Secret %s error reason: %s, %v\n", context, metav1.StatusReasonBadRequest, err)
+		return http.StatusBadRequest
+	case k8serrors.ReasonForError(err) == metav1.StatusReasonForbidden:
+		log.Printf("Secret %s error reason: %s, %v\n", context, metav1.StatusReasonForbidden, err)
+		return http.StatusForbidden
+	case k8serrors.ReasonForError(err) == metav1.StatusReasonTimeout:
+		log.Printf("Secret %s error reason: %s, %v\n", context, metav1.StatusReasonTimeout, err)
+		return http.StatusRequestTimeout
+	default:
+		log.Printf("Secret %s error: %v\n", context, err)
+		return http.StatusInternalServerError
+	}
 }
