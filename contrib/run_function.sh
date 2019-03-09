@@ -3,6 +3,12 @@
 export KUBECONFIG="$(kind get kubeconfig-path)"
 
 kubectl rollout status deploy/gateway -n openfaas
+
+if [ $? != 0 ];
+then
+   exit 1
+fi
+
 kubectl port-forward deploy/gateway -n openfaas 8080:8080 &
 
 sleep 10
