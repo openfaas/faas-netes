@@ -1,12 +1,17 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/openfaas/faas/gateway/requests"
 	apiv1 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/extensions/v1beta1"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsNil(t *testing.T) {
@@ -224,6 +229,30 @@ func Test_UpdateSecrets_RemovesSecretsVolumeIfRequestSecretsIsEmptyOrNil(t *test
 	}
 
 	validateEmptySecretVolumesAndMounts(t, deployment)
+}
+
+func Test_DefaultErrorReason(t *testing.T) {
+	err := errors.New("A default error mapping")
+	status, reason := processErrorReasons(err)
+	if status != http.StatusInternalServerError {
+		t.Errorf("Unexpected default status code: %d", status)
+	}
+	if reason != metav1.StatusReasonInternalError {
+		t.Errorf("Unexpected default reason: %s", reason)
+	}
+}
+
+func Test_ConflictErrorReason(t *testing.T) {
+	gv := schema.GroupResource{Group: "testing", Resource: "testing"}
+	statusError := k8serrors.NewConflict(gv, "conflict_test", errors.New("A test error for confict"))
+
+	status, reason := processErrorReasons(statusError)
+	if status != http.StatusConflict {
+		t.Errorf("Unexpected default status code: %d", status)
+	}
+	if !k8serrors.IsConflict(statusError) {
+		t.Errorf("Unexpected default reason: %s", reason)
+	}
 }
 
 func validateEmptySecretVolumesAndMounts(t *testing.T, deployment *v1beta1.Deployment) {
