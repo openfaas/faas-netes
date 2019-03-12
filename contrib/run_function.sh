@@ -2,7 +2,7 @@
 
 export KUBECONFIG="$(kind get kubeconfig-path)"
 
-kubectl rollout status deploy/gateway -n openfaas
+kubectl rollout status deploy/gateway -n openfaas --timeout=0s
 
 if [ $? != 0 ];
 then
@@ -11,6 +11,7 @@ fi
 
 kubectl port-forward deploy/gateway -n openfaas 8080:8080 &
 
+# port-forward needs some time to start
 sleep 10
 
 # Login in OpenFaas
@@ -23,8 +24,8 @@ faas-cli deploy --image=functions/alpine:latest --fprocess=cat --name echo
 # Call echo function
 for i in {1..180};
 do
-    curl -if http://127.0.0.1:8080/function/echo
-    if [ $? == 0 ];
+    Ready="$(faas-cli describe echo | awk '{ if($1 ~ /Status:/) print $2 }')"
+    if [ $Ready == "Ready" ];
     then
         exit 0
     fi
