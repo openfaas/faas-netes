@@ -60,7 +60,7 @@ Now deploy OpenFaaS from the helm chart repo:
 
 ```
 $ helm repo update \
- && helm upgrade openfaas --install openfaas/openfaas \
+ && helm upgrade openfaas --install openfaas openfaas/ \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn
