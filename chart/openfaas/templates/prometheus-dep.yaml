@@ -57,6 +57,8 @@ spec:
         - mountPath: /etc/prometheus/alert.rules.yml
           name: prometheus-config
           subPath: alert.rules.yml
+        - mountPath: /prometheus/data
+          name: prom-data
       volumes:
         - name: prometheus-config
           configMap:
@@ -68,6 +70,8 @@ spec:
               - key: alert.rules.yml
                 path: alert.rules.yml
                 mode: 0644
+        - name: prom-data
+          emptyDir: {}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
