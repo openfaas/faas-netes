@@ -1,0 +1,13 @@
+image: functions/kafka-connector:0.3.0
+replicas: 1
+gateway_url: http://gateway.openfaas:8080
+topics: faas-request
+print_response: true
+broker_host: kafka
+basic_auth: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
