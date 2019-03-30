@@ -2,5 +2,5 @@ Thanks for installing kafka-connector. Please follow the instructions below to g
 
 You can watch the Connector logs to see it invoke your functions:
 
-$ export CONNECTOR=$(kubectl -n {{ .Release.Namespace }} get po -l "app.kubernetes.io/component=kafka-connector" -o name | cut -d'/' -f2)
-$ kubectl -n {{ .Release.Namespace }} logs $CONNECTOR -f
+$ kubectl logs -n {{ .Release.Namespace }} deploy/kafka-connector -f
+
