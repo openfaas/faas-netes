@@ -8,9 +8,20 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
   You must have a working OpenFaaS installation. You can find [instructions in the docs](https://docs.openfaas.com/deployment/kubernetes/#pick-helm-or-yaml-files-for-deployment-a-or-b), including instructions to also install OpenFaaS via Helm.
 
-- Install Kafka
+- Install Kafka (dev/testing)
 
-  You must have a working Kafka installation. Confluent has provided various [Helm charts here](https://github.com/confluentinc/cp-helm-charts). Instructions for installing Kafka via Helm are [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart).
+    You can install [Apache Kafka](https://kafka.apache.org/) with the [wurstmeister Docker images](https://github.com/wurstmeister/kafka-docker) from the [kafka-connector repo](https://github.com/openfaas-incubator/kafka-connector).
+
+    ```sh
+    $ git clone https://github.com/openfaas-incubator/kafka-connector
+    $ cd kafka-connector/yaml/kubernetes
+    $ kubectl apply -f \
+     kafka-broker-dep.yml,kafka-broker-svc.yml,zookeeper-dep.yaml,zookeeper-svc.yaml
+    ```
+
+- Install Kafka (production)
+
+  You may already have a working Kafka installation, but if not you can provision it using a production-grade helm chart. Confluent has provided various [Helm charts here](https://github.com/confluentinc/cp-helm-charts). Instructions for installing Apache Kafka via Helm are [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart).
 
 ## Install the Chart
 
