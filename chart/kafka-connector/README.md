@@ -10,14 +10,14 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
 - Install Kafka (dev/testing)
 
-    You can install [Apache Kafka](https://kafka.apache.org/) with the [wurstmeister Docker images](https://github.com/wurstmeister/kafka-docker) from the [kafka-connector repo](https://github.com/openfaas-incubator/kafka-connector).
+  You can install [Apache Kafka](https://kafka.apache.org/) with the [wurstmeister Docker images](https://github.com/wurstmeister/kafka-docker) from the [kafka-connector repo](https://github.com/openfaas-incubator/kafka-connector).
 
-    ```sh
-    $ git clone https://github.com/openfaas-incubator/kafka-connector
-    $ cd kafka-connector/yaml/kubernetes
-    $ kubectl apply -f \
-     kafka-broker-dep.yml,kafka-broker-svc.yml,zookeeper-dep.yaml,zookeeper-svc.yaml
-    ```
+  ```sh
+  $ git clone https://github.com/openfaas-incubator/kafka-connector
+  $ cd kafka-connector/yaml/kubernetes
+  $ kubectl apply -f \
+   kafka-broker-dep.yml,kafka-broker-svc.yml,zookeeper-dep.yaml,zookeeper-svc.yaml
+  ```
 
 - Install Kafka (production)
 
@@ -52,6 +52,7 @@ Additional kafka-connector options in `values.yaml`.
 | `gateway_url`      | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
 | `broker_host`      | location of the Kafka brokers.                                                         | `kafka`                        |
 | `print_response`   | Output the response of calling a function in the logs.                                 | `true`                         |
+| `fullnameOverride` | Override the name value used for the Connector Deployment object.                      | ``                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
