@@ -16,7 +16,6 @@ sleep 10
 
 # Login in OpenFaas
 export OPENFAAS_URL=http://127.0.0.1:8080
-echo $(head -c 16 /dev/urandom| $sha_cmd | cut -d " " -f 1) > ./password.txt # Store password in password.txt file
 PASSWORD=$(cat ./password.txt)
 
 faas-cli login --username admin --password $PASSWORD
