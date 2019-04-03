@@ -12,23 +12,27 @@ You can use this [chart](chart/openfaas) to install OpenFaaS to your cluster.
 
 ## Pre-reqs:
 
-* Instructions for latest Helm install
+### Install the helm CLI/client
 
-On Linux and Mac/Darwin:
+Instructions for latest Helm install
 
-```
-$ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
-```
+* On Linux and Mac/Darwin:
 
-Or via Homebrew on Mac:
+      ```
+      $ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+      ```
 
-```
-$ brew install kubernetes-helm
-```
+* Or via Homebrew on Mac:
+
+      ```
+      $ brew install kubernetes-helm
+      ```
+
+### Install tiller
 
 * Create RBAC permissions for Tiller
 
-```
+```sh
 $ kubectl -n kube-system create sa tiller \
  && kubectl create clusterrolebinding tiller \
       --clusterrole cluster-admin \
@@ -37,7 +41,7 @@ $ kubectl -n kube-system create sa tiller \
 
 * Install the server-side Tiller component on your cluster
 
-```
+```sh
 $ helm init --skip-refresh --upgrade --service-account tiller
 ```
 
