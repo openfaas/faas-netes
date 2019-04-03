@@ -27,7 +27,7 @@ faas-cli deploy --image=functions/alpine:latest --fprocess=cat --name echo
 for i in {1..180};
 do
     Ready="$(faas-cli describe echo | awk '{ if($1 ~ /Status:/) print $2 }')"
-    if [ $Ready == "Ready" ];
+    if [[ $Ready == "Ready" ]];
     then
         exit 0
     fi
