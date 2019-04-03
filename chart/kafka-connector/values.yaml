@@ -1,4 +1,4 @@
-image: functions/kafka-connector:0.3.0
+image: functions/kafka-connector:0.3.1
 replicas: 1
 gateway_url: http://gateway.openfaas:8080
 topics: faas-request
