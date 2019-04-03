@@ -2,7 +2,7 @@
 
 export KUBECONFIG="$(kind get kubeconfig-path)"
 
-kubectl rollout status deploy/gateway -n openfaas --timeout=0s
+kubectl rollout status deploy/gateway -n openfaas --timeout=1m
 
 if [ $? != 0 ];
 then
@@ -16,7 +16,9 @@ sleep 10
 
 # Login in OpenFaas
 export OPENFAAS_URL=http://127.0.0.1:8080
-PASSWORD="something_random" # Set to predetermined value from ./contrib/deploy.sh
+echo $(head -c 16 /dev/urandom| $sha_cmd | cut -d " " -f 1) > ./password.txt # Store password in password.txt file
+PASSWORD=$(cat ./password.txt)
+
 faas-cli login --username admin --password $PASSWORD
 
 faas-cli deploy --image=functions/alpine:latest --fprocess=cat --name echo
