@@ -112,26 +112,20 @@ See also: [Introducing the OpenFaaS Operator](https://www.openfaas.com/blog/kube
 This option is good for those that have issues with installing Tiller, the server/cluster component of helm. Using the `helm` CLI, we can pre-render and then apply the templates using `kubectl`.
 
 1. Clone the faas-netes repository
-    ```sh
     git clone https://github.com/openfaas/faas-netes.git
-    ```
 
 2. Render the chart to a Kubernetes manifest called `openfaas.yaml`
-    ```sh
     helm template faas-netes/chart/openfaas \
         --name openfaas \
         --namespace openfaas  \
         --set basic_auth=true \
         --set functionNamespace=openfaas-fn > $HOME/openfaas.yaml
-    ```
 
     You can set the values and overrides just as you would in the install/upgrade commands above.
 
 3. Install the components using `kubectl`
-    ```sh
     kubectl apply -f faas-netes/namespaces.yml
     kubectl apply -f $HOME/openfaas.yaml
-    ```
 
 Now [verify your installation](#verify-the-installation).
 
