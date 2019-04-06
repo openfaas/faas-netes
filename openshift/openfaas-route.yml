@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: openfaas
+  namespace: openfaas
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: gateway
+    weight: 100
+  wildcardPolicy: None
