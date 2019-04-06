@@ -1,3 +1,6 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.alertmanager.create }}
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -41,3 +44,4 @@ data:
               username: admin
               password_file: /var/secrets/basic-auth-password
           {{- end -}}
+{{- end }}

@@ -52,10 +52,14 @@ operator:
   createCRD: true
 
 # monitoring and auto-scaling components
+# both components
 prometheus:
   image: prom/prometheus:v2.7.1
+  create: true
+
 alertmanager:
   image: prom/alertmanager:v0.16.1
+  create: true
 
 # async provider
 nats:
@@ -78,6 +82,7 @@ ingress:
 
 # faas-idler configuration
 faasIdler:
+  create: true
   replicas: 1
   image: openfaas/faas-idler:0.1.9
   inactivityDuration: 5m
