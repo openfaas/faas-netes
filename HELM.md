@@ -18,25 +18,21 @@ Instructions for latest Helm install
 
 * On Linux and Mac/Darwin:
 
-      ```
       curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
-      ```
 
 * Or via Homebrew on Mac:
 
-      ```
       brew install kubernetes-helm
-      ```
 
 ### Install tiller
 
 * Create RBAC permissions for tiller
 
 ```sh
- kubectl -n kube-system create sa tiller \
- && kubectl create clusterrolebinding tiller \
-      --clusterrole cluster-admin \
-      --serviceaccount=kube-system:tiller
+kubectl -n kube-system create sa tiller \
+  && kubectl create clusterrolebinding tiller \
+  --clusterrole cluster-admin \
+  --serviceaccount=kube-system:tiller
 ```
 
 * Install the server-side Tiller component on your cluster
