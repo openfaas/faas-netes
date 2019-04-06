@@ -1,3 +1,6 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.alertmanager.create }}
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,3 +19,4 @@ spec:
       protocol: TCP
   selector:
     app: alertmanager
+{{- end }}

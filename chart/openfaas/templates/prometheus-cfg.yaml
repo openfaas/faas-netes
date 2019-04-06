@@ -1,3 +1,6 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.prometheus.create }}
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -73,3 +76,4 @@ data:
           annotations:
             description: High invocation total on "{{ "{{" }}$labels.function_name{{ "}}" }}"
             summary: High invocation total on "{{ "{{" }}$labels.function_name{{ "}}" }}"
+{{- end }}
