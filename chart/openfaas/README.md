@@ -22,24 +22,26 @@
 
 ---
 ### Install
+
+See also: [Install Helm](https://github.com/openfaas/faas-netes/blob/master/HELM.md)
+
 We recommend creating two namespaces, one for the OpenFaaS core services and one for the functions:
 
-```
-$ kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
+```sh
+kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
 ```
 
 You will now have `openfaas` and `openfaas-fn`. If you want to change the names or to install into multiple installations then edit `namespaces.yml` from the `faas-netes` repo.
 
 Add the OpenFaaS `helm` chart:
 
-```bash
-$ helm repo add openfaas https://openfaas.github.io/faas-netes/
-"openfaas" has been added to your repositories
+```sh
+helm repo add openfaas https://openfaas.github.io/faas-netes/
 ```
 
 Generate secrets so that we can enable basic authentication for the gateway:
 
-```bash
+```sh
 # generate a random password
 PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
 
@@ -58,8 +60,8 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 
 Now deploy OpenFaaS from the helm chart repo:
 
-```
-$ helm repo update \
+```sh
+helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
@@ -69,23 +71,32 @@ $ helm repo update \
 > The above command will also update your helm repo to pull in any new releases.
 
 ### Verify the installation
+
 Once all the services are up and running, log into your gateway using the OpenFaaS CLI. This will cache your credentials into your `~/.openfaas/config.yml` file.
 
 Fetch your public IP or NodePort via `kubectl get svc -n openfaas gateway-external -o wide` and set it as an environmental variable as below:
 
-```bash
-export OPENFAAS_URL=http://...
+```sh
+export OPENFAAS_URL=http://127.0.0.1:31112
 ```
 
-Now log in:
+If using a remote cluster, you can port-forward the gateway to your local machine:
 
-``` bash
+```sh
+kubectl port-forward -n openfaas svc/gateway 31112:8080 &
+```
+
+Now log in with the CLI and check connectivity:
+
+```sh
 echo -n $PASSWORD | faas-cli login -g $OPENFAAS_URL -u admin --password-stdin
+
+faas-cli version
 ```
 
-## OpenFaaS Operator / CRD controller
+## OpenFaaS Operator and Function CRD
 
-If you would like to work with CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time.
+If you would like to work with Function CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time.
 The OpenFaaS Operator is suitable for development and testing and may replace the faas-netes controller in the future.
 The Operator is compatible with Kubernetes 1.9 or later.
 
@@ -93,42 +104,46 @@ To use it, add the flag: `--set operator.create=true` when installing with Helm.
 
 ### faas-netes vs OpenFaaS Operator
 
-The faas-netes controller is the most tested, stable and supported version of the OpenFaaS integration with Kubernetes. In contrast the OpenFaaS Operator is based upon the codebase and features from `faas-netes`, but offers a tighter integration with Kubernetes through CustomResourceDefinitions. This means you can type in `kubectl get functions` for instance.
+The faas-netes controller is the most tested, stable and supported version of the OpenFaaS integration with Kubernetes. In contrast the OpenFaaS Operator is based upon the codebase and features from `faas-netes`, but offers a tighter integration with Kubernetes through [CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/). This means you can type in `kubectl get functions` for instance.
+
+See also: [Introducing the OpenFaaS Operator](https://www.openfaas.com/blog/kubernetes-operator-crd/)
 
 ## Deployment with `helm template`
 This option is good for those that have issues with installing Tiller, the server/cluster component of helm. Using the `helm` CLI, we can pre-render and then apply the templates using `kubectl`.
 
 1. Clone the faas-netes repository
     ```sh
-    $ git clone https://github.com/openfaas/faas-netes.git
+    git clone https://github.com/openfaas/faas-netes.git
     ```
 
 2. Render the chart to a Kubernetes manifest called `openfaas.yaml`
-    ```
-    $ helm template faas-netes/chart/openfaas \
+    ```sh
+    helm template faas-netes/chart/openfaas \
         --name openfaas \
         --namespace openfaas  \
         --set basic_auth=true \
         --set functionNamespace=openfaas-fn > $HOME/openfaas.yaml
     ```
+
     You can set the values and overrides just as you would in the install/upgrade commands above.
 
 3. Install the components using `kubectl`
-    ```
-    $ kubectl apply -f faas-netes/namespaces.yml
-    $ kubectl apply -f $HOME/openfaas.yaml
+    ```sh
+    kubectl apply -f faas-netes/namespaces.yml
+    kubectl apply -f $HOME/openfaas.yaml
     ```
 
 Now [verify your installation](#verify-the-installation).
 
-## Deploy for development / testing
+## Test a local helm chart
 
 You can run the following command from within the `faas-netes/chart` folder in the `faas-netes` repo.
 
-```
-$ helm upgrade --install openfaas openfaas/ \
-   --namespace openfaas \
-   --set functionNamespace=openfaas-fn
+```sh
+helm upgrade --install openfaas openfaas/ \
+    --namespace openfaas  \
+    --set basic_auth=true \
+    --set functionNamespace=openfaas-fn
 ```
 
 ## Exposing services
@@ -161,7 +176,7 @@ Scaling up from zero replicas is enabled by default, to turn it off set `zero_sc
 
 Scaling to zero is done by the `faas-idler` component and by default will only carry out a dry-run. Pass the following to helm to enable scaling to zero replicas of idle functions. You will also need to [read the docs](https://docs.openfaas.com/architecture/autoscaling/#zero-scale) on how to configure functions to opt into scaling down.
 
-```
+```sh
 --set faasIdler.dryRun=false
 ```
 
@@ -205,15 +220,14 @@ See values.yaml for detailed configuration.
 
 All control plane components can be cleaned up with helm:
 
-```
-$ helm delete --purge openfaas
+```sh
+helm delete --purge openfaas
 ```
 
 Follow this by the following to remove all other associated objects:
 
-```
-$ kubectl delete namespace/openfaas
-$ kubectl delete namespace/openfaas-fn
+```sh
+kubectl delete namespace openfaas openfaas-fn
 ```
 
 In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
