@@ -180,14 +180,18 @@ Additional OpenFaaS options in `values.yaml`.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `default` |
 | `async` | Deploys NATS | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
-| `ingress.enabled` | Create ingress resources | `false` |
-| `rbac` | Enable RBAC | `true` |
 | `basic_auth` | Enable basic authentication on the Gateway | `false` |
+| `rbac` | Enable RBAC | `true` |
+| `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
+| `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
+| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
+| `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
+| `operator.createCRD` | Create the CRD for OpenFaaS Function definition | `true` |
+| `ingress.enabled` | Create ingress resources | `false` |
 | `faasnetes.readTimeout` | Queue worker read timeout | `60s` |
 | `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
@@ -201,11 +205,13 @@ Additional OpenFaaS options in `values.yaml`.
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
 | `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` | `false` |
-| `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
-| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
+| `faasIdler.create` | Create the faasIdler component | `true` |
 | `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `5m` |
 | `faasIdler.reconcileInterval` | The time between each of reconciliation | `30s` |
 | `faasIdler.dryRun` | When set to false the OpenFaaS API will be called to scale down idle functions, by default this is set to only print in the logs. | `true` |
+| `prometheus.create` | Create the Prometheus component | `true` |
+| `alertmanager.create` | Create the AlertManager component | `true` |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
