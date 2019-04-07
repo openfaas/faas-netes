@@ -7,6 +7,7 @@ serviceType: NodePort
 rbac: true
 securityContext: true
 basic_auth: false
+http_signatures: false
 
 faasnetes:
   image: openfaas/faas-netes:0.7.1

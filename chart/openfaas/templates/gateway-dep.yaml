@@ -25,11 +25,16 @@ spec:
       {{- else }}
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
-      {{- if .Values.basic_auth }}
       volumes:
+      {{- if .Values.basic_auth }}
       - name: auth
         secret:
           secretName: basic-auth
+      {{- end }}
+      {{- if .Values.http_signatures }}
+      - name: http-signing-public-key
+        secret:
+          secretName: http-signing-public-key
       {{- end }}
       containers:
       - name: gateway
@@ -73,6 +78,8 @@ spec:
           value: "true"
         - name: direct_functions_suffix
           value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        - name: secret_mount_path
+          value: "/var/secrets"
         {{- if .Values.async }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
@@ -82,8 +89,6 @@ spec:
         {{- if .Values.basic_auth }}
         - name: basic_auth
           value: "true"
-        - name: secret_mount_path
-          value: "/var/secrets"
         {{- end }}
         - name: scale_from_zero
           value: "{{ .Values.gateway.scaleFromZero }}"
@@ -91,9 +96,14 @@ spec:
           value: "{{ .Values.gateway.maxIdleConns }}"
         - name: max_idle_conns_per_host
           value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
-        {{- if .Values.basic_auth }}
         volumeMounts:
+        {{- if .Values.basic_auth }}
         - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        {{- end }}
+        {{- if .Values.http_signatures }}
+        - name: http-signing-public-key
           readOnly: true
           mountPath: "/var/secrets"
         {{- end }}

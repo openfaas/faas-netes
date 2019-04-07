@@ -19,32 +19,46 @@ spec:
       labels:
         app: queue-worker
     spec:
-      {{- if .Values.basic_auth }}
       volumes:
+      {{- if .Values.basic_auth }}
       - name: auth
         secret:
           secretName: basic-auth
+      {{- end }}
+      {{- if .Values.http_signatures }}
+      - name: http-signing-private-key
+        secret:
+          secretName: http-signing-private-key
       {{- end }}
       containers:
       - name:  queue-worker
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         env:
+        - name : write_debug
+          value : "true"
         {{- if .Values.functionNamespace }}
         - name: faas_function_suffix
           value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end }}
         - name: ack_wait    # Max duration of any async task / request
           value: {{ .Values.queueWorker.ackWait }}
-        {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets"
+        {{- if .Values.basic_auth }}
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
+        {{- end }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         volumeMounts:
+        {{- if .Values.basic_auth }}
         - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        {{- end }}
+        {{- if .Values.http_signatures }}
+        - name: http-signing-private-key
           readOnly: true
           mountPath: "/var/secrets"
         {{- end }}

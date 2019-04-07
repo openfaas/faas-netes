@@ -174,6 +174,25 @@ Scaling to zero is done by the `faas-idler` component and by default will only c
 --set faasIdler.dryRun=false
 ```
 
+## HTTP message signing
+To enable message signing when using asynchronous functions we need to generate a key pair. Using HTTP message signing 
+allows function callbacks to verify the authenticity of the callee. Only the OpenFaaS gateway should invoke the callback
+URL. This feature enables you to verify that.
+
+```bash
+rm signing.key > /dev/null 2>&1 || true && rm signing.key.pub > /dev/null 2>&1 || true
+ssh-keygen -t rsa -b 2048 -N "" -m PEM -f signing.key > /dev/null 2>&1
+openssl rsa -in ./signing.key -pubout -outform PEM -out signing.key.pub > /dev/null 2>&1
+
+kubectl create secret generic http-signing-private-key -n openfaas \
+    --from-file=http-signing-private-key=./signing.key
+
+kubectl create secret generic http-signing-public-key -n openfaas \
+    --from-file=http-signing-public-key=./signing.key.pub
+ 
+rm signing.key || true && rm signing.key.pub || true
+```
+
 ## Configuration
 
 Additional OpenFaaS options in `values.yaml`.
@@ -187,6 +206,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `basic_auth` | Enable basic authentication on the Gateway | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
+| `http_signatures` | Enable http message signing for non-repudiation of asynchronous function callbacks | `false` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
