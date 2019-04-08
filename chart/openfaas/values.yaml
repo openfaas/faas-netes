@@ -85,8 +85,8 @@ faasIdler:
   create: true
   replicas: 1
   image: openfaas/faas-idler:0.1.9
-  inactivityDuration: 5m
-  reconcileInterval: 30s
+  inactivityDuration: 15m               # If a function is inactive for 15 minutes, it may be scaled to zero
+  reconcileInterval: 1m                 # The interval between each attempt to scale functions to zero
   dryRun: true                          # Set to true to enable the idler to apply changes and scale to zero
 
 nodeSelector: {}

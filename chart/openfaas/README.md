@@ -206,8 +206,8 @@ Additional OpenFaaS options in `values.yaml`.
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
 | `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` | `false` |
 | `faasIdler.create` | Create the faasIdler component | `true` |
-| `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `5m` |
-| `faasIdler.reconcileInterval` | The time between each of reconciliation | `30s` |
+| `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `15m` |
+| `faasIdler.reconcileInterval` | The time between each of reconciliation | `1m` |
 | `faasIdler.dryRun` | When set to false the OpenFaaS API will be called to scale down idle functions, by default this is set to only print in the logs. | `true` |
 | `prometheus.create` | Create the Prometheus component | `true` |
 | `alertmanager.create` | Create the AlertManager component | `true` |
