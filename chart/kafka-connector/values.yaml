@@ -3,6 +3,7 @@ replicas: 1
 gateway_url: http://gateway.openfaas:8080
 topics: faas-request
 print_response: true
+print_response_body: false
 broker_host: kafka
 basic_auth: true
 

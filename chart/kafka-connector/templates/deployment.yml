@@ -43,9 +43,11 @@ spec:
             - name: gateway_url
               value: {{ .Values.gateway_url | quote }}
             - name: topics
-              value: {{ .Values.topics | quote}}
+              value: {{ .Values.topics | quote }}
             - name: print_response
-              value: {{ .Values.print_response |quote }}
+              value: {{ .Values.print_response | quote }}
+            - name: print_response_body
+              value: {{ .Values.print_response_body | quote }}
             {{- if .Values.basic_auth }}
             - name: basic_auth
               value: "true"
