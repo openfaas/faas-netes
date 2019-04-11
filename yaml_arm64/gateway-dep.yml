@@ -13,7 +13,7 @@ spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: openfaas/gateway:0.11.0-arm64
+        image: openfaas/gateway:0.13.0-arm64
         imagePullPolicy: Always
         env:
         - name: functions_provider_url
@@ -41,7 +41,7 @@ spec:
           limits:
             memory: 100Mi
       - name: faas-netesd
-        image: openfaas/faas-netes:0.7.0-arm64
+        image: openfaas/faas-netes:0.7.1-arm64
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
