@@ -23,7 +23,7 @@ data:
         scrape_interval: 5s
         dns_sd_configs:
           - names: ['gateway.openfaas']
-            port: 8080
+            port: 8082
             type: A
             refresh_interval: 5s
     alerting:
