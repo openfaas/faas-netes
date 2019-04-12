@@ -52,6 +52,7 @@ Additional kafka-connector options in `values.yaml`.
 | `gateway_url`            | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
 | `broker_host`            | location of the Kafka brokers.                                                         | `kafka`                        |
 | `print_response`         | Output the response of calling a function in the logs.                                 | `true`                         |
+| `print_response_body`         | Output to the logs the response body when calling a function.                                 | `false`                         |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
