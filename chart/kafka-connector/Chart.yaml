@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Connect OpenFaaS functions to Kafka topics
 name: kafka-connector
-version: 0.1.2
+version: 0.2.2
 sources:
 - https://github.com/openfaas-incubator/kafka-connector
 home: https://www.openfaas.com
