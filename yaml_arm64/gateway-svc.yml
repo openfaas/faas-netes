@@ -12,5 +12,10 @@ spec:
       protocol: TCP
       targetPort: 8080
       nodePort: 31112
+      name: "gateway"
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+      name: "prometheus"
   selector:
     app: gateway
