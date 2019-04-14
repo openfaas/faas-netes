@@ -101,6 +101,17 @@ func updateDeploymentSpec(
 
 		deployment.Spec.Template.Spec.Containers[0].Resources = *resources
 
+		var serviceAccount string
+
+		if request.Annotations != nil {
+			annotations := *request.Annotations
+			if val, ok := annotations["com.openfaas.serviceaccount"]; ok && len(val) > 0 {
+				serviceAccount = val
+			}
+		}
+
+		deployment.Spec.Template.Spec.ServiceAccountName = serviceAccount
+
 		existingSecrets, err := getSecrets(clientset, functionNamespace, request.Secrets)
 		if err != nil {
 			return err, http.StatusBadRequest

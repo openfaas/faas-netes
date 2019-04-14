@@ -198,6 +198,16 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	}
 
 	annotations := buildAnnotations(request)
+
+	var serviceAccount string
+
+	if request.Annotations != nil {
+		annotations := *request.Annotations
+		if val, ok := annotations["com.openfaas.serviceaccount"]; ok && len(val) > 0 {
+			serviceAccount = val
+		}
+	}
+
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "Deployment",
@@ -253,8 +263,9 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							},
 						},
 					},
-					RestartPolicy: corev1.RestartPolicyAlways,
-					DNSPolicy:     corev1.DNSClusterFirst,
+					ServiceAccountName: serviceAccount,
+					RestartPolicy:      corev1.RestartPolicyAlways,
+					DNSPolicy:          corev1.DNSClusterFirst,
 				},
 			},
 		},
