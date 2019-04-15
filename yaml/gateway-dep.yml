@@ -9,14 +9,14 @@ spec:
     metadata:
       annotations:
         prometheus.io.scrape: "true"
-        prometheus.io.port: "8080"
+        prometheus.io.port: "8082"
       labels:
         app: gateway
     spec:
       serviceAccountName: faas-controller
       containers:
       - name: gateway
-        image: openfaas/gateway:0.11.1
+        image: openfaas/gateway:0.13.0
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -63,7 +63,7 @@ spec:
           limits:
             memory: 250Mi   # Adjust to suit needs of deployment
       - name: faas-netes
-        image: openfaas/faas-netes:0.7.0
+        image: openfaas/faas-netes:0.7.2
         imagePullPolicy: Always
         env:
         - name: port
