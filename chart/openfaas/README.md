@@ -166,13 +166,27 @@ If you require TLS/SSL then please make use of an IngressController. A full guid
 
 ## Zero scale
 
-Scaling up from zero replicas is enabled by default, to turn it off set `zero_scale` to false in the helm chart.
+### Scale-up from zero (on by default)
 
-Scaling to zero is done by the `faas-idler` component and by default will only carry out a dry-run. Pass the following to helm to enable scaling to zero replicas of idle functions. You will also need to [read the docs](https://docs.openfaas.com/architecture/autoscaling/#zero-scale) on how to configure functions to opt into scaling down.
+Scaling up from zero replicas is enabled by default, to turn it off set `scaleFromZero` to `false` in the helm chart options for the `gateway` component.
 
 ```sh
---set faasIdler.dryRun=false
+--set gateway.scaleFromZero=true/false
 ```
+
+### Scale-down to zero (off by default)
+
+Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the [faas-idler](https://github.com/openfaas-incubator/faas-idler) component.
+
+By default the faas-idler is set to only do a dryRun and to not scale any functions down.
+
+```sh
+--set faasIdler.dryRun=true/false
+```
+
+The faas-idler will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
+
+See also: [faas-idler README](https://docs.openfaas.com/architecture/autoscaling/#zero-scale).
 
 ## Configuration
 
