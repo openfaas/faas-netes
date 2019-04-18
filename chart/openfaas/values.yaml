@@ -71,7 +71,7 @@ ingress:
   enabled: false
   # Used to create Ingress record (should be used with exposeServices: false).
   hosts:
-    - host: gateway.openfaas.local
+    - host: gateway.openfaas.local  # Replace with gateway.example.com if public-facing
       serviceName: gateway
       servicePort: 8080
       path: /
