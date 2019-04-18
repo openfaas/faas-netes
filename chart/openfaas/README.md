@@ -70,6 +70,8 @@ helm repo update \
 
 > The above command will also update your helm repo to pull in any new releases.
 
+If you want to switch from "exec" liveness and readiness probes to httpProbes then use `--set faasnetes.httpProbe=true`, this can only be used with `--set operator.create=false`.
+
 ### Verify the installation
 
 Once all the services are up and running, log into your gateway using the OpenFaaS CLI. This will cache your credentials into your `~/.openfaas/config.yml` file.
@@ -206,6 +208,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `operator.createCRD` | Create the CRD for OpenFaaS Function definition | `true` |
 | `ingress.enabled` | Create ingress resources | `false` |
+| `faasnetes.httpProbe` | Use a httpProbe instead of exec | `false` |
 | `faasnetes.readTimeout` | Queue worker read timeout | `60s` |
 | `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |

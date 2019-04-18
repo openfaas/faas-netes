@@ -126,8 +126,12 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, config *DeployHandlerConfig) (*v1beta1.Deployment, error) {
-	envVars := buildEnvVars(&request)
+type FunctionProbes struct {
+	Liveness  *apiv1.Probe
+	Readiness *apiv1.Probe
+}
+
+func makeProbes(config *DeployHandlerConfig) *FunctionProbes {
 	var handler apiv1.Handler
 
 	if config.HTTPProbe {
@@ -148,7 +152,9 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 			},
 		}
 	}
-	readinessProbe := &apiv1.Probe{
+
+	probes := FunctionProbes{}
+	probes.Readiness = &apiv1.Probe{
 		Handler:             handler,
 		InitialDelaySeconds: config.FunctionReadinessProbeConfig.InitialDelaySeconds,
 		TimeoutSeconds:      config.FunctionReadinessProbeConfig.TimeoutSeconds,
@@ -156,7 +162,8 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		SuccessThreshold:    1,
 		FailureThreshold:    3,
 	}
-	livenessProbe := &apiv1.Probe{
+
+	probes.Liveness = &apiv1.Probe{
 		Handler:             handler,
 		InitialDelaySeconds: config.FunctionLivenessProbeConfig.InitialDelaySeconds,
 		TimeoutSeconds:      config.FunctionLivenessProbeConfig.TimeoutSeconds,
@@ -164,6 +171,12 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		SuccessThreshold:    1,
 		FailureThreshold:    3,
 	}
+
+	return &probes
+}
+
+func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, config *DeployHandlerConfig) (*v1beta1.Deployment, error) {
+	envVars := buildEnvVars(&request)
 
 	initialReplicas := int32p(initialReplicasCount)
 	labels := map[string]string{
@@ -207,6 +220,8 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 			serviceAccount = val
 		}
 	}
+
+	probes := makeProbes(config)
 
 	deploymentSpec := &v1beta1.Deployment{
 		TypeMeta: metav1.TypeMeta{
@@ -256,8 +271,8 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							Env:             envVars,
 							Resources:       *resources,
 							ImagePullPolicy: imagePullPolicy,
-							LivenessProbe:   livenessProbe,
-							ReadinessProbe:  readinessProbe,
+							LivenessProbe:   probes.Liveness,
+							ReadinessProbe:  probes.Readiness,
 							SecurityContext: &corev1.SecurityContext{
 								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 							},

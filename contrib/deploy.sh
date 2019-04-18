@@ -5,8 +5,17 @@ export KUBECONFIG="$(kind get kubeconfig-path)"
 echo "Applying namespaces"
 kubectl apply -f ./namespaces.yml
 
-echo $(head -c 16 /dev/urandom| sha256sum | cut -d " " -f 1) > ./password.txt # Store password in password.txt file
-PASSWORD=$(cat ./password.txt)
+sha_cmd="sha256sum"
+if [ ! -x "$(command -v $sha_cmd)" ]; then
+    sha_cmd="shasum -a 256"
+fi
+
+if [ -x "$(command -v $sha_cmd)" ]; then
+    sha_cmd="shasum"
+fi
+
+PASSWORD=$(head -c 16 /dev/urandom| $sha_cmd | cut -d " " -f 1)
+echo -n $PASSWORD > password.txt
 
 kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
@@ -20,4 +29,3 @@ helm install ./chart/openfaas \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn \
     --wait
-
