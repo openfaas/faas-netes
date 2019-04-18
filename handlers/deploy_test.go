@@ -225,3 +225,41 @@ func readOnlyRootEnabled(t *testing.T, deployment *v1beta1.Deployment) {
 		t.Error("should set ReadOnlyRootFilesystem to true on the container SecurityContext")
 	}
 }
+
+func Test_makeProbes_useExec(t *testing.T) {
+	cfg := DeployHandlerConfig{
+		HTTPProbe:                    false,
+		FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
+		FunctionReadinessProbeConfig: &FunctionProbeConfig{},
+	}
+
+	probes := makeProbes(&cfg)
+
+	if probes.Readiness.Exec == nil {
+		t.Errorf("Readiness probe should have had exec handler")
+		t.Fail()
+	}
+	if probes.Liveness.Exec == nil {
+		t.Errorf("Liveness probe should have had exec handler")
+		t.Fail()
+	}
+}
+
+func Test_makeProbes_useHTTPProbe(t *testing.T) {
+	cfg := DeployHandlerConfig{
+		HTTPProbe:                    true,
+		FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
+		FunctionReadinessProbeConfig: &FunctionProbeConfig{},
+	}
+
+	probes := makeProbes(&cfg)
+
+	if probes.Readiness.HTTPGet == nil {
+		t.Errorf("Readiness probe should have had HTTPGet handler")
+		t.Fail()
+	}
+	if probes.Liveness.HTTPGet == nil {
+		t.Errorf("Liveness probe should have had HTTPGet handler")
+		t.Fail()
+	}
+}
