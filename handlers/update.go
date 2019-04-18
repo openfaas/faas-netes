@@ -14,7 +14,7 @@ import (
 )
 
 // MakeUpdateHandler update specified function
-func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset, config *DeployHandlerConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		defer r.Body.Close()
@@ -29,7 +29,7 @@ func MakeUpdateHandler(functionNamespace string, clientset *kubernetes.Clientset
 		}
 
 		annotations := buildAnnotations(request)
-		if err, status := updateDeploymentSpec(functionNamespace, clientset, request, annotations); err != nil {
+		if err, status := updateDeploymentSpec(functionNamespace, clientset, request, annotations, config); err != nil {
 			w.WriteHeader(status)
 			w.Write([]byte(err.Error()))
 		}
@@ -47,7 +47,9 @@ func updateDeploymentSpec(
 	functionNamespace string,
 	clientset *kubernetes.Clientset,
 	request requests.CreateFunctionRequest,
-	annotations map[string]string) (err error, httpStatus int) {
+	annotations map[string]string,
+	config *DeployHandlerConfig) (err error, httpStatus int) {
+
 	getOpts := metav1.GetOptions{}
 
 	deployment, findDeployErr := clientset.ExtensionsV1beta1().
@@ -122,6 +124,10 @@ func updateDeploymentSpec(
 			log.Println(err)
 			return err, http.StatusBadRequest
 		}
+
+		probes := makeProbes(config)
+		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
+		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 	}
 
 	if _, updateErr := clientset.ExtensionsV1beta1().
