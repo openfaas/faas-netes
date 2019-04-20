@@ -9,6 +9,8 @@ spec:
     metadata:
       labels:
         app: prometheus
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:

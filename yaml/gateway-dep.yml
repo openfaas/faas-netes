@@ -14,6 +14,10 @@ spec:
         app: gateway
     spec:
       serviceAccountName: faas-controller
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
       containers:
       - name: gateway
         image: openfaas/gateway:0.13.0
@@ -44,15 +48,19 @@ spec:
         - name: upstream_timeout  # Must be smaller than read/write_timeout
           value: "60s"
         - name: basic_auth
-          value: "false"
+          value: "true"
         - name: secret_mount_path
-          value: "/etc/openfaas"
+          value: "/var/secrets"
         - name: scale_from_zero
-          value: "false"
+          value: "true"
         - name: max_idle_conns
           value: "1024"
         - name: max_idle_conns_per_host
           value: "1024"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         ports:
         - containerPort: 8080
           protocol: TCP
