@@ -12,13 +12,16 @@ data:
       evaluation_interval: 15s
       external_labels:
           monitor: 'faas-monitor'
+
     rule_files:
         - 'alert.rules.yml'
+
     scrape_configs:
       - job_name: 'prometheus'
         scrape_interval: 5s
         static_configs:
           - targets: ['localhost:9090']
+
       - job_name: 'kubernetes-pods'
         scrape_interval: 5s
         honor_labels: false
@@ -44,26 +47,26 @@ data:
           regex: ([^:]+)(?::\d+)?;(\d+)
           replacement: $1:$2
           target_label: __address__
+
     alerting:
       alertmanagers:
       - static_configs:
         - targets:
-          - alertmanager.openfaas:9093
+          - alertmanager:9093
+
   alert.rules.yml: |
     groups:
-    - name: openfaas
-      rules:
-      - alert: service_down
-        expr: up == 0
-      - alert: APIHighInvocationRate
-        expr: sum(rate(gateway_function_invocation_total{code="200"}[10s])) BY (function_name)
-          > 5
-        for: 5s
-        labels:
-          service: gateway
-          severity: major
-          value: '{{$value}}'
-        annotations:
-          description: High invocation total on {{ $labels.instance }}
-          summary: High invocation total on {{ $labels.instance }}
+      - name: openfaas
+        rules:
+        - alert: service_down
+          expr: up == 0
+        - alert: APIHighInvocationRate
+          expr: sum(rate(gateway_function_invocation_total{code="200"}[10s])) BY (function_name) > 5
+          for: 5s
+          labels:
+            service: gateway
+            severity: major
+          annotations:
+            description: High invocation total on "{{$labels.function_name}}"
+            summary: High invocation total on "{{$labels.function_name}}"
 ---

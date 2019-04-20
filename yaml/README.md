@@ -9,7 +9,7 @@ One size doesn't fit all and for that reason it's strongly encouraged that you u
 ### 1.0 Create namespaces
 
 ```sh
-kubectl apply ./namespaces.yaml
+kubectl apply -f namespaces.yml
 ```
 
 ### 2.0 Create password
@@ -47,7 +47,8 @@ kubectl port-forward svc/gateway -n openfaas 31112:8080 &
 
 Now log-in:
 ```sh
-echo -n $PASSWORD faas-cli login --password-stdin
+echo -n $PASSWORD | faas-cli login --password-stdin
+
 faas-cli list
 
 Function                        Invocations     Replicas
