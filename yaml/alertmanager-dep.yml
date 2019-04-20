@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.15.0
+        image: prom/alertmanager:v0.16.1
         imagePullPolicy: Always
         command: 
           - "alertmanager"
@@ -32,6 +32,9 @@ spec:
         - mountPath: /alertmanager.yml
           name: alertmanager-config
           subPath: alertmanager.yml
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
       volumes:
         - name: alertmanager-config
           configMap:
@@ -40,3 +43,6 @@ spec:
               - key: alertmanager.yml
                 path: alertmanager.yml
                 mode: 0644
+        - name: auth
+          secret:
+            secretName: basic-auth

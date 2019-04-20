@@ -1,66 +1,55 @@
-# YAML reference
+## YAML (development-only instructions)
 
-These instructions are for OpenFaaS when you don't want to use `helm`.
+When using these instructions you only want to use OpenFaaS for development.
 
-## 1.0 Enable basic auth on gateway
+For production usage use helm, or template YAML files through the use of helm.
 
-To enable built-in basic auth: create secrets, configure and mount the secrets to the gateway and queue worker.
+One size doesn't fit all and for that reason it's strongly encouraged that you use helm and set the appropriate parameters such as whether you're using a LoadBalancer and what your timeouts are going to be.
 
-### 1.1 Create secrets:
+### 1.0 Create namespaces
 
-```
-export GW_PASS=$(head -c 16 /dev/random |shasum | cut -d ' ' -f1)
-
-echo "Password: $GW_PASS"
-
-kubectl create secret generic gateway-basic-auth -n openfaas \
-    --from-literal=basic-auth-user=admin \
-    --from-literal=basic-auth-password=$GW_PASS
-
-kubectl create secret generic basic-auth-user -n openfaas-fn  \
-    --from-literal=basic-auth-user=admin
-
-kubectl create secret generic basic-auth-password -n openfaas-fn \
- --from-literal=basic-auth-password=$GW_PASS
+```sh
+kubectl apply ./namespaces.yaml
 ```
 
-Record the line from "Password: c66ec59d880e66fb02c043ef910eefba020f2a3a" for later use with `faas-cli login`
+### 2.0 Create password
 
-### 1.2 Set env-vars on gateway and queue worker
+Generate secrets so that we can enable basic authentication for the gateway:
 
-```
-        - name: basic_auth
-          value: "true"
-```
+```sh
+# generate a random password
+PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
 
-### 1.3 Add volume mount to gateway and queue worker
-
-```
-        volumeMounts:
-        - name: gateway-basic-auth
-          readOnly: true
-          mountPath: "/etc/openfaas"
+kubectl -n openfaas create secret generic basic-auth \
+--from-literal=basic-auth-user=admin \
+--from-literal=basic-auth-password="$PASSWORD"
 ```
 
-### 1.4 Add secrets as volumes within gateway and queue worker
-```
-      volumes:
-      - name: gateway-basic-auth
-        secret:
-          secretName: gateway-basic-auth
+### 3.0 Apply YAML files
+
+```sh
+kubectl apply -f ./yaml/
 ```
 
-Apply the changes to the gateway and queue worker(deployment only):
+### 4.0 Log in
 
-```
-$ kubectl apply -f ./yaml/gateway-dep.yml
-$ kubectl apply -f ./yaml/queueworker-dep.yml
+Set `OPENFAAS_URL`:
+
+```sh
+export OPENFAAS_URL=http://127.0.0.1:31112
 ```
 
-### 1.5 Login in
+If not using a NodePort, or if using KinD:
 
-Now attempt to login with:
+```sh
+kubectl port-forward svc/gateway -n openfaas 31112:8080 &
+```
 
+Now log-in:
+```sh
+echo -n $PASSWORD faas-cli login --password-stdin
+faas-cli list
+
+Function                        Invocations     Replicas
 ```
-echo -n $GW_PASS | faas-cli login --username=admin --password-stdin
-```
+
