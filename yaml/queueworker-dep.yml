@@ -28,7 +28,7 @@ spec:
         - name: secret_mount_path
           value: "/var/secrets"
         - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
+          value: "true"
         volumeMounts:
         - name: auth
           readOnly: true

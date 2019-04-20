@@ -18,12 +18,14 @@ data:
           service: gateway
           receiver: scale-up
           severity: major
+
     inhibit_rules:
     - source_match:
         severity: 'critical'
       target_match:
         severity: 'warning'
       equal: ['alertname', 'cluster', 'service']
+
     receivers:
     - name: 'scale-up'
       webhook_configs:
