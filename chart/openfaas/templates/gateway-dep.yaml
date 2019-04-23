@@ -138,8 +138,8 @@ spec:
           value: {{ .Values.faasnetes.imagePullPolicy | quote }}
         - name: http_probe
           value: "{{ .Values.faasnetes.httpProbe }}"
-        - name: force_nonroot_user
-          value: "{{ .Values.faasnetes.forceNonRootuser }}"
+        - name: set_nonroot_user
+          value: "{{ .Values.faasnetes.setNonRootuser }}"
         - name: readiness_probe_initial_delay_seconds
           value: "{{ .Values.faasnetes.readinessProbe.initialDelaySeconds }}"
         - name: readiness_probe_timeout_seconds
