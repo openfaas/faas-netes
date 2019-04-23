@@ -9,7 +9,7 @@ securityContext: true
 basic_auth: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.7.2
+  image: openfaas/faas-netes:0.7.3
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -45,7 +45,7 @@ openfaasImagePullPolicy: "Always"
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/openfaas-operator:0.9.3
+  image: openfaas/openfaas-operator:0.9.4
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
