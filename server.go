@@ -42,9 +42,11 @@ func main() {
 	log.Printf("HTTP Read Timeout: %s\n", cfg.ReadTimeout)
 	log.Printf("HTTP Write Timeout: %s\n", cfg.WriteTimeout)
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
+	log.Printf("ForceNonRootUser: %v\n", cfg.ForceNonRootUser)
 
 	deployConfig := &handlers.DeployHandlerConfig{
-		HTTPProbe: cfg.HTTPProbe,
+		HTTPProbe:        cfg.HTTPProbe,
+		ForceNonRootUser: cfg.ForceNonRootUser,
 		FunctionReadinessProbeConfig: &handlers.FunctionProbeConfig{
 			InitialDelaySeconds: int32(cfg.ReadinessProbeInitialDelaySeconds),
 			TimeoutSeconds:      int32(cfg.ReadinessProbeTimeoutSeconds),

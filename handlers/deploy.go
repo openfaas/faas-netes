@@ -31,6 +31,9 @@ const watchdogPort = 8080
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
 
+// nonRootFunctionuserID is the user id that is set when DeployHandlerConfig.ForceNonRootUser is true
+const nonRootFunctionuserID = 2000
+
 // Regex for RFC-1123 validation:
 // 	k8s.io/kubernetes/pkg/util/validation/validation.go
 var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
@@ -58,6 +61,9 @@ type DeployHandlerConfig struct {
 	FunctionReadinessProbeConfig *FunctionProbeConfig
 	FunctionLivenessProbeConfig  *FunctionProbeConfig
 	ImagePullPolicy              string
+	// ForceNonRootUser will override the function image user to ensure that it is not root. When
+	// true, the user will set to 2000 for all functions.
+	ForceNonRootUser bool
 }
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
@@ -287,6 +293,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	}
 
 	configureReadOnlyRootFilesystem(request, deploymentSpec)
+	configureContainerUserID(deploymentSpec, nonRootFunctionuserID, config)
 
 	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
 		return nil, err
@@ -480,4 +487,20 @@ func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, dep
 				ReadOnly:  false},
 		)
 	}
+}
+
+// configureContainerUserID set the UID for all containers in the function Container.  Defaults to user
+// specified in image metadata if `forceNonRoot` is `false`. Root == 0.
+func configureContainerUserID(deployment *v1beta1.Deployment, userID int64, config *DeployHandlerConfig) {
+	var functionUser *int64
+
+	if config.ForceNonRootUser {
+		functionUser = &userID
+	}
+
+	if deployment.Spec.Template.Spec.Containers[0].SecurityContext == nil {
+		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{}
+	}
+
+	deployment.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser = functionUser
 }
