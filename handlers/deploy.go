@@ -31,8 +31,9 @@ const watchdogPort = 8080
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
 
-// nonRootFunctionuserID is the user id that is set when DeployHandlerConfig.ForceNonRootUser is true
-const nonRootFunctionuserID = 2000
+// nonRootFunctionuserID is the user id that is set when DeployHandlerConfig.SetNonRootUser is true.
+// value >10000 per the suggestion from https://kubesec.io/basics/containers-securitycontext-runasuser/
+const nonRootFunctionuserID = 12000
 
 // Regex for RFC-1123 validation:
 // 	k8s.io/kubernetes/pkg/util/validation/validation.go
