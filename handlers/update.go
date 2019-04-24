@@ -71,6 +71,7 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].Env = buildEnvVars(&request)
 
 		configureReadOnlyRootFilesystem(request, deployment)
+		configureContainerUserID(deployment, nonRootFunctionuserID, config)
 
 		deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
 
