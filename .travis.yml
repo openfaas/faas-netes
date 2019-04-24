@@ -27,6 +27,7 @@ script:
   - ./contrib/deploy.sh
   - ./contrib/get_faas.sh
   - ./contrib/run_function.sh
+  - ./contrib/run_certifier.sh
 
 after_success:
     - if [ -z $DOCKER_NS ] ; then
