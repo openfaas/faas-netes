@@ -263,3 +263,43 @@ func Test_makeProbes_useHTTPProbe(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_SetNonRootUser(t *testing.T) {
+
+	scenarios := []struct {
+		name       string
+		setNonRoot bool
+	}{
+		{"does not set userid value when SetNonRootUser is false", false},
+		{"does set userid to constant value when SetNonRootUser is true", true},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			request := requests.CreateFunctionRequest{Service: "testfunc", Image: "alpine:latest"}
+			cfg := &DeployHandlerConfig{
+				FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
+				FunctionReadinessProbeConfig: &FunctionProbeConfig{},
+				SetNonRootUser:               s.setNonRoot,
+			}
+			deployment, err := makeDeploymentSpec(request, map[string]*apiv1.Secret{}, cfg)
+			if err != nil {
+				t.Errorf("unexpected makeDeploymentSpec error: %s", err.Error())
+			}
+
+			functionContainer := deployment.Spec.Template.Spec.Containers[0]
+			if functionContainer.SecurityContext == nil {
+				t.Errorf("expected container %s to have a non-nil security context", functionContainer.Name)
+			}
+
+			if !s.setNonRoot && functionContainer.SecurityContext.RunAsUser != nil {
+				t.Errorf("expected RunAsUser to be nil, got %d", functionContainer.SecurityContext.RunAsUser)
+			}
+
+			if s.setNonRoot && *functionContainer.SecurityContext.RunAsUser != nonRootFunctionuserID {
+				t.Errorf("expected RunAsUser to be %d, got %d", nonRootFunctionuserID, functionContainer.SecurityContext.RunAsUser)
+			}
+		})
+	}
+
+}

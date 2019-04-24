@@ -71,6 +71,7 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg := BootstrapConfig{}
 
 	httpProbe := parseBoolValue(hasEnv.Getenv("http_probe"), false)
+	setNonRootUser := parseBoolValue(hasEnv.Getenv("set_nonroot_user"), false)
 
 	readinessProbeInitialDelaySeconds := parseIntValue(hasEnv.Getenv("readiness_probe_initial_delay_seconds"), 3)
 	readinessProbeTimeoutSeconds := parseIntValue(hasEnv.Getenv("readiness_probe_timeout_seconds"), 1)
@@ -89,6 +90,7 @@ func (ReadConfig) Read(hasEnv HasEnv) BootstrapConfig {
 	cfg.WriteTimeout = writeTimeout
 
 	cfg.HTTPProbe = httpProbe
+	cfg.SetNonRootUser = setNonRootUser
 
 	cfg.ReadinessProbeInitialDelaySeconds = readinessProbeInitialDelaySeconds
 	cfg.ReadinessProbeTimeoutSeconds = readinessProbeTimeoutSeconds
@@ -111,6 +113,7 @@ type BootstrapConfig struct {
 	// HTTPProbe when set to true switches readiness and liveness probe to
 	// access /_/health over HTTP instead of accessing /tmp/.lock.
 	HTTPProbe                         bool
+	SetNonRootUser                    bool
 	ReadinessProbeInitialDelaySeconds int
 	ReadinessProbeTimeoutSeconds      int
 	ReadinessProbePeriodSeconds       int

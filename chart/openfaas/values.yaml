@@ -14,6 +14,7 @@ faasnetes:
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
   httpProbe: false              # Setting to true will use a lock file for readiness and liveness (incompatible with Istio)
+  setNonRootUser: false
   readinessProbe:
     initialDelaySeconds: 0
     timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
