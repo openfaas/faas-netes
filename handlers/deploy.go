@@ -63,7 +63,7 @@ type DeployHandlerConfig struct {
 	FunctionLivenessProbeConfig  *FunctionProbeConfig
 	ImagePullPolicy              string
 	// SetNonRootUser will override the function image user to ensure that it is not root. When
-	// true, the user will set to 2000 for all functions.
+	// true, the user will set to 12000 for all functions.
 	SetNonRootUser bool
 }
 
