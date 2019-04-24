@@ -139,7 +139,7 @@ spec:
         - name: http_probe
           value: "{{ .Values.faasnetes.httpProbe }}"
         - name: set_nonroot_user
-          value: "{{ .Values.faasnetes.setNonRootuser }}"
+          value: "{{ .Values.faasnetes.setNonRootUser }}"
         - name: readiness_probe_initial_delay_seconds
           value: "{{ .Values.faasnetes.readinessProbe.initialDelaySeconds }}"
         - name: readiness_probe_timeout_seconds
