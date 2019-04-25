@@ -1,10 +1,13 @@
+---
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: prometheus
+    app: openfaas
+    component: prometheus-config
   name: prometheus-config
-  namespace: openfaas
+  namespace: "openfaas"
 data:
   prometheus.yml: |
     global:
@@ -19,33 +22,48 @@ data:
         scrape_interval: 5s
         static_configs:
           - targets: ['localhost:9090']
-      - job_name: "gateway"
+      - job_name: 'kubernetes-pods'
         scrape_interval: 5s
-        dns_sd_configs:
-          - names: ['gateway.openfaas']
-            port: 8082
-            type: A
-            refresh_interval: 5s
+        honor_labels: false
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - openfaas
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: kubernetes_pod_name
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+          target_label: __address__
     alerting:
       alertmanagers:
       - static_configs:
         - targets:
-          - alertmanager.openfaas:9093
+          - alertmanager:9093
   alert.rules.yml: |
     groups:
-    - name: openfaas
-      rules:
-      - alert: service_down
-        expr: up == 0
-      - alert: APIHighInvocationRate
-        expr: sum(rate(gateway_function_invocation_total{code="200"}[10s])) BY (function_name)
-          > 5
-        for: 5s
-        labels:
-          service: gateway
-          severity: major
-          value: '{{$value}}'
-        annotations:
-          description: High invocation total on {{ $labels.instance }}
-          summary: High invocation total on {{ $labels.instance }}
----
+      - name: openfaas
+        rules:
+        - alert: service_down
+          expr: up == 0
+        - alert: APIHighInvocationRate
+          expr: sum(rate(gateway_function_invocation_total{code="200"}[10s])) BY (function_name) > 5
+          for: 5s
+          labels:
+            service: gateway
+            severity: major
+          annotations:
+            description: High invocation total on "{{$labels.function_name}}"
+            summary: High invocation total on "{{$labels.function_name}}"

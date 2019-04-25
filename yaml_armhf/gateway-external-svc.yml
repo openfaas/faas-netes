@@ -5,14 +5,15 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    component: nats
-  name: nats
+    component: gateway
+  name: gateway-external
   namespace: "openfaas"
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-    - port: 4222
+    - port: 8080
       protocol: TCP
-      name: clients
+      targetPort: 8080
+      nodePort: 31112
   selector:
-    app: nats
+    app: gateway

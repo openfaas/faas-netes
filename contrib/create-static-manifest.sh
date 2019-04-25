@@ -16,7 +16,7 @@
 
 CHART_DIR=${1:-"./chart/openfaas"}
 OUTPUT_DIR=${2:-"./yaml"}
-VALUESNAME=${3:-"values.yaml"}
+VALUESNAME=${3:-"$CHART_DIR/values.yaml"}
 NAMEPSPACE=${4:-"openfaas"}
 FUNCTIONNAMESPACE=${5:-"openfaas-fn"}
 
@@ -25,7 +25,7 @@ for filepath in $TEMPLATE_FILE; do
     filename=$(basename $filepath)
     outputname="${filename%%.*}.yml"
     # Use helm to generate the yaml and then use sed to remove the helm specific lables/annotations.
-    helm template "$CHART_DIR" --name=faas --namespace="$NAMEPSPACE" --set "functionNamespace=$FUNCTIONNAMESPACE" -x templates/$filename --values="$CHART_DIR/$VALUESNAME" \
+    helm template "$CHART_DIR" --name=faas --namespace="$NAMEPSPACE" --set "functionNamespace=$FUNCTIONNAMESPACE" -x templates/$filename --values="$VALUESNAME" \
         | sed -E '/(chart:)|(release:)|(heritage:)/d' \
         | sed -E '/# Source:/d' \
         | sed -E '/^$/d' \
