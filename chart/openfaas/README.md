@@ -148,6 +148,16 @@ helm upgrade --install openfaas openfaas/ \
 
 By default a NodePort will be created for the API Gateway.
 
+### Metrics
+
+You temporarily access the Prometheus metrics by ueing `port-forward`
+
+```
+kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
+```
+
+Then open `http://localhost:31119` to directly query the OpenFaaS metrics scraped by Prometheus.
+
 ### LB
 
 If you're running on a cloud such as AKS or GKE you will need to pass an additional flag of `--set serviceType=LoadBalancer` to tell `helm` to create LoadBalancer objects instead. An alternative to using multiple LoadBalancers is to install an Ingress controller.

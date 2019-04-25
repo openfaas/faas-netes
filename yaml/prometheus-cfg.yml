@@ -1,10 +1,13 @@
+---
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: prometheus
+    app: openfaas
+    component: prometheus-config
   name: prometheus-config
-  namespace: openfaas
+  namespace: "openfaas"
 data:
   prometheus.yml: |
     global:
@@ -12,16 +15,13 @@ data:
       evaluation_interval: 15s
       external_labels:
           monitor: 'faas-monitor'
-
     rule_files:
         - 'alert.rules.yml'
-
     scrape_configs:
       - job_name: 'prometheus'
         scrape_interval: 5s
         static_configs:
           - targets: ['localhost:9090']
-
       - job_name: 'kubernetes-pods'
         scrape_interval: 5s
         honor_labels: false
@@ -47,13 +47,11 @@ data:
           regex: ([^:]+)(?::\d+)?;(\d+)
           replacement: $1:$2
           target_label: __address__
-
     alerting:
       alertmanagers:
       - static_configs:
         - targets:
           - alertmanager:9093
-
   alert.rules.yml: |
     groups:
       - name: openfaas
@@ -69,4 +67,3 @@ data:
           annotations:
             description: High invocation total on "{{$labels.function_name}}"
             summary: High invocation total on "{{$labels.function_name}}"
----

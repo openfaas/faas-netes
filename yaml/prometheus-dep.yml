@@ -1,8 +1,13 @@
-apiVersion: apps/v1beta1
+---
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: openfaas
+    component: prometheus
   name: prometheus
-  namespace: openfaas
+  namespace: "openfaas"
 spec:
   replicas: 1
   template:
@@ -11,8 +16,9 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "false"
+        checksum/prometheus-config: "e8fd19094eec813bd9d58cbcf2647335b49393c330256fafbeafb4fc4df52853"
     spec:
-      serviceAccountName: openfaas-prometheus
+      serviceAccountName: faas-prometheus
       containers:
       - name: prometheus
         image: prom/prometheus:v2.7.1
@@ -20,14 +26,29 @@ spec:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9090/-/healthy
+          timeoutSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9090/-/healthy
+          timeoutSeconds: 30
         ports:
         - containerPort: 9090
           protocol: TCP
-        resources:
-          requests:
-            memory: 512Mi
-          limits:
-            memory: 512Mi
         volumeMounts:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config
@@ -50,4 +71,3 @@ spec:
                 mode: 0644
         - name: prom-data
           emptyDir: {}
-

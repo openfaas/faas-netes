@@ -1,14 +1,19 @@
-apiVersion: apps/v1beta1
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: openfaas
+    component: nats
   name: nats
-  namespace: openfaas
+  namespace: "openfaas"
 spec:
   replicas: 1
   template:
     metadata:
       annotations:
-         sidecar.istio.io/inject: "false"
+        sidecar.istio.io/inject: "false"
+        prometheus.io.scrape: "false"
       labels:
         app: nats
     spec:
@@ -19,13 +24,9 @@ spec:
         ports:
         - containerPort: 4222
           protocol: TCP
-        # - containerPort: 8222
-        #   protocol: TCP
         command: ["/nats-streaming-server"]
         args:
           - --store
           - memory
           - --cluster_id
           - faas-cluster
-          # - -m
-          # - "8222"

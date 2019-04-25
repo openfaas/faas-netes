@@ -53,6 +53,11 @@ spec:
         ports:
         - containerPort: 9093
           protocol: TCP
+        resources:
+          requests:
+            memory: 25Mi
+          limits:
+            memory: 50Mi
         volumeMounts:
         - mountPath: /alertmanager.yml
           name: alertmanager-config

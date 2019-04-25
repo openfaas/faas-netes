@@ -1,27 +1,53 @@
-apiVersion: apps/v1beta1
+---
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: openfaas
+    component: alertmanager
   name: alertmanager
-  namespace: openfaas
+  namespace: "openfaas"
 spec:
   replicas: 1
   template:
     metadata:
-      annotations:
-         sidecar.istio.io/inject: "false"
       labels:
         app: alertmanager
+      annotations:
+        sidecar.istio.io/inject: "false"
+        checksum/alertmanager-config: "b23c0eb4f017786bf1ee4c7eaceb0d931d0bf2e7af00b1221b994d7a4242b49f"
     spec:
       containers:
       - name: alertmanager
         image: prom/alertmanager:v0.16.1
         imagePullPolicy: Always
-        command: 
+        command:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9093/-/ready
+          timeoutSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9093/-/ready
+          timeoutSeconds: 30
         ports:
-        - containerPort: 9003
+        - containerPort: 9093
           protocol: TCP
         resources:
           requests:
