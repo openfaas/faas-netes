@@ -9,7 +9,7 @@ securityContext: true
 basic_auth: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.7.3
+  image: openfaas/faas-netes:0.7.5
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
