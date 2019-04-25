@@ -31,6 +31,7 @@ charts:
 	cd chart && helm package openfaas/ && helm package kafka-connector/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
+	./contrib/create-static-manifest.sh
 
 ci-armhf-build:
 	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf

@@ -6,7 +6,7 @@ exposeServices: true
 serviceType: NodePort
 rbac: true
 securityContext: true
-basic_auth: false
+basic_auth: true
 
 faasnetes:
   image: openfaas/faas-netes:0.7.5
