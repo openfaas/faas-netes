@@ -24,6 +24,9 @@ spec:
     spec:
       containers:
       - name: alertmanager
+        resources:
+          requests:
+            memory: "32Mi"
         image: {{ .Values.alertmanager.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:

@@ -23,6 +23,9 @@ spec:
     spec:
       containers:
         - name: faas-idler
+          resources:
+            requests:
+              memory: "64Mi"
           image: {{ .Values.faasIdler.image }}
           imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
           env:

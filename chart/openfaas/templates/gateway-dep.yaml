@@ -33,6 +33,9 @@ spec:
       {{- end }}
       containers:
       - name: gateway
+        resources:
+          requests:
+            memory: "120Mi"
         image: {{ .Values.gateway.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
@@ -103,6 +106,9 @@ spec:
           protocol: TCP
       {{- if .Values.operator.create }}
       - name: operator
+        resources:
+          requests:
+            memory: "120Mi"
         image: {{ .Values.operator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
