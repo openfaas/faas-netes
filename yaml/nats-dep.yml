@@ -19,6 +19,9 @@ spec:
     spec:
       containers:
       - name:  nats
+        resources:
+          requests:
+            memory: "120Mi"
         image: nats-streaming:0.11.2
         imagePullPolicy: Always
         ports:

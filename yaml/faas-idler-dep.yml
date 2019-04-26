@@ -19,6 +19,9 @@ spec:
     spec:
       containers:
         - name: faas-idler
+          resources:
+            requests:
+              memory: "64Mi"
           image: openfaas/faas-idler:0.1.9
           imagePullPolicy: Always
           env:
