@@ -36,6 +36,7 @@ spec:
         resources:
           requests:
             memory: "120Mi"
+            cpu: "50m"
         image: {{ .Values.gateway.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
@@ -109,6 +110,7 @@ spec:
         resources:
           requests:
             memory: "120Mi"
+            cpu: "50m"
         image: {{ .Values.operator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
@@ -129,6 +131,10 @@ spec:
           protocol: TCP
       {{- else }}
       - name: faas-netes
+        resources:
+          requests:
+            memory: "120Mi"
+            cpu: "50m"
         image: {{ .Values.faasnetes.image }}
         imagePullPolicy: {{ .Values.openFaasImagePullPolicy }}
         env:
