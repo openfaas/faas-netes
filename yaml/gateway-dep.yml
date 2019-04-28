@@ -99,7 +99,7 @@ spec:
         - name: port
           value: "8081"
         - name: function_namespace
-          value: "openfaas"
+          value: "openfaas-fn"
         - name: read_timeout
           value: "60s"
         - name: write_timeout
