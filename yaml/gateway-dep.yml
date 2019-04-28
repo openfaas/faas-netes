@@ -65,7 +65,7 @@ spec:
         - name: direct_functions
           value: "true"
         - name: direct_functions_suffix
-          value: "openfaas.svc.cluster.local"
+          value: "openfaas-fn.svc.cluster.local"
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
@@ -99,7 +99,7 @@ spec:
         - name: port
           value: "8081"
         - name: function_namespace
-          value: "openfaas"
+          value: "openfaas-fn"
         - name: read_timeout
           value: "60s"
         - name: write_timeout

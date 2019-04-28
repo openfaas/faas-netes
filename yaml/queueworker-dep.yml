@@ -29,6 +29,8 @@ spec:
         image: openfaas/queue-worker:0.7.1
         imagePullPolicy: Always
         env:
+        - name: faas_function_suffix
+          value: ".openfaas-fn.svc.cluster.local"
         - name: ack_wait    # Max duration of any async task / request
           value: 60s
         - name: secret_mount_path
