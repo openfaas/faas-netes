@@ -34,6 +34,12 @@ spec:
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         env:
+        - name: faas_nats_address
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        - name: faas_gateway_address
+          value: "gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        - name: "gateway_invoke"
+          value: "{{ .Values.queueWorker.gatewayInvoke }}"
         {{- if .Values.functionNamespace }}
         - name: faas_function_suffix
           value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
@@ -45,8 +51,6 @@ spec:
           value: "/var/secrets"
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
-        - name: faas_nats_address
-          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         volumeMounts:
         - name: auth
           readOnly: true
