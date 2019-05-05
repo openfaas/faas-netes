@@ -9,13 +9,13 @@ then
    exit 1
 fi
 
-kubectl port-forward deploy/gateway -n openfaas 8080:8080 &
+kubectl port-forward deploy/gateway -n openfaas 31112:8080 &
 
 # port-forward needs some time to start
 sleep 10
 
 # Login in OpenFaas
-export OPENFAAS_URL=http://127.0.0.1:8080
+export OPENFAAS_URL=http://127.0.0.1:31112
 PASSWORD=$(cat ./password.txt)
 
 faas-cli login --username admin --password $PASSWORD
