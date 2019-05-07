@@ -37,7 +37,7 @@ gateway:
   maxIdleConnsPerHost: 1024
 
 queueWorker:
-  image: openfaas/queue-worker:0.7.2-rc1
+  image: openfaas/queue-worker:0.7.2
   ackWait : "60s"
   replicas: 1
   gatewayInvoke: true
