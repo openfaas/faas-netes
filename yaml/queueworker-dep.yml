@@ -26,9 +26,15 @@ spec:
           requests:
             memory: "120Mi"
             cpu: "50m"
-        image: openfaas/queue-worker:0.7.1
+        image: openfaas/queue-worker:0.7.2
         imagePullPolicy: Always
         env:
+        - name: faas_nats_address
+          value: "nats.openfaas.svc.cluster.local"
+        - name: faas_gateway_address
+          value: "gateway.openfaas.svc.cluster.local"
+        - name: "gateway_invoke"
+          value: "true"
         - name: faas_function_suffix
           value: ".openfaas-fn.svc.cluster.local"
         - name: ack_wait    # Max duration of any async task / request
@@ -37,8 +43,6 @@ spec:
           value: "/var/secrets"
         - name: basic_auth
           value: "true"
-        - name: faas_nats_address
-          value: "nats.openfaas.svc.cluster.local"
         volumeMounts:
         - name: auth
           readOnly: true
