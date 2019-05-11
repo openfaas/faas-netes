@@ -13,9 +13,6 @@ install:
 services:
   - docker
 
-env:
-- GO111MODULE="on"
-
 before_script:
 - bash contrib/set_travis_experimental_mode.sh
 - curl -sSL get.docker.com | sudo -E sh
