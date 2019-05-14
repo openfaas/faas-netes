@@ -3,7 +3,7 @@ sudo: required
 language: go
 
 go:
-  - 1.10.x
+  - 1.11.x
 
 install:
   - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
@@ -33,7 +33,7 @@ after_success:
         export DOCKER_NS=openfaas;
         fi
 
-    - if [ ! -z "$TRAVIS_TAG" ] ; then 
+    - if [ ! -z "$TRAVIS_TAG" ] ; then
         docker tag $DOCKER_NS/faas-netes:latest $DOCKER_NS/faas-netes:$TRAVIS_TAG;
         echo $DOCKER_PASSWORD | docker login -u=$DOCKER_USERNAME --password-stdin;
         docker push $DOCKER_NS/faas-netes:$TRAVIS_TAG;
