@@ -215,7 +215,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `async` | Deploys NATS | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
-| `basic_auth` | Enable basic authentication on the Gateway | `false` |
+| `basic_auth` | Enable basic authentication on the Gateway | `true` |
 | `rbac` | Enable RBAC | `true` |
 | `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
