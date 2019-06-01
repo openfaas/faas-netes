@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-export KUBECONFIG="$(kind get kubeconfig-path)"
+DEVENV=${OF_DEV_ENV:-kind}
+
+export KUBECONFIG="$(kind get kubeconfig-path --name="$DEVENV")"
 
 echo "Applying namespaces"
 kubectl apply -f ./namespaces.yml
