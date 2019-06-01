@@ -44,3 +44,14 @@ ci-arm64-build:
 
 ci-arm64-push:
 	docker push openfaas/faas-netes:$(TAG)-arm64
+
+start-kind: ## attempt to start a new dev environment
+	@./contrib/create_dev.sh \
+		&& echo "" \
+		&& printf '%-15s:\t %s\n' 'Web UI' 'http://localhost:31112/ui' \
+		&& printf '%-15s:\t %s\n' 'User' 'admin' \
+		&& printf '%-15s:\t %s\n' 'Password' $(shell cat password.txt) \
+		&& printf '%-15s:\t %s\n' 'CLI Login' "faas-cli login --username admin --password $(shell cat password.txt)"
+
+stop-kind: ## attempt to stop the dev environment
+	@./contrib/stop_dev.sh

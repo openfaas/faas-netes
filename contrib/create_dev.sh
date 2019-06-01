@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Creates an installation of OpenFaaS in kind for development
 
