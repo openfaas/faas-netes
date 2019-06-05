@@ -88,6 +88,10 @@ spec:
           value: "true"
         - name: secret_mount_path
           value: "/var/secrets"
+        - name: auth_proxy_url
+          value: "http://basic-auth-plugin.{{ .Release.Namespace }}:8080/validate"
+        - name: auth_pass_body
+          value: "false"
         {{- end }}
         - name: scale_from_zero
           value: "{{ .Values.gateway.scaleFromZero }}"

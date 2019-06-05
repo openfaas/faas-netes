@@ -25,7 +25,7 @@ faasnetes:
     periodSeconds: 10
 
 gateway:
-  image: openfaas/gateway:0.13.0
+  image: openfaas/gateway:0.13.6
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -90,6 +90,10 @@ faasIdler:
   inactivityDuration: 15m               # If a function is inactive for 15 minutes, it may be scaled to zero
   reconcileInterval: 1m                 # The interval between each attempt to scale functions to zero
   dryRun: true                          # Set to true to enable the idler to apply changes and scale to zero
+
+basicAuthPlugin:
+  replicas: 1
+  image: openfaas/basic-auth-plugin:0.1.0
 
 nodeSelector: {}
 
