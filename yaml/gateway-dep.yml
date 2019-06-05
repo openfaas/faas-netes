@@ -74,6 +74,10 @@ spec:
           value: "true"
         - name: secret_mount_path
           value: "/var/secrets"
+        - name: auth_proxy_url
+          value: "http://basic-auth-plugin.openfaas:8080/validate"
+        - name: auth_pass_body
+          value: "false"
         - name: scale_from_zero
           value: "true"
         - name: max_idle_conns
