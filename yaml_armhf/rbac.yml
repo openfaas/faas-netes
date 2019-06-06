@@ -36,6 +36,7 @@ rules:
   - delete
 - apiGroups:
   - extensions
+  - apps
   resources:
   - deployments
   verbs:
