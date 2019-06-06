@@ -234,6 +234,9 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        request.Service,
 			Annotations: annotations,
+			Labels: map[string]string{
+				"faas_function": request.Service,
+			},
 		},
 		Spec: appsv1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
