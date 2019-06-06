@@ -52,7 +52,7 @@ func updateDeploymentSpec(
 
 	getOpts := metav1.GetOptions{}
 
-	deployment, findDeployErr := clientset.ExtensionsV1beta1().
+	deployment, findDeployErr := clientset.AppsV1beta2().
 		Deployments(functionNamespace).
 		Get(request.Service, getOpts)
 
@@ -131,7 +131,7 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 	}
 
-	if _, updateErr := clientset.ExtensionsV1beta1().
+	if _, updateErr := clientset.AppsV1beta2().
 		Deployments(functionNamespace).
 		Update(deployment); updateErr != nil {
 

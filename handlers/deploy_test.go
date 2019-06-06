@@ -4,13 +4,13 @@ import (
 	"testing"
 
 	"github.com/openfaas/faas/gateway/requests"
+	appsv1 "k8s.io/api/apps/v1beta2"
 	apiv1 "k8s.io/api/core/v1"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
 )
 
 func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -31,8 +31,8 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
 }
 
 func Test_configureReadOnlyRootFilesystem_Disabled_To_Enabled(t *testing.T) {
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -54,8 +54,8 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Enabled(t *testing.T) {
 
 func Test_configureReadOnlyRootFilesystem_Enabled_To_Disabled(t *testing.T) {
 	trueValue := true
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -93,8 +93,8 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Disabled(t *testing.T) {
 
 func Test_configureReadOnlyRootFilesystem_Enabled_To_Enabled(t *testing.T) {
 	trueValue := true
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -173,7 +173,7 @@ func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
 	}
 }
 
-func readOnlyRootDisabled(t *testing.T, deployment *v1beta1.Deployment) {
+func readOnlyRootDisabled(t *testing.T, deployment *appsv1.Deployment) {
 	if len(deployment.Spec.Template.Spec.Volumes) != 0 {
 		t.Error("Volumes should be empty if ReadOnlyRootFilesystem is false")
 	}
@@ -190,7 +190,7 @@ func readOnlyRootDisabled(t *testing.T, deployment *v1beta1.Deployment) {
 	}
 }
 
-func readOnlyRootEnabled(t *testing.T, deployment *v1beta1.Deployment) {
+func readOnlyRootEnabled(t *testing.T, deployment *appsv1.Deployment) {
 	if len(deployment.Spec.Template.Spec.Volumes) != 1 {
 		t.Error("should create a single tmp Volume")
 	}

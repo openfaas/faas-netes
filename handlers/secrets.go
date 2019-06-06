@@ -11,8 +11,8 @@ import (
 	typedV1 "k8s.io/client-go/kubernetes/typed/core/v1"
 
 	"github.com/openfaas/faas/gateway/requests"
+	appsv1 "k8s.io/api/apps/v1beta2"
 	apiv1 "k8s.io/api/core/v1"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -191,7 +191,7 @@ func getSecrets(clientset *kubernetes.Clientset, namespace string, secretNames [
 // in the kubernetes cluster.  For each requested secret, we inspect the type and add it to the
 // deployment spec as appropriat: secrets with type `SecretTypeDockercfg/SecretTypeDockerjson`
 // are added as ImagePullSecrets all other secrets are mounted as files in the deployments containers.
-func UpdateSecrets(request requests.CreateFunctionRequest, deployment *v1beta1.Deployment, existingSecrets map[string]*apiv1.Secret) error {
+func UpdateSecrets(request requests.CreateFunctionRequest, deployment *appsv1.Deployment, existingSecrets map[string]*apiv1.Secret) error {
 	// Add / reference pre-existing secrets within Kubernetes
 	secretVolumeProjections := []apiv1.VolumeProjection{}
 

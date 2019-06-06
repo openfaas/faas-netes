@@ -9,7 +9,7 @@ import (
 	"net/http"
 
 	"github.com/openfaas/faas/gateway/requests"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
+	appsv1 "k8s.io/api/apps/v1beta2"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -36,7 +36,7 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 		getOpts := metav1.GetOptions{}
 
 		// This makes sure we don't delete non-labelled deployments
-		deployment, findDeployErr := clientset.ExtensionsV1beta1().
+		deployment, findDeployErr := clientset.AppsV1beta2().
 			Deployments(functionNamespace).
 			Get(request.FunctionName, getOpts)
 
@@ -64,7 +64,7 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-func isFunction(deployment *v1beta1.Deployment) bool {
+func isFunction(deployment *appsv1.Deployment) bool {
 	if deployment != nil {
 		if _, found := deployment.Labels["faas_function"]; found {
 			return true

@@ -10,7 +10,7 @@ import (
 	"net/http"
 
 	"github.com/openfaas/faas/gateway/requests"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
+	appsv1 "k8s.io/api/apps/v1beta2"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -42,7 +42,7 @@ func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) (
 		LabelSelector: "faas_function",
 	}
 
-	res, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).List(listOpts)
+	res, err := clientset.AppsV1beta2().Deployments(functionNamespace).List(listOpts)
 
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func getService(functionNamespace string, functionName string, clientset *kubern
 
 	getOpts := metav1.GetOptions{}
 
-	item, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(functionName, getOpts)
+	item, err := clientset.AppsV1beta2().Deployments(functionNamespace).Get(functionName, getOpts)
 
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -83,7 +83,7 @@ func getService(functionNamespace string, functionName string, clientset *kubern
 	return nil, fmt.Errorf("function: %s not found", functionName)
 }
 
-func readFunction(item v1beta1.Deployment) *requests.Function {
+func readFunction(item appsv1.Deployment) *requests.Function {
 	var replicas uint64
 	if item.Spec.Replicas != nil {
 		replicas = uint64(*item.Spec.Replicas)
