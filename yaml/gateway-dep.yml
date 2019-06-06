@@ -28,7 +28,7 @@ spec:
           requests:
             memory: "120Mi"
             cpu: "50m"
-        image: openfaas/gateway:0.13.0
+        image: openfaas/gateway:0.13.6
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -99,6 +99,9 @@ spec:
             cpu: "50m"
         image: openfaas/faas-netes:0.7.5
         imagePullPolicy: 
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
         env:
         - name: port
           value: "8081"
