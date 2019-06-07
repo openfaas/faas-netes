@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/openfaas/faas-netes/k8s"
 	"log"
 	"os"
 
@@ -44,15 +45,15 @@ func main() {
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
 	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
-	deployConfig := &handlers.DeployHandlerConfig{
+	deployConfig := k8s.DeploymentConfig{
 		HTTPProbe:      cfg.HTTPProbe,
 		SetNonRootUser: cfg.SetNonRootUser,
-		FunctionReadinessProbeConfig: &handlers.FunctionProbeConfig{
+		ReadinessProbe: &k8s.ProbeConfig{
 			InitialDelaySeconds: int32(cfg.ReadinessProbeInitialDelaySeconds),
 			TimeoutSeconds:      int32(cfg.ReadinessProbeTimeoutSeconds),
 			PeriodSeconds:       int32(cfg.ReadinessProbePeriodSeconds),
 		},
-		FunctionLivenessProbeConfig: &handlers.FunctionProbeConfig{
+		LivenessProbe: &k8s.ProbeConfig{
 			InitialDelaySeconds: int32(cfg.LivenessProbeInitialDelaySeconds),
 			TimeoutSeconds:      int32(cfg.LivenessProbeTimeoutSeconds),
 			PeriodSeconds:       int32(cfg.LivenessProbePeriodSeconds),
@@ -60,14 +61,16 @@ func main() {
 		ImagePullPolicy: cfg.ImagePullPolicy,
 	}
 
+	factory := k8s.NewFactory(clientset, deployConfig)
+
 	bootstrapHandlers := bootTypes.FaaSHandlers{
 		FunctionProxy:  handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),
 		DeleteHandler:  handlers.MakeDeleteHandler(functionNamespace, clientset),
-		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, clientset, deployConfig),
+		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, factory),
 		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
-		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset, deployConfig),
+		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, factory),
 		HealthHandler:  handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),

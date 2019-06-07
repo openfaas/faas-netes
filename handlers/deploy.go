@@ -6,11 +6,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/openfaas/faas-netes/k8s"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -22,7 +21,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	"k8s.io/client-go/kubernetes"
 )
 
 // watchdogPort for the OpenFaaS function watchdog
@@ -49,26 +47,8 @@ func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
 	return fmt.Errorf("(%s) must be a valid DNS entry for service name", request.Service)
 }
 
-// FunctionProbeConfig specify options for Liveliness and Readiness checks
-type FunctionProbeConfig struct {
-	InitialDelaySeconds int32
-	TimeoutSeconds      int32
-	PeriodSeconds       int32
-}
-
-// DeployHandlerConfig specify options for Deployments
-type DeployHandlerConfig struct {
-	HTTPProbe                    bool
-	FunctionReadinessProbeConfig *FunctionProbeConfig
-	FunctionLivenessProbeConfig  *FunctionProbeConfig
-	ImagePullPolicy              string
-	// SetNonRootUser will override the function image user to ensure that it is not root. When
-	// true, the user will set to 12000 for all functions.
-	SetNonRootUser bool
-}
-
 // MakeDeployHandler creates a handler to create new functions in the cluster
-func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset, config *DeployHandlerConfig) http.HandlerFunc {
+func MakeDeployHandler(functionNamespace string, factory k8s.Factory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
@@ -87,14 +67,14 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		existingSecrets, err := getSecrets(clientset, functionNamespace, request.Secrets)
+		existingSecrets, err := getSecrets(factory.Client, functionNamespace, request.Secrets)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
 			return
 		}
 
-		deploymentSpec, specErr := makeDeploymentSpec(request, existingSecrets, config)
+		deploymentSpec, specErr := makeDeploymentSpec(request, existingSecrets, factory)
 
 		if specErr != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -102,7 +82,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		deploy := clientset.AppsV1beta2().Deployments(functionNamespace)
+		deploy := factory.Client.AppsV1beta2().Deployments(functionNamespace)
 
 		_, err = deploy.Create(deploymentSpec)
 		if err != nil {
@@ -114,7 +94,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 		log.Println("Created deployment - " + request.Service)
 
-		service := clientset.Core().Services(functionNamespace)
+		service := factory.Client.Core().Services(functionNamespace)
 		serviceSpec := makeServiceSpec(request)
 		_, err = service.Create(serviceSpec)
 
@@ -133,56 +113,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-type FunctionProbes struct {
-	Liveness  *apiv1.Probe
-	Readiness *apiv1.Probe
-}
-
-func makeProbes(config *DeployHandlerConfig) *FunctionProbes {
-	var handler apiv1.Handler
-
-	if config.HTTPProbe {
-		handler = apiv1.Handler{
-			HTTPGet: &apiv1.HTTPGetAction{
-				Path: "/_/health",
-				Port: intstr.IntOrString{
-					Type:   intstr.Int,
-					IntVal: int32(watchdogPort),
-				},
-			},
-		}
-	} else {
-		path := filepath.Join(os.TempDir(), ".lock")
-		handler = apiv1.Handler{
-			Exec: &apiv1.ExecAction{
-				Command: []string{"cat", path},
-			},
-		}
-	}
-
-	probes := FunctionProbes{}
-	probes.Readiness = &apiv1.Probe{
-		Handler:             handler,
-		InitialDelaySeconds: config.FunctionReadinessProbeConfig.InitialDelaySeconds,
-		TimeoutSeconds:      config.FunctionReadinessProbeConfig.TimeoutSeconds,
-		PeriodSeconds:       config.FunctionReadinessProbeConfig.PeriodSeconds,
-		SuccessThreshold:    1,
-		FailureThreshold:    3,
-	}
-
-	probes.Liveness = &apiv1.Probe{
-		Handler:             handler,
-		InitialDelaySeconds: config.FunctionLivenessProbeConfig.InitialDelaySeconds,
-		TimeoutSeconds:      config.FunctionLivenessProbeConfig.TimeoutSeconds,
-		PeriodSeconds:       config.FunctionLivenessProbeConfig.PeriodSeconds,
-		SuccessThreshold:    1,
-		FailureThreshold:    3,
-	}
-
-	return &probes
-}
-
-func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, config *DeployHandlerConfig) (*appsv1.Deployment, error) {
+func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, factory k8s.Factory) (*appsv1.Deployment, error) {
 	envVars := buildEnvVars(&request)
 
 	initialReplicas := int32p(initialReplicasCount)
@@ -208,7 +139,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	}
 
 	var imagePullPolicy apiv1.PullPolicy
-	switch config.ImagePullPolicy {
+	switch factory.Config.ImagePullPolicy {
 	case "Never":
 		imagePullPolicy = apiv1.PullNever
 	case "IfNotPresent":
@@ -228,7 +159,10 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		}
 	}
 
-	probes := makeProbes(config)
+	probes, err := factory.MakeProbes(request)
+	if err != nil {
+		return nil, err
+	}
 
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -293,7 +227,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	}
 
 	configureReadOnlyRootFilesystem(request, deploymentSpec)
-	configureContainerUserID(deploymentSpec, nonRootFunctionuserID, config)
+	configureContainerUserID(deploymentSpec, nonRootFunctionuserID, factory.Config)
 
 	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
 		return nil, err
@@ -491,7 +425,7 @@ func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, dep
 
 // configureContainerUserID set the UID for all containers in the function Container.  Defaults to user
 // specified in image metadata if `SetNonRootUser` is `false`. Root == 0.
-func configureContainerUserID(deployment *appsv1.Deployment, userID int64, config *DeployHandlerConfig) {
+func configureContainerUserID(deployment *appsv1.Deployment, userID int64, config k8s.DeploymentConfig) {
 	var functionUser *int64
 
 	if config.SetNonRootUser {

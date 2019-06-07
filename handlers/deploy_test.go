@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"github.com/openfaas/faas-netes/k8s"
+	"k8s.io/client-go/kubernetes/fake"
 	"testing"
 
 	"github.com/openfaas/faas/gateway/requests"
@@ -226,44 +228,6 @@ func readOnlyRootEnabled(t *testing.T, deployment *appsv1.Deployment) {
 	}
 }
 
-func Test_makeProbes_useExec(t *testing.T) {
-	cfg := DeployHandlerConfig{
-		HTTPProbe:                    false,
-		FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
-		FunctionReadinessProbeConfig: &FunctionProbeConfig{},
-	}
-
-	probes := makeProbes(&cfg)
-
-	if probes.Readiness.Exec == nil {
-		t.Errorf("Readiness probe should have had exec handler")
-		t.Fail()
-	}
-	if probes.Liveness.Exec == nil {
-		t.Errorf("Liveness probe should have had exec handler")
-		t.Fail()
-	}
-}
-
-func Test_makeProbes_useHTTPProbe(t *testing.T) {
-	cfg := DeployHandlerConfig{
-		HTTPProbe:                    true,
-		FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
-		FunctionReadinessProbeConfig: &FunctionProbeConfig{},
-	}
-
-	probes := makeProbes(&cfg)
-
-	if probes.Readiness.HTTPGet == nil {
-		t.Errorf("Readiness probe should have had HTTPGet handler")
-		t.Fail()
-	}
-	if probes.Liveness.HTTPGet == nil {
-		t.Errorf("Liveness probe should have had HTTPGet handler")
-		t.Fail()
-	}
-}
-
 func Test_SetNonRootUser(t *testing.T) {
 
 	scenarios := []struct {
@@ -277,12 +241,12 @@ func Test_SetNonRootUser(t *testing.T) {
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
 			request := requests.CreateFunctionRequest{Service: "testfunc", Image: "alpine:latest"}
-			cfg := &DeployHandlerConfig{
-				FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
-				FunctionReadinessProbeConfig: &FunctionProbeConfig{},
-				SetNonRootUser:               s.setNonRoot,
-			}
-			deployment, err := makeDeploymentSpec(request, map[string]*apiv1.Secret{}, cfg)
+			factory := k8s.NewFactory(fake.NewSimpleClientset(), k8s.DeploymentConfig{
+				LivenessProbe:  &k8s.ProbeConfig{},
+				ReadinessProbe: &k8s.ProbeConfig{},
+				SetNonRootUser: s.setNonRoot,
+			})
+			deployment, err := makeDeploymentSpec(request, map[string]*apiv1.Secret{}, factory)
 			if err != nil {
 				t.Errorf("unexpected makeDeploymentSpec error: %s", err.Error())
 			}
