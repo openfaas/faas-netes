@@ -9,7 +9,7 @@ type ProbeConfig struct {
 
 // DeploymentConfig holds the global deployment options
 type DeploymentConfig struct {
-	Port            int
+	WatchdogPort    int32
 	HTTPProbe       bool
 	ReadinessProbe  *ProbeConfig
 	LivenessProbe   *ProbeConfig
