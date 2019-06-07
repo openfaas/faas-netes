@@ -22,6 +22,9 @@ spec:
     spec:
       containers:
       - name:  nats
+        resources:
+          requests:
+            memory: "120Mi"
         image: {{ .Values.nats.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         ports:

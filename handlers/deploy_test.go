@@ -4,13 +4,13 @@ import (
 	"testing"
 
 	"github.com/openfaas/faas/gateway/requests"
+	appsv1 "k8s.io/api/apps/v1beta2"
 	apiv1 "k8s.io/api/core/v1"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
 )
 
 func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -31,8 +31,8 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
 }
 
 func Test_configureReadOnlyRootFilesystem_Disabled_To_Enabled(t *testing.T) {
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -54,8 +54,8 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Enabled(t *testing.T) {
 
 func Test_configureReadOnlyRootFilesystem_Enabled_To_Disabled(t *testing.T) {
 	trueValue := true
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -93,8 +93,8 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Disabled(t *testing.T) {
 
 func Test_configureReadOnlyRootFilesystem_Enabled_To_Enabled(t *testing.T) {
 	trueValue := true
-	deployment := &v1beta1.Deployment{
-		Spec: v1beta1.DeploymentSpec{
+	deployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
@@ -173,7 +173,7 @@ func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
 	}
 }
 
-func readOnlyRootDisabled(t *testing.T, deployment *v1beta1.Deployment) {
+func readOnlyRootDisabled(t *testing.T, deployment *appsv1.Deployment) {
 	if len(deployment.Spec.Template.Spec.Volumes) != 0 {
 		t.Error("Volumes should be empty if ReadOnlyRootFilesystem is false")
 	}
@@ -190,7 +190,7 @@ func readOnlyRootDisabled(t *testing.T, deployment *v1beta1.Deployment) {
 	}
 }
 
-func readOnlyRootEnabled(t *testing.T, deployment *v1beta1.Deployment) {
+func readOnlyRootEnabled(t *testing.T, deployment *appsv1.Deployment) {
 	if len(deployment.Spec.Template.Spec.Volumes) != 1 {
 		t.Error("should create a single tmp Volume")
 	}
@@ -262,4 +262,44 @@ func Test_makeProbes_useHTTPProbe(t *testing.T) {
 		t.Errorf("Liveness probe should have had HTTPGet handler")
 		t.Fail()
 	}
+}
+
+func Test_SetNonRootUser(t *testing.T) {
+
+	scenarios := []struct {
+		name       string
+		setNonRoot bool
+	}{
+		{"does not set userid value when SetNonRootUser is false", false},
+		{"does set userid to constant value when SetNonRootUser is true", true},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			request := requests.CreateFunctionRequest{Service: "testfunc", Image: "alpine:latest"}
+			cfg := &DeployHandlerConfig{
+				FunctionLivenessProbeConfig:  &FunctionProbeConfig{},
+				FunctionReadinessProbeConfig: &FunctionProbeConfig{},
+				SetNonRootUser:               s.setNonRoot,
+			}
+			deployment, err := makeDeploymentSpec(request, map[string]*apiv1.Secret{}, cfg)
+			if err != nil {
+				t.Errorf("unexpected makeDeploymentSpec error: %s", err.Error())
+			}
+
+			functionContainer := deployment.Spec.Template.Spec.Containers[0]
+			if functionContainer.SecurityContext == nil {
+				t.Errorf("expected container %s to have a non-nil security context", functionContainer.Name)
+			}
+
+			if !s.setNonRoot && functionContainer.SecurityContext.RunAsUser != nil {
+				t.Errorf("expected RunAsUser to be nil, got %d", functionContainer.SecurityContext.RunAsUser)
+			}
+
+			if s.setNonRoot && *functionContainer.SecurityContext.RunAsUser != nonRootFunctionuserID {
+				t.Errorf("expected RunAsUser to be %d, got %d", nonRootFunctionuserID, functionContainer.SecurityContext.RunAsUser)
+			}
+		})
+	}
+
 }

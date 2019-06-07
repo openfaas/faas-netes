@@ -24,6 +24,9 @@ spec:
     spec:
       containers:
       - name: alertmanager
+        resources:
+          requests:
+            memory: "32Mi"
         image: {{ .Values.alertmanager.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
@@ -53,6 +56,11 @@ spec:
         ports:
         - containerPort: 9093
           protocol: TCP
+        resources:
+          requests:
+            memory: 25Mi
+          limits:
+            memory: 50Mi
         volumeMounts:
         - mountPath: /alertmanager.yml
           name: alertmanager-config

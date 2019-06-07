@@ -209,7 +209,7 @@
   version = "0.9.14"
 
 [[projects]]
-  digest = "1:51ce680938533385fd69725839e0e419d6e100308897341ff93151571d73cd7f"
+  digest = "1:698444ab032d6e8528ae9171659941a2afea8003978c240e860936128e22a8c6"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
@@ -217,8 +217,8 @@
     "types",
   ]
   pruneopts = "UT"
-  revision = "220324e98f5db5aa61f02d1ab13f03e91310796c"
-  version = "0.8.1"
+  revision = "6a76a052deb12fd94b373c082963d8a8ad44d4d1"
+  version = "0.9.0"
 
 [[projects]]
   branch = "master"
@@ -475,11 +475,12 @@
     "github.com/openfaas/faas-provider",
     "github.com/openfaas/faas-provider/types",
     "github.com/openfaas/faas/gateway/requests",
+    "k8s.io/api/apps/v1beta2",
     "k8s.io/api/core/v1",
-    "k8s.io/api/extensions/v1beta1",
     "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/api/resource",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
+    "k8s.io/apimachinery/pkg/runtime/schema",
     "k8s.io/apimachinery/pkg/util/intstr",
     "k8s.io/client-go/kubernetes",
     "k8s.io/client-go/kubernetes/fake",

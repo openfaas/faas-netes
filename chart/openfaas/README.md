@@ -70,6 +70,11 @@ helm repo update \
 
 > The above command will also update your helm repo to pull in any new releases.
 
+A note on health-checking probes for functions:
+
+* httpProbe - most efficient, currently incompatible with Istio
+* execProbe - least efficient health-checking, but most compatible
+
 If you want to switch from "exec" liveness and readiness probes to httpProbes then use `--set faasnetes.httpProbe=true`, this can only be used with `--set operator.create=false`.
 
 ### Verify the installation
@@ -148,6 +153,16 @@ helm upgrade --install openfaas openfaas/ \
 
 By default a NodePort will be created for the API Gateway.
 
+### Metrics
+
+You temporarily access the Prometheus metrics by ueing `port-forward`
+
+```
+kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
+```
+
+Then open `http://localhost:31119` to directly query the OpenFaaS metrics scraped by Prometheus.
+
 ### LB
 
 If you're running on a cloud such as AKS or GKE you will need to pass an additional flag of `--set serviceType=LoadBalancer` to tell `helm` to create LoadBalancer objects instead. An alternative to using multiple LoadBalancers is to install an Ingress controller.
@@ -200,7 +215,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `async` | Deploys NATS | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
-| `basic_auth` | Enable basic authentication on the Gateway | `false` |
+| `basic_auth` | Enable basic authentication on the Gateway | `true` |
 | `rbac` | Enable RBAC | `true` |
 | `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
@@ -212,6 +227,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `faasnetes.readTimeout` | Queue worker read timeout | `60s` |
 | `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
+| `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
 | `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
 | `gateway.readTimeout` | Queue worker read timeout | `65s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `65s` |

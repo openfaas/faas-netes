@@ -41,12 +41,12 @@ In this README you'll find a technical overview and instructions for deploying t
 
 faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
 
-| Option                 | Usage                                                                                           |
-|------------------------|-------------------------------------------------------------------------------------------------|
-| `httpProbe`            | Boolean - use http probe type for function readiness and liveness. Default: `false`             |
-| `write_timeout`        | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`        |
-| `read_timeout`         | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`        |
-| `image_pull_policy`    | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`.  Default: `Always` |
+| Option              | Usage                                                                                           |
+|---------------------|-------------------------------------------------------------------------------------------------|
+| `httpProbe`         | Boolean - use http probe type for function readiness and liveness. Default: `false`             |
+| `write_timeout`     | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`        |
+| `read_timeout`      | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`        |
+| `image_pull_policy` | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`.  Default: `Always` |
 
 ### Readiness checking
 
@@ -68,3 +68,18 @@ In this case, you can set your local environment to [use minikube's docker](http
 `faas-cli push` is unnecessary in this workflow - use `faas-cli build` then `faas-cli deploy`.
 
 Note: When set to `Never`, **only** local (or pulled) images will work.  When set to `IfNotPresent`, function deployments may not be updated when using static image tags.
+
+## Kubernetes Versions
+OpenFaaS strives to support as many Kubernetes versions as possible. Due to recent changes in the Secrets API, **Kubernetes 1.9** or higher is required with **faas-netes 0.7.1** or higher.
+
+## Contributing to faas-netes
+
+You can quickly create a standard development environment using
+
+```sh
+make start-kind
+```
+
+this will use [KinD](https://github.com/kubernetes-sigs/kind) to create a single node cluster and install the latest version of OpenFaaS via the Helm chart.
+
+Check the contributor guide in `CONTRIBUTING.md` for more details on the workflow, processes, and additional tips.

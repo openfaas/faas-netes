@@ -1,10 +1,13 @@
+---
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: alertmanager
+    app: openfaas
+    component: alertmanager-config
   name: alertmanager-config
-  namespace: openfaas
+  namespace: "openfaas"
 data:
   alertmanager.yml: |
     route:
@@ -18,14 +21,12 @@ data:
           service: gateway
           receiver: scale-up
           severity: major
-
     inhibit_rules:
     - source_match:
         severity: 'critical'
       target_match:
         severity: 'warning'
       equal: ['alertname', 'cluster', 'service']
-
     receivers:
     - name: 'scale-up'
       webhook_configs:

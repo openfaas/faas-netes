@@ -33,6 +33,10 @@ spec:
       {{- end }}
       containers:
       - name: gateway
+        resources:
+          requests:
+            memory: "120Mi"
+            cpu: "50m"
         image: {{ .Values.gateway.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
@@ -84,6 +88,10 @@ spec:
           value: "true"
         - name: secret_mount_path
           value: "/var/secrets"
+        - name: auth_proxy_url
+          value: "http://basic-auth-plugin.{{ .Release.Namespace }}:8080/validate"
+        - name: auth_pass_body
+          value: "false"
         {{- end }}
         - name: scale_from_zero
           value: "{{ .Values.gateway.scaleFromZero }}"
@@ -103,6 +111,10 @@ spec:
           protocol: TCP
       {{- if .Values.operator.create }}
       - name: operator
+        resources:
+          requests:
+            memory: "120Mi"
+            cpu: "50m"
         image: {{ .Values.operator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
@@ -123,8 +135,17 @@ spec:
           protocol: TCP
       {{- else }}
       - name: faas-netes
+        resources:
+          requests:
+            memory: "120Mi"
+            cpu: "50m"
         image: {{ .Values.faasnetes.image }}
         imagePullPolicy: {{ .Values.openFaasImagePullPolicy }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+        {{- end }}
         env:
         - name: port
           value: "8081"
@@ -138,6 +159,8 @@ spec:
           value: {{ .Values.faasnetes.imagePullPolicy | quote }}
         - name: http_probe
           value: "{{ .Values.faasnetes.httpProbe }}"
+        - name: set_nonroot_user
+          value: "{{ .Values.faasnetes.setNonRootUser }}"
         - name: readiness_probe_initial_delay_seconds
           value: "{{ .Values.faasnetes.readinessProbe.initialDelaySeconds }}"
         - name: readiness_probe_timeout_seconds

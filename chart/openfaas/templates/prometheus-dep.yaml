@@ -25,6 +25,9 @@ spec:
       serviceAccountName: {{ .Release.Name }}-prometheus
       containers:
       - name: prometheus
+        resources:
+          requests:
+            memory: "512Mi"
         image: {{ .Values.prometheus.image }}
         command:
           - "prometheus"

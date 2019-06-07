@@ -1,0 +1,48 @@
+---
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: faas-idler
+  namespace: "openfaas"
+  labels:
+    app: openfaas
+    component: faas-idler
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io.scrape: "false"
+      labels:
+        app: faas-idler
+    spec:
+      containers:
+        - name: faas-idler
+          resources:
+            requests:
+              memory: "64Mi"
+          image: openfaas/faas-idler:0.1.9
+          imagePullPolicy: Always
+          env:
+            - name: gateway_url
+              value: "http://gateway.openfaas:8080/"
+            - name: prometheus_host
+              value: "prometheus.openfaas"
+            - name: prometheus_port
+              value: "9090"
+            - name: inactivity_duration
+              value: 15m
+            - name: reconcile_interval
+              value: 1m
+          command:
+            - /home/app/faas-idler
+            - -dry-run=true
+          volumeMounts:
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets/"
+      volumes:
+        - name: auth
+          secret:
+            secretName: basic-auth

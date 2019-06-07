@@ -42,9 +42,11 @@ func main() {
 	log.Printf("HTTP Read Timeout: %s\n", cfg.ReadTimeout)
 	log.Printf("HTTP Write Timeout: %s\n", cfg.WriteTimeout)
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
+	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
 	deployConfig := &handlers.DeployHandlerConfig{
-		HTTPProbe: cfg.HTTPProbe,
+		HTTPProbe:      cfg.HTTPProbe,
+		SetNonRootUser: cfg.SetNonRootUser,
 		FunctionReadinessProbeConfig: &handlers.FunctionProbeConfig{
 			InitialDelaySeconds: int32(cfg.ReadinessProbeInitialDelaySeconds),
 			TimeoutSeconds:      int32(cfg.ReadinessProbeTimeoutSeconds),
@@ -66,7 +68,7 @@ func main() {
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, clientset, deployConfig),
-		Health:         handlers.MakeHealthHandler(),
+		HealthHandler:  handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),
 	}

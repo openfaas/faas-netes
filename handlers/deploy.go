@@ -16,9 +16,9 @@ import (
 	"strings"
 
 	"github.com/openfaas/faas/gateway/requests"
+	appsv1 "k8s.io/api/apps/v1beta2"
 	apiv1 "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
-	v1beta1 "k8s.io/api/extensions/v1beta1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -30,6 +30,10 @@ const watchdogPort = 8080
 
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
+
+// nonRootFunctionuserID is the user id that is set when DeployHandlerConfig.SetNonRootUser is true.
+// value >10000 per the suggestion from https://kubesec.io/basics/containers-securitycontext-runasuser/
+const nonRootFunctionuserID = 12000
 
 // Regex for RFC-1123 validation:
 // 	k8s.io/kubernetes/pkg/util/validation/validation.go
@@ -58,6 +62,9 @@ type DeployHandlerConfig struct {
 	FunctionReadinessProbeConfig *FunctionProbeConfig
 	FunctionLivenessProbeConfig  *FunctionProbeConfig
 	ImagePullPolicy              string
+	// SetNonRootUser will override the function image user to ensure that it is not root. When
+	// true, the user will set to 12000 for all functions.
+	SetNonRootUser bool
 }
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
@@ -95,7 +102,7 @@ func MakeDeployHandler(functionNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		deploy := clientset.Extensions().Deployments(functionNamespace)
+		deploy := clientset.AppsV1beta2().Deployments(functionNamespace)
 
 		_, err = deploy.Create(deploymentSpec)
 		if err != nil {
@@ -175,7 +182,7 @@ func makeProbes(config *DeployHandlerConfig) *FunctionProbes {
 	return &probes
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, config *DeployHandlerConfig) (*v1beta1.Deployment, error) {
+func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, config *DeployHandlerConfig) (*appsv1.Deployment, error) {
 	envVars := buildEnvVars(&request)
 
 	initialReplicas := int32p(initialReplicasCount)
@@ -223,25 +230,24 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 
 	probes := makeProbes(config)
 
-	deploymentSpec := &v1beta1.Deployment{
-		TypeMeta: metav1.TypeMeta{
-			Kind:       "Deployment",
-			APIVersion: "extensions/v1beta1",
-		},
+	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        request.Service,
 			Annotations: annotations,
+			Labels: map[string]string{
+				"faas_function": request.Service,
+			},
 		},
-		Spec: v1beta1.DeploymentSpec{
+		Spec: appsv1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
 					"faas_function": request.Service,
 				},
 			},
 			Replicas: initialReplicas,
-			Strategy: v1beta1.DeploymentStrategy{
-				Type: v1beta1.RollingUpdateDeploymentStrategyType,
-				RollingUpdate: &v1beta1.RollingUpdateDeployment{
+			Strategy: appsv1.DeploymentStrategy{
+				Type: appsv1.RollingUpdateDeploymentStrategyType,
+				RollingUpdate: &appsv1.RollingUpdateDeployment{
 					MaxUnavailable: &intstr.IntOrString{
 						Type:   intstr.Int,
 						IntVal: int32(0),
@@ -287,6 +293,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	}
 
 	configureReadOnlyRootFilesystem(request, deploymentSpec)
+	configureContainerUserID(deploymentSpec, nonRootFunctionuserID, config)
 
 	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
 		return nil, err
@@ -446,7 +453,7 @@ func getMinReplicaCount(labels map[string]string) *int32 {
 //    to false and there will be no mount for the `/tmp` folder
 //
 // This method is safe for both create and update operations.
-func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *v1beta1.Deployment) {
+func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *appsv1.Deployment) {
 	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
 		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
 	} else {
@@ -480,4 +487,20 @@ func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, dep
 				ReadOnly:  false},
 		)
 	}
+}
+
+// configureContainerUserID set the UID for all containers in the function Container.  Defaults to user
+// specified in image metadata if `SetNonRootUser` is `false`. Root == 0.
+func configureContainerUserID(deployment *appsv1.Deployment, userID int64, config *DeployHandlerConfig) {
+	var functionUser *int64
+
+	if config.SetNonRootUser {
+		functionUser = &userID
+	}
+
+	if deployment.Spec.Template.Spec.Containers[0].SecurityContext == nil {
+		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{}
+	}
+
+	deployment.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser = functionUser
 }

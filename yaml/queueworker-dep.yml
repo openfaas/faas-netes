@@ -1,12 +1,18 @@
-apiVersion: apps/v1beta1
+---
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: openfaas
+    component: queue-worker
   name: queue-worker
-  namespace: openfaas
+  namespace: "openfaas"
 spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        prometheus.io.scrape: "false"
       labels:
         app: queue-worker
     spec:
@@ -16,15 +22,23 @@ spec:
           secretName: basic-auth
       containers:
       - name:  queue-worker
-        image: openfaas/queue-worker:0.7.1
+        resources:
+          requests:
+            memory: "120Mi"
+            cpu: "50m"
+        image: openfaas/queue-worker:0.7.2
         imagePullPolicy: Always
         env:
-        - name: max_inflight      # Max number of items in-flight
-          value: "1"
-        - name: ack_wait          # Max duration of any async task / request
-          value: "30s"
+        - name: faas_nats_address
+          value: "nats.openfaas.svc.cluster.local"
+        - name: faas_gateway_address
+          value: "gateway.openfaas.svc.cluster.local"
+        - name: "gateway_invoke"
+          value: "true"
         - name: faas_function_suffix
-          value: ".openfaas-fn.svc.cluster.local."  # absolute DNS will suppress search domains
+          value: ".openfaas-fn.svc.cluster.local"
+        - name: ack_wait    # Max duration of any async task / request
+          value: 60s
         - name: secret_mount_path
           value: "/var/secrets"
         - name: basic_auth
@@ -33,4 +47,3 @@ spec:
         - name: auth
           readOnly: true
           mountPath: "/var/secrets"
-
