@@ -173,7 +173,7 @@ func parseSecret(namespace string, r io.Reader) (*apiv1.Secret, error) {
 }
 
 // getSecrets queries Kubernetes for a list of secrets by name in the given k8s namespace.
-func getSecrets(clientset *kubernetes.Clientset, namespace string, secretNames []string) (map[string]*apiv1.Secret, error) {
+func getSecrets(clientset kubernetes.Interface, namespace string, secretNames []string) (map[string]*apiv1.Secret, error) {
 	secrets := map[string]*apiv1.Secret{}
 
 	for _, secretName := range secretNames {
