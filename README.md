@@ -69,6 +69,8 @@ In this case, you can set your local environment to [use minikube's docker](http
 
 Note: When set to `Never`, **only** local (or pulled) images will work.  When set to `IfNotPresent`, function deployments may not be updated when using static image tags.
 
+## Kubernetes Versions
+OpenFaaS strives to support as many Kubernetes versions as possible. Due to recent changes in the Secrets API, **Kubernetes 1.9** or higher is required with **faas-netes 0.7.1** or higher.
 
 ## Contributing to faas-netes
 
