@@ -54,7 +54,6 @@ func Test_makeProbes_useHTTPProbe(t *testing.T) {
 
 func Test_makeProbes_useCustomHTTPProbe(t *testing.T) {
 	f := mockFactory()
-	f.Config.HTTPProbe = true
 	customPath := "/healthz"
 	request := requests.CreateFunctionRequest{
 		Service:                "testfunc",

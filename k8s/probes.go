@@ -11,6 +11,7 @@ import (
 
 const (
 	ProbePath         = "com.openfaas.health.http.path"
+	ProbePathValue    = "/_/health"
 	ProbeInitialDelay = "com.openfaas.health.http.initialDelay"
 )
 
@@ -19,9 +20,11 @@ type FunctionProbes struct {
 	Readiness *corev1.Probe
 }
 
+// MakeProbes returns the liveness and readiness probes
+// by default the health check runs `cat /tmp/.lock` every ten seconds
 func (f *Factory) MakeProbes(r requests.CreateFunctionRequest) (*FunctionProbes, error) {
 	var handler corev1.Handler
-	httpPath := "/_/health"
+	httpPath := ProbePathValue
 	initialDelaySeconds := int32(f.Config.LivenessProbe.InitialDelaySeconds)
 
 	if r.Annotations != nil {
@@ -38,7 +41,7 @@ func (f *Factory) MakeProbes(r requests.CreateFunctionRequest) (*FunctionProbes,
 		}
 	}
 
-	if f.Config.HTTPProbe {
+	if f.Config.HTTPProbe || httpPath != ProbePathValue {
 		handler = corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
 				Path: httpPath,
