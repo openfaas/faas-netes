@@ -23,9 +23,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
-// watchdogPort for the OpenFaaS function watchdog
-const watchdogPort = 8080
-
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
 
@@ -95,7 +92,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.Factory) http.Handl
 		log.Println("Created deployment - " + request.Service)
 
 		service := factory.Client.Core().Services(functionNamespace)
-		serviceSpec := makeServiceSpec(request)
+		serviceSpec := makeServiceSpec(request, factory)
 		_, err = service.Create(serviceSpec)
 
 		if err != nil {
@@ -206,7 +203,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							Name:  request.Service,
 							Image: request.Image,
 							Ports: []apiv1.ContainerPort{
-								{ContainerPort: int32(watchdogPort), Protocol: corev1.ProtocolTCP},
+								{ContainerPort: factory.Config.WatchdogPort, Protocol: corev1.ProtocolTCP},
 							},
 							Env:             envVars,
 							Resources:       *resources,
@@ -236,7 +233,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	return deploymentSpec, nil
 }
 
-func makeServiceSpec(request requests.CreateFunctionRequest) *corev1.Service {
+func makeServiceSpec(request requests.CreateFunctionRequest, factory k8s.Factory) *corev1.Service {
 
 	serviceSpec := &corev1.Service{
 		TypeMeta: metav1.TypeMeta{
@@ -256,10 +253,10 @@ func makeServiceSpec(request requests.CreateFunctionRequest) *corev1.Service {
 				{
 					Name:     "http",
 					Protocol: corev1.ProtocolTCP,
-					Port:     watchdogPort,
+					Port:     factory.Config.WatchdogPort,
 					TargetPort: intstr.IntOrString{
 						Type:   intstr.Int,
-						IntVal: int32(watchdogPort),
+						IntVal: factory.Config.WatchdogPort,
 					},
 				},
 			},

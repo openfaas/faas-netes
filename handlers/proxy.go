@@ -17,6 +17,9 @@ import (
 	"github.com/openfaas/faas/gateway/requests"
 )
 
+// watchdogPort for the OpenFaaS function watchdog
+const watchdogPort = 8080
+
 // MakeProxy creates a proxy for HTTP web requests which can be routed to a function.
 func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc {
 	proxyClient := http.Client{

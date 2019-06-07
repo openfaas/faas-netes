@@ -44,7 +44,7 @@ func (f *Factory) MakeProbes(r requests.CreateFunctionRequest) (*FunctionProbes,
 				Path: httpPath,
 				Port: intstr.IntOrString{
 					Type:   intstr.Int,
-					IntVal: int32(f.Config.Port),
+					IntVal: int32(f.Config.WatchdogPort),
 				},
 			},
 		}
