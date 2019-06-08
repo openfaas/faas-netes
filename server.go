@@ -46,9 +46,9 @@ func main() {
 	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
 	deployConfig := k8s.DeploymentConfig{
-		WatchdogPort:   8080,
-		HTTPProbe:      cfg.HTTPProbe,
-		SetNonRootUser: cfg.SetNonRootUser,
+		RuntimeHTTPPort: 8080,
+		HTTPProbe:       cfg.HTTPProbe,
+		SetNonRootUser:  cfg.SetNonRootUser,
 		ReadinessProbe: &k8s.ProbeConfig{
 			InitialDelaySeconds: int32(cfg.ReadinessProbeInitialDelaySeconds),
 			TimeoutSeconds:      int32(cfg.ReadinessProbeTimeoutSeconds),

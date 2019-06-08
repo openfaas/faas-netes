@@ -199,7 +199,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 							Name:  request.Service,
 							Image: request.Image,
 							Ports: []apiv1.ContainerPort{
-								{ContainerPort: factory.Config.WatchdogPort, Protocol: corev1.ProtocolTCP},
+								{ContainerPort: factory.Config.RuntimeHTTPPort, Protocol: corev1.ProtocolTCP},
 							},
 							Env:             envVars,
 							Resources:       *resources,
@@ -249,10 +249,10 @@ func makeServiceSpec(request requests.CreateFunctionRequest, factory k8s.Functio
 				{
 					Name:     "http",
 					Protocol: corev1.ProtocolTCP,
-					Port:     factory.Config.WatchdogPort,
+					Port:     factory.Config.RuntimeHTTPPort,
 					TargetPort: intstr.IntOrString{
 						Type:   intstr.Int,
-						IntVal: factory.Config.WatchdogPort,
+						IntVal: factory.Config.RuntimeHTTPPort,
 					},
 				},
 			},
