@@ -15,7 +15,7 @@ const SecurityContextUserID = int64(12000)
 
 // ConfigureContainerUserID sets the UID to 12000 for the function Container.  Defaults to user
 // specified in image metadata if `SetNonRootUser` is `false`. Root == 0.
-func (f *Factory) ConfigureContainerUserID(deployment *appsv1.Deployment) {
+func (f *FunctionFactory) ConfigureContainerUserID(deployment *appsv1.Deployment) {
 	userID := SecurityContextUserID
 	var functionUser *int64
 
@@ -38,7 +38,7 @@ func (f *Factory) ConfigureContainerUserID(deployment *appsv1.Deployment) {
 //    to false and there will be no mount for the `/tmp` folder
 //
 // This method is safe for both create and update operations.
-func (f *Factory) ConfigureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *appsv1.Deployment) {
+func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *appsv1.Deployment) {
 	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
 		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
 	} else {
