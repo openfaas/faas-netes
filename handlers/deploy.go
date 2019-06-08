@@ -26,10 +26,6 @@ import (
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
 
-// nonRootFunctionuserID is the user id that is set when DeployHandlerConfig.SetNonRootUser is true.
-// value >10000 per the suggestion from https://kubesec.io/basics/containers-securitycontext-runasuser/
-const nonRootFunctionuserID = 12000
-
 // Regex for RFC-1123 validation:
 // 	k8s.io/kubernetes/pkg/util/validation/validation.go
 var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
@@ -223,8 +219,8 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 		},
 	}
 
-	configureReadOnlyRootFilesystem(request, deploymentSpec)
-	configureContainerUserID(deploymentSpec, nonRootFunctionuserID, factory.Config)
+	factory.ConfigureReadOnlyRootFilesystem(request, deploymentSpec)
+	factory.ConfigureContainerUserID(deploymentSpec)
 
 	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
 		return nil, err
@@ -374,64 +370,4 @@ func getMinReplicaCount(labels map[string]string) *int32 {
 	}
 
 	return nil
-}
-
-// configureReadOnlyRootFilesystem will create or update the required settings and mounts to ensure
-// that the ReadOnlyRootFilesystem setting works as expected, meaning:
-// 1. when ReadOnlyRootFilesystem is true, the security context of the container will have ReadOnlyRootFilesystem also
-//    marked as true and a new `/tmp` folder mount will be added to the deployment spec
-// 2. when ReadOnlyRootFilesystem is false, the security context of the container will also have ReadOnlyRootFilesystem set
-//    to false and there will be no mount for the `/tmp` folder
-//
-// This method is safe for both create and update operations.
-func configureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *appsv1.Deployment) {
-	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
-	} else {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{
-			ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
-		}
-	}
-
-	existingVolumes := removeVolume("temp", deployment.Spec.Template.Spec.Volumes)
-	deployment.Spec.Template.Spec.Volumes = existingVolumes
-
-	existingMounts := removeVolumeMount("temp", deployment.Spec.Template.Spec.Containers[0].VolumeMounts)
-	deployment.Spec.Template.Spec.Containers[0].VolumeMounts = existingMounts
-
-	if request.ReadOnlyRootFilesystem {
-		deployment.Spec.Template.Spec.Volumes = append(
-			existingVolumes,
-			corev1.Volume{
-				Name: "temp",
-				VolumeSource: corev1.VolumeSource{
-					EmptyDir: &corev1.EmptyDirVolumeSource{},
-				},
-			},
-		)
-
-		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(
-			existingMounts,
-			corev1.VolumeMount{
-				Name:      "temp",
-				MountPath: "/tmp",
-				ReadOnly:  false},
-		)
-	}
-}
-
-// configureContainerUserID set the UID for all containers in the function Container.  Defaults to user
-// specified in image metadata if `SetNonRootUser` is `false`. Root == 0.
-func configureContainerUserID(deployment *appsv1.Deployment, userID int64, config k8s.DeploymentConfig) {
-	var functionUser *int64
-
-	if config.SetNonRootUser {
-		functionUser = &userID
-	}
-
-	if deployment.Spec.Template.Spec.Containers[0].SecurityContext == nil {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{}
-	}
-
-	deployment.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser = functionUser
 }
