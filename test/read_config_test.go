@@ -47,7 +47,7 @@ func TestRead_EmptyTimeoutConfig(t *testing.T) {
 	wantPort := 8080
 
 	if config.Port != wantPort {
-		t.Logf("WatchdogPort want: %d, got %d", wantPort, config.Port)
+		t.Logf("Port want: %d, got %d", wantPort, config.Port)
 		t.Fail()
 	}
 }
@@ -62,7 +62,7 @@ func TestRead_ReadPortConfig(t *testing.T) {
 	config := readConfig.Read(defaults)
 
 	if config.Port != wantPort {
-		t.Logf("WatchdogPort incorrect, want: %d, got: %d\n", wantPort, config.Port)
+		t.Logf("Port incorrect, want: %d, got: %d\n", wantPort, config.Port)
 		t.Fail()
 	}
 }
