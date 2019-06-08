@@ -14,7 +14,7 @@ import (
 )
 
 // MakeUpdateHandler update specified function
-func MakeUpdateHandler(functionNamespace string, factory k8s.Factory) http.HandlerFunc {
+func MakeUpdateHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		defer r.Body.Close()
@@ -45,7 +45,7 @@ func MakeUpdateHandler(functionNamespace string, factory k8s.Factory) http.Handl
 
 func updateDeploymentSpec(
 	functionNamespace string,
-	factory k8s.Factory,
+	factory k8s.FunctionFactory,
 	request requests.CreateFunctionRequest,
 	annotations map[string]string) (err error, httpStatus int) {
 
@@ -146,7 +146,7 @@ func updateDeploymentSpec(
 
 func updateService(
 	functionNamespace string,
-	factory k8s.Factory,
+	factory k8s.FunctionFactory,
 	request requests.CreateFunctionRequest,
 	annotations map[string]string) (err error, httpStatus int) {
 

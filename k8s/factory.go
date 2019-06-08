@@ -7,14 +7,14 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// Factory is handling Kubernetes operations to materialise functions into deployments and services
-type Factory struct {
+// FunctionFactory is handling Kubernetes operations to materialise functions into deployments and services
+type FunctionFactory struct {
 	Client kubernetes.Interface
 	Config DeploymentConfig
 }
 
-func NewFactory(clientset kubernetes.Interface, config DeploymentConfig) Factory {
-	return Factory{
+func NewFunctionFactory(clientset kubernetes.Interface, config DeploymentConfig) FunctionFactory {
+	return FunctionFactory{
 		Client: clientset,
 		Config: config,
 	}

@@ -62,7 +62,7 @@ func main() {
 		ImagePullPolicy: cfg.ImagePullPolicy,
 	}
 
-	factory := k8s.NewFactory(clientset, deployConfig)
+	factory := k8s.NewFunctionFactory(clientset, deployConfig)
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
 		FunctionProxy:  handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),

@@ -65,7 +65,7 @@ func Test_SetNonRootUser(t *testing.T) {
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
 			request := requests.CreateFunctionRequest{Service: "testfunc", Image: "alpine:latest"}
-			factory := k8s.NewFactory(fake.NewSimpleClientset(), k8s.DeploymentConfig{
+			factory := k8s.NewFunctionFactory(fake.NewSimpleClientset(), k8s.DeploymentConfig{
 				LivenessProbe:  &k8s.ProbeConfig{},
 				ReadinessProbe: &k8s.ProbeConfig{},
 				SetNonRootUser: s.setNonRoot,

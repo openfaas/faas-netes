@@ -41,7 +41,7 @@ func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
 }
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
-func MakeDeployHandler(functionNamespace string, factory k8s.Factory) http.HandlerFunc {
+func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
@@ -106,7 +106,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.Factory) http.Handl
 	}
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, factory k8s.Factory) (*appsv1.Deployment, error) {
+func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, factory k8s.FunctionFactory) (*appsv1.Deployment, error) {
 	envVars := buildEnvVars(&request)
 
 	initialReplicas := int32p(initialReplicasCount)
@@ -229,7 +229,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	return deploymentSpec, nil
 }
 
-func makeServiceSpec(request requests.CreateFunctionRequest, factory k8s.Factory) *corev1.Service {
+func makeServiceSpec(request requests.CreateFunctionRequest, factory k8s.FunctionFactory) *corev1.Service {
 
 	serviceSpec := &corev1.Service{
 		TypeMeta: metav1.TypeMeta{

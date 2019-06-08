@@ -25,7 +25,7 @@ type FunctionProbes struct {
 
 // MakeProbes returns the liveness and readiness probes
 // by default the health check runs `cat /tmp/.lock` every ten seconds
-func (f *Factory) MakeProbes(r requests.CreateFunctionRequest) (*FunctionProbes, error) {
+func (f *FunctionFactory) MakeProbes(r requests.CreateFunctionRequest) (*FunctionProbes, error) {
 	var handler corev1.Handler
 	httpPath := ProbePathValue
 	initialDelaySeconds := int32(f.Config.LivenessProbe.InitialDelaySeconds)

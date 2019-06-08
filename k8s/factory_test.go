@@ -5,8 +5,8 @@ package k8s
 
 import "k8s.io/client-go/kubernetes/fake"
 
-func mockFactory() Factory {
-	return NewFactory(fake.NewSimpleClientset(),
+func mockFactory() FunctionFactory {
+	return NewFunctionFactory(fake.NewSimpleClientset(),
 		DeploymentConfig{
 			HTTPProbe: false,
 			LivenessProbe: &ProbeConfig{
