@@ -9,11 +9,11 @@ securityContext: true
 basic_auth: true
 
 faasnetes:
-  image: openfaas/faas-netes:0.7.5
+  image: openfaas/faas-netes:0.7.8
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
-  httpProbe: false              # Setting to true will use a lock file for readiness and liveness (incompatible with Istio)
+  httpProbe: false              # Setting to true will use HTTP for readiness and liveness (incompatible with Istio < 1.1.5)
   setNonRootUser: false
   readinessProbe:
     initialDelaySeconds: 0
