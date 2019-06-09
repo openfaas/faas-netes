@@ -26,7 +26,7 @@ spec:
           requests:
             memory: "50Mi"
             cpu: "20m"
-        image: openfaas/basic-auth-plugin:0.1.0
+        image: openfaas/basic-auth-plugin:0.1.1
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
