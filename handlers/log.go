@@ -9,11 +9,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-const (
-	// number of log messages that may be buffered
-	logBufferSize = 500 * 2 // double the event buffer size in kail
-)
-
 // LogRequestor implements the Requestor interface for k8s
 type LogRequestor struct {
 	client            kubernetes.Interface
@@ -38,7 +33,7 @@ func (l LogRequestor) Query(ctx context.Context, r logs.Request) (<-chan logs.Me
 		return nil, err
 	}
 
-	msgStream := make(chan logs.Message, logBufferSize)
+	msgStream := make(chan logs.Message, k8s.LogBufferSize)
 	go func() {
 		defer close(msgStream)
 		// here we depend on the fact that logStream will close when the context is cancelled,
