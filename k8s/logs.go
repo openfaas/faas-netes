@@ -29,8 +29,8 @@ const (
 	// defaultLogSince is the fallback log stream history
 	defaultLogSince = 5 * time.Minute
 
-	// logBufferSize number of log messages that may be buffered
-	logBufferSize = 500 * 2
+	// LogBufferSize number of log messages that may be buffered
+	LogBufferSize = 500 * 2
 )
 
 // Log is the object which will be used together with the template to generate
@@ -59,7 +59,7 @@ func GetLogs(ctx context.Context, client kubernetes.Interface, functionName, nam
 		return nil, err
 	}
 
-	logs := make(chan Log, logBufferSize)
+	logs := make(chan Log, LogBufferSize)
 
 	go func() {
 		var watching uint
