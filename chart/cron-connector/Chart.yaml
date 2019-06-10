@@ -1,0 +1,15 @@
+apiVersion: v1
+description: Trigger OpenFaas Functions with cron 
+name: cron-connector
+version: 0.2.1
+sources:
+- https://github.com/zeerorg/cron-connector
+home: https://www.openfaas.com
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+keywords:
+- functions
+- timer
+- cron
+maintainers:
+- name: zeerorg
+  email: r.g.gupta@outlook.com

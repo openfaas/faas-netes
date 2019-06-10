@@ -1,0 +1,9 @@
+image: zeerorg/cron-connector:v0.2.2
+gateway_url: http://gateway.openfaas:8080
+basic_auth: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
