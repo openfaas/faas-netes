@@ -74,10 +74,10 @@ func main() {
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, factory),
-		Health:         handlers.MakeHealthHandler(),
+		HealthHandler:  handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),
-		LogHandler:     logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace)),
+		LogHandler:     logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace), cfg.WriteTimeout),
 	}
 
 	var port int

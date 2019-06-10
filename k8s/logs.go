@@ -90,6 +90,8 @@ func GetLogs(ctx context.Context, client kubernetes.Interface, functionName, nam
 
 // podLogs returns a stream of logs lines from the specified pod
 func podLogs(ctx context.Context, i v1.PodInterface, pod, container, namespace string, tail int64, since *time.Time, follow bool, dst chan<- Log) error {
+	log.Printf("Logger: starting log stream for %s\n", pod)
+	defer log.Printf("Logger: stopping log stream for %s\n", pod)
 
 	opts := &corev1.PodLogOptions{
 		Follow:       follow,
@@ -168,10 +170,12 @@ func startFunctionPodInformer(ctx context.Context, client kubernetes.Interface, 
 	}
 	selector, err := metav1.LabelSelectorAsSelector(functionSelector)
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to build function selector")
+		err = errors.Wrap(err, "unable to build function selector")
+		log.Printf("PodInformer: %s", err)
+		return nil, err
 	}
 
-	log.Printf("starting informer for %s\n", selector.String())
+	log.Printf("PodInformer: starting informer for %s\n", selector.String())
 	factory := informers.NewFilteredSharedInformerFactory(
 		client,
 		podInformerResync,
@@ -181,26 +185,25 @@ func startFunctionPodInformer(ctx context.Context, client kubernetes.Interface, 
 
 	podInformer := factory.Core().V1().Pods()
 	podsResp, err := client.CoreV1().Pods(namespace).List(metav1.ListOptions{LabelSelector: selector.String()})
-
-	// pods, err := podInformer.Lister().List(selector)
 	if err != nil {
+		log.Printf("PodInformer: %s", err)
 		return nil, err
 	}
+
 	pods := podsResp.Items
-
 	if len(pods) == 0 {
-		return nil, errors.New("no matching instances found")
+		err = errors.New("no matching instances found")
+		log.Printf("PodInformer: %s", err)
+		return nil, err
 	}
 
-	added := make(chan string, len(pods)+100)
-	for _, pod := range pods {
-		added <- pod.Name
-	}
-
+	// prepare channel with enough space for the current instance set
+	added := make(chan string, len(pods))
 	podInformer.Informer().AddEventHandler(&podLoggerEventHandler{
 		added: added,
 	})
 
+	// will add existing pods to the chan and then listen for any new pods
 	go podInformer.Informer().Run(ctx.Done())
 	go func() {
 		<-ctx.Done()
@@ -224,11 +227,14 @@ type podLoggerEventHandler struct {
 
 func (h *podLoggerEventHandler) OnAdd(obj interface{}) {
 	pod := obj.(*corev1.Pod)
+	log.Printf("PodInformer: adding instance: %s", pod.Name)
 	h.added <- pod.Name
 }
+
 func (h *podLoggerEventHandler) OnUpdate(oldObj, newObj interface{}) {
 	// purposefully empty, we don't need to do anything for logs on update
 }
+
 func (h *podLoggerEventHandler) OnDelete(obj interface{}) {
 	// this may not be needed, the log stream Reader _should_ close on its own without
 	// us needing to watch and close it
