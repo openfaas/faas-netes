@@ -5,9 +5,8 @@ import (
 	"net/http"
 )
 
-// WriteError sets the response status code and write formats the provided message as the
+// ErrorF sets the response status code and write formats the provided message as the
 // response body
-func WriteError(w http.ResponseWriter, statusCode int, msg string, args ...interface{}) {
-	w.WriteHeader(statusCode)
-	w.Write([]byte(fmt.Sprintf(msg, args...)))
+func ErrorF(w http.ResponseWriter, statusCode int, msg string, args ...interface{}) {
+	http.Error(w, fmt.Sprintf(msg, args...), statusCode)
 }

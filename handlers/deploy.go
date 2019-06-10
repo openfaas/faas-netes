@@ -6,13 +6,14 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/openfaas/faas-netes/k8s"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/openfaas/faas-netes/k8s"
 
 	"github.com/openfaas/faas/gateway/requests"
 	appsv1 "k8s.io/api/apps/v1beta2"

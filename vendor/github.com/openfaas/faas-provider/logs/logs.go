@@ -1,5 +1,10 @@
 // Package logs provides the standard interface and handler for OpenFaaS providers to expose function logs.
 //
+// The package defines the Requester interface that OpenFaaS providers should implement and then expose using
+// the predefined NewLogHandlerFunc. See the example folder for a minimal log provider implementation.
+//
+// The Requester is where the actual specific logic for connecting to and querying the log system should be implemented.
+//
 package logs
 
 import (
@@ -15,24 +20,16 @@ type Request struct {
 	Instance string `json:"instance"`
 	// Since is the optional datetime value to start the logs from
 	Since *time.Time `json:"since"`
-	// Limit sets the maximum number of log messages to return, <=0 means unlimited
-	Limit int `json:"limit"`
-	// Follow is allows the user to request a stream of logs
+	// Tail sets the maximum number of log messages to return, <=0 means unlimited
+	Tail int `json:"tail"`
+	// Follow is allows the user to request a stream of logs until the timeout
 	Follow bool `json:"follow"`
-	// Pattern is an optional regexp value to filter the log messages
-	Pattern *string `json:"pattern"`
-	// Invert allows you to control if the Pattern should be matched or negated
-	Invert bool `json:"invert"`
 }
 
 // String implements that Stringer interface and prints the log Request in a consistent way that
 // allows you to safely compare if two requests have the same value.
 func (r Request) String() string {
-	pattern := ""
-	if r.Pattern != nil {
-		pattern = *r.Pattern
-	}
-	return fmt.Sprintf("name:%s instance:%s since:%v limit:%d follow:%v pattern:%v invert:%v", r.Name, r.Instance, r.Since, r.Limit, r.Follow, pattern, r.Invert)
+	return fmt.Sprintf("name:%s instance:%s since:%v tail:%d follow:%v", r.Name, r.Instance, r.Since, r.Tail, r.Follow)
 }
 
 // Message is a specific log message from a function container log stream
