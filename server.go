@@ -4,9 +4,10 @@
 package main
 
 import (
-	"github.com/openfaas/faas-netes/k8s"
 	"log"
 	"os"
+
+	"github.com/openfaas/faas-netes/k8s"
 
 	"github.com/openfaas/faas-netes/handlers"
 	"github.com/openfaas/faas-netes/types"
@@ -73,10 +74,10 @@ func main() {
 		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, factory),
-		HealthHandler:  handlers.MakeHealthHandler(),
+		Health:         handlers.MakeHealthHandler(),
 		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),
-		LogHandler:     logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, config, functionNamespace)),
+		LogHandler:     logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace)),
 	}
 
 	var port int

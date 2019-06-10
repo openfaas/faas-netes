@@ -60,7 +60,7 @@ func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
 	r.HandleFunc("/system/info", handlers.InfoHandler).Methods("GET")
 
 	r.HandleFunc("/system/secrets", handlers.SecretHandler).Methods(http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete)
-	r.HandleFunc("/system/logs", handlers.LogHandler).Methods(http.MethodGet, http.MethodPost)
+	r.HandleFunc("/system/logs", handlers.LogHandler).Methods(http.MethodGet)
 
 	// Open endpoints
 	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}", handlers.FunctionProxy)
