@@ -1,4 +1,24 @@
-# Using helm chart for deployment
+# OpenFaaS Cron Connector
+
+## Pre-requisite
+
+- Install OpenFaaS
+You must have a working OpenFaaS installation. You can find [instructions in the docs](https://docs.openfaas.com/deployment/kubernetes/#pick-helm-or-yaml-files-for-deployment-a-or-b), including instructions to also install OpenFaaS via Helm.
+
+## Install the Chart
+
+- Add OpenFaaS chart repo to helm and install using the following command.
+
+```bash
+# Add OpenFaaS chart repo
+$ helm repo add openfaas https://openfaas.github.io/faas-netes/
+
+$ helm upgrade cron-connector openfaas/cron-connector \
+    --install \
+    --namespace openfaas
+```
+
+## Deploying using local repository
 
 ```bash
 git clone https://github.com/zeerorg/cron-connector.git
