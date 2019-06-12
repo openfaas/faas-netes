@@ -4,10 +4,11 @@ RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
 WORKDIR /go/src/github.com/openfaas/faas-netes
 
+RUN curl -sLSf https://raw.githubusercontent.com/teamserverless/license-check/master/get.sh | sh
+RUN mv ./license-check /usr/bin/license-check && chmod +x /usr/bin/license-check
+
 COPY . .
 
-RUN curl -sL https://github.com/alexellis/license-check/releases/download/0.2.2/license-check > /usr/bin/license-check \
-    && chmod +x /usr/bin/license-check
 RUN license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
     && go test ./test/ \
