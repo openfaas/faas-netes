@@ -4,7 +4,12 @@ RUN mkdir -p /go/src/github.com/openfaas/faas-netes/
 
 WORKDIR /go/src/github.com/openfaas/faas-netes
 
+RUN curl -sLSf https://raw.githubusercontent.com/teamserverless/license-check/master/get.sh | sh
+RUN mv ./license-check /usr/bin/license-check && chmod +x /usr/bin/license-check
+
 COPY . .
+
+RUN license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 
 RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
     && GIT_COMMIT=$(git rev-list -1 HEAD) \
