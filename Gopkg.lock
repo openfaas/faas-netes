@@ -229,7 +229,7 @@
 
 [[projects]]
   branch = "feature-define-the-logging-interface"
-  digest = "1:2fad37cf9b84403098bfdae7473be801a66c4fc9a11212603eaa361362df4566"
+  digest = "1:accf593396b0ebfff9f1b03026f85d248352e5cb37e297da76e6ddc49e86f165"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
@@ -239,7 +239,7 @@
     "types",
   ]
   pruneopts = "UT"
-  revision = "254faa26e9735432d3c9bba8a339186b17dd3b44"
+  revision = "1699074dd8798940fdf5ef97a136265769c31b5a"
   source = "github.com/LucasRoesler/faas-provider"
 
 [[projects]]

@@ -62,13 +62,14 @@ func NewLogHandlerFunc(requestor Requester, timeout time.Duration) http.HandlerF
 		w.WriteHeader(http.StatusOK)
 		flusher.Flush()
 
-		sent := 0
+		// ensure that we always try to send the closing chunk, not the inverted order due to how
+		// the defer stack works. We need two flush statements to ensure that the empty slice is
+		// sent as its own chunk
+		defer flusher.Flush()
+		defer w.Write([]byte{})
+		defer flusher.Flush()
+
 		jsonEncoder := json.NewEncoder(w)
-
-		if logRequest.Tail > 0 {
-			log.Printf("LogHandler: watch for and stream `%d` log messages\n", logRequest.Tail)
-		}
-
 		for messages != nil {
 			select {
 			case <-cn.CloseNotify():
@@ -90,18 +91,11 @@ func NewLogHandlerFunc(requestor Requester, timeout time.Duration) http.HandlerF
 					log.Println(err.Error())
 					// write json error message here ?
 					jsonEncoder.Encode(Message{Text: "failed to serialize log message"})
+					flusher.Flush()
 					return
 				}
 
 				flusher.Flush()
-
-				if logRequest.Tail > 0 {
-					sent++
-					if sent >= logRequest.Tail {
-						log.Printf("LogHandler: reached message tail '%d'\n", logRequest.Tail)
-						return
-					}
-				}
 			}
 		}
 
