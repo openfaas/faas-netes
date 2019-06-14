@@ -21,9 +21,9 @@ $ helm upgrade cron-connector openfaas/cron-connector \
 ## Deploying using local repository
 
 ```bash
-git clone https://github.com/zeerorg/cron-connector.git
+git clone https://github.com/openfaas/faas-netes.git
 
-cd cron-connector
+cd faas-netes
 
 helm upgrade --namespace openfaas \
   --install cron-connector \
