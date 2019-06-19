@@ -8,13 +8,6 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    # Helm/k8s recommended label names v
-    app.kubernetes.io/name: {{ template "connector.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/component: cron-connector
-    app.kubernetes.io/part-of: openfaas
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   name: {{ template "connector.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
