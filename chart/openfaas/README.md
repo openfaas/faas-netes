@@ -75,7 +75,7 @@ A note on health-checking probes for functions:
 * httpProbe - most efficient, currently incompatible with Istio
 * execProbe - least efficient health-checking, but most compatible
 
-If you want to switch from "exec" liveness and readiness probes to httpProbes then use `--set faasnetes.httpProbe=true`, this can only be used with `--set operator.create=false`.
+If you want to switch from "exec" liveness and readiness probes to httpProbes then use `--set faasnetes.httpProbe=true`.
 
 ### Verify the installation
 
