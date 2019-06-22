@@ -228,19 +228,18 @@
   version = "0.9.14"
 
 [[projects]]
-  branch = "feature-define-the-logging-interface"
-  digest = "1:accf593396b0ebfff9f1b03026f85d248352e5cb37e297da76e6ddc49e86f165"
+  digest = "1:ff2d17f420f265ff6ad98e0d847687a3b6c171d87893d47a208e183092723208"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
     "auth",
-    "httputils",
+    "httputil",
     "logs",
     "types",
   ]
   pruneopts = "UT"
-  revision = "1699074dd8798940fdf5ef97a136265769c31b5a"
-  source = "github.com/LucasRoesler/faas-provider"
+  revision = "0ca8ae603fee9736e011b81fbf02777d89a4ea85"
+  version = "0.9.2"
 
 [[projects]]
   branch = "master"

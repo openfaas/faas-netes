@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/openfaas/faas-provider/httputils"
+	"github.com/openfaas/faas-provider/httputil"
 )
 
 // Requester submits queries the logging system.
@@ -42,7 +42,7 @@ func NewLogHandlerFunc(requestor Requester, timeout time.Duration) http.HandlerF
 		logRequest, err := parseRequest(r)
 		if err != nil {
 			log.Printf("LogHandler: could not parse request %s", err)
-			httputils.ErrorF(w, http.StatusUnprocessableEntity, "could not parse the log request")
+			httputil.Errorf(w, http.StatusUnprocessableEntity, "could not parse the log request")
 			return
 		}
 
@@ -51,7 +51,7 @@ func NewLogHandlerFunc(requestor Requester, timeout time.Duration) http.HandlerF
 		messages, err := requestor.Query(ctx, logRequest)
 		if err != nil {
 			// add smarter error handling here
-			httputils.ErrorF(w, http.StatusInternalServerError, "function log request failed")
+			httputil.Errorf(w, http.StatusInternalServerError, "function log request failed")
 			return
 		}
 
