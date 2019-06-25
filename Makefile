@@ -32,6 +32,8 @@ charts:
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh
+	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_arm64 contrib/values-arm64.yaml
+	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_armhf contrib/values-armhf.yaml
 
 ci-armhf-build:
 	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf

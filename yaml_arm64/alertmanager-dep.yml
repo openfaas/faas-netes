@@ -1,25 +1,56 @@
+---
+---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: openfaas
+    component: alertmanager
   name: alertmanager
-  namespace: openfaas
+  namespace: "openfaas"
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: alertmanager
+      annotations:
+        sidecar.istio.io/inject: "false"
+        checksum/alertmanager-config: "02cdd6da334612bb90668bbca0531b4ec41410464ae3d276b32e1f44067ae923"
     spec:
       containers:
       - name: alertmanager
-        image: functions/alertmanager:0.15.0-rc.0-arm64
+        resources:
+          requests:
+            memory: "32Mi"
+        image: functions/alertmanager:0.16.1-arm64
         imagePullPolicy: Always
-        command: 
+        command:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9093/-/ready
+          timeoutSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9093/-/ready
+          timeoutSeconds: 30
         ports:
-        - containerPort: 9003
+        - containerPort: 9093
           protocol: TCP
         resources:
           requests:
@@ -30,6 +61,9 @@ spec:
         - mountPath: /alertmanager.yml
           name: alertmanager-config
           subPath: alertmanager.yml
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
       volumes:
         - name: alertmanager-config
           configMap:
@@ -38,3 +72,6 @@ spec:
               - key: alertmanager.yml
                 path: alertmanager.yml
                 mode: 0644
+        - name: auth
+          secret:
+            secretName: basic-auth
