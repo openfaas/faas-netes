@@ -16,6 +16,10 @@ spec:
       labels:
         app: basic-auth-plugin
     spec:
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
       containers:
       - name:  basic-auth-plugin
         resources:
@@ -48,3 +52,15 @@ spec:
             - http://localhost:8080/health
           timeoutSeconds: 5
         env:
+        - name: secret_mount_path
+          value: "/var/secrets"
+        - name: basic_auth
+          value: "true"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP

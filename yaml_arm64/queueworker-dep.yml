@@ -16,6 +16,10 @@ spec:
       labels:
         app: queue-worker
     spec:
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
       containers:
       - name:  queue-worker
         resources:
@@ -35,3 +39,11 @@ spec:
           value: ".openfaas-fn.svc.cluster.local"
         - name: ack_wait    # Max duration of any async task / request
           value: 60s
+        - name: secret_mount_path
+          value: "/var/secrets"
+        - name: basic_auth
+          value: "true"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"

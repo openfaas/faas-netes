@@ -18,13 +18,17 @@ spec:
         app: gateway
     spec:
       serviceAccountName: faas-controller
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
       containers:
       - name: gateway
         resources:
           requests:
             memory: "120Mi"
             cpu: "50m"
-        image: openfaas/gateway:0.13.0-arm64
+        image: openfaas/gateway:0.14.4-arm64
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -66,12 +70,24 @@ spec:
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
           value: "4222"
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/var/secrets"
+        - name: auth_proxy_url
+          value: "http://basic-auth-plugin.openfaas:8080/validate"
+        - name: auth_pass_body
+          value: "false"
         - name: scale_from_zero
           value: "true"
         - name: max_idle_conns
           value: "1024"
         - name: max_idle_conns_per_host
           value: "1024"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         ports:
         - name: http
           containerPort: 8080
@@ -81,7 +97,7 @@ spec:
           requests:
             memory: "120Mi"
             cpu: "50m"
-        image: openfaas/faas-netes:0.7.1-arm64
+        image: openfaas/faas-netes:0.8.0-arm64
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true

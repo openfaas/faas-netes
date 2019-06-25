@@ -38,3 +38,11 @@ spec:
           command:
             - /home/app/faas-idler
             - -dry-run=true
+          volumeMounts:
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets/"
+      volumes:
+        - name: auth
+          secret:
+            secretName: basic-auth
