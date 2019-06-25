@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: openfaas
+    component: basic-auth-plugin
+  name: basic-auth-plugin
+  namespace: "openfaas"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io.scrape: "false"
+      labels:
+        app: basic-auth-plugin
+    spec:
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
+      containers:
+      - name:  basic-auth-plugin
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "20m"
+        image: openfaas/basic-auth-plugin:0.1.1
+        imagePullPolicy: Always
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=5
+            - --spider
+            - http://localhost:8080/health
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=5
+            - --spider
+            - http://localhost:8080/health
+          timeoutSeconds: 5
+        env:
+        - name: secret_mount_path
+          value: "/var/secrets"
+        - name: basic_auth
+          value: "true"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP

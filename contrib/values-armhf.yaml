@@ -1,0 +1,19 @@
+basic_auth: false
+
+faasnetes:
+  image: openfaas/faas-netes:0.8.0-armhf
+
+gateway:
+  image: openfaas/gateway:0.14.4-armhf
+
+queueWorker:
+  image: openfaas/queue-worker:0.4.9-armhf
+
+prometheus:
+  image: functions/prometheus:2.7.1-armhf
+
+alertmanager:
+  image: functions/alertmanager:0.16.1-armhf
+
+faasIdler:
+  image: openfaas/faas-idler:0.2.0-armhf

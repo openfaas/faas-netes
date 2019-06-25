@@ -1,0 +1,43 @@
+---
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: faas-prometheus
+  namespace: "openfaas"
+  labels:
+    app: openfaas
+    component: prometheus
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: faas-prometheus
+  namespace: "openfaas"
+  labels:
+    app: openfaas
+    component: prometheus
+rules:
+- apiGroups: [""]
+  resources:
+    - services
+    - endpoints
+    - pods
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: faas-prometheus
+  namespace: "openfaas"
+  labels:
+    app: openfaas
+    component: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: faas-prometheus
+subjects:
+- kind: ServiceAccount
+  name: faas-prometheus
+  namespace: "openfaas"

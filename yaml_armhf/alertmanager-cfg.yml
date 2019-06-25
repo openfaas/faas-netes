@@ -1,10 +1,13 @@
+---
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: alertmanager
+    app: openfaas
+    component: alertmanager-config
   name: alertmanager-config
-  namespace: openfaas
+  namespace: "openfaas"
 data:
   alertmanager.yml: |
     route:
@@ -29,4 +32,3 @@ data:
       webhook_configs:
         - url: http://gateway.openfaas:8080/system/alert
           send_resolved: true
----

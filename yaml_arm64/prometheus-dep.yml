@@ -1,30 +1,57 @@
+---
+---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: openfaas
+    component: prometheus
   name: prometheus
-  namespace: openfaas
+  namespace: "openfaas"
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: prometheus
+      annotations:
+        sidecar.istio.io/inject: "false"
+        checksum/prometheus-config: "6c1e41fcc392e2bfcfc6ddfd512cf520a6458abf28692c9422f90120388c38f9"
     spec:
+      serviceAccountName: faas-prometheus
       containers:
       - name: prometheus
-        image: functions/prometheus:2.3.1-arm64
-        command: 
+        resources:
+          requests:
+            memory: "512Mi"
+        image: functions/prometheus:2.7.1-arm64
+        command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9090/-/healthy
+          timeoutSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=30
+            - --spider
+            - http://localhost:9090/-/healthy
+          timeoutSeconds: 30
         ports:
         - containerPort: 9090
           protocol: TCP
-        resources:
-          requests:
-            memory: 250Mi
-          limits:
-            memory: 250Mi
         volumeMounts:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config
@@ -32,6 +59,8 @@ spec:
         - mountPath: /etc/prometheus/alert.rules.yml
           name: prometheus-config
           subPath: alert.rules.yml
+        - mountPath: /prometheus/data
+          name: prom-data
       volumes:
         - name: prometheus-config
           configMap:
@@ -43,3 +72,5 @@ spec:
               - key: alert.rules.yml
                 path: alert.rules.yml
                 mode: 0644
+        - name: prom-data
+          emptyDir: {}
