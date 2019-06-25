@@ -1,3 +1,6 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.basic_auth }}
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -18,3 +21,5 @@ spec:
       name: http
   selector:
     app: basic-auth-plugin
+
+{{- end }}

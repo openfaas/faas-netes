@@ -1,3 +1,6 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.basic_auth }}
+---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -84,3 +87,5 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+
+{{- end }}

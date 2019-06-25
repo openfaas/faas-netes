@@ -17,3 +17,7 @@ alertmanager:
 
 faasIdler:
   image: openfaas/faas-idler:0.2.0-armhf
+
+basicAuthPlugin:
+  image: openfaas/basic-auth-plugin:0.14.4-armhf
+  replicas: 1
