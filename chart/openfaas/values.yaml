@@ -22,6 +22,10 @@ gateway:
   nodePort: 31112
   maxIdleConns: 1024
   maxIdleConnsPerHost: 1024
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
 
 faasnetes:
   image: openfaas/faas-netes:0.8.0
@@ -38,6 +42,10 @@ faasnetes:
     initialDelaySeconds: 2
     timeoutSeconds: 1
     periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
 
 # replaces faas-netes with openfaas-operator
 operator:
@@ -46,27 +54,46 @@ operator:
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
   createCRD: true
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
 
 queueWorker:
   image: openfaas/queue-worker:0.7.2
   ackWait : "60s"
   replicas: 1
   gatewayInvoke: true
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
 
 # monitoring and auto-scaling components
 # both components
 prometheus:
   image: prom/prometheus:v2.7.1
   create: true
+  resources:
+    requests:
+      memory: "512Mi"
 
 alertmanager:
   image: prom/alertmanager:v0.16.1
   create: true
+  resources:
+    requests:
+      memory: "25Mi"
+    limits:
+      memory: "50Mi"
 
 # async provider
 nats:
   image: nats-streaming:0.11.2
   enableMonitoring: false
+  resources:
+    requests:
+      memory: "120Mi"
 
 # ingress configuration
 ingress:
@@ -89,11 +116,18 @@ faasIdler:
   create: true
   inactivityDuration: 15m               # If a function is inactive for 15 minutes, it may be scaled to zero
   reconcileInterval: 1m                 # The interval between each attempt to scale functions to zero
-  dryRun: true                          # Set to true to enable the idler to apply changes and scale to zero
+  dryRun: true                          # Set to false to enable the idler to apply changes and scale to zero
+  resources:
+    requests:
+      memory: "64Mi"
 
 basicAuthPlugin:
   image: openfaas/basic-auth-plugin:0.1.1
   replicas: 1
+  resources:
+    requests:
+      memory: "50Mi"
+      cpu: "20m"
 
 nodeSelector: {}
 

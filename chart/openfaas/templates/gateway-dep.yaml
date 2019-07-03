@@ -34,9 +34,7 @@ spec:
       containers:
       - name: gateway
         resources:
-          requests:
-            memory: "120Mi"
-            cpu: "50m"
+          {{- .Values.gateway.resources | toYaml | nindent 12 }}
         image: {{ .Values.gateway.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
@@ -112,9 +110,7 @@ spec:
       {{- if .Values.operator.create }}
       - name: operator
         resources:
-          requests:
-            memory: "120Mi"
-            cpu: "50m"
+          {{- .Values.operator.resources | toYaml | nindent 12 }}
         image: {{ .Values.operator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
@@ -154,9 +150,7 @@ spec:
       {{- else }}
       - name: faas-netes
         resources:
-          requests:
-            memory: "120Mi"
-            cpu: "50m"
+          {{- .Values.faasnetes.resources | toYaml | nindent 12 }}
         image: {{ .Values.faasnetes.image }}
         imagePullPolicy: {{ .Values.openFaasImagePullPolicy }}
         {{- if .Values.securityContext }}
