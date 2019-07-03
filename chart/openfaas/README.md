@@ -70,12 +70,14 @@ helm repo update \
 
 > The above command will also update your helm repo to pull in any new releases.
 
+### httpProbe vs. execProbe
+
 A note on health-checking probes for functions:
 
-* httpProbe - most efficient, currently incompatible with Istio
+* httpProbe - (`default`) most efficient, currently incompatible with Istio
 * execProbe - least efficient health-checking, but most compatible
 
-If you want to switch from "exec" liveness and readiness probes to httpProbes then use `--set faasnetes.httpProbe=true`.
+Use `--set faasnetes.httpProbe=true/false` to toggle between http / exec probes.
 
 ### Verify the installation
 
