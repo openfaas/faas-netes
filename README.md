@@ -47,15 +47,15 @@ faas-netes can be configured with environment variables, but for a full set of o
 | `write_timeout`     | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`        |
 | `read_timeout`      | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`        |
 | `image_pull_policy` | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`).  Default: `Always` |
-| `gateway.resource`        | CPU/Memory resource requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `faasnetes.resource`      | CPU/Memory resource requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `operator.resource`       | CPU/Memory resource requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `queueWorker.resource`    | CPU/Memory resource requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `prometheus.resource`     | CPU/Memory resource requests/limits (memory: `512Mi`)             |
-| `alertmanager.resource`   | CPU/Memory resource requests/limits (memory: `25Mi`)              |
-| `nats.resource`           | CPU/Memory resource requests/limits (memory: `120Mi`)             |
-| `faasIdler.resource`      | CPU/Memory resource requests/limits (memory: `64Mi`)              |
-| `basicAuthPlugin.resource`| CPU/Memory resource requests/limits (memory: `50Mi`, cpu: `20m`)  |
+| `gateway.resources`        | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
+| `faasnetes.resources`      | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
+| `operator.resources`       | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
+| `queueWorker.resources`    | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
+| `prometheus.resources`     | CPU/Memory resources requests/limits (memory: `512Mi`)             |
+| `alertmanager.resources`   | CPU/Memory resources requests/limits (memory: `25Mi`)              |
+| `nats.resources`           | CPU/Memory resources requests/limits (memory: `120Mi`)             |
+| `faasIdler.resources`      | CPU/Memory resources requests/limits (memory: `64Mi`)              |
+| `basicAuthPlugin.resources`| CPU/Memory resources requests/limits (memory: `50Mi`, cpu: `20m`)  |
 
 ### Readiness checking
 
