@@ -32,12 +32,12 @@ faasnetes:
   setNonRootUser: false
   readinessProbe:
     initialDelaySeconds: 2
-    timeoutSeconds: 2           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
+    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
     periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
   livenessProbe:
     initialDelaySeconds: 2
-    timeoutSeconds: 2
-    periodSeconds: 10           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    timeoutSeconds: 1
+    periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
 
 # replaces faas-netes with openfaas-operator
 operator:
