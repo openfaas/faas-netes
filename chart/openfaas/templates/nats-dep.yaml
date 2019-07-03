@@ -23,8 +23,7 @@ spec:
       containers:
       - name:  nats
         resources:
-          requests:
-            memory: "120Mi"
+          {{- .Values.nats.resources | toYaml | nindent 12 }}
         image: {{ .Values.nats.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         ports:

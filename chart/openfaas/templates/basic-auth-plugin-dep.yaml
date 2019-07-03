@@ -30,9 +30,7 @@ spec:
       containers:
       - name:  basic-auth-plugin
         resources:
-          requests:
-            memory: "50Mi"
-            cpu: "20m"
+          {{- .Values.basicAuthPlugin.resources | toYaml | nindent 12 }}
         image: {{ .Values.basicAuthPlugin.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}

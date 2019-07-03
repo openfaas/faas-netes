@@ -26,8 +26,7 @@ spec:
       containers:
       - name: prometheus
         resources:
-          requests:
-            memory: "512Mi"
+          {{- .Values.prometheus.resources | toYaml | nindent 12 }}
         image: {{ .Values.prometheus.image }}
         command:
           - "prometheus"

@@ -24,8 +24,7 @@ spec:
       containers:
         - name: faas-idler
           resources:
-            requests:
-              memory: "64Mi"
+            {{- .Values.faasIdler.resources | toYaml | nindent 12 }}
           image: {{ .Values.faasIdler.image }}
           imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
           env:
