@@ -70,7 +70,37 @@ helm repo update \
 
 > The above command will also update your helm repo to pull in any new releases.
 
-### httpProbe vs. execProbe
+#### Tuning cold-start
+
+The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to scale to zero.
+
+There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, which is 1-2 seconds.
+
+1) Don't set the function to scale down to zero, just set it a minimum availability i.e. 1/1 replicas
+2) Use async invocations via the `/async/function/<name>` route
+3) Tune the readinessProbes to be aggressively low values. This will reduce the cold-start at the cost of more `kubelet` CPU usage
+
+To achieve around 1s coldstart, set `values.yaml`:
+
+```yaml
+faasnetes:
+
+# redacted
+  readinessProbe:
+    initialDelaySeconds: 1
+    timeoutSeconds: 1
+    periodSeconds: 1
+  livenessProbe:
+    initialDelaySeconds: 1
+    timeoutSeconds: 1
+    periodSeconds: 1
+# redacted
+  imagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
+```
+
+You should also set `imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available.
+
+#### httpProbe vs. execProbe
 
 A note on health-checking probes for functions:
 
