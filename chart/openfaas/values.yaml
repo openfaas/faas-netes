@@ -4,6 +4,7 @@ async: true
 
 exposeServices: true
 serviceType: NodePort
+httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5)
 rbac: true
 securityContext: true
 basic_auth: true
