@@ -43,6 +43,11 @@ spec:
           runAsUser: 10001
         {{- end }}
         livenessProbe:
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /healthz
+            port: 8080
+          {{- else }}
           exec:
             command:
             - wget
@@ -51,8 +56,14 @@ spec:
             - --timeout=5
             - --spider
             - http://localhost:8080/healthz
+          {{- end }}
           timeoutSeconds: 5
         readinessProbe:
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /healthz
+            port: 8080
+          {{- else }}
           exec:
             command:
             - wget
@@ -61,6 +72,7 @@ spec:
             - --timeout=5
             - --spider
             - http://localhost:8080/healthz
+          {{- end }}
           timeoutSeconds: 5
         env:
         - name: read_timeout

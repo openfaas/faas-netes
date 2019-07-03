@@ -33,6 +33,11 @@ spec:
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         livenessProbe:
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /-/healthy
+            port: 9090
+          {{- else }}
           exec:
             command:
             - wget
@@ -41,8 +46,14 @@ spec:
             - --timeout=30
             - --spider
             - http://localhost:9090/-/healthy
+          {{- end }}
           timeoutSeconds: 30
         readinessProbe:
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /-/healthy
+            port: 9090
+          {{- else }}
           exec:
             command:
             - wget
@@ -51,6 +62,7 @@ spec:
             - --timeout=30
             - --spider
             - http://localhost:9090/-/healthy
+          {{- end }}
           timeoutSeconds: 30
         ports:
         - containerPort: 9090

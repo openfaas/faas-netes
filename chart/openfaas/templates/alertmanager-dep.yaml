@@ -31,6 +31,11 @@ spec:
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
         livenessProbe:
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /-/ready
+            port: 9093
+          {{- else }}
           exec:
             command:
             - wget
@@ -39,8 +44,14 @@ spec:
             - --timeout=30
             - --spider
             - http://localhost:9093/-/ready
+          {{- end }}
           timeoutSeconds: 30
         readinessProbe:
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /-/ready
+            port: 9093
+          {{- else }}
           exec:
             command:
             - wget
@@ -49,6 +60,7 @@ spec:
             - --timeout=30
             - --spider
             - http://localhost:9093/-/ready
+          {{- end }}
           timeoutSeconds: 30
         ports:
         - containerPort: 9093
