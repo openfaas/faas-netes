@@ -87,11 +87,11 @@ faasnetes:
 
 # redacted
   readinessProbe:
-    initialDelaySeconds: 1
+    initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 1
   livenessProbe:
-    initialDelaySeconds: 1
+    initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 1
 # redacted
