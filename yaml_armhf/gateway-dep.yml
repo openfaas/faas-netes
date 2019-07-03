@@ -98,19 +98,19 @@ spec:
         - name: image_pull_policy
           value: "Always"
         - name: http_probe
-          value: "false"
+          value: "true"
         - name: set_nonroot_user
           value: "false"
         - name: readiness_probe_initial_delay_seconds
-          value: "0"
+          value: "2"
         - name: readiness_probe_timeout_seconds
-          value: "1"
+          value: "2"
         - name: readiness_probe_period_seconds
-          value: "1"
+          value: "2"
         - name: liveness_probe_initial_delay_seconds
-          value: "3"
+          value: "2"
         - name: liveness_probe_timeout_seconds
-          value: "1"
+          value: "2"
         - name: liveness_probe_period_seconds
           value: "10"
         ports:
