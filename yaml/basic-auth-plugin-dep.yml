@@ -24,9 +24,10 @@ spec:
       containers:
       - name:  basic-auth-plugin
         resources:
-          requests:
-            memory: "50Mi"
-            cpu: "20m"
+            requests:
+              cpu: 20m
+              memory: 50Mi
+            
         image: openfaas/basic-auth-plugin:0.1.1
         imagePullPolicy: Always
         securityContext:

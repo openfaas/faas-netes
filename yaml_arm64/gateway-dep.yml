@@ -25,9 +25,10 @@ spec:
       containers:
       - name: gateway
         resources:
-          requests:
-            memory: "120Mi"
-            cpu: "50m"
+            requests:
+              cpu: 50m
+              memory: 120Mi
+            
         image: openfaas/gateway:0.14.4-arm64
         imagePullPolicy: Always
         securityContext:
@@ -94,9 +95,10 @@ spec:
           protocol: TCP
       - name: faas-netes
         resources:
-          requests:
-            memory: "120Mi"
-            cpu: "50m"
+            requests:
+              cpu: 50m
+              memory: 120Mi
+            
         image: openfaas/faas-netes:0.8.0-arm64
         imagePullPolicy: 
         securityContext:
@@ -120,15 +122,15 @@ spec:
         - name: readiness_probe_initial_delay_seconds
           value: "2"
         - name: readiness_probe_timeout_seconds
-          value: "2"
+          value: "1"
         - name: readiness_probe_period_seconds
           value: "2"
         - name: liveness_probe_initial_delay_seconds
           value: "2"
         - name: liveness_probe_timeout_seconds
-          value: "2"
+          value: "1"
         - name: liveness_probe_period_seconds
-          value: "10"
+          value: "2"
         ports:
         - containerPort: 8081
           protocol: TCP

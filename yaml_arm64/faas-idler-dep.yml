@@ -21,7 +21,8 @@ spec:
         - name: faas-idler
           resources:
             requests:
-              memory: "64Mi"
+              memory: 64Mi
+            
           image: openfaas/faas-idler:0.2.0-arm64
           imagePullPolicy: Always
           env:

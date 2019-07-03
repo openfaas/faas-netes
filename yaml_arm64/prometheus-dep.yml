@@ -16,14 +16,15 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "false"
-        checksum/prometheus-config: "92ccc8f9ce5ee13af4f9826956cbf413ec0484aff0d6251453e14c7edcc0b5b4"
+        checksum/prometheus-config: "cd516866288c0a34e1e7bb6f0d1a661809fcf00254d5b3feac9eeee2c9a68665"
     spec:
       serviceAccountName: faas-prometheus
       containers:
       - name: prometheus
         resources:
-          requests:
-            memory: "512Mi"
+            requests:
+              memory: 512Mi
+            
         image: functions/prometheus:2.7.1-arm64
         command:
           - "prometheus"
