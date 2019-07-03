@@ -11,6 +11,9 @@ queueWorker:
 
 prometheus:
   image: functions/prometheus:2.7.1-armhf
+  resources:
+    requests:
+      memory: "125Mi"
 
 alertmanager:
   image: functions/alertmanager:0.16.1-armhf
