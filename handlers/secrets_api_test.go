@@ -52,6 +52,15 @@ func Test_SecretsHandler(t *testing.T) {
 		if actualValue != secretValue {
 			t.Errorf("want secret value: '%s', got: '%s'", secretValue, actualValue)
 		}
+
+		// Attempt to re-create the secret and make sure that "409 CONFLICT" is returned.
+		newReq := httptest.NewRequest("POST", "http://example.com/foo", strings.NewReader(payload))
+		newW := httptest.NewRecorder()
+		secretsHandler(newW, newReq)
+		newResp := newW.Result()
+		if newResp.StatusCode != http.StatusConflict {
+			t.Errorf("want status code '%d', got '%d'", http.StatusConflict, newResp.StatusCode)
+		}
 	})
 
 	t.Run("update managed secrets", func(t *testing.T) {
