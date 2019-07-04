@@ -3,11 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/openfaas/faas-netes/k8s"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/openfaas/faas-netes/k8s"
 
 	"github.com/openfaas/faas/gateway/requests"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -89,7 +90,7 @@ func updateDeploymentSpec(
 			}
 		}
 
-		deployment.Labels = labels
+		// deployment.Labels = labels
 		deployment.Spec.Template.ObjectMeta.Labels = labels
 
 		deployment.Annotations = annotations

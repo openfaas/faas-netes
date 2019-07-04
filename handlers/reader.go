@@ -89,7 +89,7 @@ func readFunction(item appsv1.Deployment) *requests.Function {
 		replicas = uint64(*item.Spec.Replicas)
 	}
 
-	labels := item.Labels
+	labels := item.Spec.Template.Labels
 	function := requests.Function{
 		Name:              item.Name,
 		Replicas:          replicas,
