@@ -319,6 +319,8 @@ func isNotFound(err error) bool {
 // processErrorReasons maps k8serrors.ReasonForError to http status codes
 func processErrorReasons(err error) (int, metav1.StatusReason) {
 	switch {
+	case k8serrors.IsAlreadyExists(err):
+		return http.StatusConflict, metav1.StatusReasonAlreadyExists
 	case k8serrors.ReasonForError(err) == metav1.StatusReasonConflict:
 		return http.StatusConflict, metav1.StatusReasonConflict
 	case k8serrors.ReasonForError(err) == metav1.StatusReasonInvalid:
