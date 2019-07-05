@@ -4,21 +4,24 @@
 
 [OpenFaaS](https://github.com/openfaas/faas) (Functions as a Service) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
-**Highlights**
+## Highlights
 
 * Ease of use through UI portal and *one-click* install
 * Write functions in any language for Linux or Windows and package in Docker/OCI image format
-* Portable - runs on existing hardware or public/private cloud - [Kubernetes](https://github.com/openfaas/faas-netes) and Docker Swarm native
-* [CLI](http://github.com/openfaas/faas-cli) available with YAML format for templating and defining functions
-* Auto-scales as demand increases
-* Scales to zero and back again
-* Compatible with [Istio Service Mesh](https://istio.io). mTLS supported via `exec` health checks.
+* Portable - runs on existing hardware or public/private cloud. Native [Kubernetes](https://github.com/openfaas/faas-netes) support, Docker Swarm also available
+* [Operator / CRD option available](https://github.com/openfaas-incubator/openfaas-operator/)
+* [faas-cli](http://github.com/openfaas/faas-cli) available with stack.yml for creating and managing functions
+* Auto-scales according to metrics from Prometheus
+* Scales to zero and back again and can be tuned at a per-function level
+* Works with service-mesh
+    * Tested with [Istio](https://istio.io) including mTLS
+    * Tested with [Linkerd2](https://github.com/openfaas-incubator/openfaas-linkerd2) including mTLS
 
 ## Deploy OpenFaaS
 
-**Note:** You must also pass `--set rbac=false` if your cluster is not configured with role-based access control. For further information, see [here](https://kubernetes.io/docs/admin/authorization/rbac/).
+**Note:** If your cluster is not configured with role-based access control, then pass `--set rbac=false`. For further information, see [Kubernetes: RBAC](https://kubernetes.io/docs/admin/authorization/rbac/).
 
-**Note:** If you can not use helm with Tiller, [skip below](#deployment-with-helm-template) for alternative install instructions.
+**Note:** If you can not use helm with Tiller, you can still use the `helm` CLI to [generate custom YAML](#deployment-with-helm-template) without server-side components.
 
 ---
 ### Install
@@ -104,8 +107,8 @@ You should also set `imagePullPolicy` to `IfNotPresent` so that the `kubelet` on
 
 A note on health-checking probes for functions:
 
-* httpProbe - (`default`) most efficient, currently incompatible with Istio
-* execProbe - least efficient health-checking, but most compatible
+* httpProbe - (`default`) most efficient. (compatible with Istio >= 1.1.5)
+* execProbe - least efficient option, but compatible with Istio <> 1.1.5
 
 Use `--set faasnetes.httpProbe=true/false` to toggle between http / exec probes.
 
@@ -249,7 +252,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `basic_auth` | Enable basic authentication on the Gateway | `true` |
 | `rbac` | Enable RBAC | `true` |
-| `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5) | `true` |
+| `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
 | `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |

@@ -17,13 +17,14 @@ faas-netes
 
 In this README you'll find a technical overview and instructions for deploying to a Kubernetes cluster. (Docker Swarm is also supported along with Hashicorp Nomad)
 
-* Framework for deploying serverless workloads
+* Platorm for deploying [serverless-style workloads](https://docs.openfaas.com/reference/workloads/) - microservices and functions
 * Native Kubernetes integrations (API and ecosystem)
-* Built-in UI
+* Built-in UI portal
 * YAML templates & helm chart
-* Over 13.5k GitHub stars
+* Over 17.5k GitHub stars
 * Independent open-source project with over 130 contributors
 * Operator available to use Custom Resource Definitions (CRDs) [openfaas-operator](https://github.com/openfaas-incubator/openfaas-operator/)
+* OAuth2 / OIDC authz available
 
 ## Get started
 
