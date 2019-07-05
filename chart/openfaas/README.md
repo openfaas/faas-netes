@@ -108,7 +108,7 @@ You should also set `imagePullPolicy` to `IfNotPresent` so that the `kubelet` on
 A note on health-checking probes for functions:
 
 * httpProbe - (`default`) most efficient. (compatible with Istio >= 1.1.5)
-* execProbe - least efficient option, but compatible with Istio <> 1.1.5
+* execProbe - least efficient option, but compatible with Istio < 1.1.5
 
 Use `--set faasnetes.httpProbe=true/false` to toggle between http / exec probes.
 
