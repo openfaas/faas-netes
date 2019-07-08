@@ -13,7 +13,7 @@ basic_auth: true
 openfaasImagePullPolicy: "Always"
 
 gateway:
-  image: openfaas/gateway:0.14.4
+  image: openfaas/gateway:0.15.0
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -29,7 +29,7 @@ gateway:
       cpu: "50m"
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.0
+  image: openfaas/faas-netes:0.8.1
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions

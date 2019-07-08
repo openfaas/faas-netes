@@ -16,7 +16,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "false"
-        checksum/prometheus-config: "cd516866288c0a34e1e7bb6f0d1a661809fcf00254d5b3feac9eeee2c9a68665"
+        checksum/prometheus-config: "8d8d46b51d43280a8843b35723e57ee1699f116f2a66c05f929039677f1d8fd3"
     spec:
       serviceAccountName: faas-prometheus
       containers:
@@ -31,24 +31,14 @@ spec:
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: Always
         livenessProbe:
-          exec:
-            command:
-            - wget
-            - --quiet
-            - --tries=1
-            - --timeout=30
-            - --spider
-            - http://localhost:9090/-/healthy
+          httpGet:
+            path: /-/healthy
+            port: 9090
           timeoutSeconds: 30
         readinessProbe:
-          exec:
-            command:
-            - wget
-            - --quiet
-            - --tries=1
-            - --timeout=30
-            - --spider
-            - http://localhost:9090/-/healthy
+          httpGet:
+            path: /-/healthy
+            port: 9090
           timeoutSeconds: 30
         ports:
         - containerPort: 9090

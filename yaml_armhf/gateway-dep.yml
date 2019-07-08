@@ -31,24 +31,14 @@ spec:
           readOnlyRootFilesystem: true
           runAsUser: 10001
         livenessProbe:
-          exec:
-            command:
-            - wget
-            - --quiet
-            - --tries=1
-            - --timeout=5
-            - --spider
-            - http://localhost:8080/healthz
+          httpGet:
+            path: /healthz
+            port: 8080
           timeoutSeconds: 5
         readinessProbe:
-          exec:
-            command:
-            - wget
-            - --quiet
-            - --tries=1
-            - --timeout=5
-            - --spider
-            - http://localhost:8080/healthz
+          httpGet:
+            path: /healthz
+            port: 8080
           timeoutSeconds: 5
         env:
         - name: read_timeout

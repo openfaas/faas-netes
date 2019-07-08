@@ -16,7 +16,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "false"
-        checksum/alertmanager-config: "7b1226b584a2a032f4dd1443e54930ea83f369ea8ac2a6cd160e80098146adf0"
+        checksum/alertmanager-config: "54366e3c1dae6ca23dde0e3bb1390774dab9a93566a12ae5943cfa3731656068"
     spec:
       containers:
       - name: alertmanager
@@ -27,24 +27,14 @@ spec:
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
         livenessProbe:
-          exec:
-            command:
-            - wget
-            - --quiet
-            - --tries=1
-            - --timeout=30
-            - --spider
-            - http://localhost:9093/-/ready
+          httpGet:
+            path: /-/ready
+            port: 9093
           timeoutSeconds: 30
         readinessProbe:
-          exec:
-            command:
-            - wget
-            - --quiet
-            - --tries=1
-            - --timeout=30
-            - --spider
-            - http://localhost:9093/-/ready
+          httpGet:
+            path: /-/ready
+            port: 9093
           timeoutSeconds: 30
         ports:
         - containerPort: 9093
