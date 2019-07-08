@@ -6,6 +6,8 @@ exposeServices: true
 serviceType: NodePort
 httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5)
 rbac: true
+# create pod security policies for OpenFaaS control plane
+# https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 psp: false
 securityContext: true
 basic_auth: true
