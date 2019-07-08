@@ -19,7 +19,8 @@ spec:
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     allowedCapabilities:
-        - '*'
+        - NET_ADMIN
+        - NET_RAW
     fsGroup:
         rule: RunAsAny
     hostPorts:
