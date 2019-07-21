@@ -63,6 +63,33 @@ operator:
       memory: "120Mi"
       cpu: "50m"
 
+# configuration options for the faas-lambda provider
+faaslambda:
+  image: ewilde/faas-lambda:0.1
+  create: false
+  replicas: 1
+  readTimeout : "60s"
+  writeTimeout : "60s"
+  imagePullPolicy : "Always"    # Image pull policy for deployed functions
+  httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on Pods (incompatible with Istio < 1.1.5)
+  setNonRootUser: false
+  readinessProbe:
+    initialDelaySeconds: 2
+    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
+    periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+  livenessProbe:
+    initialDelaySeconds: 2
+    timeoutSeconds: 1
+    periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
+  lambda_execution_role: ""
+  access_token: ""
+  access_email: ""
+  aws_region: ""
+
 queueWorker:
   image: openfaas/queue-worker:0.7.2
   ackWait : "60s"

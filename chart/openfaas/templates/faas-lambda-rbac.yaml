@@ -1,5 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if eq .Values.faasnetes.create true }}
+{{- if eq .Values.faaslambda.create true }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -7,10 +7,10 @@ metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
+    component: faas-lambda
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ .Release.Name }}-controller
+  name: {{ .Release.Name }}-lambda
   namespace: {{ .Release.Namespace | quote }}
 {{- if .Values.rbac }}
 ---
@@ -20,10 +20,10 @@ metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
+    component: faas-lambda
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ .Release.Name }}-controller
+  name: {{ .Release.Name }}-lambda
   namespace: {{ $functionNs | quote }}
 rules:
   - apiGroups:
@@ -77,18 +77,18 @@ metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: faas-controller
+    component: faas-lambda
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ .Release.Name }}-controller
+  name: {{ .Release.Name }}-lambda
   namespace: {{ $functionNs | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ .Release.Name }}-controller
+  name: {{ .Release.Name }}-lambda
 subjects:
   - kind: ServiceAccount
-    name: {{ .Release.Name }}-controller
+    name: {{ .Release.Name }}-lambda
     namespace: {{ .Release.Namespace | quote }}
 {{- end }}
 {{- end }}

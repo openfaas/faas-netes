@@ -22,6 +22,8 @@ spec:
     spec:
       {{- if .Values.operator.create }}
       serviceAccountName: {{ .Release.Name }}-operator
+      {{- else if .Values.faaslambda.create }}
+      serviceAccountName: {{ .Release.Name }}-lambda
       {{- else }}
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
@@ -83,8 +85,13 @@ spec:
           value: "{{ .Values.gateway.upstreamTimeout }}"
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
+        {{- if .Values.faaslambda.create}}
+        - name: direct_functions
+          value: "false"
+        {{- else }}
         - name: direct_functions
           value: "true"
+        {{- end }}
         - name: direct_functions_suffix
           value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- if .Values.async }}
@@ -159,6 +166,75 @@ spec:
         ports:
         - containerPort: 8081
           protocol: TCP
+      {{- else if .Values.faaslambda.create }}
+      - name: faaslambda
+        resources:
+          {{- .Values.operator.resources | toYaml | nindent 12 }}
+        image: {{ .Values.faaslambda.image }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+        {{- end }}
+        env:
+          - name: port
+            value: "8081"
+          - name: function_namespace
+            value: {{ $functionNs | quote }}
+          - name: read_timeout
+            value: "{{ .Values.faaslambda.readTimeout }}"
+          - name: write_timeout
+            value: "{{ .Values.faaslambda.writeTimeout }}"
+          - name: image_pull_policy
+            value: {{ .Values.faaslambda.imagePullPolicy | quote }}
+          - name: http_probe
+            value: "{{ .Values.faaslambda.httpProbe }}"
+          - name: secret_mount_path
+            value: "/var/secrets"
+          {{- if .Values.basic_auth }}
+          - name: basic_auth
+            value: "{{ .Values.basic_auth }}"
+          {{- end }}
+          - name: readiness_probe_initial_delay_seconds
+            value: "{{ .Values.faaslambda.readinessProbe.initialDelaySeconds }}"
+          - name: readiness_probe_timeout_seconds
+            value: "{{ .Values.faaslambda.readinessProbe.timeoutSeconds }}"
+          - name: readiness_probe_period_seconds
+            value: "{{ .Values.faaslambda.readinessProbe.periodSeconds }}"
+          - name: liveness_probe_initial_delay_seconds
+            value: "{{ .Values.faaslambda.livenessProbe.initialDelaySeconds }}"
+          - name: liveness_probe_timeout_seconds
+            value: "{{ .Values.faaslambda.livenessProbe.timeoutSeconds }}"
+          - name: liveness_probe_period_seconds
+            value: "{{ .Values.faaslambda.livenessProbe.periodSeconds }}"
+          - name: lambda_execution_role
+            value: "{{ .Values.faaslambda.lambda_execution_role }}"
+          - name: access_token
+            value: "{{ .Values.faaslambda.access_token }}"
+          - name: access_email
+            value: "{{ .Values.faaslambda.access_email }}"
+          - name: AWS_REGION
+            value: "{{ .Values.faaslambda.aws_region }}"
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: lambda-aws-access
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: lambda-aws-access
+                key: AWS_SECRET_ACCESS_KEY
+        {{- if .Values.basic_auth }}
+        volumeMounts:
+          - name: auth
+            readOnly: true
+            mountPath: "/var/secrets"
+        {{- end }}
+        ports:
+          - containerPort: 8080
+            protocol: TCP
       {{- else }}
       - name: faas-netes
         resources:
