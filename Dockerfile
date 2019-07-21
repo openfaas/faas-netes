@@ -1,5 +1,4 @@
-FROM golang:1.10
-
+FROM golang:1.10 as build
 
 RUN curl -sLSf https://raw.githubusercontent.com/teamserverless/license-check/master/get.sh | sh
 RUN mv ./license-check /usr/bin/license-check && chmod +x /usr/bin/license-check
@@ -17,7 +16,7 @@ RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
         -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
         -a -installsuffix cgo -o faas-netes .
 
-FROM alpine:3.9
+FROM alpine:3.10 as ship
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
