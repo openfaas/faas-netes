@@ -25,7 +25,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/gateway:0.14.4-armhf
+        image: openfaas/gateway:0.15.3-armhf
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -73,7 +73,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/faas-netes:0.8.0-armhf
+        image: openfaas/faas-netes:0.8.1-armhf
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true

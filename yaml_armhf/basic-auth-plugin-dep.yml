@@ -28,7 +28,7 @@ spec:
               cpu: 20m
               memory: 50Mi
             
-        image: openfaas/basic-auth-plugin:0.15.3-arm64
+        image: openfaas/basic-auth-plugin:0.15.3-armhf
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true

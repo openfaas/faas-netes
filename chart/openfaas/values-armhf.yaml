@@ -1,13 +1,13 @@
 basic_auth: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.0-armhf
+  image: openfaas/faas-netes:0.8.1-armhf
 
 gateway:
-  image: openfaas/gateway:0.14.4-armhf
+  image: openfaas/gateway:0.15.3-armhf
 
 queueWorker:
-  image: openfaas/queue-worker:0.4.9-armhf
+  image: openfaas/queue-worker:0.7.2-armhf
 
 prometheus:
   image: functions/prometheus:2.7.1-armhf
@@ -22,5 +22,5 @@ faasIdler:
   image: openfaas/faas-idler:0.2.0-armhf
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.14.4-armhf
+  image: openfaas/basic-auth-plugin:0.15.3-armhf
   replicas: 1

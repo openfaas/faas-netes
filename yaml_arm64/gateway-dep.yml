@@ -29,7 +29,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/gateway:0.14.4-arm64
+        image: openfaas/gateway:0.15.3-arm64
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -89,7 +89,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/faas-netes:0.8.0-arm64
+        image: openfaas/faas-netes:0.8.1-arm64
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true
