@@ -14,11 +14,11 @@
     apiVersion: v1
     kind: Pod
     metadata:
-    name: testclient
-    namespace: kafka
+      name: testclient
+      namespace: kafka
     spec:
-    containers:
-    - name: kafka
+      containers:
+      - name: kafka
         image: confluentinc/cp-kafka:5.0.1
         command:
         - sh
@@ -70,7 +70,7 @@
    faas store deploy figlet --annotation topic="faas-request" --gateway $GATEWAY
    ```
 
-   b. write a topic with the `testclient` msg:
+   b. write a msg with the `testclient`:
 
    ```sh
    echo "test message" | kubectl -n kafka exec -it testclient -- kafka-console-producer --broker-list kf-kafka-headless:9092 --topic faas-request
