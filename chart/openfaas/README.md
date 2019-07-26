@@ -157,7 +157,7 @@ This option is good for those that have issues with installing Tiller, the serve
     git clone https://github.com/openfaas/faas-netes.git
 
 2. Render the chart to a Kubernetes manifest called `openfaas.yaml`
-    ```
+    ```sh
     helm template faas-netes/chart/openfaas \
         --name openfaas \
         --namespace openfaas  \
@@ -167,8 +167,10 @@ This option is good for those that have issues with installing Tiller, the serve
     You can set the values and overrides just as you would in the install/upgrade commands above.
 
 3. Install the components using `kubectl`
+    ```sh
     kubectl apply -f faas-netes/namespaces.yml
     kubectl apply -f $HOME/openfaas.yaml
+    ```
 
 Now [verify your installation](#verify-the-installation).
 
