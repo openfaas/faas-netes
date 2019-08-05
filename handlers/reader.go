@@ -9,7 +9,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/openfaas/faas/gateway/requests"
+	types "github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1beta2"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,8 +35,8 @@ func MakeFunctionReader(functionNamespace string, clientset *kubernetes.Clientse
 	}
 }
 
-func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) ([]requests.Function, error) {
-	functions := []requests.Function{}
+func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) ([]types.FunctionStatus, error) {
+	functions := []types.FunctionStatus{}
 
 	listOpts := metav1.ListOptions{
 		LabelSelector: "faas_function",
@@ -58,7 +58,7 @@ func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) (
 }
 
 // getService returns a function/service or nil if not found
-func getService(functionNamespace string, functionName string, clientset *kubernetes.Clientset) (*requests.Function, error) {
+func getService(functionNamespace string, functionName string, clientset *kubernetes.Clientset) (*types.FunctionStatus, error) {
 
 	getOpts := metav1.GetOptions{}
 
@@ -83,14 +83,14 @@ func getService(functionNamespace string, functionName string, clientset *kubern
 	return nil, fmt.Errorf("function: %s not found", functionName)
 }
 
-func readFunction(item appsv1.Deployment) *requests.Function {
+func readFunction(item appsv1.Deployment) *types.FunctionStatus {
 	var replicas uint64
 	if item.Spec.Replicas != nil {
 		replicas = uint64(*item.Spec.Replicas)
 	}
 
 	labels := item.Spec.Template.Labels
-	function := requests.Function{
+	function := types.FunctionStatus{
 		Name:              item.Name,
 		Replicas:          replicas,
 		Image:             item.Spec.Template.Spec.Containers[0].Image,

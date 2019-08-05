@@ -77,7 +77,7 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
 		},
 	}
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: false,
 	}
@@ -100,7 +100,7 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Enabled(t *testing.T) {
 		},
 	}
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: true,
 	}
@@ -141,7 +141,7 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Disabled(t *testing.T) {
 		},
 	}
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: false,
 	}
@@ -181,7 +181,7 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Enabled(t *testing.T) {
 		},
 	}
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: true,
 	}

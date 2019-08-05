@@ -11,7 +11,7 @@ import (
 func Test_makeProbes_useExec(t *testing.T) {
 	f := mockFactory()
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: false,
 	}
@@ -35,7 +35,7 @@ func Test_makeProbes_useHTTPProbe(t *testing.T) {
 	f := mockFactory()
 	f.Config.HTTPProbe = true
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: false,
 	}
@@ -58,7 +58,7 @@ func Test_makeProbes_useHTTPProbe(t *testing.T) {
 func Test_makeProbes_useCustomHTTPProbe(t *testing.T) {
 	f := mockFactory()
 	customPath := "/healthz"
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: false,
 		Annotations: &map[string]string{
@@ -95,7 +95,7 @@ func Test_makeProbes_useCustomDurationHTTPProbe(t *testing.T) {
 	f.Config.HTTPProbe = true
 	customDelay := "2m"
 
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service:                "testfunc",
 		ReadOnlyRootFilesystem: false,
 		Annotations: &map[string]string{

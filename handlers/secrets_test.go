@@ -15,7 +15,7 @@ import (
 )
 
 func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsNil(t *testing.T) {
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: nil,
 	}
@@ -45,7 +45,7 @@ func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsNil(t *testing.T) {
 }
 
 func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsEmpty(t *testing.T) {
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: []string{},
 	}
@@ -76,7 +76,7 @@ func Test_UpdateSecrets_DoesNotAddVolumeIfRequestSecretsIsEmpty(t *testing.T) {
 
 func Test_UpdateSecrets_RemovesAllCopiesOfExitingSecretsVolumes(t *testing.T) {
 	volumeName := "testfunc-projected-secrets"
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: []string{},
 	}
@@ -125,7 +125,7 @@ func Test_UpdateSecrets_RemovesAllCopiesOfExitingSecretsVolumes(t *testing.T) {
 }
 
 func Test_UpdateSecrets_AddNewSecretVolume(t *testing.T) {
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: []string{"pullsecret", "testsecret"},
 	}
@@ -155,7 +155,7 @@ func Test_UpdateSecrets_AddNewSecretVolume(t *testing.T) {
 }
 
 func Test_UpdateSecrets_ReplacesPreviousSecretMountWithNewMount(t *testing.T) {
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: []string{"pullsecret", "testsecret"},
 	}
@@ -192,7 +192,7 @@ func Test_UpdateSecrets_ReplacesPreviousSecretMountWithNewMount(t *testing.T) {
 }
 
 func Test_UpdateSecrets_RemovesSecretsVolumeIfRequestSecretsIsEmptyOrNil(t *testing.T) {
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: []string{"pullsecret", "testsecret"},
 	}
@@ -219,7 +219,7 @@ func Test_UpdateSecrets_RemovesSecretsVolumeIfRequestSecretsIsEmptyOrNil(t *test
 
 	validateNewSecretVolumesAndMounts(t, deployment)
 
-	request = requests.CreateFunctionRequest{
+	request = types.FunctionDeployment{
 		Service: "testfunc",
 		Secrets: []string{},
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
-	request := requests.CreateFunctionRequest{}
+	request := types.FunctionDeployment{}
 
 	annotations := buildAnnotations(request)
 
@@ -29,7 +29,7 @@ func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
 }
 
 func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
-	request := requests.CreateFunctionRequest{
+	request := types.FunctionDeployment{
 		Annotations: &map[string]string{
 			"date-created": "Wed 25 Jul 21:26:22 BST 2018",
 			"foo":          "bar",
@@ -64,7 +64,7 @@ func Test_SetNonRootUser(t *testing.T) {
 
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
-			request := requests.CreateFunctionRequest{Service: "testfunc", Image: "alpine:latest"}
+			request := types.FunctionDeployment{Service: "testfunc", Image: "alpine:latest"}
 			factory := k8s.NewFunctionFactory(fake.NewSimpleClientset(), k8s.DeploymentConfig{
 				LivenessProbe:  &k8s.ProbeConfig{},
 				ReadinessProbe: &k8s.ProbeConfig{},

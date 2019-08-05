@@ -10,7 +10,7 @@ import (
 
 	"github.com/openfaas/faas-netes/k8s"
 
-	"github.com/openfaas/faas/gateway/requests"
+	types "github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -22,7 +22,7 @@ func MakeUpdateHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		body, _ := ioutil.ReadAll(r.Body)
 
-		request := requests.CreateFunctionRequest{}
+		request := types.FunctionDeployment{}
 		err := json.Unmarshal(body, &request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -47,7 +47,7 @@ func MakeUpdateHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 func updateDeploymentSpec(
 	functionNamespace string,
 	factory k8s.FunctionFactory,
-	request requests.CreateFunctionRequest,
+	request types.FunctionDeployment,
 	annotations map[string]string) (err error, httpStatus int) {
 
 	getOpts := metav1.GetOptions{}
@@ -148,7 +148,7 @@ func updateDeploymentSpec(
 func updateService(
 	functionNamespace string,
 	factory k8s.FunctionFactory,
-	request requests.CreateFunctionRequest,
+	request types.FunctionDeployment,
 	annotations map[string]string) (err error, httpStatus int) {
 
 	getOpts := metav1.GetOptions{}

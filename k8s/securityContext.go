@@ -4,7 +4,7 @@
 package k8s
 
 import (
-	"github.com/openfaas/faas/gateway/requests"
+	types "github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1beta2"
 	corev1 "k8s.io/api/core/v1"
 )
@@ -38,7 +38,7 @@ func (f *FunctionFactory) ConfigureContainerUserID(deployment *appsv1.Deployment
 //    to false and there will be no mount for the `/tmp` folder
 //
 // This method is safe for both create and update operations.
-func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request requests.CreateFunctionRequest, deployment *appsv1.Deployment) {
+func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request types.FunctionDeployment, deployment *appsv1.Deployment) {
 	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
 		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
 	} else {
