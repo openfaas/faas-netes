@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/openfaas/faas-netes/handlers"
-	"github.com/openfaas/faas-provider/types"
+	types "github.com/openfaas/faas-provider/types"
 )
 
 const (

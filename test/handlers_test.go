@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/openfaas/faas-netes/handlers"
-	"github.com/openfaas/faas/gateway/requests"
+	types "github.com/openfaas/faas-provider/types"
 )
 
 func Test_ValidateDeployRequest_ValidCharacters(t *testing.T) {
@@ -22,7 +22,7 @@ func Test_ValidateDeployRequest_ValidCharacters(t *testing.T) {
 	}
 
 	for _, testCase := range cases {
-		request := requests.CreateFunctionRequest{
+		request := types.FunctionDeployment{
 			Service: testCase.value,
 		}
 
@@ -48,7 +48,7 @@ func Test_ValidateDeployRequest_InvalidCharacters(t *testing.T) {
 	}
 
 	for _, testCase := range cases {
-		request := requests.CreateFunctionRequest{
+		request := types.FunctionDeployment{
 			Service: testCase.value,
 		}
 

@@ -15,7 +15,7 @@ import (
 
 	"github.com/openfaas/faas-netes/k8s"
 
-	"github.com/openfaas/faas/gateway/requests"
+	types "github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1beta2"
 	apiv1 "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -32,7 +32,7 @@ const initialReplicasCount = 1
 var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
 
 // ValidateDeployRequest validates that the service name is valid for Kubernetes
-func ValidateDeployRequest(request *requests.CreateFunctionRequest) error {
+func ValidateDeployRequest(request *types.FunctionDeployment) error {
 	matched := validDNS.MatchString(request.Service)
 	if matched {
 		return nil
@@ -48,7 +48,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		body, _ := ioutil.ReadAll(r.Body)
 
-		request := requests.CreateFunctionRequest{}
+		request := types.FunctionDeployment{}
 		err := json.Unmarshal(body, &request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -107,7 +107,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 	}
 }
 
-func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets map[string]*apiv1.Secret, factory k8s.FunctionFactory) (*appsv1.Deployment, error) {
+func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[string]*apiv1.Secret, factory k8s.FunctionFactory) (*appsv1.Deployment, error) {
 	envVars := buildEnvVars(&request)
 
 	initialReplicas := int32p(initialReplicasCount)
@@ -230,7 +230,7 @@ func makeDeploymentSpec(request requests.CreateFunctionRequest, existingSecrets 
 	return deploymentSpec, nil
 }
 
-func makeServiceSpec(request requests.CreateFunctionRequest, factory k8s.FunctionFactory) *corev1.Service {
+func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFactory) *corev1.Service {
 
 	serviceSpec := &corev1.Service{
 		TypeMeta: metav1.TypeMeta{
@@ -263,7 +263,7 @@ func makeServiceSpec(request requests.CreateFunctionRequest, factory k8s.Functio
 	return serviceSpec
 }
 
-func buildAnnotations(request requests.CreateFunctionRequest) map[string]string {
+func buildAnnotations(request types.FunctionDeployment) map[string]string {
 	var annotations map[string]string
 	if request.Annotations != nil {
 		annotations = *request.Annotations
@@ -275,7 +275,7 @@ func buildAnnotations(request requests.CreateFunctionRequest) map[string]string 
 	return annotations
 }
 
-func buildEnvVars(request *requests.CreateFunctionRequest) []corev1.EnvVar {
+func buildEnvVars(request *types.FunctionDeployment) []corev1.EnvVar {
 	envVars := []corev1.EnvVar{}
 
 	if len(request.EnvProcess) > 0 {
@@ -317,7 +317,7 @@ func createSelector(constraints []string) map[string]string {
 	return selector
 }
 
-func createResources(request requests.CreateFunctionRequest) (*apiv1.ResourceRequirements, error) {
+func createResources(request types.FunctionDeployment) (*apiv1.ResourceRequirements, error) {
 	resources := &apiv1.ResourceRequirements{
 		Limits:   apiv1.ResourceList{},
 		Requests: apiv1.ResourceList{},

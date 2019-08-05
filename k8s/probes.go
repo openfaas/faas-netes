@@ -5,11 +5,12 @@ package k8s
 
 import (
 	"fmt"
-	"github.com/openfaas/faas/gateway/requests"
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/util/intstr"
 	"path/filepath"
 	"time"
+
+	types "github.com/openfaas/faas-provider/types"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 const (
@@ -25,7 +26,7 @@ type FunctionProbes struct {
 
 // MakeProbes returns the liveness and readiness probes
 // by default the health check runs `cat /tmp/.lock` every ten seconds
-func (f *FunctionFactory) MakeProbes(r requests.CreateFunctionRequest) (*FunctionProbes, error) {
+func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbes, error) {
 	var handler corev1.Handler
 	httpPath := ProbePathValue
 	initialDelaySeconds := int32(f.Config.LivenessProbe.InitialDelaySeconds)
