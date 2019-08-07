@@ -236,6 +236,8 @@ helm upgrade openfaas --install chart/openfaas \
 
 The above command will enable mTLS for the openfaas control plane services and functions excluding NATS.
 
+> Note that the above instructions were tested on GKE 1.13 and Istio 1.2
+
 ## Zero scale
 
 ### Scale-up from zero (on by default)
