@@ -93,6 +93,22 @@ func Test_SetNonRootUser(t *testing.T) {
 
 }
 
+func Test_buildEnvVars_NoSortedKeys(t *testing.T) {
+
+	inputEnvs := map[string]string{}
+
+	function := types.FunctionDeployment{
+		EnvVars: inputEnvs,
+	}
+
+	coreEnvs := buildEnvVars(&function)
+
+	if len(coreEnvs) != 0 {
+		t.Errorf("want: %d env-vars, got: %d", 0, len(coreEnvs))
+		t.Fail()
+	}
+}
+
 func Test_buildEnvVars_TwoSortedKeys(t *testing.T) {
 	firstKey := "first"
 	lastKey := "last"
