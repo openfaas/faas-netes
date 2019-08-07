@@ -179,7 +179,7 @@ Now [verify your installation](#verify-the-installation).
 You can run the following command from within the `faas-netes/chart` folder in the `faas-netes` repo.
 
 ```sh
-helm upgrade --install openfaas openfaas/ \
+helm upgrade --install openfaas openfaas/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn
@@ -218,6 +218,23 @@ By default services will be exposed with following hostnames (can be changed, se
 ### SSL / TLS
 
 If you require TLS/SSL then please make use of an IngressController. A full guide is provided to [enable TLS for the OpenFaaS Gateway using cert-manager and Let's Encrypt](https://docs.openfaas.com/reference/ssl/kubernetes-with-cert-manager/).
+
+### Istio mTLS
+
+To install OpenFaaS with Istio mTLS pass  `--set istio.mtls=true` and disable the HTTP probes:
+
+```
+helm upgrade openfaas --install chart/openfaas \
+    --namespace openfaas  \
+    --set basic_auth=true \
+    --set functionNamespace=openfaas-fn \
+    --set exposeServices=false \
+    --set faasnetes.httpProbe=false \
+    --set httpProbe=false \
+    --set istio.mtls=true
+```
+
+The above command will enable mTLS for the openfaas control plane services and functions excluding NATS.
 
 ## Zero scale
 
@@ -284,6 +301,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `faasIdler.dryRun` | When set to false the OpenFaaS API will be called to scale down idle functions, by default this is set to only print in the logs. | `true` |
 | `prometheus.create` | Create the Prometheus component | `true` |
 | `alertmanager.create` | Create the AlertManager component | `true` |
+| `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
