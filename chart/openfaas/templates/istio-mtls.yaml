@@ -1,0 +1,58 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.istio.mtls -}}
+# enforce mTLS to openfaas control plane
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+    name: default
+    namespace: {{ .Release.Namespace }}
+spec:
+    peers:
+        - mtls: {}
+---
+# enforce mTLS to openfaas control plane
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: default
+    namespace: {{ .Release.Namespace }}
+spec:
+    host: "*.openfaas.svc.cluster.local"
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+---
+# enforce mTLS to functions
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+    name: default
+    namespace: {{ $functionNs }}
+spec:
+    peers:
+        - mtls: {}
+---
+# enforce mTLS to functions
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: default
+    namespace: {{ $functionNs | quote }}
+spec:
+    host: "*.openfaas-fn.svc.cluster.local"
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+---
+# disable mTLS to nats, the nats protocol is not supported by Istio
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: "nats-no-mtls"
+    namespace: {{ .Release.Namespace }}
+spec:
+    host: "nats.openfaas.svc.cluster.local"
+    trafficPolicy:
+        tls:
+            mode: DISABLE
+{{- end -}}

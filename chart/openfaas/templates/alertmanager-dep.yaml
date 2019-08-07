@@ -19,7 +19,7 @@ spec:
       labels:
         app: alertmanager
       annotations:
-        sidecar.istio.io/inject: "false"
+        sidecar.istio.io/inject: "true"
         checksum/alertmanager-config: {{ include (print $.Template.BasePath "/alertmanager-cfg.yaml") . | sha256sum | quote  }}
     spec:
       containers:
@@ -30,6 +30,7 @@ spec:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
+          - "--cluster.listen-address="
         livenessProbe:
           {{- if .Values.httpProbe }}
           httpGet:
