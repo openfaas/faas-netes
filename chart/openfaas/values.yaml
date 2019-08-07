@@ -140,3 +140,6 @@ tolerations: []
 affinity: {}
 
 kubernetesDNSDomain: cluster.local
+
+istio:
+  mtls: false
