@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"github.com/openfaas/faas-netes/k8s"
-	"k8s.io/client-go/kubernetes/fake"
 	"testing"
 
-	"github.com/openfaas/faas/gateway/requests"
+	"github.com/openfaas/faas-netes/k8s"
+	types "github.com/openfaas/faas-provider/types"
+	"k8s.io/client-go/kubernetes/fake"
+
 	apiv1 "k8s.io/api/core/v1"
 )
 
@@ -90,4 +91,65 @@ func Test_SetNonRootUser(t *testing.T) {
 		})
 	}
 
+}
+
+func Test_buildEnvVars_TwoSortedKeys(t *testing.T) {
+	firstKey := "first"
+	lastKey := "last"
+
+	inputEnvs := map[string]string{
+		lastKey:  "",
+		firstKey: "",
+	}
+
+	function := types.FunctionDeployment{
+		EnvVars: inputEnvs,
+	}
+
+	coreEnvs := buildEnvVars(&function)
+
+	if coreEnvs[0].Name != firstKey {
+		t.Errorf("first want: %s, got: %s", firstKey, coreEnvs[0].Name)
+		t.Fail()
+	}
+}
+
+func Test_buildEnvVars_FourSortedKeys(t *testing.T) {
+	firstKey := "alex"
+	secondKey := "elliot"
+	thirdKey := "stefan"
+	lastKey := "zane"
+
+	inputEnvs := map[string]string{
+		lastKey:   "",
+		firstKey:  "",
+		thirdKey:  "",
+		secondKey: "",
+	}
+
+	function := types.FunctionDeployment{
+		EnvVars: inputEnvs,
+	}
+
+	coreEnvs := buildEnvVars(&function)
+
+	if coreEnvs[0].Name != firstKey {
+		t.Errorf("first want: %s, got: %s", firstKey, coreEnvs[0].Name)
+		t.Fail()
+	}
+
+	if coreEnvs[1].Name != secondKey {
+		t.Errorf("second want: %s, got: %s", secondKey, coreEnvs[1].Name)
+		t.Fail()
+	}
+
+	if coreEnvs[2].Name != thirdKey {
+		t.Errorf("third want: %s, got: %s", thirdKey, coreEnvs[2].Name)
+		t.Fail()
+	}
+
+	if coreEnvs[3].Name != lastKey {
+		t.Errorf("last want: %s, got: %s", lastKey, coreEnvs[3].Name)
+		t.Fail()
+	}
 }

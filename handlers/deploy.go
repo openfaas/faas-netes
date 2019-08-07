@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -291,6 +292,10 @@ func buildEnvVars(request *types.FunctionDeployment) []corev1.EnvVar {
 			Value: v,
 		})
 	}
+
+	sort.SliceStable(envVars, func(i, j int) bool {
+		return strings.Compare(envVars[i].Name, envVars[j].Name) == -1
+	})
 
 	return envVars
 }
