@@ -32,7 +32,7 @@ gateway:
       cpu: "50m"
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.3
+  image: openfaas/faas-netes:0.8.4
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions

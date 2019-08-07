@@ -15,8 +15,8 @@ spec:
       labels:
         app: alertmanager
       annotations:
-        sidecar.istio.io/inject: "false"
-        checksum/alertmanager-config: "4224d44a3cc615133e348ed64134761bf95c3a7ac94738fbf06af0b5138d7853"
+        sidecar.istio.io/inject: "true"
+        checksum/alertmanager-config: "37b96100e59b6a21a65202084af4a13b89e09b089971687b5f0e2acaf99b2b7b"
     spec:
       containers:
       - name: alertmanager
@@ -26,6 +26,7 @@ spec:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"
           - "--storage.path=/alertmanager"
+          - "--cluster.listen-address="
         livenessProbe:
           httpGet:
             path: /-/ready

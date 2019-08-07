@@ -73,7 +73,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/faas-netes:0.8.3-armhf
+        image: openfaas/faas-netes:0.8.4-armhf
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true
