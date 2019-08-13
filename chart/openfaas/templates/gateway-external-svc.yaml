@@ -9,6 +9,9 @@ metadata:
     component: gateway
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
+{{- if .Values.gatewayExternal.annotations }}
+  annotations: {{ toYaml .Values.gatewayExternal.annotations | nindent 4 }}
+{{- end }}
   name: gateway-external
   namespace: {{ .Release.Namespace | quote }}
 spec:

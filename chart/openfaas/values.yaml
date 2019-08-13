@@ -15,6 +15,9 @@ basic_auth: true
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"
 
+gatewayExternal:
+  annotations: {}
+
 gateway:
   image: openfaas/gateway:0.16.0
   readTimeout : "65s"
