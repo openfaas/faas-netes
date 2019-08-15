@@ -1,10 +1,10 @@
-image: openfaas/kafka-connector:0.3.4
+image: openfaas/kafka-connector:0.4.0
 replicas: 1
 gateway_url: http://gateway.openfaas:8080
 topics: faas-request
 print_response: true
 print_response_body: false
-broker_host: kafka
+broker_host: kafka:9092
 basic_auth: true
 
 nodeSelector: {}
