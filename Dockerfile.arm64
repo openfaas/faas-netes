@@ -1,4 +1,5 @@
-FROM golang:1.10 as build
+FROM golang:1.11 as build
+ENV CGO_ENABLED=0
 
 RUN curl -sLSf https://raw.githubusercontent.com/teamserverless/license-check/master/get.sh | sh
 RUN mv ./license-check /usr/bin/license-check && chmod +x /usr/bin/license-check
