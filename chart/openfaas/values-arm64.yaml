@@ -4,7 +4,10 @@ faasnetes:
   image: openfaas/faas-netes:0.8.4-arm64
 
 gateway:
-  image: openfaas/gateway:0.14.4-arm64
+  image: openfaas/gateway:0.17.0-arm64
+
+basicAuthPlugin:
+  image: openfaas/basic-auth-plugin:0.17.0-arm64
 
 queueWorker:
   image: openfaas/queue-worker:0.7.1-arm64
@@ -16,4 +19,4 @@ alertmanager:
   image: functions/alertmanager:0.16.1-arm64
 
 faasIdler:
-  image: openfaas/faas-idler:0.2.0-arm64
+  image: openfaas/faas-idler:0.2.1-arm64
