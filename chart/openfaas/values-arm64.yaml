@@ -1,7 +1,7 @@
 basic_auth: true
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.4-arm64
+  image: openfaas/faas-netes:0.8.5-arm64
 
 gateway:
   image: openfaas/gateway:0.17.0-arm64
@@ -10,7 +10,7 @@ basicAuthPlugin:
   image: openfaas/basic-auth-plugin:0.17.0-arm64
 
 queueWorker:
-  image: openfaas/queue-worker:0.7.1-arm64
+  image: openfaas/queue-worker:0.8.0-arm64
 
 prometheus:
   image: functions/prometheus:2.7.1-arm64
