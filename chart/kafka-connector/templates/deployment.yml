@@ -26,6 +26,8 @@ spec:
       app.kubernetes.io/component: kafka-connector
   template:
     metadata:
+      annotations:
+        prometheus.io.scrape: "false"
       labels:
         app.kubernetes.io/name: {{ template "connector.name" . }}
         app.kubernetes.io/component: kafka-connector
