@@ -79,14 +79,14 @@ queueWorker:
 # monitoring and auto-scaling components
 # both components
 prometheus:
-  image: prom/prometheus:v2.7.1
+  image: prom/prometheus:v2.11.0
   create: true
   resources:
     requests:
       memory: "512Mi"
 
 alertmanager:
-  image: prom/alertmanager:v0.16.1
+  image: prom/alertmanager:v0.18.0
   create: true
   resources:
     requests:

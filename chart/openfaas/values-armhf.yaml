@@ -10,13 +10,13 @@ queueWorker:
   image: openfaas/queue-worker:0.8.0-armhf
 
 prometheus:
-  image: functions/prometheus:2.7.1-armhf
+  image: prom/prometheus:v2.11.0
   resources:
     requests:
       memory: "125Mi"
 
 alertmanager:
-  image: functions/alertmanager:0.16.1-armhf
+  image: prom/alertmanager:v0.18.0
 
 faasIdler:
   image: openfaas/faas-idler:0.2.0-armhf
