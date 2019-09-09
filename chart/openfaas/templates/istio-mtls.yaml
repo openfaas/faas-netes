@@ -17,7 +17,7 @@ metadata:
     name: default
     namespace: {{ .Release.Namespace }}
 spec:
-    host: "*.openfaas.svc.cluster.local"
+    host: "*.{{ .Release.Namespace }}.svc.cluster.local"
     trafficPolicy:
         tls:
             mode: ISTIO_MUTUAL
@@ -39,7 +39,7 @@ metadata:
     name: default
     namespace: {{ $functionNs | quote }}
 spec:
-    host: "*.openfaas-fn.svc.cluster.local"
+    host: "*.{{ $functionNs }}.svc.cluster.local"
     trafficPolicy:
         tls:
             mode: ISTIO_MUTUAL
@@ -51,7 +51,7 @@ metadata:
     name: "nats-no-mtls"
     namespace: {{ .Release.Namespace }}
 spec:
-    host: "nats.openfaas.svc.cluster.local"
+    host: "nats.{{ .Release.Namespace }}.svc.cluster.local"
     trafficPolicy:
         tls:
             mode: DISABLE
