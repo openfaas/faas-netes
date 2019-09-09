@@ -1,0 +1,42 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.ingressOperator.create }}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: ingress-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: ingress-operator
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.ingressOperator.replicas }}
+  selector:
+    matchLabels:
+      app: ingress-operator
+  template:
+    metadata:
+      annotations:
+        prometheus.io.scrape: "true"
+      labels:
+        app: ingress-operator
+    spec:
+      {{- if .Values.rbac }}
+      serviceAccountName: ingress-operator
+      {{- end }}
+      containers:
+      - name: operator
+        resources:
+          {{- .Values.ingressOperator.resources | toYaml | nindent 10 }}
+        image: {{ .Values.ingressOperator.image }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        command:
+          - ./ingress-operator
+          - -logtostderr
+          - -v=2
+        env:
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
+{{- end }}
