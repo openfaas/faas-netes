@@ -116,6 +116,16 @@ ingress:
   tls:
     # Secrets must be manually created in the namespace.
 
+ingressOperator:
+  image: openfaas/ingress-operator:0.4.0
+  replicas: 1
+  create: true
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      memory: 25Mi
+
 # faas-idler configuration
 faasIdler:
   image: openfaas/faas-idler:0.2.1

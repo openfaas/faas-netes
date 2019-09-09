@@ -18,10 +18,12 @@ prometheus:
 alertmanager:
   image: functions/alertmanager:0.16.1-armhf
 
+ingressOperator:
+  image: openfaas/ingress-operator:0.4.0-armhf
+
 faasIdler:
   image: openfaas/faas-idler:0.2.0-armhf
 
 basicAuthPlugin:
   image: openfaas/basic-auth-plugin:0.17.0-armhf
   replicas: 1
-
