@@ -286,7 +286,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `ingressOperator.create` | Create the ingress-operator component | `true` |
 | `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
 | `ingressOperator.image` | Container image used in ingress-operator| `openfaas/ingress-operator:0.4.0` |
-| `ingressOperator.resources` | Limits and requests for memory and CPU usage | `openfaas/ingress-operator:0.4.0` |
+| `ingressOperator.resources` | Limits and requests for memory and CPU usage | Memory Requests: 25Mi / Memory Limits 128Mi |
 | `faasnetes.readTimeout` | Queue worker read timeout | `60s` |
 | `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
