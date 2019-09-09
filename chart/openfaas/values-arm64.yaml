@@ -18,5 +18,8 @@ prometheus:
 alertmanager:
   image: functions/alertmanager:0.16.1-arm64
 
+ingressOperator:
+  create: false
+
 faasIdler:
   image: openfaas/faas-idler:0.2.1-arm64

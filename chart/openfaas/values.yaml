@@ -119,7 +119,7 @@ ingress:
 ingressOperator:
   image: openfaas/ingress-operator:0.4.0
   replicas: 1
-  create: true
+  create: false
   resources:
     limits:
       memory: 128Mi
