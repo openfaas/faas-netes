@@ -283,7 +283,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `operator.createCRD` | Create the CRD for OpenFaaS Function definition | `true` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `faasnetes.httpProbe` | Use a httpProbe instead of exec | `false` |
-| `ingressOperator.create` | Create the ingress-operator component | `true` |
+| `ingressOperator.create` | Create the ingress-operator component | `false` |
 | `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
 | `ingressOperator.image` | Container image used in ingress-operator| `openfaas/ingress-operator:0.4.0` |
 | `ingressOperator.resources` | Limits and requests for memory and CPU usage | Memory Requests: 25Mi / Memory Limits 128Mi |
