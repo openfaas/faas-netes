@@ -1,10 +1,10 @@
 basic_auth: false
 
-faasnetes:
-  image: openfaas/faas-netes:0.8.5-armhf
-
 gateway:
   image: openfaas/gateway:0.17.0-armhf
+
+faasnetes:
+  image: openfaas/faas-netes:0.8.5-armhf
 
 queueWorker:
   image: openfaas/queue-worker:0.8.0-armhf
