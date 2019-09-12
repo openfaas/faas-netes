@@ -19,13 +19,28 @@ RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
 
 FROM alpine:3.10 as ship
 
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
+LABEL org.label-schema.license="MIT" \
+      org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
+      org.label-schema.vcs-type="Git" \
+      org.label-schema.name="openfaas/faas-netes" \
+      org.label-schema.vendor="openfaas" \
+      org.label-schema.docker.schema-version="1.0"
+
+RUN addgroup -S app \
+    && adduser -S -g app app \
+    && apk --no-cache add \
+    ca-certificates
+
+WORKDIR /home/app
 
 EXPOSE 8080
+
 ENV http_proxy      ""
 ENV https_proxy     ""
 
-COPY --from=build /go/src/github.com/openfaas/faas-netes/faas-netes    .
+COPY --from=0 /go/src/github.com/openfaas/faas-netes/faas-netes    .
+RUN chown -R app:app ./
+
+USER app
 
 CMD ["./faas-netes"]
