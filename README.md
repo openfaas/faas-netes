@@ -30,6 +30,8 @@ In this README you'll find a technical overview and instructions for deploying t
 * [Read the blog at openfaas.com](https://www.openfaas.com/blog/)
 * [Join the Slack community](https://docs.openfaas.com/community)
 
+OpenFaaS can form a complete stack for Cloud Native application development called PLONK including: Prometheus, Linux/Linkerd, OpenFaaS, NATS/Nginx and Kubernetes. [Introducing PLONK](https://www.openfaas.com/blog/plonk-stack/).
+
 ## Reference guide
 
 ### Configuration via Environmental variables

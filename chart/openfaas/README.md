@@ -28,7 +28,7 @@
 
 See also: [Install Helm](https://github.com/openfaas/faas-netes/blob/master/HELM.md)
 
-We recommend creating two namespaces, one for the OpenFaaS core services and one for the functions:
+We recommend creating two namespaces, one for the OpenFaaS *core services* and one for the *functions*:
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
