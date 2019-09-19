@@ -21,12 +21,26 @@ spec:
       labels:
         app: faas-idler
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        fsGroup: 65534
+      {{- end }}
       containers:
         - name: faas-idler
           resources:
             {{- .Values.faasIdler.resources | toYaml | nindent 12 }}
           image: {{ .Values.faasIdler.image }}
           imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+          {{- if .Values.securityContext }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+          {{- end }}
           env:
             - name: gateway_url
               value: "http://gateway.{{ .Release.Namespace }}:8080/"

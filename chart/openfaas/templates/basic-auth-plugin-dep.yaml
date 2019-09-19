@@ -21,6 +21,10 @@ spec:
       labels:
         app: basic-auth-plugin
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        fsGroup: 65534
+      {{- end }}
       {{- if .Values.basic_auth }}
       volumes:
       - name: auth
@@ -35,8 +39,13 @@ spec:
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
         securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
           readOnlyRootFilesystem: true
-          runAsUser: 10001
+          runAsNonRoot: true
+          runAsUser: 65534
         {{- end }}
         livenessProbe:
           {{- if .Values.httpProbe }}

@@ -19,6 +19,10 @@ spec:
       labels:
         app: queue-worker
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        fsGroup: 65534
+      {{- end }}
       {{- if .Values.basic_auth }}
       volumes:
       - name: auth
@@ -31,6 +35,16 @@ spec:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+        {{- end }}
         env:
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"

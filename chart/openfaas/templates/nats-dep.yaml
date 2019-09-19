@@ -20,12 +20,26 @@ spec:
       labels:
         app: nats
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        fsGroup: 65534
+      {{- end }}
       containers:
       - name:  nats
         resources:
           {{- .Values.nats.resources | toYaml | nindent 12 }}
         image: {{ .Values.nats.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+        {{- end }}
         ports:
         - containerPort: 4222
           protocol: TCP

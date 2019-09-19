@@ -13,27 +13,35 @@ metadata:
         seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
 spec:
     privileged: false
-    hostIPC: false
-    hostNetwork: false
-    hostPID: false
-    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    allowedCapabilities:
-        - NET_ADMIN
-        - NET_RAW
-    fsGroup:
-        rule: RunAsAny
-    hostPorts:
-        - max: 65535
-          min: 1
-    runAsUser:
-        rule: RunAsAny
-    seLinux:
-        rule: RunAsAny
-    supplementalGroups:
-        rule: RunAsAny
+    requiredDropCapabilities:
+    - ALL
     volumes:
-        - '*'
+    - configMap
+    - downwardAPI
+    - emptyDir
+    - persistentVolumeClaim
+    - projected
+    - secret
+    hostNetwork: false
+    hostIPC: false
+    hostPID: false
+    readOnlyRootFilesystem: true
+    runAsUser:
+        rule: MustRunAsNonRoot
+    seLinux:
+        rule: 'RunAsAny'
+    supplementalGroups:
+        rule: 'MustRunAs'
+        ranges:
+        - min: 1
+          max: 65535
+    fsGroup:
+        rule: 'MustRunAs'
+        ranges:
+        - min: 1
+          max: 65535
+    readOnlyRootFilesystem: false
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1

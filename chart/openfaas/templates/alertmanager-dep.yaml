@@ -22,10 +22,24 @@ spec:
         sidecar.istio.io/inject: "true"
         checksum/alertmanager-config: {{ include (print $.Template.BasePath "/alertmanager-cfg.yaml") . | sha256sum | quote  }}
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        fsGroup: 65534
+      {{- end }}
       containers:
       - name: alertmanager
         image: {{ .Values.alertmanager.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+        {{- end }}
         command:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"
