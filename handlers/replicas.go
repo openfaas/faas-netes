@@ -16,14 +16,24 @@ import (
 )
 
 // MakeReplicaUpdater updates desired count of replicas
-func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Update replicas")
 
 		vars := mux.Vars(r)
+
 		functionName := vars["name"]
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
 
 		req := types.ScaleServiceRequest{}
+
 		if r.Body != nil {
 			defer r.Body.Close()
 			bytesIn, _ := ioutil.ReadAll(r.Body)
@@ -37,6 +47,10 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 			}
 		}
 
+		if len(req.ServiceNamespace) > 0 {
+			lookupNamespace = req.ServiceNamespace
+		}
+
 		options := metav1.GetOptions{
 			TypeMeta: metav1.TypeMeta{
 				Kind:       "Deployment",
@@ -44,7 +58,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 			},
 		}
 
-		deployment, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(functionName, options)
+		deployment, err := clientset.ExtensionsV1beta1().Deployments(lookupNamespace).Get(functionName, options)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -54,8 +68,10 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 		}
 
 		replicas := int32(req.Replicas)
+		log.Printf("Set replicas - %s %s, %d/%d\n", functionName, lookupNamespace, replicas, deployment.Spec.Replicas)
 		deployment.Spec.Replicas = &replicas
-		_, err = clientset.ExtensionsV1beta1().Deployments(functionNamespace).Update(deployment)
+
+		_, err = clientset.ExtensionsV1beta1().Deployments(lookupNamespace).Update(deployment)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -69,15 +85,24 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 }
 
 // MakeReplicaReader reads the amount of replicas for a deployment
-func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Read replicas")
 
 		vars := mux.Vars(r)
-		functionName := vars["name"]
 
-		function, err := getService(functionNamespace, functionName, clientset)
+		functionName := vars["name"]
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		function, err := getService(lookupNamespace, functionName, clientset)
 		if err != nil {
+			log.Printf("Unable to fetch service: %s %s\n", functionName, namespace)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -86,6 +111,8 @@ func MakeReplicaReader(functionNamespace string, clientset *kubernetes.Clientset
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
+
+		log.Printf("Read replicas - %s %s, %d/%d\n", functionName, namespace, function.AvailableReplicas, function.Replicas)
 
 		functionBytes, _ := json.Marshal(function)
 		w.Header().Set("Content-Type", "application/json")

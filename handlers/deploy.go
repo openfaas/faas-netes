@@ -5,11 +5,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -27,20 +25,6 @@ import (
 
 // initialReplicasCount how many replicas to start of creating for a function
 const initialReplicasCount = 1
-
-// Regex for RFC-1123 validation:
-// 	k8s.io/kubernetes/pkg/util/validation/validation.go
-var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
-
-// ValidateDeployRequest validates that the service name is valid for Kubernetes
-func ValidateDeployRequest(request *types.FunctionDeployment) error {
-	matched := validDNS.MatchString(request.Service)
-	if matched {
-		return nil
-	}
-
-	return fmt.Errorf("(%s) must be a valid DNS entry for service name", request.Service)
-}
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
 func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
@@ -62,7 +46,12 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		existingSecrets, err := getSecrets(factory.Client, functionNamespace, request.Secrets)
+		namespace := functionNamespace
+		if len(request.Namespace) > 0 {
+			namespace = request.Namespace
+		}
+
+		existingSecrets, err := getSecrets(factory.Client, namespace, request.Secrets)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
@@ -77,7 +66,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		deploy := factory.Client.AppsV1beta2().Deployments(functionNamespace)
+		deploy := factory.Client.AppsV1beta2().Deployments(namespace)
 
 		_, err = deploy.Create(deploymentSpec)
 		if err != nil {
@@ -87,9 +76,9 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		log.Println("Created deployment - " + request.Service)
+		log.Println("Created deployment - " + request.Service + "," + namespace)
 
-		service := factory.Client.Core().Services(functionNamespace)
+		service := factory.Client.Core().Services(namespace)
 		serviceSpec := makeServiceSpec(request, factory)
 		_, err = service.Create(serviceSpec)
 
@@ -100,7 +89,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		log.Println("Created service - " + request.Service)
+		log.Println("Created service - " + request.Service + "," + namespace)
 		log.Println(string(body))
 
 		w.WriteHeader(http.StatusAccepted)
