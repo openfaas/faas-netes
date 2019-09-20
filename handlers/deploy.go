@@ -15,7 +15,7 @@ import (
 	"github.com/openfaas/faas-netes/k8s"
 
 	types "github.com/openfaas/faas-provider/types"
-	appsv1 "k8s.io/api/apps/v1beta2"
+	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -66,7 +66,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		deploy := factory.Client.AppsV1beta2().Deployments(namespace)
+		deploy := factory.Client.AppsV1().Deployments(namespace)
 
 		_, err = deploy.Create(deploymentSpec)
 		if err != nil {

@@ -10,13 +10,14 @@
   name = "github.com/gorilla/mux"
   version = "1.6.1"
 
-[[constraint]]
+[[override]]
   name = "k8s.io/apimachinery"
-  branch = "release-1.9"
+  branch = "release-1.12"
 
-[[constraint]]
+
+[[override]]
   name = "k8s.io/client-go"
-  version = "6.0.0"
+  version = "v9.0.0"
 
 [prune]
   go-tests = true

@@ -52,7 +52,7 @@ func updateDeploymentSpec(
 
 	getOpts := metav1.GetOptions{}
 
-	deployment, findDeployErr := factory.Client.AppsV1beta2().
+	deployment, findDeployErr := factory.Client.AppsV1().
 		Deployments(functionNamespace).
 		Get(request.Service, getOpts)
 
@@ -135,7 +135,7 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 	}
 
-	if _, updateErr := factory.Client.AppsV1beta2().
+	if _, updateErr := factory.Client.AppsV1().
 		Deployments(functionNamespace).
 		Update(deployment); updateErr != nil {
 
