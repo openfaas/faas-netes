@@ -1,7 +1,7 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.faasIdler.create }}
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: faas-idler
@@ -14,6 +14,9 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.faasIdler.replicas }}
+  selector:
+    matchLabels:
+      app: faas-idler
   template:
     metadata:
       annotations:

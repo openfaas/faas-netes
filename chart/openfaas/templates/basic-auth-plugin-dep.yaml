@@ -1,7 +1,7 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.basic_auth }}
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -14,6 +14,9 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: {{ .Values.basicAuthPlugin.replicas }}
+  selector:
+    matchLabels:
+      app: basic-auth-plugin
   template:
     metadata:
       annotations:

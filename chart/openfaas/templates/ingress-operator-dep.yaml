@@ -1,6 +1,6 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.ingressOperator.create }}
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
