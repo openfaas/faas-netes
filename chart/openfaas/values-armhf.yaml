@@ -1,7 +1,7 @@
 basic_auth: false
 
 gateway:
-  image: openfaas/gateway:0.17.0-armhf
+  image: openfaas/gateway:0.17.3-armhf
 
 faasnetes:
   image: openfaas/faas-netes:0.8.6-armhf
