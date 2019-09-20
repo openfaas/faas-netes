@@ -4,6 +4,7 @@
 package types
 
 type ScaleServiceRequest struct {
-	ServiceName string `json:"serviceName"`
-	Replicas    uint64 `json:"replicas"`
+	ServiceName      string `json:"serviceName"`
+	ServiceNamespace string `json:"serviceNamespace"`
+	Replicas         uint64 `json:"replicas"`
 }
