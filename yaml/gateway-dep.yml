@@ -57,6 +57,8 @@ spec:
           value: "true"
         - name: direct_functions_suffix
           value: "openfaas-fn.svc.cluster.local"
+        - name: function_namespace
+          value: "openfaas-fn"
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
