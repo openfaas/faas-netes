@@ -115,6 +115,7 @@ func parseRequest(r *http.Request) (logRequest Request, err error) {
 			return logRequest, err
 		}
 	}
+
 	// ignore error because it will default to false if we can't parse it
 	logRequest.Follow, _ = strconv.ParseBool(getValue(query, "follow"))
 
