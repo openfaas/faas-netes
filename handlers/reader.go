@@ -73,7 +73,6 @@ func getService(functionNamespace string, functionName string, clientset *kubern
 	}
 
 	if item != nil {
-
 		function := readFunction(*item)
 		if function != nil {
 			return function, nil
@@ -98,6 +97,7 @@ func readFunction(item appsv1.Deployment) *types.FunctionStatus {
 		InvocationCount:   0,
 		Labels:            &labels,
 		Annotations:       &item.Spec.Template.Annotations,
+		Namespace:         item.Namespace,
 	}
 
 	return &function

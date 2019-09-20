@@ -13,6 +13,9 @@ import (
 	"github.com/openfaas/faas-provider/types"
 )
 
+// NameExpression for a function / service
+const NameExpression = "-a-zA-Z_0-9."
+
 var r *mux.Router
 
 // Mark this as a Golang "package"
@@ -55,17 +58,17 @@ func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
 	r.HandleFunc("/system/functions", handlers.DeleteHandler).Methods("DELETE")
 	r.HandleFunc("/system/functions", handlers.UpdateHandler).Methods("PUT")
 
-	r.HandleFunc("/system/function/{name:[-a-zA-Z_0-9]+}", handlers.ReplicaReader).Methods("GET")
-	r.HandleFunc("/system/scale-function/{name:[-a-zA-Z_0-9]+}", handlers.ReplicaUpdater).Methods("POST")
+	r.HandleFunc("/system/function/{name:["+NameExpression+"]+}", handlers.ReplicaReader).Methods("GET")
+	r.HandleFunc("/system/scale-function/{name:["+NameExpression+"]+}", handlers.ReplicaUpdater).Methods("POST")
 	r.HandleFunc("/system/info", handlers.InfoHandler).Methods("GET")
 
 	r.HandleFunc("/system/secrets", handlers.SecretHandler).Methods(http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete)
 	r.HandleFunc("/system/logs", handlers.LogHandler).Methods(http.MethodGet)
 
 	// Open endpoints
-	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}", handlers.FunctionProxy)
-	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}/", handlers.FunctionProxy)
-	r.HandleFunc("/function/{name:[-a-zA-Z_0-9]+}/{params:.*}", handlers.FunctionProxy)
+	r.HandleFunc("/function/{name:["+NameExpression+"]+}", handlers.FunctionProxy)
+	r.HandleFunc("/function/{name:["+NameExpression+"]+}/", handlers.FunctionProxy)
+	r.HandleFunc("/function/{name:["+NameExpression+"]+}/{params:.*}", handlers.FunctionProxy)
 
 	if config.EnableHealth {
 		r.HandleFunc("/healthz", handlers.HealthHandler).Methods("GET")
