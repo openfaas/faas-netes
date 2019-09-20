@@ -43,6 +43,7 @@ func MakeReplicaUpdater(functionNamespace string, clientset *kubernetes.Clientse
 				APIVersion: "extensions/v1beta1",
 			},
 		}
+
 		deployment, err := clientset.ExtensionsV1beta1().Deployments(functionNamespace).Get(functionName, options)
 
 		if err != nil {

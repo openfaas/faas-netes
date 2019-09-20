@@ -22,7 +22,7 @@ gatewayExternal:
 
 
 gateway:
-  image: openfaas/gateway:0.17.3
+  image: openfaas/gateway:0.17.4
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -38,7 +38,7 @@ gateway:
       cpu: "50m"
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.6
+  image: openfaas/faas-netes:0.8.7
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
