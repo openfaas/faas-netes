@@ -5,7 +5,7 @@ package k8s
 
 import (
 	"github.com/openfaas/faas/gateway/requests"
-	appsv1 "k8s.io/api/apps/v1beta2"
+	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
 	"testing"
 )

@@ -10,7 +10,7 @@ import (
 	"net/http"
 
 	types "github.com/openfaas/faas-provider/types"
-	appsv1 "k8s.io/api/apps/v1beta2"
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -42,7 +42,7 @@ func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) (
 		LabelSelector: "faas_function",
 	}
 
-	res, err := clientset.AppsV1beta2().Deployments(functionNamespace).List(listOpts)
+	res, err := clientset.AppsV1().Deployments(functionNamespace).List(listOpts)
 
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func getService(functionNamespace string, functionName string, clientset *kubern
 
 	getOpts := metav1.GetOptions{}
 
-	item, err := clientset.AppsV1beta2().Deployments(functionNamespace).Get(functionName, getOpts)
+	item, err := clientset.AppsV1().Deployments(functionNamespace).Get(functionName, getOpts)
 
 	if err != nil {
 		if errors.IsNotFound(err) {

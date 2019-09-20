@@ -54,11 +54,11 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 		options := metav1.GetOptions{
 			TypeMeta: metav1.TypeMeta{
 				Kind:       "Deployment",
-				APIVersion: "extensions/v1beta1",
+				APIVersion: "apps/v1",
 			},
 		}
 
-		deployment, err := clientset.ExtensionsV1beta1().Deployments(lookupNamespace).Get(functionName, options)
+		deployment, err := clientset.Apps().Deployments(lookupNamespace).Get(functionName, options)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -74,7 +74,7 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 
 		deployment.Spec.Replicas = &replicas
 
-		_, err = clientset.ExtensionsV1beta1().Deployments(lookupNamespace).Update(deployment)
+		_, err = clientset.Apps().Deployments(lookupNamespace).Update(deployment)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

@@ -9,7 +9,7 @@ import (
 	"net/http"
 
 	"github.com/openfaas/faas/gateway/requests"
-	appsv1 "k8s.io/api/apps/v1beta2"
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -36,7 +36,7 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 		getOpts := metav1.GetOptions{}
 
 		// This makes sure we don't delete non-labelled deployments
-		deployment, findDeployErr := clientset.AppsV1beta2().
+		deployment, findDeployErr := clientset.AppsV1().
 			Deployments(functionNamespace).
 			Get(request.FunctionName, getOpts)
 
@@ -77,8 +77,7 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 	foregroundPolicy := metav1.DeletePropagationForeground
 	opts := &metav1.DeleteOptions{PropagationPolicy: &foregroundPolicy}
 
-	if deployErr := clientset.ExtensionsV1beta1().
-		Deployments(functionNamespace).
+	if deployErr := clientset.Apps().Deployments(functionNamespace).
 		Delete(request.FunctionName, opts); deployErr != nil {
 
 		if errors.IsNotFound(deployErr) {
