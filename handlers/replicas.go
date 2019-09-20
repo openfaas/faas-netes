@@ -67,8 +67,11 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
+		oldReplicas := *deployment.Spec.Replicas
 		replicas := int32(req.Replicas)
-		log.Printf("Set replicas - %s %s, %d/%d\n", functionName, lookupNamespace, replicas, deployment.Spec.Replicas)
+
+		log.Printf("Set replicas - %s %s, %d/%d\n", functionName, lookupNamespace, replicas, oldReplicas)
+
 		deployment.Spec.Replicas = &replicas
 
 		_, err = clientset.ExtensionsV1beta1().Deployments(lookupNamespace).Update(deployment)
@@ -112,7 +115,7 @@ func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset)
 			return
 		}
 
-		log.Printf("Read replicas - %s %s, %d/%d\n", functionName, namespace, function.AvailableReplicas, function.Replicas)
+		log.Printf("Read replicas - %s %s, %d/%d\n", functionName, lookupNamespace, function.AvailableReplicas, function.Replicas)
 
 		functionBytes, _ := json.Marshal(function)
 		w.Header().Set("Content-Type", "application/json")
