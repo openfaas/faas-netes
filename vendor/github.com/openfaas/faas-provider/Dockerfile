@@ -1,4 +1,6 @@
-FROM golang:1.10.4-alpine3.8
+FROM golang:1.11-alpine3.10
+
+ENV CGO_ENABLED=0
 
 RUN mkdir -p /go/src/github.com/openfaas/faas-provider/
 

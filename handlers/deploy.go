@@ -76,7 +76,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		log.Println("Created deployment - " + request.Service + "," + namespace)
+		log.Printf("Deployment created: %s.%s\n", request.Service, namespace)
 
 		service := factory.Client.Core().Services(namespace)
 		serviceSpec := makeServiceSpec(request, factory)
@@ -89,8 +89,9 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			return
 		}
 
-		log.Println("Created service - " + request.Service + "," + namespace)
-		log.Println(string(body))
+		log.Printf("Service created: %s.%s\n", request.Service, namespace)
+
+		// log.Println(string(body))
 
 		w.WriteHeader(http.StatusAccepted)
 
@@ -307,7 +308,6 @@ func createSelector(constraints []string) map[string]string {
 		}
 	}
 
-	// log.Println("selector: ", selector)
 	return selector
 }
 

@@ -65,6 +65,8 @@ func Serve(handlers *types.FaaSHandlers, config *types.FaaSConfig) {
 	r.HandleFunc("/system/secrets", handlers.SecretHandler).Methods(http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete)
 	r.HandleFunc("/system/logs", handlers.LogHandler).Methods(http.MethodGet)
 
+	r.HandleFunc("/system/namespaces", handlers.ListNamespaceHandler).Methods("GET")
+
 	// Open endpoints
 	r.HandleFunc("/function/{name:["+NameExpression+"]+}", handlers.FunctionProxy)
 	r.HandleFunc("/function/{name:["+NameExpression+"]+}/", handlers.FunctionProxy)
