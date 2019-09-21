@@ -67,17 +67,18 @@ func main() {
 	factory := k8s.NewFunctionFactory(clientset, deployConfig)
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:  handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),
-		DeleteHandler:  handlers.MakeDeleteHandler(functionNamespace, clientset),
-		DeployHandler:  handlers.MakeDeployHandler(functionNamespace, factory),
-		FunctionReader: handlers.MakeFunctionReader(functionNamespace, clientset),
-		ReplicaReader:  handlers.MakeReplicaReader(functionNamespace, clientset),
-		ReplicaUpdater: handlers.MakeReplicaUpdater(functionNamespace, clientset),
-		UpdateHandler:  handlers.MakeUpdateHandler(functionNamespace, factory),
-		HealthHandler:  handlers.MakeHealthHandler(),
-		InfoHandler:    handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
-		SecretHandler:  handlers.MakeSecretHandler(functionNamespace, clientset),
-		LogHandler:     logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace), cfg.WriteTimeout),
+		FunctionProxy:        handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),
+		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
+		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
+		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),
+		ReplicaReader:        handlers.MakeReplicaReader(functionNamespace, clientset),
+		ReplicaUpdater:       handlers.MakeReplicaUpdater(functionNamespace, clientset),
+		UpdateHandler:        handlers.MakeUpdateHandler(functionNamespace, factory),
+		HealthHandler:        handlers.MakeHealthHandler(),
+		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
+		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, clientset),
+		LogHandler:           logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace), cfg.WriteTimeout),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clientset),
 	}
 
 	var port int
