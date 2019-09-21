@@ -1,6 +1,6 @@
 ---
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -10,13 +10,16 @@ metadata:
   namespace: "openfaas"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
   template:
     metadata:
       labels:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "205df41b137314b391c850cb549444767fad00ba26054f2aee3884797696fb6a"
+        checksum/alertmanager-config: "84efdb03dd584f6969cbc02c405dafec0507720af1f64e983e7f7f566d2f64a4"
     spec:
       containers:
       - name: alertmanager

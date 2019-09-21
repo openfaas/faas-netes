@@ -1,4 +1,4 @@
-functionNamespace: openfaas-fn
+functionNamespace: openfaas-fn  # Default namespace for functions
 
 async: true
 
@@ -37,7 +37,7 @@ gateway:
       cpu: "50m"
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.7
+  image: openfaas/faas-netes:0.9.0
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions

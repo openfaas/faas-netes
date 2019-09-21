@@ -269,6 +269,7 @@ Additional OpenFaaS options in `values.yaml`.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `default` |
+| `clusterRole` | Set to `true` if you'd like to use multiple namespaces for functions | `false` |
 | `async` | Deploys NATS | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |

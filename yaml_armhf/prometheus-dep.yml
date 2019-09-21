@@ -1,6 +1,6 @@
 ---
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -10,13 +10,16 @@ metadata:
   namespace: "openfaas"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
   template:
     metadata:
       labels:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "8914ce846b093896b866f7a65e00f16ffb0c92c2b0d5cceb53f63d6ab1def078"
+        checksum/prometheus-config: "f82939d7fc1e756abec8e6682eb82240ee51706786774fc6f88edd2e501a24a5"
     spec:
       serviceAccountName: faas-prometheus
       containers:

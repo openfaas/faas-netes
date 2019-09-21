@@ -1,5 +1,5 @@
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -9,6 +9,9 @@ metadata:
   namespace: "openfaas"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
   template:
     metadata:
       annotations:
@@ -91,7 +94,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/faas-netes:0.8.7
+        image: openfaas/faas-netes:0.9.0
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true
