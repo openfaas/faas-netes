@@ -16,9 +16,22 @@ import (
 )
 
 // MakeDeleteHandler delete a function
-func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
+
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		if lookupNamespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+		}
 
 		body, _ := ioutil.ReadAll(r.Body)
 
@@ -37,7 +50,7 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 
 		// This makes sure we don't delete non-labelled deployments
 		deployment, findDeployErr := clientset.AppsV1().
-			Deployments(functionNamespace).
+			Deployments(lookupNamespace).
 			Get(request.FunctionName, getOpts)
 
 		if findDeployErr != nil {
@@ -52,7 +65,7 @@ func MakeDeleteHandler(functionNamespace string, clientset *kubernetes.Clientset
 		}
 
 		if isFunction(deployment) {
-			deleteFunction(functionNamespace, clientset, request, w)
+			deleteFunction(lookupNamespace, clientset, request, w)
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 
