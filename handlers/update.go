@@ -18,10 +18,22 @@ import (
 )
 
 // MakeUpdateHandler update specified function
-func MakeUpdateHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
+func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		defer r.Body.Close()
+
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		if lookupNamespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+		}
 
 		body, _ := ioutil.ReadAll(r.Body)
 
@@ -33,12 +45,12 @@ func MakeUpdateHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		}
 
 		annotations := buildAnnotations(request)
-		if err, status := updateDeploymentSpec(functionNamespace, factory, request, annotations); err != nil {
+		if err, status := updateDeploymentSpec(lookupNamespace, factory, request, annotations); err != nil {
 			w.WriteHeader(status)
 			w.Write([]byte(err.Error()))
 		}
 
-		if err, status := updateService(functionNamespace, factory, request, annotations); err != nil {
+		if err, status := updateService(lookupNamespace, factory, request, annotations); err != nil {
 			w.WriteHeader(status)
 			w.Write([]byte(err.Error()))
 		}

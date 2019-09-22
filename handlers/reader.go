@@ -17,10 +17,22 @@ import (
 )
 
 // MakeFunctionReader handler for reading functions deployed in the cluster as deployments.
-func MakeFunctionReader(functionNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeFunctionReader(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
 
-		functions, err := getServiceList(functionNamespace, clientset)
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		if lookupNamespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+		}
+
+		functions, err := getServiceList(lookupNamespace, clientset)
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
