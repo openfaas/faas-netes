@@ -10,7 +10,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"strconv"
 	"time"
 
 	"math/rand"
@@ -73,6 +72,7 @@ func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kuber
 	lister := endpointsInformer.Lister()
 
 	client := newHTTPClient(timeout, 1024, 1024)
+	nsEndpointLister := lister.Endpoints(functionNamespace)
 
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -90,7 +90,7 @@ func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kuber
 			vars := mux.Vars(r)
 			service := vars["name"]
 
-			svc, err := lister.Endpoints(functionNamespace).Get(service)
+			svc, err := nsEndpointLister.Get(service)
 			if err != nil {
 				log.Printf("error listing %s %s\n", service, err.Error())
 				w.WriteHeader(http.StatusInternalServerError)
@@ -101,13 +101,6 @@ func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kuber
 			target := rand.Intn(all)
 
 			serviceIP := svc.Subsets[0].Addresses[target].IP
-
-			stamp := strconv.FormatInt(time.Now().Unix(), 10)
-
-			defer func(when time.Time) {
-				seconds := time.Since(when).Seconds()
-				log.Printf("[%s] took %f seconds\n", stamp, seconds)
-			}(time.Now())
 
 			forwardReq := requests.NewForwardRequest(r.Method, *r.URL)
 
