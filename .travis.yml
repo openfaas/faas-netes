@@ -15,7 +15,7 @@ services:
 
 before_script:
 - bash contrib/set_travis_experimental_mode.sh
-- curl -sSL get.docker.com | sudo -E sh
+- curl -sSLf https://get.docker.com | sed s/sleep\ 20/sleep\ 0/g | sudo -E sh
 - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 
 script:
