@@ -26,21 +26,40 @@ import (
 // watchdogPort for the OpenFaaS function watchdog
 const watchdogPort = 8080
 
+func newHTTPClient(timeout time.Duration, maxIdleConns, maxIdleConnsPerHost int) *http.Client {
+
+	client := http.DefaultClient
+	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+
+	// These overrides for the default client enable re-use of connections and prevent
+	// CoreDNS from rate limiting the gateway under high traffic
+	//
+	// See also two similar projects where this value was updated:
+	// https://github.com/prometheus/prometheus/pull/3592
+	// https://github.com/minio/minio/pull/5860
+
+	// Taken from http.DefaultTransport in Go 1.11
+	client.Transport = &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   timeout,
+			KeepAlive: timeout,
+			DualStack: true,
+		}).DialContext,
+		MaxIdleConns:          maxIdleConns,
+		MaxIdleConnsPerHost:   maxIdleConnsPerHost,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+	}
+
+	return client
+}
+
 // MakeProxy creates a proxy for HTTP web requests which can be routed to a function.
 func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kubernetes.Clientset) http.HandlerFunc {
-	proxyClient := http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-			DialContext: (&net.Dialer{
-				Timeout:   timeout,
-				KeepAlive: 1 * time.Second,
-			}).DialContext,
-			// MaxIdleConns:          1,
-			// DisableKeepAlives:     false,
-			IdleConnTimeout:       120 * time.Millisecond,
-			ExpectContinueTimeout: 1500 * time.Millisecond,
-		},
-	}
 
 	defaultResync := time.Second * 5
 	kubeInformerOpt := kubeinformers.WithNamespace(functionNamespace)
@@ -52,6 +71,8 @@ func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kuber
 	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
 	go kubeInformerFactory.Start(stopCh)
 	lister := endpointsInformer.Lister()
+
+	client := newHTTPClient(timeout, 1024, 1024)
 
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -100,7 +121,7 @@ func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kuber
 
 			defer request.Body.Close()
 
-			response, err := proxyClient.Do(request)
+			response, err := client.Do(request)
 
 			if err != nil {
 				log.Println(err.Error())
