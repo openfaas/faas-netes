@@ -4,6 +4,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 
@@ -16,26 +17,34 @@ import (
 	"github.com/openfaas/faas-provider/logs"
 	bootTypes "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 func main() {
-	// creates the in-cluster config
-	config, err := rest.InClusterConfig()
+	var kubeconfig string
+	var masterURL string
+
+	flag.StringVar(&kubeconfig, "kubeconfig", "",
+		"Path to a kubeconfig. Only required if out-of-cluster.")
+	flag.StringVar(&masterURL, "master", "",
+		"The address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster.")
+	flag.Parse()
+
+	clientCmdConfig, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("Error building kubeconfig: %s", err.Error())
+	}
+
+	clientset, err := kubernetes.NewForConfig(clientCmdConfig)
+	if err != nil {
+		log.Fatalf("Error building Kubernetes clientset: %s", err.Error())
+
 	}
 
 	functionNamespace := "default"
 
 	if namespace, exists := os.LookupEnv("function_namespace"); exists {
 		functionNamespace = namespace
-	}
-
-	// creates the clientset
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
 	}
 
 	readConfig := types.ReadConfig{}
