@@ -67,7 +67,7 @@ func main() {
 	factory := k8s.NewFunctionFactory(clientset, deployConfig)
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:        handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),
+		FunctionProxy:        handlers.MakeProxy(functionNamespace, cfg.ReadTimeout, clientset),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
 		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),

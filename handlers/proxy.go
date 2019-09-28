@@ -13,15 +13,21 @@ import (
 	"strconv"
 	"time"
 
+	"math/rand"
+
+	"github.com/openfaas-incubator/openfaas-operator/pkg/signals"
+	kubeinformers "k8s.io/client-go/informers"
+
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas/gateway/requests"
+	"k8s.io/client-go/kubernetes"
 )
 
 // watchdogPort for the OpenFaaS function watchdog
 const watchdogPort = 8080
 
 // MakeProxy creates a proxy for HTTP web requests which can be routed to a function.
-func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc {
+func MakeProxy(functionNamespace string, timeout time.Duration, clientset *kubernetes.Clientset) http.HandlerFunc {
 	proxyClient := http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -35,6 +41,17 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 			ExpectContinueTimeout: 1500 * time.Millisecond,
 		},
 	}
+
+	defaultResync := time.Second * 5
+	kubeInformerOpt := kubeinformers.WithNamespace(functionNamespace)
+	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(clientset, defaultResync, kubeInformerOpt)
+
+	// set up signals so we handle the first shutdown signal gracefully
+	stopCh := signals.SetupSignalHandler()
+
+	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
+	go kubeInformerFactory.Start(stopCh)
+	lister := endpointsInformer.Lister()
 
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -52,6 +69,18 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 			vars := mux.Vars(r)
 			service := vars["name"]
 
+			svc, err := lister.Endpoints(functionNamespace).Get(service)
+			if err != nil {
+				log.Printf("error listing %s %s\n", service, err.Error())
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			all := len(svc.Subsets[0].Addresses)
+			target := rand.Intn(all)
+
+			serviceIP := svc.Subsets[0].Addresses[target].IP
+
 			stamp := strconv.FormatInt(time.Now().Unix(), 10)
 
 			defer func(when time.Time) {
@@ -61,7 +90,9 @@ func MakeProxy(functionNamespace string, timeout time.Duration) http.HandlerFunc
 
 			forwardReq := requests.NewForwardRequest(r.Method, *r.URL)
 
-			url := forwardReq.ToURL(fmt.Sprintf("%s.%s", service, functionNamespace), watchdogPort)
+			url := forwardReq.ToURL(fmt.Sprintf("%s", serviceIP), watchdogPort)
+
+			log.Printf("Invoke [%d/%d] via: %s\n", target+1, all, url)
 
 			request, _ := http.NewRequest(r.Method, url, r.Body)
 
