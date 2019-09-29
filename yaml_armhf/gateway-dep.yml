@@ -21,6 +21,9 @@ spec:
         app: gateway
     spec:
       serviceAccountName: faas-controller
+      volumes:
+      - name: faas-netes-temp-volume
+        emptyDir: {}
       containers:
       - name: gateway
         resources:
@@ -110,6 +113,9 @@ spec:
           value: "1"
         - name: liveness_probe_period_seconds
           value: "2"
+        volumeMounts:
+        - mountPath: /tmp
+          name: faas-netes-temp-volume
         ports:
         - containerPort: 8081
           protocol: TCP

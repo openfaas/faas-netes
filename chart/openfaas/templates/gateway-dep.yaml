@@ -28,8 +28,10 @@ spec:
       {{- else }}
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
-      {{- if .Values.basic_auth }}
       volumes:
+      - name: faas-netes-temp-volume
+        emptyDir: {}
+      {{- if .Values.basic_auth }}
       - name: auth
         secret:
           secretName: basic-auth
@@ -202,6 +204,9 @@ spec:
           value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
         - name: liveness_probe_period_seconds
           value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
+        volumeMounts:
+        - mountPath: /tmp
+          name: faas-netes-temp-volume
         ports:
         - containerPort: 8081
           protocol: TCP
