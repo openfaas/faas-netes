@@ -157,13 +157,14 @@
   version = "0.17.3"
 
 [[projects]]
-  digest = "1:e02df3904d1a0f00b8e82654be61ca5bac94a64d52951de533b9bb86a4978726"
+  digest = "1:f879843be21485d1cf3c32c5a1395af47c67526aa6a321d5e65425a6a1fa69d1"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
     "auth",
     "httputil",
     "logs",
+    "proxy",
     "types",
   ]
   pruneopts = "UT"
@@ -588,6 +589,7 @@
     "github.com/gorilla/mux",
     "github.com/openfaas/faas-provider",
     "github.com/openfaas/faas-provider/logs",
+    "github.com/openfaas/faas-provider/proxy",
     "github.com/openfaas/faas-provider/types",
     "github.com/openfaas/faas/gateway/requests",
     "github.com/pkg/errors",
@@ -603,7 +605,6 @@
     "k8s.io/client-go/kubernetes",
     "k8s.io/client-go/kubernetes/fake",
     "k8s.io/client-go/kubernetes/typed/core/v1",
-    "k8s.io/client-go/rest",
     "k8s.io/client-go/tools/cache",
     "k8s.io/client-go/tools/clientcmd",
   ]
