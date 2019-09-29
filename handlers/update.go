@@ -46,14 +46,18 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 
 		annotations := buildAnnotations(request)
 		if err, status := updateDeploymentSpec(lookupNamespace, factory, request, annotations); err != nil {
-			log.Printf("error updating deployment: %s\n", err)
+			if !isNotFound(err) {
+				log.Printf("error updating deployment: %s\n", err)
+				return
+			}
 			w.WriteHeader(status)
 			w.Write([]byte(err.Error()))
-			return
 		}
 
 		if err, status := updateService(lookupNamespace, factory, request, annotations); err != nil {
-			log.Printf("error updating service: %s\n", err)
+			if !isNotFound(err) {
+				log.Printf("error updating service: %s\n", err)
+			}
 
 			w.WriteHeader(status)
 			w.Write([]byte(err.Error()))
