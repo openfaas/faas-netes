@@ -91,10 +91,8 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		log.Printf("Service created: %s.%s\n", request.Service, namespace)
 
-		// log.Println(string(body))
-
 		w.WriteHeader(http.StatusAccepted)
-
+		return
 	}
 }
 
@@ -297,7 +295,6 @@ func int32p(i int32) *int32 {
 func createSelector(constraints []string) map[string]string {
 	selector := make(map[string]string)
 
-	log.Println(constraints)
 	if len(constraints) > 0 {
 		for _, constraint := range constraints {
 			parts := strings.Split(constraint, "=")
