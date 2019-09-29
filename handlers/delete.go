@@ -44,6 +44,7 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 
 		if len(request.FunctionName) == 0 {
 			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
 
 		getOpts := metav1.GetOptions{}
@@ -74,6 +75,7 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 		}
 
 		w.WriteHeader(http.StatusAccepted)
+		return
 	}
 }
 
