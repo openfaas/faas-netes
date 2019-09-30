@@ -1,5 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if eq .Values.faasnetes.create true }}
+{{- if .Values.faasnetes.create }}
 ---
 apiVersion: v1
 kind: ServiceAccount
