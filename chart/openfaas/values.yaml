@@ -73,14 +73,6 @@ faaslambda:
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
   httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on Pods (incompatible with Istio < 1.1.5)
   setNonRootUser: false
-  readinessProbe:
-    initialDelaySeconds: 2
-    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
-    periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
-  livenessProbe:
-    initialDelaySeconds: 2
-    timeoutSeconds: 1
-    periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
   resources:
     requests:
       memory: "120Mi"

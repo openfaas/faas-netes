@@ -196,24 +196,12 @@ spec:
           - name: basic_auth
             value: "{{ .Values.basic_auth }}"
           {{- end }}
-          - name: readiness_probe_initial_delay_seconds
-            value: "{{ .Values.faaslambda.readinessProbe.initialDelaySeconds }}"
-          - name: readiness_probe_timeout_seconds
-            value: "{{ .Values.faaslambda.readinessProbe.timeoutSeconds }}"
-          - name: readiness_probe_period_seconds
-            value: "{{ .Values.faaslambda.readinessProbe.periodSeconds }}"
-          - name: liveness_probe_initial_delay_seconds
-            value: "{{ .Values.faaslambda.livenessProbe.initialDelaySeconds }}"
-          - name: liveness_probe_timeout_seconds
-            value: "{{ .Values.faaslambda.livenessProbe.timeoutSeconds }}"
-          - name: liveness_probe_period_seconds
-            value: "{{ .Values.faaslambda.livenessProbe.periodSeconds }}"
           - name: lambda_execution_role
-            value: "{{ .Values.faaslambda.lambda_execution_role }}"
+            value: "{{ required "An IAM execution role is required" .Values.faaslambda.lambda_execution_role }}"
           - name: access_token
-            value: "{{ .Values.faaslambda.access_token }}"
+            value: "{{ required "An OpenFaaS Lambda access token is required" .Values.faaslambda.access_token }}"
           - name: access_email
-            value: "{{ .Values.faaslambda.access_email }}"
+            value: "{{ required "The email address used when registering your OpenFaaS Lambda access token is required" .Values.faaslambda.access_email }}"
           - name: AWS_REGION
             value: "{{ .Values.faaslambda.aws_region }}"
           - name: AWS_ACCESS_KEY_ID
