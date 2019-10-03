@@ -21,7 +21,8 @@ func Test_SecretsHandler(t *testing.T) {
 	namespace := "of-fnc"
 	kube := testclient.NewSimpleClientset()
 	secretsHandler := MakeSecretHandler(namespace, kube).ServeHTTP
-
+	secretLabel := "app.kubernetes.io/managed-by"
+	secretLabelValue := "openfaas"
 	secretName := "testsecret"
 
 	t.Run("create managed secrets", func(t *testing.T) {
