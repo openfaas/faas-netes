@@ -17,7 +17,8 @@ metadata:
 spec:
   type: {{ .Values.serviceType }}
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       protocol: TCP
       targetPort: 8080
       {{- if contains "NodePort" .Values.serviceType }}
