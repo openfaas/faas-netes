@@ -4,8 +4,9 @@
 package k8s
 
 import (
-	"github.com/openfaas/faas/gateway/requests"
 	"testing"
+
+	types "github.com/openfaas/faas-provider/types"
 )
 
 func Test_makeProbes_useExec(t *testing.T) {
