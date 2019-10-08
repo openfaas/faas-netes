@@ -14,7 +14,7 @@ import (
 )
 
 // MakeNamespacesLister builds a list of namespaces with an "openfaas" tag, or the default name
-func MakeNamespacesLister(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Query namespaces")
 
@@ -28,7 +28,7 @@ func MakeNamespacesLister(defaultNamespace string, clientset *kubernetes.Clients
 	}
 }
 
-func list(defaultNamespace string, clientset *kubernetes.Clientset) []string {
+func list(defaultNamespace string, clientset kubernetes.Interface) []string {
 	listOptions := metav1.ListOptions{}
 	namespaces, err := clientset.CoreV1().Namespaces().List(listOptions)
 
