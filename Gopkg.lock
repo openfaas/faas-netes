@@ -157,7 +157,7 @@
   version = "0.17.3"
 
 [[projects]]
-  digest = "1:e02df3904d1a0f00b8e82654be61ca5bac94a64d52951de533b9bb86a4978726"
+  digest = "1:add7a1c43234b668ff5ce8f6a7d5e0a453d866d51cdb2f7014fe94808154f431"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
@@ -167,8 +167,8 @@
     "types",
   ]
   pruneopts = "UT"
-  revision = "eafd85a3b360d8e0982c3a1db43e6d5fee9b85e2"
-  version = "0.10.2"
+  revision = "478f741b64cbcfaaee852156b060514be56623b3"
+  version = "0.12.0"
 
 [[projects]]
   branch = "master"
@@ -603,7 +603,6 @@
     "k8s.io/client-go/kubernetes",
     "k8s.io/client-go/kubernetes/fake",
     "k8s.io/client-go/kubernetes/typed/core/v1",
-    "k8s.io/client-go/rest",
     "k8s.io/client-go/tools/cache",
     "k8s.io/client-go/tools/clientcmd",
   ]

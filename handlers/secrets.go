@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -28,28 +29,75 @@ const (
 
 // MakeSecretHandler makes a handler for Create/List/Delete/Update of
 //secrets in the Kubernetes API
-func MakeSecretHandler(namespace string, kube kubernetes.Interface) http.HandlerFunc {
+func MakeSecretHandler(defaultNamespace string, kube kubernetes.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Body != nil {
 			defer r.Body.Close()
 		}
 
-		client := kube.CoreV1().Secrets(namespace)
+		lookupNamespace, err := getLookupNamespace(defaultNamespace, kube, r)
+		if err != nil {
+			switch err.Error() {
+			case "unable to unmarshal Secret request":
+				http.Error(w, err.Error(), http.StatusBadRequest)
+			case "unable to manage secrets within the specified namespace":
+				http.Error(w, err.Error(), http.StatusUnauthorized)
+			default:
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+		}
+
+		client := kube.CoreV1().Secrets(lookupNamespace)
 
 		switch r.Method {
 		case http.MethodGet:
 			getSecretsHandler(client, w, r)
 		case http.MethodPost:
-			createSecretHandler(client, namespace, w, r)
+			createSecretHandler(client, lookupNamespace, w, r)
 		case http.MethodPut:
-			replaceSecretHandler(client, namespace, w, r)
+			replaceSecretHandler(client, lookupNamespace, w, r)
 		case http.MethodDelete:
-			deleteSecretHandler(client, namespace, w, r)
+			deleteSecretHandler(client, lookupNamespace, w, r)
 		default:
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 	}
+}
+
+// getLookupNamespace returns the namespace specified in any request type
+func getLookupNamespace(defaultNamespace string, kube kubernetes.Interface, r *http.Request) (string, error) {
+	req := types.Secret{Namespace: defaultNamespace}
+
+	switch r.Method {
+	case http.MethodGet:
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		if len(namespace) > 0 {
+			req.Namespace = namespace
+		}
+
+	case http.MethodPost, http.MethodPut, http.MethodDelete:
+		body, _ := ioutil.ReadAll(r.Body)
+		err := json.Unmarshal(body, &req)
+		if err != nil {
+			log.Printf("error while getting namespace: %s\n", err)
+			return "", fmt.Errorf("unable to unmarshal Secret request")
+		}
+
+		// Reconstruct Body
+		r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	}
+
+	allowedNamespaces := list(defaultNamespace, kube)
+	ok := findNamespace(req.Namespace, allowedNamespaces)
+	if !ok {
+		return req.Namespace, fmt.Errorf("unable to manage secrets within the %s namespace", req.Namespace)
+	}
+
+	return req.Namespace, nil
 }
 
 func getSecretsHandler(kube typedV1.SecretInterface, w http.ResponseWriter, r *http.Request) {
@@ -65,7 +113,8 @@ func getSecretsHandler(kube typedV1.SecretInterface, w http.ResponseWriter, r *h
 	secrets := []types.Secret{}
 	for _, item := range res.Items {
 		secret := types.Secret{
-			Name: item.Name,
+			Name:      item.Name,
+			Namespace: item.Namespace,
 		}
 		secrets = append(secrets, secret)
 	}
