@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/openfaas/faas-provider/proxy"
+
 	"github.com/openfaas/faas-netes/k8s"
 
 	"github.com/openfaas/faas-netes/handlers"
@@ -75,8 +77,10 @@ func main() {
 
 	factory := k8s.NewFunctionFactory(clientset, deployConfig)
 
+	functionLookup := handlers.FunctionLookup{DefaultNamespace: functionNamespace}
+
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:        handlers.MakeProxy(functionNamespace, cfg.ReadTimeout),
+		FunctionProxy:        proxy.NewHandlerFunc(cfg.ReadTimeout, &functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
 		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),

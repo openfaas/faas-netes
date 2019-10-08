@@ -157,13 +157,14 @@
   version = "0.17.3"
 
 [[projects]]
-  digest = "1:add7a1c43234b668ff5ce8f6a7d5e0a453d866d51cdb2f7014fe94808154f431"
+  digest = "1:ca48ab4a85175261336d42e14cc31dfa2c874118136b404dca5cca8686a6250b"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
     "auth",
     "httputil",
     "logs",
+    "proxy",
     "types",
   ]
   pruneopts = "UT"
@@ -588,6 +589,7 @@
     "github.com/gorilla/mux",
     "github.com/openfaas/faas-provider",
     "github.com/openfaas/faas-provider/logs",
+    "github.com/openfaas/faas-provider/proxy",
     "github.com/openfaas/faas-provider/types",
     "github.com/openfaas/faas/gateway/requests",
     "github.com/pkg/errors",
