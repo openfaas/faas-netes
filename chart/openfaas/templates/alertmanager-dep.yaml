@@ -25,10 +25,14 @@ spec:
         sidecar.istio.io/inject: "true"
         checksum/alertmanager-config: {{ include (print $.Template.BasePath "/alertmanager-cfg.yaml") . | sha256sum | quote  }}
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.alertmanager.pod | nindent 8 }}
       containers:
       - name: alertmanager
         image: {{ .Values.alertmanager.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContexts.alertmanager.containers.alertmanager | nindent 10 }}
         command:
           - "alertmanager"
           - "--config.file=/alertmanager.yml"

@@ -22,6 +22,8 @@ spec:
       labels:
         app: queue-worker
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.queueWorker.pod | nindent 8 }}
       {{- if .Values.basic_auth }}
       volumes:
       - name: auth
@@ -34,6 +36,8 @@ spec:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContexts.queueWorker.containers.queueWorker | nindent 10 }}
         env:
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"

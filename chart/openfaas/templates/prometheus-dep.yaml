@@ -25,6 +25,8 @@ spec:
         sidecar.istio.io/inject: "true"
         checksum/prometheus-config: {{ include (print $.Template.BasePath "/prometheus-cfg.yaml") . | sha256sum | quote }}
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.prometheus.pod | nindent 8 }}
       serviceAccountName: {{ .Release.Name }}-prometheus
       containers:
       - name: prometheus
@@ -35,6 +37,8 @@ spec:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContexts.prometheus.containers.prometheus | nindent 10 }}
         livenessProbe:
           {{- if .Values.httpProbe }}
           httpGet:

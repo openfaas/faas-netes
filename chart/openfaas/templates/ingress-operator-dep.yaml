@@ -23,6 +23,8 @@ spec:
       labels:
         app: ingress-operator
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.ingressOperator.pod | nindent 8 }}
       serviceAccountName: ingress-operator
       containers:
       - name: operator
@@ -30,6 +32,8 @@ spec:
           {{- .Values.ingressOperator.resources | toYaml | nindent 10 }}
         image: {{ .Values.ingressOperator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContexts.ingressOperator.containers.ingressOperator | nindent 10 }}
         command:
           - ./ingress-operator
           - -logtostderr

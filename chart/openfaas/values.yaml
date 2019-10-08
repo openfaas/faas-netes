@@ -11,7 +11,6 @@ clusterRole: false            # Set to true to have OpenFaaS administrate multip
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 psp: false
-securityContext: true
 basic_auth: true
 
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
@@ -158,3 +157,39 @@ kubernetesDNSDomain: cluster.local
 
 istio:
   mtls: false
+
+securityContexts:
+  alertmanager:
+    containers:
+      alertmanager: {}
+    pod: {}
+  basicAuthPlugin:
+    containers:
+      basicAuthPlugin: {}
+    pod: {}
+  faasIdler:
+    containers:
+      faasIdler: {}
+    pod: {}
+  gateway:
+    containers:
+      faasNetes: {}
+      gateway: {}
+      operator: {}
+    pod: {}
+  ingressOperator:
+    containers:
+      ingressOperator: {}
+    pod: {}
+  nats:
+    containers:
+      nats: {}
+    pod: {}
+  prometheus:
+    containers:
+      prometheus: {}
+    pod: {}
+  queueWorker:
+    containers:
+      queueWorker: {}
+    pod: {}

@@ -23,6 +23,8 @@ spec:
       labels:
         app: gateway
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.gateway.pod | nindent 8 }}
       {{- if .Values.operator.create }}
       serviceAccountName: {{ .Release.Name }}-operator
       {{- else }}
@@ -42,11 +44,8 @@ spec:
           {{- .Values.gateway.resources | toYaml | nindent 12 }}
         image: {{ .Values.gateway.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.securityContext }}
         securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 10001
-        {{- end }}
+          {{- toYaml .Values.securityContexts.gateway.containers.gateway | nindent 10 }}
         livenessProbe:
           {{- if .Values.httpProbe }}
           httpGet:
@@ -132,6 +131,8 @@ spec:
           {{- .Values.operator.resources | toYaml | nindent 12 }}
         image: {{ .Values.operator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContexts.gateway.containers.operator | nindent 10 }}
         command:
           - ./openfaas-operator
           - -logtostderr
@@ -172,11 +173,8 @@ spec:
           {{- .Values.faasnetes.resources | toYaml | nindent 12 }}
         image: {{ .Values.faasnetes.image }}
         imagePullPolicy: {{ .Values.openFaasImagePullPolicy }}
-        {{- if .Values.securityContext }}
         securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 10001
-        {{- end }}
+          {{- toYaml .Values.securityContexts.gateway.containers.faasNetes | nindent 10 }}
         env:
         - name: port
           value: "8081"

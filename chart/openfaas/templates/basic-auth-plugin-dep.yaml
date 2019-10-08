@@ -24,6 +24,8 @@ spec:
       labels:
         app: basic-auth-plugin
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.basicAuthPlugin.pod | nindent 8 }}
       {{- if .Values.basic_auth }}
       volumes:
       - name: auth
@@ -36,11 +38,8 @@ spec:
           {{- .Values.basicAuthPlugin.resources | toYaml | nindent 12 }}
         image: {{ .Values.basicAuthPlugin.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.securityContext }}
         securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 10001
-        {{- end }}
+          {{- toYaml .Values.securityContexts.basicAuthPlugin.containers.basicAuthPlugin | nindent 10 }}
         livenessProbe:
           {{- if .Values.httpProbe }}
           httpGet:

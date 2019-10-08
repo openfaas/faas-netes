@@ -4,6 +4,30 @@
 
 [OpenFaaS](https://github.com/openfaas/faas) (Functions as a Service) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
+## Important notes
+
+If you are upgrading from pre-`6.0.0` and have `securityContext` set to `true`, please...
+
+* ... tweak the `securityContexts` field in `values.yaml` according to your requirements. By default, the new pods will have an empty `securityContext` field. To keep your existing configuration for this field, use
+
+  ```yaml
+  securityContexts:
+    basicAuthPlugin:
+      containers:
+        basicAuthPlugin:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+    gateway:
+      containers:
+        faasNetes:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+        gateway:
+          readOnlyRootFilesystem: true
+          runAsUser: 10001
+  ```
+* ... remove the `securityContext` field, which has been replaced by the aforementioned one.
+
 ## Highlights
 
 * Ease of use through UI portal and *one-click* install
@@ -277,7 +301,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `rbac` | Enable RBAC | `true` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
-| `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
+| `securityContexts` | Security contexts to use for each pod and container. | (see `values.yaml`) |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |

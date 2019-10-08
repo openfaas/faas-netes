@@ -24,12 +24,16 @@ spec:
       labels:
         app: faas-idler
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.faasIdler.pod | nindent 8 }}
       containers:
         - name: faas-idler
           resources:
             {{- .Values.faasIdler.resources | toYaml | nindent 12 }}
           image: {{ .Values.faasIdler.image }}
           imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContexts.faasIdler.containers.faasIdler | nindent 12 }}
           env:
             - name: gateway_url
               value: "http://gateway.{{ .Release.Namespace }}:8080/"

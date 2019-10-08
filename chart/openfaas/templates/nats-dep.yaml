@@ -23,12 +23,16 @@ spec:
       labels:
         app: nats
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContexts.nats.pod | nindent 8 }}
       containers:
       - name:  nats
         resources:
           {{- .Values.nats.resources | toYaml | nindent 12 }}
         image: {{ .Values.nats.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContexts.nats.containers.nats | nindent 10 }}
         ports:
         - containerPort: 4222
           protocol: TCP
