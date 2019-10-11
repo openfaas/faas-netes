@@ -48,21 +48,19 @@ func (f *FunctionLookup) SetLister(ns string, lister corelister.EndpointsNamespa
 func getNamespace(name, defaultNamespace string) string {
 	namespace := defaultNamespace
 	if strings.Contains(name, ".") {
-		namespace = name[:strings.LastIndexAny(name, ".")+1]
+		namespace = name[strings.LastIndexAny(name, ".")+1:]
 	}
 	return namespace
 }
 
 func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
-	if strings.Contains(name, ".") {
-		err := l.verifyNamespace(name)
-		if err != nil {
-			return url.URL{}, err
-		}
-	}
 
 	namespace := getNamespace(name, l.DefaultNamespace)
+	if err := l.verifyNamespace(namespace); err != nil {
+		return url.URL{}, err
+	}
 
+	fmt.Println(namespace)
 	nsEndpointLister := l.GetLister(namespace)
 
 	if nsEndpointLister == nil {
@@ -81,7 +79,7 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 
 	serviceIP := svc.Subsets[0].Addresses[target].IP
 
-	urlStr := fmt.Sprintf("http://%s.%s:%d", serviceIP, namespace, watchdogPort)
+	urlStr := fmt.Sprintf("http://%s:%d", serviceIP, watchdogPort)
 
 	urlRes, err := url.Parse(urlStr)
 	if err != nil {
