@@ -7,18 +7,21 @@ import (
 	"flag"
 	"log"
 	"os"
+	"time"
 
 	"github.com/openfaas/faas-provider/proxy"
+	"k8s.io/client-go/kubernetes"
 
-	"github.com/openfaas/faas-netes/k8s"
-
+	"github.com/openfaas-incubator/openfaas-operator/pkg/signals"
 	"github.com/openfaas/faas-netes/handlers"
+	"github.com/openfaas/faas-netes/k8s"
 	"github.com/openfaas/faas-netes/types"
 	"github.com/openfaas/faas-netes/version"
 	bootstrap "github.com/openfaas/faas-provider"
 	"github.com/openfaas/faas-provider/logs"
 	bootTypes "github.com/openfaas/faas-provider/types"
-	"k8s.io/client-go/kubernetes"
+	kubeinformers "k8s.io/client-go/informers"
+
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -77,10 +80,21 @@ func main() {
 
 	factory := k8s.NewFunctionFactory(clientset, deployConfig)
 
-	functionLookup := handlers.FunctionLookup{DefaultNamespace: functionNamespace}
+	defaultResync := time.Second * 5
+	kubeInformerOpt := kubeinformers.WithNamespace(functionNamespace)
+	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(clientset, defaultResync, kubeInformerOpt)
+
+	// set up signals so we handle the first shutdown signal gracefully
+	stopCh := signals.SetupSignalHandler()
+
+	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
+	go kubeInformerFactory.Start(stopCh)
+	lister := endpointsInformer.Lister()
+
+	functionLookup := handlers.NewFunctionLookup(functionNamespace, lister)
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:        proxy.NewHandlerFunc(cfg.ReadTimeout, &functionLookup),
+		FunctionProxy:        proxy.NewHandlerFunc(cfg.ReadTimeout, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
 		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),
