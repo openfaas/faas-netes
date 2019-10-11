@@ -149,6 +149,14 @@
   version = "1.0.1"
 
 [[projects]]
+  digest = "1:da252652270fa34c1f69e7a31f2cd62933afe24355a9f9e79919c9ba64f5c3c3"
+  name = "github.com/openfaas-incubator/openfaas-operator"
+  packages = ["pkg/signals"]
+  pruneopts = "UT"
+  revision = "8a2f0aa0fb60957147b46c9f4f3312763b86c27a"
+  version = "0.11.0"
+
+[[projects]]
   digest = "1:0250441ac9f681c839722297897952ee6d633f2a37dc254eca9d6d21bd1e877d"
   name = "github.com/openfaas/faas"
   packages = ["gateway/requests"]
@@ -587,6 +595,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/gorilla/mux",
+    "github.com/openfaas-incubator/openfaas-operator/pkg/signals",
     "github.com/openfaas/faas-provider",
     "github.com/openfaas/faas-provider/logs",
     "github.com/openfaas/faas-provider/proxy",
@@ -605,6 +614,7 @@
     "k8s.io/client-go/kubernetes",
     "k8s.io/client-go/kubernetes/fake",
     "k8s.io/client-go/kubernetes/typed/core/v1",
+    "k8s.io/client-go/listers/core/v1",
     "k8s.io/client-go/tools/cache",
     "k8s.io/client-go/tools/clientcmd",
   ]
