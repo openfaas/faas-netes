@@ -3,10 +3,51 @@ package handlers
 import (
 	"strings"
 	"testing"
+
+	corelister "k8s.io/client-go/listers/core/v1"
+
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
+type FakeLister struct {
+}
+
+func (f FakeLister) List(selector labels.Selector) (ret []*corev1.Endpoints, err error) {
+	return nil, nil
+}
+
+func (f FakeLister) Endpoints(namespace string) corelister.EndpointsNamespaceLister {
+
+	return FakeNSLister{}
+}
+
+type FakeNSLister struct {
+}
+
+func (f FakeNSLister) List(selector labels.Selector) (ret []*corev1.Endpoints, err error) {
+	return nil, nil
+}
+
+func (f FakeNSLister) Get(name string) (*corev1.Endpoints, error) {
+	ep := corev1.Endpoints{
+		Subsets: []corev1.EndpointSubset{
+			corev1.EndpointSubset{
+				Addresses: []corev1.EndpointAddress{
+					corev1.EndpointAddress{IP: "127.0.0.1"},
+				},
+			},
+		},
+	}
+
+	return &ep, nil
+}
+
 func Test_FunctionLookup(t *testing.T) {
-	resolver := FunctionLookup{DefaultNamespace: "testDefault"}
+
+	lister := FakeLister{}
+
+	resolver := NewFunctionLookup("testDefault", lister)
 
 	cases := []struct {
 		name     string
@@ -17,17 +58,17 @@ func Test_FunctionLookup(t *testing.T) {
 		{
 			name:     "function without namespace uses default namespace",
 			funcName: "testfunc",
-			expUrl:   "http://testfunc.testDefault:8080",
+			expUrl:   "http://127.0.0.1:8080",
 		},
 		{
 			name:     "function with namespace uses the given namespace",
 			funcName: "testfunc.othernamespace",
-			expUrl:   "http://testfunc.othernamespace:8080",
+			expUrl:   "http://127.0.0.1:8080",
 		},
 		{
 			name:     "url parse errors are returned",
-			funcName: "\ttestfunc.othernamespace",
-			expError: "net/url: invalid control character in URL",
+			funcName: "testfunc.kube-system",
+			expError: "namespace not allowed",
 		},
 	}
 
