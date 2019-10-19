@@ -165,7 +165,7 @@
   version = "0.18.2"
 
 [[projects]]
-  digest = "1:ca48ab4a85175261336d42e14cc31dfa2c874118136b404dca5cca8686a6250b"
+  digest = "1:99dadc2c1ee4102a3ffc1e84d9e182dcb20bed29a89c9f937310b7a969de7f7d"
   name = "github.com/openfaas/faas-provider"
   packages = [
     ".",
@@ -176,8 +176,8 @@
     "types",
   ]
   pruneopts = "UT"
-  revision = "478f741b64cbcfaaee852156b060514be56623b3"
-  version = "0.12.0"
+  revision = "78c25aab33bbdaae7b6d031006535d363eaacda5"
+  version = "0.13.1"
 
 [[projects]]
   branch = "master"

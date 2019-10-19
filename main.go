@@ -53,11 +53,14 @@ func main() {
 	}
 
 	readConfig := types.ReadConfig{}
-	osEnv := types.OsEnv{}
-	cfg := readConfig.Read(osEnv)
+	osEnv := bootTypes.OsEnv{}
+	cfg, err := readConfig.Read(osEnv)
+	if err != nil {
+		log.Fatalf("Error reading config: %s", err.Error())
+	}
 
-	log.Printf("HTTP Read Timeout: %s\n", cfg.ReadTimeout)
-	log.Printf("HTTP Write Timeout: %s\n", cfg.WriteTimeout)
+	log.Printf("HTTP Read Timeout: %s\n", cfg.FaaSConfig.GetReadTimeout())
+	log.Printf("HTTP Write Timeout: %s\n", cfg.FaaSConfig.WriteTimeout)
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
 	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
@@ -94,7 +97,7 @@ func main() {
 	functionLookup := handlers.NewFunctionLookup(functionNamespace, lister)
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
-		FunctionProxy:        proxy.NewHandlerFunc(cfg.ReadTimeout, functionLookup),
+		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
 		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),
@@ -104,19 +107,9 @@ func main() {
 		HealthHandler:        handlers.MakeHealthHandler(),
 		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, clientset),
-		LogHandler:           logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace), cfg.WriteTimeout),
+		LogHandler:           logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace), cfg.FaaSConfig.WriteTimeout),
 		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clientset),
 	}
 
-	var port int
-	port = cfg.Port
-
-	bootstrapConfig := bootTypes.FaaSConfig{
-		ReadTimeout:  cfg.ReadTimeout,
-		WriteTimeout: cfg.WriteTimeout,
-		TCPPort:      &port,
-		EnableHealth: true,
-	}
-
-	bootstrap.Serve(&bootstrapHandlers, &bootstrapConfig)
+	bootstrap.Serve(&bootstrapHandlers, &cfg.FaaSConfig)
 }
