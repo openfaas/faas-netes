@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/openfaas/faas/gateway/requests"
+	types "github.com/openfaas/faas-provider/types"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	testclient "k8s.io/client-go/kubernetes/fake"
@@ -127,7 +127,7 @@ func Test_SecretsHandler(t *testing.T) {
 
 		decoder := json.NewDecoder(resp.Body)
 
-		secretList := []requests.Secret{}
+		secretList := []types.Secret{}
 		err := decoder.Decode(&secretList)
 		if err != nil {
 			t.Error(err)
