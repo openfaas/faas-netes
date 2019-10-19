@@ -157,12 +157,12 @@
   version = "0.11.0"
 
 [[projects]]
-  digest = "1:0250441ac9f681c839722297897952ee6d633f2a37dc254eca9d6d21bd1e877d"
+  digest = "1:cdf3df431e70077f94e14a99305808e3d13e96262b4686154970f448f7248842"
   name = "github.com/openfaas/faas"
   packages = ["gateway/requests"]
   pruneopts = "UT"
-  revision = "d322f109a8379d19b639c003846e721a24ce9dc0"
-  version = "0.17.3"
+  revision = "1c9e12237046fccc3e23b9ca79d0c904157e89ad"
+  version = "0.18.2"
 
 [[projects]]
   digest = "1:ca48ab4a85175261336d42e14cc31dfa2c874118136b404dca5cca8686a6250b"
@@ -607,6 +607,7 @@
     "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/api/resource",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
+    "k8s.io/apimachinery/pkg/labels",
     "k8s.io/apimachinery/pkg/runtime/schema",
     "k8s.io/apimachinery/pkg/util/intstr",
     "k8s.io/client-go/informers",
