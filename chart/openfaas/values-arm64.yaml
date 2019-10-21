@@ -1,13 +1,13 @@
 basic_auth: true
 
 gateway:
-  image: openfaas/gateway:0.17.0-arm64
+  image: openfaas/gateway:0.18.2-arm64
 
 faasnetes:
-  image: openfaas/faas-netes:0.8.5-arm64
+  image: openfaas/faas-netes:0.9.7-arm64
 
 queueWorker:
-  image: openfaas/queue-worker:0.8.0-arm64
+  image: openfaas/queue-worker:0.8.1-arm64
 
 prometheus:
   image: prom/prometheus:v2.11.0
@@ -18,13 +18,12 @@ prometheus:
 alertmanager:
   image: prom/alertmanager:v0.18.0
 
-ingressOperator:
-  create: false
-
 faasIdler:
   image: openfaas/faas-idler:0.2.0-arm64
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.17.0-arm64
+  image: openfaas/basic-auth-plugin:0.18.2-arm64
   replicas: 1
 
+ingressOperator:
+  create: false
