@@ -30,7 +30,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/queue-worker:0.8.0-arm64
+        image: openfaas/queue-worker:0.8.1-arm64
         imagePullPolicy: Always
         env:
         - name: faas_nats_address
