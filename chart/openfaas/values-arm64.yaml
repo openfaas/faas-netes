@@ -2,6 +2,7 @@ basic_auth: true
 
 gateway:
   image: openfaas/gateway:0.18.2-arm64
+  directFunctions: true
 
 faasnetes:
   image: openfaas/faas-netes:0.9.7-arm64

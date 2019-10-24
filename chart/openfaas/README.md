@@ -215,6 +215,18 @@ By default services will be exposed with following hostnames (can be changed, se
 
 * `gateway.openfaas.local`
 
+### Endpoint load-balancing
+
+Some configurations in combination with client-side KeepAlive settings may because load to be spread unevenly between replicas of a function. If you experience this, there are three ways to work around it:
+
+* Disable KeepAlive in the client-side code
+* Install Linkerd2 which takes over load-balacning from the Kubernetes L4 Service
+* Configure the gateway to pass invocations through to the Kubernetes provider (faas-netes)
+
+    ```
+    --set gateway.directFunctions=false,
+    ```
+
 ### SSL / TLS
 
 If you require TLS/SSL then please make use of an IngressController. A full guide is provided to [enable TLS for the OpenFaaS Gateway using cert-manager and Let's Encrypt](https://docs.openfaas.com/reference/ssl/kubernetes-with-cert-manager/).
@@ -292,6 +304,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
+| `gateway.directFunctions` | Invoke functions directly without using the provider | `true` |
 | `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
 | `gateway.readTimeout` | Queue worker read timeout | `65s` |
 | `gateway.writeTimeout` | Queue worker write timeout | `65s` |

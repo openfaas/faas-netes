@@ -89,7 +89,11 @@ spec:
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
         - name: direct_functions
-          value: "true"
+        {{- if (.Values.gateway.directFunctions) eq true }}
+          value: "{{.Values.gateway.directFunctions}}"
+        {{- else}}
+          value: "false"
+        {{- end }}
         - name: direct_functions_suffix
           value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: function_namespace

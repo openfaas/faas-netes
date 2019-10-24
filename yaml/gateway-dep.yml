@@ -34,7 +34,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/gateway:0.18.0
+        image: openfaas/gateway:0.18.2
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -59,7 +59,7 @@ spec:
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
         - name: direct_functions
-          value: "true"
+          value: "false"
         - name: direct_functions_suffix
           value: "openfaas-fn.svc.cluster.local"
         - name: function_namespace
@@ -96,7 +96,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/faas-netes:0.9.4
+        image: openfaas/faas-netes:0.9.8
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true
