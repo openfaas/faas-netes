@@ -59,7 +59,7 @@ spec:
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
         - name: direct_functions
-          value: "false"
+          value: "true"
         - name: direct_functions_suffix
           value: "openfaas-fn.svc.cluster.local"
         - name: function_namespace

@@ -31,6 +31,7 @@ rules:
     - ""
     resources:
     - namespaces
+    - endpoints
     verbs:
     - get
     - list
@@ -113,6 +114,14 @@ metadata:
   name: {{ .Release.Name }}-controller
   namespace: {{ $functionNs | quote }}
 rules:
+  - apiGroups:
+    - ""
+    resources:
+    - endpoints
+    verbs:
+    - get
+    - list
+    - watch
   - apiGroups:
       - ""
     resources:
