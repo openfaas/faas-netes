@@ -60,7 +60,6 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 		return url.URL{}, err
 	}
 
-	fmt.Println(namespace)
 	nsEndpointLister := l.GetLister(namespace)
 
 	if nsEndpointLister == nil {
