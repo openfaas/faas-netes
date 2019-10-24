@@ -96,6 +96,8 @@ func main() {
 
 	functionLookup := handlers.NewFunctionLookup(functionNamespace, lister)
 
+	cfg.FaaSConfig.EnableHealth = true // Needed due to breaking change in #534
+
 	bootstrapHandlers := bootTypes.FaaSHandlers{
 		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
