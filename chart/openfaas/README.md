@@ -219,9 +219,9 @@ By default services will be exposed with following hostnames (can be changed, se
 
 Some configurations in combination with client-side KeepAlive settings may because load to be spread unevenly between replicas of a function. If you experience this, there are three ways to work around it:
 
-* Disable KeepAlive in the client-side code
-* Install Linkerd2 which takes over load-balacning from the Kubernetes L4 Service
-* Configure the gateway to pass invocations through to the Kubernetes provider (faas-netes)
+* [Install Linkerd2](https://github.com/openfaas-incubator/openfaas-linkerd2) which takes over load-balancing from the Kubernetes L4 Service (recommended)
+* Disable KeepAlive in the client-side code (not recommended)
+* Configure the gateway to pass invocations through to the faas-netes provider (alternative to using Linkerd2)
 
     ```sh
     --set gateway.directFunctions=false
