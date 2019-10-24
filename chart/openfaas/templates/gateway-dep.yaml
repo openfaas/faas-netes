@@ -89,7 +89,7 @@ spec:
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
         - name: direct_functions
-        {{- if (.Values.gateway.directFunctions) eq true }}
+        {{- if .Values.gateway.directFunctions }}
           value: "{{.Values.gateway.directFunctions}}"
         {{- else}}
           value: "false"
