@@ -31,7 +31,7 @@ gateway:
   nodePort: 31112
   maxIdleConns: 1024
   maxIdleConnsPerHost: 1024
-  directFunctions: false
+  directFunctions: true
   resources:
     requests:
       memory: "120Mi"

@@ -223,9 +223,11 @@ Some configurations in combination with client-side KeepAlive settings may becau
 * Install Linkerd2 which takes over load-balacning from the Kubernetes L4 Service
 * Configure the gateway to pass invocations through to the Kubernetes provider (faas-netes)
 
+    ```sh
+    --set gateway.directFunctions=false
     ```
-    --set gateway.directFunctions=false,
-    ```
+
+    In this mode, all invocations will pass through the gateway to faas-netes, which will look up endpoint IPs directly from Kubernetes, the additional hop may add some latency, but will do fair load-balancing, even with KeepAlive.
 
 ### SSL / TLS
 
