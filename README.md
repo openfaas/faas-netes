@@ -19,7 +19,7 @@ In this README you'll find a technical overview and instructions for deploying t
 * Native Kubernetes integrations (API and ecosystem)
 * Built-in UI portal
 * YAML templates & helm chart
-* Over 18.5k GitHub stars
+* Over 19k GitHub stars
 * Independent open-source project with over 240 contributors
 * Operator available to use Custom Resource Definitions (CRDs) [openfaas-operator](https://github.com/openfaas-incubator/openfaas-operator/)
 * OAuth2 / OIDC authz available
@@ -76,9 +76,10 @@ In this case, you can set your local environment to [use minikube's docker](http
 Note: When set to `Never`, **only** local (or pulled) images will work.  When set to `IfNotPresent`, function deployments may not be updated when using static image tags.
 
 ## Kubernetes Versions
-OpenFaaS strives to support as many Kubernetes versions as possible. Due to recent changes in the Secrets API, **Kubernetes 1.9** or higher is required with **faas-netes 0.7.1** or higher.
 
-## Contributing to faas-netes
+faas-netes maintainers strive to support as many Kubernetes versions as possible and it is currently compatible with Kubernetes 1.11 and higher. Instructions for OpenShift are also available in the documentation.
+
+## Contributing
 
 You can quickly create a standard development environment using
 
