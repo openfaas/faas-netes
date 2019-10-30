@@ -76,9 +76,8 @@ func ParseString(val string, fallback string) string {
 // Read fetches config from environmental variables.
 func (ReadConfig) Read(hasEnv HasEnv) (*FaaSConfig, error) {
 	cfg := &FaaSConfig{
-		ReadTimeout:  ParseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*10),
-		WriteTimeout: ParseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*10),
-		// default value from Gateway
+		ReadTimeout:     ParseIntOrDurationValue(hasEnv.Getenv("read_timeout"), time.Second*10),
+		WriteTimeout:    ParseIntOrDurationValue(hasEnv.Getenv("write_timeout"), time.Second*10),
 		EnableBasicAuth: ParseBoolValue(hasEnv.Getenv("basic_auth"), false),
 		// default value from Gateway
 		SecretMountPath: ParseString(hasEnv.Getenv("secret_mount_path"), "/run/secrets/"),
