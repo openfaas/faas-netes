@@ -27,7 +27,9 @@ type FaaSHandlers struct {
 	LogHandler http.HandlerFunc
 
 	// UpdateHandler an existing function/service
-	UpdateHandler        http.HandlerFunc
+	UpdateHandler http.HandlerFunc
+	// HealthHandler defines the default health endpoint bound to "/healthz
+	// If the handler is not set, then the "/healthz" path will not be configured
 	HealthHandler        http.HandlerFunc
 	InfoHandler          http.HandlerFunc
 	ListNamespaceHandler http.HandlerFunc
@@ -42,6 +44,9 @@ type FaaSConfig struct {
 	// HTTP timeout for writing a response from functions.
 	WriteTimeout time.Duration
 	// EnableHealth enables/disables the default health endpoint bound to "/healthz".
+	//
+	// Deprecated: basic auth is enabled automatcally by setting the HealthHandler in the FaaSHandlers
+	// struct.  This value is not longer read or used.
 	EnableHealth bool
 	// EnableBasicAuth enforces basic auth on the API. If set, reads secrets from file-system
 	// location specificed in `SecretMountPath`.
