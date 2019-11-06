@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -36,13 +37,14 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		request := types.FunctionDeployment{}
 		err := json.Unmarshal(body, &request)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
+			wrappedErr := fmt.Errorf("failed to unmarshal request: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
 		}
 
 		if err := ValidateDeployRequest(&request); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			wrappedErr := fmt.Errorf("validation failed: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -53,16 +55,17 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		existingSecrets, err := getSecrets(factory.Client, namespace, request.Secrets)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			wrappedErr := fmt.Errorf("unable to fetch secrets: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
 		}
 
 		deploymentSpec, specErr := makeDeploymentSpec(request, existingSecrets, factory)
 
 		if specErr != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(specErr.Error()))
+			wrappedErr := fmt.Errorf("failed create Deployment spec: %s", specErr.Error())
+			log.Println(wrappedErr)
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -70,9 +73,9 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		_, err = deploy.Create(deploymentSpec)
 		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
+			wrappedErr := fmt.Errorf("unable create Deployment: %s", err.Error())
+			log.Println(wrappedErr)
+			http.Error(w, wrappedErr.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -83,9 +86,9 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		_, err = service.Create(serviceSpec)
 
 		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
+			wrappedErr := fmt.Errorf("failed create Service: %s", err.Error())
+			log.Println(wrappedErr)
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
 		}
 

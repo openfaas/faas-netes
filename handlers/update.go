@@ -33,6 +33,7 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 
 		if lookupNamespace == "kube-system" {
 			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+			return
 		}
 
 		body, _ := ioutil.ReadAll(r.Body)
@@ -40,7 +41,8 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 		request := types.FunctionDeployment{}
 		err := json.Unmarshal(body, &request)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
+			wrappedErr := fmt.Errorf("unable to unmarshal request: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -48,10 +50,13 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 		if err, status := updateDeploymentSpec(lookupNamespace, factory, request, annotations); err != nil {
 			if !isNotFound(err) {
 				log.Printf("error updating deployment: %s\n", err)
+
 				return
 			}
-			w.WriteHeader(status)
-			w.Write([]byte(err.Error()))
+
+			wrappedErr := fmt.Errorf("unable update Deployment: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), status)
+			return
 		}
 
 		if err, status := updateService(lookupNamespace, factory, request, annotations); err != nil {
@@ -59,8 +64,8 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 				log.Printf("error updating service: %s\n", err)
 			}
 
-			w.WriteHeader(status)
-			w.Write([]byte(err.Error()))
+			wrappedErr := fmt.Errorf("unable update Service: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), status)
 			return
 		}
 
