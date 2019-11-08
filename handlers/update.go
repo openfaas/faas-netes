@@ -20,20 +20,8 @@ import (
 // MakeUpdateHandler update specified function
 func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
-
-		q := r.URL.Query()
-		namespace := q.Get("namespace")
-
-		lookupNamespace := defaultNamespace
-
-		if len(namespace) > 0 {
-			lookupNamespace = namespace
-		}
-
-		if lookupNamespace == "kube-system" {
-			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
-			return
+		if r.Body != nil {
+			defer r.Body.Close()
 		}
 
 		body, _ := ioutil.ReadAll(r.Body)
@@ -46,25 +34,35 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 			return
 		}
 
+		lookupNamespace := defaultNamespace
+		if len(request.Namespace) > 0 {
+			lookupNamespace = request.Namespace
+		}
+
+		if lookupNamespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+			return
+		}
+
 		annotations := buildAnnotations(request)
 		if err, status := updateDeploymentSpec(lookupNamespace, factory, request, annotations); err != nil {
 			if !isNotFound(err) {
-				log.Printf("error updating deployment: %s\n", err)
+				log.Printf("error updating deployment: %s.%s, error: %s\n", request.Service, lookupNamespace, err)
 
 				return
 			}
 
-			wrappedErr := fmt.Errorf("unable update Deployment: %s", err.Error())
+			wrappedErr := fmt.Errorf("unable update Deployment: %s.%s, error: %s", request.Service, lookupNamespace, err.Error())
 			http.Error(w, wrappedErr.Error(), status)
 			return
 		}
 
 		if err, status := updateService(lookupNamespace, factory, request, annotations); err != nil {
 			if !isNotFound(err) {
-				log.Printf("error updating service: %s\n", err)
+				log.Printf("error updating service: %s.%s, error: %s\n", request.Service, lookupNamespace, err)
 			}
 
-			wrappedErr := fmt.Errorf("unable update Service: %s", err.Error())
+			wrappedErr := fmt.Errorf("unable update Service: %s.%s, error: %s", request.Service, request.Namespace, err.Error())
 			http.Error(w, wrappedErr.Error(), status)
 			return
 		}
