@@ -30,7 +30,10 @@ const initialReplicasCount = 1
 // MakeDeployHandler creates a handler to create new functions in the cluster
 func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
+
+		if r.Body != nil {
+			defer r.Body.Close()
+		}
 
 		body, _ := ioutil.ReadAll(r.Body)
 

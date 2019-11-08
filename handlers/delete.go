@@ -5,6 +5,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -31,6 +32,7 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 
 		if lookupNamespace == "kube-system" {
 			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+			return
 		}
 
 		body, _ := ioutil.ReadAll(r.Body)
@@ -66,7 +68,10 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 		}
 
 		if isFunction(deployment) {
-			deleteFunction(lookupNamespace, clientset, request, w)
+			err := deleteFunction(lookupNamespace, clientset, request, w)
+			if err != nil {
+				return
+			}
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 
@@ -88,7 +93,7 @@ func isFunction(deployment *appsv1.Deployment) bool {
 	return false
 }
 
-func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, request requests.DeleteFunctionRequest, w http.ResponseWriter) {
+func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, request requests.DeleteFunctionRequest, w http.ResponseWriter) error {
 	foregroundPolicy := metav1.DeletePropagationForeground
 	opts := &metav1.DeleteOptions{PropagationPolicy: &foregroundPolicy}
 
@@ -101,7 +106,7 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 		w.Write([]byte(deployErr.Error()))
-		return
+		return fmt.Errorf("error deleting function's deployment")
 	}
 
 	if svcErr := clientset.CoreV1().
@@ -115,6 +120,7 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 		}
 
 		w.Write([]byte(svcErr.Error()))
-		return
+		return fmt.Errorf("error deleting function's service")
 	}
+	return nil
 }
