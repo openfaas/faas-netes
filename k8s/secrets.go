@@ -4,7 +4,6 @@
 package k8s
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"strings"
@@ -30,18 +29,18 @@ type SecretsClient interface {
 	// List returns a list of available function secrets.  Only the names are returned
 	// to ensure we do not accidentally read or print the sensitive values during
 	// read operations.
-	List(ctx context.Context, namespace string) (names []string, err error)
+	List(namespace string) (names []string, err error)
 	// Create adds a new secret, with the appropriate labels and structure to be
 	// used as a function secret.
-	Create(ctx context.Context, secret types.Secret) error
+	Create(secret types.Secret) error
 	// Replace updates the value of a function secret
-	Replace(ctx context.Context, secret types.Secret) error
+	Replace(secret types.Secret) error
 	// Delete removes a function secret
-	Delete(ctx context.Context, name string, namespace string) error
+	Delete(name string, namespace string) error
 	// GetSecrets queries Kubernetes for a list of secrets by name in the given k8s namespace.
 	// This should only be used if you need access to the actual secret structure/value. Specifically,
 	// inside the FunctionFactory.
-	GetSecrets(ctx context.Context, namespace string, secretNames []string) (map[string]*apiv1.Secret, error)
+	GetSecrets(namespace string, secretNames []string) (map[string]*apiv1.Secret, error)
 }
 
 // SecretsInterfacer exposes the SecretInterface getter for the k8s client.
@@ -65,7 +64,7 @@ func NewSecretsClient(kube kubernetes.Interface) SecretsClient {
 	}
 }
 
-func (c secretClient) List(ctx context.Context, namespace string) (names []string, err error) {
+func (c secretClient) List(namespace string) (names []string, err error) {
 	res, err := c.kube.Secrets(namespace).List(c.selector())
 	if err != nil {
 		log.Printf("failed to list secrets in %s: %v\n", namespace, err)
@@ -80,7 +79,7 @@ func (c secretClient) List(ctx context.Context, namespace string) (names []strin
 	return names, nil
 }
 
-func (c secretClient) Create(ctx context.Context, secret types.Secret) error {
+func (c secretClient) Create(secret types.Secret) error {
 	err := c.validateSecret(secret)
 	if err != nil {
 		return err
@@ -111,7 +110,7 @@ func (c secretClient) Create(ctx context.Context, secret types.Secret) error {
 	return nil
 }
 
-func (c secretClient) Replace(ctx context.Context, secret types.Secret) error {
+func (c secretClient) Replace(secret types.Secret) error {
 	err := c.validateSecret(secret)
 	if err != nil {
 		return err
@@ -136,7 +135,7 @@ func (c secretClient) Replace(ctx context.Context, secret types.Secret) error {
 	return nil
 }
 
-func (c secretClient) Delete(ctx context.Context, namespace string, name string) error {
+func (c secretClient) Delete(namespace string, name string) error {
 	err := c.kube.Secrets(namespace).Delete(name, &metav1.DeleteOptions{})
 	if err != nil {
 		log.Printf("can not delete %s.%s: %v\n", name, namespace, err)
@@ -144,7 +143,7 @@ func (c secretClient) Delete(ctx context.Context, namespace string, name string)
 	return err
 }
 
-func (c secretClient) GetSecrets(ctx context.Context, namespace string, secretNames []string) (map[string]*apiv1.Secret, error) {
+func (c secretClient) GetSecrets(namespace string, secretNames []string) (map[string]*apiv1.Secret, error) {
 	kube := c.kube.Secrets(namespace)
 	opts := metav1.GetOptions{}
 

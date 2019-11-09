@@ -58,7 +58,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			namespace = request.Namespace
 		}
 
-		existingSecrets, err := secrets.GetSecrets(r.Context(), namespace, request.Secrets)
+		existingSecrets, err := secrets.GetSecrets(namespace, request.Secrets)
 		if err != nil {
 			wrappedErr := fmt.Errorf("unable to fetch secrets: %s", err.Error())
 			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
