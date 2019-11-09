@@ -24,6 +24,8 @@ const (
 	secretLabelValue = "openfaas"
 )
 
+// SecretsClient exposes the standardized CRUD behaviors for Kubernetes secrets.  These methods
+// will ensure that the secrets are structured and labelled correctly for use by the OpenFaaS system.
 type SecretsClient interface {
 	// List returns a list of available function secrets.  Only the names are returned
 	// to ensure we do not accidentally read or print the sensitive values during
@@ -43,7 +45,7 @@ type SecretsClient interface {
 }
 
 // SecretsInterfacer exposes the SecretInterface getter for the k8s client.
-// This is implemented by the CoreV1Interface() interface in the kubernetes client.
+// This is implemented by the CoreV1Interface() interface in the Kubernetes client.
 // The SecretsClient only needs this one interface, but needs to be able to set the
 // namespaces when the interface is instantiated, meaning, we need the Getter and not the
 // SecretInterface itself.
@@ -56,6 +58,7 @@ type secretClient struct {
 	kube SecretInterfacer
 }
 
+// NewSecretsClient constructs a new SecretsClient using the provided Kubernetes client.
 func NewSecretsClient(kube kubernetes.Interface) SecretsClient {
 	return &secretClient{
 		kube: kube.CoreV1(),
@@ -175,7 +178,7 @@ func (c secretClient) validateSecret(secret types.Secret) error {
 	return nil
 }
 
-// ConfigureSecrets will update the Deployment spec to include secrets that have beenb deployed
+// ConfigureSecrets will update the Deployment spec to include secrets that have been deployed
 // in the kubernetes cluster.  For each requested secret, we inspect the type and add it to the
 // deployment spec as appropriate: secrets with type `SecretTypeDockercfg/SecretTypeDockerjson`
 // are added as ImagePullSecrets all other secrets are mounted as files in the deployments containers.
@@ -200,9 +203,6 @@ func (f *FunctionFactory) ConfigureSecrets(request types.FunctionDeployment, dep
 					Name: secretName,
 				},
 			)
-
-			break
-
 		default:
 
 			projectedPaths := []apiv1.KeyToPath{}
@@ -216,8 +216,6 @@ func (f *FunctionFactory) ConfigureSecrets(request types.FunctionDeployment, dep
 				Secret: projection,
 			}
 			secretVolumeProjections = append(secretVolumeProjections, secretProjection)
-
-			break
 		}
 	}
 
