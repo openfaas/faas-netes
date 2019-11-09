@@ -128,7 +128,7 @@ func (c secretClient) Replace(secret types.Secret) error {
 	}
 	_, err = kube.Update(found)
 	if err != nil {
-		log.Printf("can not update %s.%s: %v\n", secret.Name, secret.Namespace, err)
+		log.Printf("can not update secret %s.%s: %v\n", secret.Name, secret.Namespace, err)
 		return err
 	}
 
