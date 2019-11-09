@@ -62,7 +62,7 @@ func (h secretsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h secretsHandler) listSecrets(namespace string, w http.ResponseWriter, r *http.Request) {
-	res, err := h.secrets.List(r.Context(), namespace)
+	res, err := h.secrets.List(namespace)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret list error reason: %s, %v\n", reason, err)
@@ -98,7 +98,7 @@ func (h secretsHandler) createSecret(namespace string, w http.ResponseWriter, r 
 	}
 
 	secret.Namespace = namespace
-	err = h.secrets.Create(r.Context(), secret)
+	err = h.secrets.Create(secret)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret create error reason: %s, %v\n", reason, err)
@@ -119,7 +119,7 @@ func (h secretsHandler) replaceSecret(namespace string, w http.ResponseWriter, r
 	}
 
 	secret.Namespace = namespace
-	err = h.secrets.Replace(r.Context(), secret)
+	err = h.secrets.Replace(secret)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret update error reason: %s, %v\n", reason, err)
@@ -139,7 +139,7 @@ func (h secretsHandler) deleteSecret(namespace string, w http.ResponseWriter, r 
 		return
 	}
 
-	err = h.secrets.Delete(r.Context(), namespace, secret.Name)
+	err = h.secrets.Delete(namespace, secret.Name)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret delete error reason: %s, %v\n", reason, err)

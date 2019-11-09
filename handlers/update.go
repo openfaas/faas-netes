@@ -4,7 +4,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -144,7 +143,7 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.ServiceAccountName = serviceAccount
 
 		secrets := k8s.NewSecretsClient(factory.Client)
-		existingSecrets, err := secrets.GetSecrets(context.TODO(), functionNamespace, request.Secrets)
+		existingSecrets, err := secrets.GetSecrets(functionNamespace, request.Secrets)
 		if err != nil {
 			return err, http.StatusBadRequest
 		}
