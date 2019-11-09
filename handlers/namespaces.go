@@ -5,7 +5,10 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -25,6 +28,47 @@ func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interfac
 
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(out)
+	}
+}
+
+// NamespaceResolver is a method that determines the requested namespace corresponding to an
+// HTTP request. It then validates that OpenFaaS is permitted to operate in that the namespace.
+type NamespaceResolver func(r *http.Request) (namespace string, err error)
+
+// NewNamespaceResolver returns a generic namespace resolver that will inspect both the GET query
+// parameters and the request body. It looks for the query param or json key "namespace".
+func NewNamespaceResolver(defaultNamespace string, kube kubernetes.Interface) NamespaceResolver {
+	return func(r *http.Request) (string, error) {
+		req := struct{ Namespace string }{Namespace: defaultNamespace}
+
+		switch r.Method {
+		case http.MethodGet:
+			q := r.URL.Query()
+			namespace := q.Get("namespace")
+
+			if len(namespace) > 0 {
+				req.Namespace = namespace
+			}
+
+		case http.MethodPost, http.MethodPut, http.MethodDelete:
+			body, _ := ioutil.ReadAll(r.Body)
+			err := json.Unmarshal(body, &req)
+			if err != nil {
+				log.Printf("error while getting namespace: %s\n", err)
+				return "", fmt.Errorf("unable to unmarshal json request")
+			}
+
+			// Reconstruct Body
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		}
+
+		allowedNamespaces := list(defaultNamespace, kube)
+		ok := findNamespace(req.Namespace, allowedNamespaces)
+		if !ok {
+			return req.Namespace, fmt.Errorf("unable to manage secrets within the %s namespace", req.Namespace)
+		}
+
+		return req.Namespace, nil
 	}
 }
 
