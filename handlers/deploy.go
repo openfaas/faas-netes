@@ -29,6 +29,8 @@ const initialReplicasCount = 1
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
 func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
+	secrets := k8s.NewSecretsClient(factory.Client)
+
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		if r.Body != nil {
@@ -56,7 +58,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			namespace = request.Namespace
 		}
 
-		existingSecrets, err := getSecrets(factory.Client, namespace, request.Secrets)
+		existingSecrets, err := secrets.GetSecrets(r.Context(), namespace, request.Secrets)
 		if err != nil {
 			wrappedErr := fmt.Errorf("unable to fetch secrets: %s", err.Error())
 			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
@@ -218,7 +220,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 	factory.ConfigureReadOnlyRootFilesystem(request, deploymentSpec)
 	factory.ConfigureContainerUserID(deploymentSpec)
 
-	if err := UpdateSecrets(request, deploymentSpec, existingSecrets); err != nil {
+	if err := factory.ConfigureSecrets(request, deploymentSpec, existingSecrets); err != nil {
 		return nil, err
 	}
 
