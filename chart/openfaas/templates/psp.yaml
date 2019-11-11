@@ -49,12 +49,13 @@ rules:
       resources: ['podsecuritypolicies']
       verbs:     ['use']
       resourceNames:
-          - openfaas-psp
+          - {{ .Release.Name }}-psp
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
     name: {{ .Release.Name }}-psp
+    namespace: {{ .Release.Namespace | quote }}
 roleRef:
     apiGroup: rbac.authorization.k8s.io
     kind: ClusterRole
