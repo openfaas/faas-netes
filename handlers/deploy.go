@@ -275,7 +275,7 @@ func buildEnvVars(request *types.FunctionDeployment) []corev1.EnvVar {
 
 	if len(request.EnvProcess) > 0 {
 		envVars = append(envVars, corev1.EnvVar{
-			Name:  "fprocess",
+			Name:  k8s.EnvProcessName,
 			Value: request.EnvProcess,
 		})
 	}
