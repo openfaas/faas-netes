@@ -1,5 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.basic_auth }}
+{{- if .Values.basicAuthPlugin.create }}
 ---
 apiVersion: v1
 kind: Service

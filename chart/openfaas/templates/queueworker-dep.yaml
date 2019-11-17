@@ -22,7 +22,7 @@ spec:
       labels:
         app: queue-worker
     spec:
-      {{- if .Values.basic_auth }}
+      {{- if .Values.basicAuthPlugin.create }}
       volumes:
       - name: auth
         secret:
@@ -47,11 +47,11 @@ spec:
         {{- end }}
         - name: ack_wait    # Max duration of any async task / request
           value: {{ .Values.queueWorker.ackWait }}
-        {{- if .Values.basic_auth }}
+        {{- if .Values.basicAuthPlugin.create }}
         - name: secret_mount_path
           value: "/var/secrets"
         - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
+          value: "{{ .Values.basicAuthPlugin.create }}"
         volumeMounts:
         - name: auth
           readOnly: true

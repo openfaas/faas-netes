@@ -31,7 +31,7 @@ spec:
       volumes:
       - name: faas-netes-temp-volume
         emptyDir: {}
-      {{- if .Values.basic_auth }}
+      {{- if .Values.basicAuthPlugin.create }}
       - name: auth
         secret:
           secretName: basic-auth
@@ -104,7 +104,7 @@ spec:
         - name: faas_nats_port
           value: "4222"
         {{- end }}
-        {{- if .Values.basic_auth }}
+        {{- if .Values.basicAuthPlugin.create }}
         - name: basic_auth
           value: "true"
         - name: secret_mount_path
@@ -120,7 +120,7 @@ spec:
           value: "{{ .Values.gateway.maxIdleConns }}"
         - name: max_idle_conns_per_host
           value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
-        {{- if .Values.basic_auth }}
+        {{- if .Values.basicAuthPlugin.create }}
         volumeMounts:
         - name: auth
           readOnly: true

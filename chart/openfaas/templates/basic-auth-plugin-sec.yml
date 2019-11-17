@@ -1,0 +1,12 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.basicAuthPlugin.create }}
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  basic-auth-user: {{ required "Basic Auth User Name" .Values.basicAuthPlugin.user | b64enc }}
+  basic-auth-password: {{ required "Basic Auth Password"  .Values.basicAuthPlugin.password | b64enc }} 
+metadata:
+  name: basic-auth
+{{- end }}

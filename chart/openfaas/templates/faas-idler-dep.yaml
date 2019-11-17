@@ -45,7 +45,7 @@ spec:
             - /home/app/faas-idler
             - -dry-run={{ .Values.faasIdler.dryRun }}
 
-{{- if .Values.basic_auth }}
+{{- if .Values.basicAuthPlugin.create }}
           volumeMounts:
             - name: auth
               readOnly: true

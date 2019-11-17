@@ -1,5 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.basic_auth }}
+{{- if .Values.basicAuthPlugin.create }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,7 +24,7 @@ spec:
       labels:
         app: basic-auth-plugin
     spec:
-      {{- if .Values.basic_auth }}
+      {{- if .Values.basicAuthPlugin.create }}
       volumes:
       - name: auth
         secret:
@@ -74,11 +74,11 @@ spec:
           {{- end }}
           timeoutSeconds: 5
         env:
-        {{- if .Values.basic_auth }}
+        {{- if .Values.basicAuthPlugin.create }}
         - name: secret_mount_path
           value: "/var/secrets"
         - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
+          value: "{{ .Values.basicAuthPlugin.create }}"
         volumeMounts:
         - name: auth
           readOnly: true
