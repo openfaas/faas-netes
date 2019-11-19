@@ -1,0 +1,16 @@
+# Helmfile for OpenFaaS
+# For local testing of releases
+helmDefaults:
+  tillerless: true
+  tillerNamespace: openfaas
+
+releases:
+  - name: openfaas-test
+    namespace: openfaas
+    chart: ./
+    values:
+      - basicAuthPlugin:
+          user: testing
+          password: testingit!
+    wait: true # wait for k8s resources via --wait. Defaults to `false`
+    missingFileHandler: Error

@@ -1,0 +1,21 @@
+# Helmfile for OpenFaaS
+repositories:
+  - name: openfaas
+    url: https://openfaas.github.io/faas-netes/
+
+helmDefaults:
+  tillerless: true # Comment out if you want to use Tiller
+  tillerNamespace: openfaas # Comment out if you want to use Tiller
+
+releases:
+  - name: openfaas
+    namespace: openfaas
+    chart: openfaas/openfaas
+    version: ~5.2.2
+    values:
+      - basicAuthPlugin:
+          user: admin
+          password: "{{ requiredEnv "PASSWORD" }}"
+    verify: true
+    wait: true # wait for k8s resources via --wait. Defaults to `false`
+    missingFileHandler: Error
