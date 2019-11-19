@@ -15,7 +15,7 @@ Before you begin with your workflow make sure you have the following tools insta
 
 ## Development Workflow
 
-Before any changes test first that the current helm chart is working.
+Before you start changing the charts verify that the current helm chart is working.
 
 ```sh
 k3d create --name openfaas-test-helm #Create local k3s cluster in a container
