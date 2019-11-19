@@ -74,10 +74,10 @@ Decide how you want to expose the services and edit the `helmfile.yaml` as requi
 * To use NodePorts (default) not changes are needed to the `helmfile.yaml`
 * To use a LoadBalancer set
 
-```yaml
-  values:
-    serviceType: LoadBalancer
-```
+    ```yaml
+    values:
+        serviceType: LoadBalancer
+    ```
 
 * To use an IngressController set
   
