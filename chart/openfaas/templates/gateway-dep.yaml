@@ -98,11 +98,20 @@ spec:
           value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: function_namespace
           value: {{ $functionNs | quote }}
+        {{- if .Values.nats.external.enabled }}
+        - name: faas_nats_address
+          value: "{{ .Values.nats.external.host }}"
+        - name: faas_nats_port
+          value: "{{ .Values.nats.external.port }}"
+        - name: faas_nats_cluster_name
+          value: "{{ .Values.nats.external.clusterName }}"
+        {{- else }}
         {{- if .Values.async }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: faas_nats_port
           value: "4222"
+        {{- end }}
         {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth

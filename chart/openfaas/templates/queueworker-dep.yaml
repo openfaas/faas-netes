@@ -35,8 +35,17 @@ spec:
         image: {{ .Values.queueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         env:
+        {{- if .Values.nats.external.enabled }}
+        - name: faas_nats_address
+          value: "{{ .Values.nats.external.host }}"
+        - name: faas_nats_port
+          value: "{{ .Values.nats.external.port }}"
+        - name: faas_nats_cluster_name
+          value: "{{ .Values.nats.external.clusterName }}"
+        {{- else }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- end}}
         - name: faas_gateway_address
           value: "gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: "gateway_invoke"
