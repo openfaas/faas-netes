@@ -99,6 +99,11 @@ alertmanager:
 
 # async provider
 nats:
+  external:
+    clusterName: ""
+    enabled: false
+    host: ""
+    port: ""
   image: nats-streaming:0.11.2
   enableMonitoring: false
   resources:

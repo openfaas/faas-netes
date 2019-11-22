@@ -284,7 +284,7 @@ Additional OpenFaaS options in `values.yaml`.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `default` |
 | `clusterRole` | Set to `true` if you'd like to use multiple namespaces for functions | `false` |
-| `async` | Deploys NATS | `true` |
+| `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `basic_auth` | Enable basic authentication on the Gateway | `true` |
@@ -316,7 +316,11 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.maxIdleConnsPerHost` | Set max idle connections from gateway to functions per host | `1024` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
-| `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` | `false` |
+| `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `` |
+| `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
+| `nats.external.host` | The host at which the externally-managed NATS Streaming server can be reached | `""` |
+| `nats.external.port` | The port at which the externally-managed NATS Streaming server can be reached | `""` |
+| `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
 | `faasIdler.create` | Create the faasIdler component | `true` |
 | `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `15m` |
 | `faasIdler.reconcileInterval` | The time between each of reconciliation | `1m` |

@@ -1,4 +1,4 @@
-{{- if .Values.async }}
+{{- if and .Values.async (not .Values.nats.external.enabled) }}
 ---
 apiVersion: v1
 kind: Service
