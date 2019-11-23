@@ -94,14 +94,17 @@ func podLogs(ctx context.Context, i v1.PodInterface, pod, container, namespace s
 	defer log.Printf("Logger: stopping log stream for %s\n", pod)
 
 	opts := &corev1.PodLogOptions{
-		Follow:       follow,
-		Timestamps:   true,
-		Container:    container,
-		SinceSeconds: parseSince(since, sinceDuration),
+		Follow:     follow,
+		Timestamps: true,
+		Container:  container,
 	}
 
 	if tail > 0 {
 		opts.TailLines = &tail
+	}
+
+	if opts.TailLines == nil || (since != nil || sinceDuration != nil) {
+		opts.SinceSeconds = parseSince(since, sinceDuration)
 	}
 
 	stream, err := i.GetLogs(pod, opts).Stream()
