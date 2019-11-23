@@ -53,7 +53,7 @@ type Log struct {
 }
 
 // GetLogs returns a channel of logs for the given function
-func GetLogs(ctx context.Context, client kubernetes.Interface, functionName, namespace string, tail int64, since *time.Time, follow bool) (<-chan Log, error) {
+func GetLogs(ctx context.Context, client kubernetes.Interface, functionName, namespace string, tail int64, since *time.Time, sinceDuration *time.Duration, follow bool) (<-chan Log, error) {
 	added, err := startFunctionPodInformer(ctx, client, functionName, namespace)
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func GetLogs(ctx context.Context, client kubernetes.Interface, functionName, nam
 			case p := <-added:
 				watching++
 				go func() {
-					finished <- podLogs(ctx, client.CoreV1().Pods(namespace), p, functionName, namespace, tail, since, follow, logs)
+					finished <- podLogs(ctx, client.CoreV1().Pods(namespace), p, functionName, namespace, tail, since, sinceDuration, follow, logs)
 				}()
 			}
 		}
@@ -89,7 +89,7 @@ func GetLogs(ctx context.Context, client kubernetes.Interface, functionName, nam
 }
 
 // podLogs returns a stream of logs lines from the specified pod
-func podLogs(ctx context.Context, i v1.PodInterface, pod, container, namespace string, tail int64, since *time.Time, follow bool, dst chan<- Log) error {
+func podLogs(ctx context.Context, i v1.PodInterface, pod, container, namespace string, tail int64, since *time.Time, sinceDuration *time.Duration, follow bool, dst chan<- Log) error {
 	log.Printf("Logger: starting log stream for %s\n", pod)
 	defer log.Printf("Logger: stopping log stream for %s\n", pod)
 
@@ -97,7 +97,7 @@ func podLogs(ctx context.Context, i v1.PodInterface, pod, container, namespace s
 		Follow:       follow,
 		Timestamps:   true,
 		Container:    container,
-		SinceSeconds: parseSince(since),
+		SinceSeconds: parseSince(since, sinceDuration),
 	}
 
 	if tail > 0 {
@@ -152,12 +152,18 @@ func extractTimestampAndMsg(logText string) (string, time.Time) {
 }
 
 // parseSince returns the time.Duration of the requested Since value _or_ 5 minutes
-func parseSince(r *time.Time) *int64 {
+func parseSince(r *time.Time, d *time.Duration) *int64 {
 	var since int64
-	if r == nil || r.IsZero() {
+	if (r == nil || r.IsZero()) && d == nil {
 		since = int64(defaultLogSince.Seconds())
 		return &since
 	}
+
+	if d != nil {
+		since = int64(d.Seconds())
+		return &since
+	}
+
 	since = int64(time.Since(*r).Seconds())
 	return &since
 }

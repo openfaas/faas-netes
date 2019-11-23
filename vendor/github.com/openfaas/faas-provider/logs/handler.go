@@ -3,6 +3,7 @@ package logs
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -126,6 +127,19 @@ func parseRequest(r *http.Request) (logRequest Request, err error) {
 		if err != nil {
 			return logRequest, err
 		}
+	}
+
+	sinceDuration := getValue(query, "since-duration")
+	if sinceDuration != "" {
+		sinceDuration, err := time.ParseDuration(sinceDuration)
+		logRequest.SinceDuration = &sinceDuration
+		if err != nil {
+			return logRequest, err
+		}
+	}
+
+	if logRequest.Since != nil && logRequest.SinceDuration != nil {
+		return logRequest, fmt.Errorf("since and sinceDuration are to be used exclusively")
 	}
 
 	return logRequest, nil

@@ -20,6 +20,8 @@ type Request struct {
 	Instance string `json:"instance"`
 	// Since is the optional datetime value to start the logs from
 	Since *time.Time `json:"since"`
+	// Since duration is the optional duration for which logs are requested
+	SinceDuration *time.Duration `json:"since-duration"`
 	// Tail sets the maximum number of log messages to return, <=0 means unlimited
 	Tail int `json:"tail"`
 	// Follow is allows the user to request a stream of logs until the timeout

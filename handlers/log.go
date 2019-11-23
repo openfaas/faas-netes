@@ -30,7 +30,7 @@ func NewLogRequestor(client kubernetes.Interface, functionNamespace string) *Log
 // This implementation ignores the r.Limit value because the OF-Provider already handles server side
 // line limits.
 func (l LogRequestor) Query(ctx context.Context, r logs.Request) (<-chan logs.Message, error) {
-	logStream, err := k8s.GetLogs(ctx, l.client, r.Name, l.functionNamespace, int64(r.Tail), r.Since, r.Follow)
+	logStream, err := k8s.GetLogs(ctx, l.client, r.Name, l.functionNamespace, int64(r.Tail), r.Since, r.SinceDuration, r.Follow)
 	if err != nil {
 		log.Printf("LogRequestor: get logs failed: %s\n", err)
 		return nil, err
