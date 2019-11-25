@@ -21,7 +21,7 @@ gatewayExternal:
   annotations: {}
 
 gateway:
-  image: openfaas/gateway:0.18.2
+  image: openfaas/gateway:0.18.3
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -38,7 +38,7 @@ gateway:
       cpu: "50m"
 
 faasnetes:
-  image: openfaas/faas-netes:0.9.9
+  image: openfaas/faas-netes:0.9.13
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -70,7 +70,7 @@ operator:
       cpu: "50m"
 
 queueWorker:
-  image: openfaas/queue-worker:0.8.0
+  image: openfaas/queue-worker:0.8.3
   ackWait : "60s"
   replicas: 1
   gatewayInvoke: true
