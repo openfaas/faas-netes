@@ -94,7 +94,7 @@ func main() {
 	go kubeInformerFactory.Start(stopCh)
 	lister := endpointsInformer.Lister()
 
-	functionLookup := handlers.NewFunctionLookup(functionNamespace, lister)
+	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
 
 	bootstrapHandlers := bootTypes.FaaSHandlers{
 		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
