@@ -107,7 +107,7 @@ func main() {
 		HealthHandler:        handlers.MakeHealthHandler(),
 		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, clientset),
-		LogHandler:           logs.NewLogHandlerFunc(handlers.NewLogRequestor(clientset, functionNamespace), cfg.FaaSConfig.WriteTimeout),
+		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(clientset, functionNamespace), cfg.FaaSConfig.WriteTimeout),
 		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clientset),
 	}
 
