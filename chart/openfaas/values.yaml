@@ -70,7 +70,7 @@ operator:
       cpu: "50m"
 
 queueWorker:
-  image: openfaas/queue-worker:0.8.0
+  image: openfaas/queue-worker:0.8.4
   ackWait : "60s"
   replicas: 1
   gatewayInvoke: true
