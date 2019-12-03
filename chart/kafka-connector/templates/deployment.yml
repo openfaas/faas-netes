@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -11,7 +11,7 @@ metadata:
     # Helm/k8s recommended label names v
     app.kubernetes.io/name: {{ template "connector.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
     app.kubernetes.io/component: kafka-connector
     app.kubernetes.io/part-of: openfaas
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -22,15 +22,16 @@ spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "connector.name" . }}
-      app.kubernetes.io/component: kafka-connector
+      app: {{ template "connector.name" . }}
+      component: kafka-connector
+
   template:
     metadata:
       annotations:
         prometheus.io.scrape: "false"
       labels:
-        app.kubernetes.io/name: {{ template "connector.name" . }}
-        app.kubernetes.io/component: kafka-connector
+        app: {{ template "connector.name" . }}
+        component: kafka-connector
     spec:
       {{- if .Values.basic_auth }}
       volumes:
