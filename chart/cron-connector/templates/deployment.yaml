@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -16,11 +16,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      app: {{ template "connector.name" . }}
       name: {{ template "connector.name" . }}
       component: cron-connector
   template:
     metadata:
       labels:
+        app: {{ template "connector.name" . }}
         name: {{ template "connector.name" . }}
         component: cron-connector
     spec:
