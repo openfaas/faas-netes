@@ -39,3 +39,6 @@ spec:
           value: ".openfaas-fn.svc.cluster.local"
         - name: ack_wait    # Max duration of any async task / request
           value: 60s
+      nodeSelector:
+        beta.kubernetes.io/arch: arm
+        

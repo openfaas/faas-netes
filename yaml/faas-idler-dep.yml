@@ -50,3 +50,6 @@ spec:
         - name: auth
           secret:
             secretName: basic-auth
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+        

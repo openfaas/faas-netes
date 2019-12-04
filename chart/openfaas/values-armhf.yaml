@@ -28,3 +28,7 @@ basicAuthPlugin:
 
 ingressOperator:
   create: false
+
+
+nodeSelector:
+  beta.kubernetes.io/arch: arm
