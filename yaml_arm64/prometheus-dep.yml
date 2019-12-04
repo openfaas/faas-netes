@@ -19,7 +19,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "cc3ed8c15cdb9627fe557b0f6ac4144b25e3e77306f05849a7fc743c8eee67e4"
+        checksum/prometheus-config: "c3918ac6ccae018bef95517e7a082bf83b90414a58db8e64fc82c4419adb5ad6"
     spec:
       serviceAccountName: faas-prometheus
       containers:
@@ -68,3 +68,6 @@ spec:
                 mode: 0644
         - name: prom-data
           emptyDir: {}
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64
+        

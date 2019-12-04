@@ -42,3 +42,6 @@ spec:
           command:
             - /home/app/faas-idler
             - -dry-run=true
+      nodeSelector:
+        beta.kubernetes.io/arch: arm
+        

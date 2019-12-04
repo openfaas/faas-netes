@@ -154,7 +154,8 @@ basicAuthPlugin:
       memory: "50Mi"
       cpu: "20m"
 
-nodeSelector: {}
+nodeSelector:
+  beta.kubernetes.io/arch: amd64
 
 tolerations: []
 
