@@ -34,7 +34,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/gateway:0.18.3
+        image: openfaas/gateway:0.18.5
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -68,6 +68,8 @@ spec:
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
           value: "4222"
+        - name: faas_nats_channel
+          value: "faas-request"
         - name: basic_auth
           value: "true"
         - name: secret_mount_path

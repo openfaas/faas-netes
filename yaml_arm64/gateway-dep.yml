@@ -68,6 +68,8 @@ spec:
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
           value: "4222"
+        - name: faas_nats_channel
+          value: "faas-request"
         - name: basic_auth
           value: "true"
         - name: secret_mount_path

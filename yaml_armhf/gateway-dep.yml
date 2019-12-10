@@ -65,6 +65,8 @@ spec:
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
           value: "4222"
+        - name: faas_nats_channel
+          value: "faas-request"
         - name: scale_from_zero
           value: "true"
         - name: max_idle_conns

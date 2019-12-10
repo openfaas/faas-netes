@@ -31,6 +31,12 @@ spec:
         env:
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
+        - name: faas_nats_durable_queue_subscription
+          value: "false"
+        - name: faas_nats_channel
+          value: "faas-request"
+        - name: faas_nats_queue_group
+          value: "faas"
         - name: faas_gateway_address
           value: "gateway.openfaas.svc.cluster.local"
         - name: "gateway_invoke"
