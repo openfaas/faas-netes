@@ -314,8 +314,11 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `gateway.maxIdleConns` | Set max idle connections from gateway to functions | `1024` |
 | `gateway.maxIdleConnsPerHost` | Set max idle connections from gateway to functions per host | `1024` |
+| `queueWorker.durableQueueSubscriptions` | Whether to use a durable queue subscription | `false` |
+| `queueWorker.queueGroup` | The name of the queue group used to process asynchronous function invocations | `faas` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
+| `nats.channel` | The name of the NATS Streaming channel to use for asynchronous function invocations | `faas-request` |
 | `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `` |
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
 | `nats.external.host` | The host at which the externally-managed NATS Streaming server can be reached | `""` |

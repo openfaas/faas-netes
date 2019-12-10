@@ -105,12 +105,16 @@ spec:
           value: "{{ .Values.nats.external.port }}"
         - name: faas_nats_cluster_name
           value: "{{ .Values.nats.external.clusterName }}"
+        - name: faas_nats_channel
+          value: "{{ .Values.nats.channel }}"
         {{- else }}
         {{- if .Values.async }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: faas_nats_port
           value: "4222"
+        - name: faas_nats_channel
+          value: "{{ .Values.nats.channel }}"
         {{- end }}
         {{- end }}
         {{- if .Values.basic_auth }}

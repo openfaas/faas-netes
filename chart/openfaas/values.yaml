@@ -21,7 +21,7 @@ gatewayExternal:
   annotations: {}
 
 gateway:
-  image: openfaas/gateway:0.18.3
+  image: openfaas/gateway:0.18.5
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -70,7 +70,9 @@ operator:
       cpu: "50m"
 
 queueWorker:
-  image: openfaas/queue-worker:0.8.4
+  durableQueueSubscription: false
+  queueGroup: "faas"
+  image: openfaas/queue-worker:0.9.0
   ackWait : "60s"
   replicas: 1
   gatewayInvoke: true
@@ -99,6 +101,7 @@ alertmanager:
 
 # async provider
 nats:
+  channel: "faas-request"
   external:
     clusterName: ""
     enabled: false
