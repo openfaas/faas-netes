@@ -26,7 +26,7 @@ func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interfac
 		out, _ := json.Marshal(res)
 		w.Header().Set("Content-Type", "application/json")
 
-		w.WriteHeader(http.StatusAccepted)
+		w.WriteHeader(http.StatusOK)
 		w.Write(out)
 	}
 }
