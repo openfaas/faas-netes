@@ -1,0 +1,18 @@
+apiVersion: v1
+description: Connect OpenFaaS functions to vCenter events
+name: vcenter-connector
+version: 0.4.0
+sources:
+- https://github.com/openfaas-incubator/openfaas-vcenter-connector
+home: https://www.openfaas.com
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+keywords:
+- functions
+- service
+- vCenter
+- vmware
+maintainers:
+- name: alexellis
+  email: alex@openfaas.com
+- name: embano1
+  email: mgasch@vmware.com

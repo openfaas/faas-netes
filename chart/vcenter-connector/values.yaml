@@ -1,0 +1,21 @@
+image: openfaas/vcenter-connector:0.4.0
+replicas: 1
+resources:
+  requests:
+    memory: "120Mi"
+    cpu: "100m"
+vc_k8s_secret: vcenter-secrets
+secret_mount: /var/openfaas/secrets/
+basic_auth: true
+extraArgs:
+  gateway: http://gateway.openfaas:8080
+  vcenter: http://vcsim.openfaas:8989
+  vc-user-secret-name: vcenter-username
+  vc-pass-secret-name: vcenter-password
+  insecure:
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

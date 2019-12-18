@@ -1,0 +1,7 @@
+Thank you for installing vcenter-connector. Please follow the instructions below to retrieve the status of the connector. 
+If you experience problems please also refer to the troubleshooting instructions in the README provided with this chart.
+
+You can watch the Connector logs to see incoming vCenter events and invoked functions based on topic annotations (if any):
+
+$ kubectl logs -n {{ .Release.Namespace }} deploy/{{ template "connector.fullname" . }} -f
+
