@@ -41,6 +41,10 @@ spec:
               value: {{ .Values.faasIdler.inactivityDuration }}
             - name: reconcile_interval
               value: {{ .Values.faasIdler.reconcileInterval }}
+{{- if .Values.faasIdler.writeDebug }}
+            - name: write_debug
+              value: {{ .Values.faasIdler.writeDebug }}
+{{- end }}
           command:
             - /home/app/faas-idler
             - -dry-run={{ .Values.faasIdler.dryRun }}
