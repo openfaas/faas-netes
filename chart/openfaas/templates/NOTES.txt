@@ -1,3 +1,9 @@
 To verify that openfaas has started, run:
 
-  kubectl --namespace={{ .Release.Namespace }} get deployments -l "release={{ .Release.Name }}, app={{ template "openfaas.name" . }}"
+  kubectl -n {{ .Release.Namespace }} get deployments -l "release={{ .Release.Name }}, app={{ template "openfaas.name" . }}"
+
+{{- if .Values.generateBasicAuth }}
+To retrieve the admin password, run:
+
+  echo $(kubectl -n {{ .Release.Namespace }} get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode)
+{{- end }}
