@@ -42,17 +42,6 @@ Add the OpenFaaS `helm` chart:
 helm repo add openfaas https://openfaas.github.io/faas-netes/
 ```
 
-Generate secrets so that we can enable basic authentication for the gateway:
-
-```sh
-# generate a random password
-PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
-
-kubectl -n openfaas create secret generic basic-auth \
---from-literal=basic-auth-user=admin \
---from-literal=basic-auth-password="$PASSWORD"
-```
-
 Now decide how you want to expose the services and edit the `helm upgrade` command as required.
 
 * To use NodePorts (default) pass no additional flags
@@ -67,11 +56,18 @@ Now deploy OpenFaaS from the helm chart repo:
 helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
-    --set basic_auth=true \
-    --set functionNamespace=openfaas-fn
+    --set functionNamespace=openfaas-fn \
+    --set generateBasicAuth=true 
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
+
+Retrieve the OpenFaaS credentials with:
+
+```sh
+PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode) && \
+echo "OpenFaaS admin password: $PASSWORD"
+```
 
 #### Tuning cold-start
 
@@ -288,6 +284,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `basic_auth` | Enable basic authentication on the Gateway | `true` |
+| `generateBasicAuth` | Generate admin password for basic authentication | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |

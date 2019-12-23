@@ -13,6 +13,7 @@ clusterRole: false            # Set to true to have OpenFaaS administrate multip
 psp: false
 securityContext: true
 basic_auth: true
+generateBasicAuth: false
 
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"
