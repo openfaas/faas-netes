@@ -68,6 +68,19 @@ Retrieve the OpenFaaS credentials with:
 PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode) && \
 echo "OpenFaaS admin password: $PASSWORD"
 ```
+#### Generate basic-auth credentials
+
+The chart has a pre-install hook which can generate basic-auth credentials, enable it with `--set generateBasicAuth=true`.
+
+Alternatively, you can set `generateBasicAuth` to `false` and generate or supply the basic-auth credentials yourself. This is the option you may want if you are using `helm template`.
+
+```sh	
+# generate a random password	
+PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)	
+kubectl -n openfaas create secret generic basic-auth \	
+--from-literal=basic-auth-user=admin \	
+--from-literal=basic-auth-password="$PASSWORD"	
+```	
 
 #### Tuning cold-start
 
