@@ -1,7 +1,7 @@
 basic_auth: true
 
 gateway:
-  image: openfaas/gateway:0.18.2-arm64
+  image: openfaas/gateway:0.18.10-arm64
   directFunctions: true
 
 faasnetes:
@@ -23,7 +23,7 @@ faasIdler:
   image: openfaas/faas-idler:0.2.0-arm64
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.2-arm64
+  image: openfaas/basic-auth-plugin:0.18.10-arm64
   replicas: 1
 
 ingressOperator:

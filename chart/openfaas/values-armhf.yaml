@@ -1,7 +1,7 @@
 basic_auth: false
 
 gateway:
-  image: openfaas/gateway:0.18.2-armhf
+  image: openfaas/gateway:0.18.10-armhf
   directFunctions: true
 
 faasnetes:
@@ -23,7 +23,7 @@ faasIdler:
   image: openfaas/faas-idler:0.2.0-armhf
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.2-armhf
+  image: openfaas/basic-auth-plugin:0.18.10-armhf
   replicas: 0
 
 ingressOperator:
