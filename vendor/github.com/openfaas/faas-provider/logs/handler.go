@@ -107,6 +107,7 @@ func NewLogHandlerFunc(requestor Requester, timeout time.Duration) http.HandlerF
 func parseRequest(r *http.Request) (logRequest Request, err error) {
 	query := r.URL.Query()
 	logRequest.Name = getValue(query, "name")
+	logRequest.Namespace = getValue(query, "namespace")
 	logRequest.Instance = getValue(query, "instance")
 	tailStr := getValue(query, "tail")
 	if tailStr != "" {

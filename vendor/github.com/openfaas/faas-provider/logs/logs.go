@@ -16,6 +16,9 @@ import (
 type Request struct {
 	// Name is the function name and is required
 	Name string `json:"name"`
+	// Namespace is the namespace the function is deployed to, how a namespace is defined
+	// is faas-provider specific
+	Namespace string `json:"namespace"`
 	// Instance is the optional container name, that allows you to request logs from a specific function instance
 	Instance string `json:"instance"`
 	// Since is the optional datetime value to start the logs from
@@ -29,13 +32,19 @@ type Request struct {
 // String implements that Stringer interface and prints the log Request in a consistent way that
 // allows you to safely compare if two requests have the same value.
 func (r Request) String() string {
-	return fmt.Sprintf("name:%s instance:%s since:%v tail:%d follow:%v", r.Name, r.Instance, r.Since, r.Tail, r.Follow)
+	return fmt.Sprintf(
+		"name:%s namespace: %s instance:%s since:%v tail:%d follow:%v",
+		r.Name, r.Namespace, r.Instance, r.Since, r.Tail, r.Follow,
+	)
 }
 
 // Message is a specific log message from a function container log stream
 type Message struct {
 	// Name is the function name
 	Name string `json:"name"`
+	// Namespace is the namespace the function is deployed to, how a namespace is defined
+	// is faas-provider specific
+	Namespace string `json:"namespace"`
 	// instance is the name/id of the specific function instance
 	Instance string `json:"instance"`
 	// Timestamp is the timestamp of when the log message was recorded
@@ -46,5 +55,8 @@ type Message struct {
 
 // String implements the Stringer interface and allows for nice and simple string formatting of a log Message.
 func (m Message) String() string {
-	return fmt.Sprintf("%s %s (%s) %s", m.Timestamp.String(), m.Name, m.Instance, m.Text)
+	return fmt.Sprintf(
+		"%s %s (%s %s) %s",
+		m.Timestamp.String(), m.Name, m.Namespace, m.Instance, m.Text,
+	)
 }
