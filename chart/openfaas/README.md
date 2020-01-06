@@ -174,7 +174,15 @@ This option is good for those that have issues with installing Tiller, the serve
         --set functionNamespace=openfaas-fn > $HOME/openfaas.yaml
     ```
     You can set the values and overrides just as you would in the install/upgrade commands above.
-
+    
+    If you are using helm 3 (or above) the syntax differs slightly:
+    
+    ```sh
+    helm template openfaas faas-netes/chart/openfaas \
+         --namespace openfaas \
+         --set basic_auth=true  \
+         --set functionNamespace=openfaas-fn > $HOME/openfaas.yaml
+    ```
 3. Install the components using `kubectl`
     ```sh
     kubectl apply -f faas-netes/namespaces.yml
