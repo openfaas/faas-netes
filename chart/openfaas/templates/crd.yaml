@@ -1,52 +1,6 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.operator.create }}
 {{- if .Values.operator.createCRD }}
-apiVersion: apiextensions.k8s.io/v1beta1
-kind: CustomResourceDefinition
-metadata:
-  name: functions.openfaas.com
-spec:
-  group: openfaas.com
-  version: v1alpha2
-  versions:
-    - name: v1alpha2
-      served: true
-      storage: true
-  names:
-    plural: functions
-    singular: function
-    kind: Function
-    shortNames:
-    - fn
-  scope: Namespaced
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          required:
-            - name
-            - image
-          properties:
-            name:
-              type: string
-              pattern: "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-            image:
-              type: string
-            limits:
-              properties:
-                cpu:
-                  type: string
-                  pattern: "^[0-9]+(m)"
-                memory:
-                  type: string
-                  pattern: "^[0-9]+(Mi|Gi)"
-            requests:
-              properties:
-                cpu:
-                  type: string
-                  pattern: "^[0-9]+(m)"
-                memory:
-                  type: string
-                  pattern: "^[0-9]+(Mi|Gi)"
+{{ $.Files.Get "crds/crd.yaml" }}
 {{- end }}
 {{- end }}
