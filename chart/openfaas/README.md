@@ -89,7 +89,7 @@ The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler an
 There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, which is 1-2 seconds.
 
 1) Don't set the function to scale down to zero, just set it a minimum availability i.e. 1/1 replicas
-2) Use async invocations via the `/async/function/<name>` route
+2) Use async invocations via the `/async-function/<name>` route on the gateway, so that the latency is hidden from the caller
 3) Tune the readinessProbes to be aggressively low values. This will reduce the cold-start at the cost of more `kubelet` CPU usage
 
 To achieve around 1s coldstart, set `values.yaml`:
