@@ -84,9 +84,9 @@ kubectl -n openfaas create secret generic basic-auth \
 
 #### Tuning cold-start
 
-The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to scale to zero.
+The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to scale to zero. Otherwise there is not a cold-start, because at least one replica of your function remains available.
 
-There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, which is 1-2 seconds.
+There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, which is around 1-2 seconds.
 
 1) Don't set the function to scale down to zero, just set it a minimum availability i.e. 1/1 replicas
 2) Use async invocations via the `/async-function/<name>` route on the gateway, so that the latency is hidden from the caller
@@ -110,7 +110,13 @@ faasnetes:
   imagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
 ```
 
-You should also set `imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available.
+
+In addition:
+
+* Pre-pull images on each node
+* Use an in-cluster registry to reduce the pull latency for images
+* Set the `imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available
+* Explore alternatives such as not scaling to absolute zero, and using async calls which do not show the cold start
 
 #### httpProbe vs. execProbe
 
