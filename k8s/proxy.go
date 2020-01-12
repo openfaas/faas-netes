@@ -10,6 +10,8 @@ import (
 	"strings"
 	"sync"
 
+	corev1 "k8s.io/api/core/v1"
+
 	corelister "k8s.io/client-go/listers/core/v1"
 )
 
@@ -73,10 +75,17 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 		return url.URL{}, fmt.Errorf("error listing %s.%s %s", name, namespace, err.Error())
 	}
 
-	all := len(svc.Subsets[0].Addresses)
+	var addresses []corev1.EndpointAddress
+
+	if len(svc.Subsets[0].Addresses) > 0 {
+		addresses = svc.Subsets[0].Addresses
+	} else {
+		addresses = svc.Subsets[0].NotReadyAddresses
+	}
+	all := len(addresses)
 	target := rand.Intn(all)
 
-	serviceIP := svc.Subsets[0].Addresses[target].IP
+	serviceIP := addresses[target].IP
 
 	urlStr := fmt.Sprintf("http://%s:%d", serviceIP, watchdogPort)
 

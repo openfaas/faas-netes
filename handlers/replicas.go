@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas-netes/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -102,12 +103,31 @@ func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset)
 		if len(namespace) > 0 {
 			lookupNamespace = namespace
 		}
-
 		function, err := getService(lookupNamespace, functionName, clientset)
 		if err != nil {
 			log.Printf("Unable to fetch service: %s %s\n", functionName, namespace)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
+		}
+
+		if function.AvailableReplicas == 0 && function.Replicas > 0 {
+			log.Printf("Checking Replicas > 0 and AvailableReplicas = 0\n")
+			opts := metav1.GetOptions{}
+			endpoints, err := clientset.CoreV1().Endpoints(lookupNamespace).Get(functionName, opts)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			if len(endpoints.Subsets) > 0 {
+				log.Printf("Endpoints for %s, subnets %d notready %d ready %d\n", function.Name,
+					len(endpoints.Subsets), len(endpoints.Subsets[0].NotReadyAddresses), len(endpoints.Subsets[0].Addresses))
+
+				if len(endpoints.Subsets[0].NotReadyAddresses) > 0 ||
+					len(endpoints.Subsets[0].Addresses) > 0 {
+					function.AvailableReplicas = 1
+				}
+			}
 		}
 
 		if function == nil {
