@@ -127,6 +127,8 @@ func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset)
 					len(endpoints.Subsets[0].Addresses) > 0 {
 					function.AvailableReplicas = 1
 				}
+			} else {
+				log.Printf("Endpoints for %s, subnets %d notready %d ready %d\n", function.Name, 0, 0, 0)
 			}
 		}
 
