@@ -1,41 +1,38 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.basic_auth }}
-{{- if not .Values.oauth2Plugin.enabled }}
+{{- if .Values.oauth2Plugin.enabled }}
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: basic-auth-plugin
+    component: oauth2-plugin
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: basic-auth-plugin
+  name: oauth2-plugin
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  replicas: {{ .Values.basicAuthPlugin.replicas }}
+  replicas: {{ .Values.oauth2Plugin.replicas }}
   selector:
     matchLabels:
-      app: basic-auth-plugin
+      app: oauth2-plugin
   template:
     metadata:
       annotations:
         prometheus.io.scrape: "false"
       labels:
-        app: basic-auth-plugin
+        app: oauth2-plugin
     spec:
-      {{- if .Values.basic_auth }}
       volumes:
-      - name: auth
-        secret:
-          secretName: basic-auth
-      {{- end }}
+      - name: oauth2-plugin-temp-volume
+        emptyDir: {}
       containers:
-      - name:  basic-auth-plugin
+      - name:  oauth2-plugin
         resources:
-          {{- .Values.basicAuthPlugin.resources | toYaml | nindent 12 }}
-        image: {{ .Values.basicAuthPlugin.image }}
+          {{- .Values.oauth2Plugin.resources | toYaml | nindent 12 }}
+        image: {{ .Values.oauth2Plugin.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
         securityContext:
@@ -74,21 +71,43 @@ spec:
             - http://localhost:8080/health
           {{- end }}
           timeoutSeconds: 5
+        args:
+        - "-license={{- .Values.oauth2Plugin.license}}"
         env:
-        {{- if .Values.basic_auth }}
-        - name: secret_mount_path
-          value: "/var/secrets"
-        - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
+        - name: client_id
+          value: "{{- .Values.oauth2Plugin.clientID}}"
+        - name: client_secret
+          value: "{{- .Values.oauth2Plugin.clientSecret}}"
+        - name: cookie_domain
+          value: "{{- .Values.oauth2Plugin.cookieDomain}}"
+        - name: base_host
+          value: "{{- .Values.oauth2Plugin.baseHost}}"
+        - name: port
+          value: "8080"
+        - name: authorize_url
+          value: "{{- .Values.oauth2Plugin.authorizeURL}}"
+        - name: welcome_page_url
+          value: "{{- .Values.oauth2Plugin.welcomePageURL}}"
+        - name: public_key_path
+          value: ""  # leave blank if using jwks
+        - name: audience
+          value: "{{- .Values.oauth2Plugin.audience}}"
+        - name: token_url
+          value: "{{- .Values.oauth2Plugin.tokenURL}}"
+        - name: scopes
+          value: "{{- .Values.oauth2Plugin.scopes}}"
+        - name: jwks_url
+          value: "{{- .Values.oauth2Plugin.jwksURL}}"
+        - name: insecure_tls
+          value: "{{- .Values.oauth2Plugin.insecureTLS}}"
         volumeMounts:
-        - name: auth
-          readOnly: true
-          mountPath: "/var/secrets"
+        - mountPath: /tmp
+          name: oauth2-plugin-temp-volume
         ports:
         - name: http
           containerPort: 8080
           protocol: TCP
-        {{- end }}
+
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -102,5 +121,4 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
 
-{{- end }}
 {{- end }}

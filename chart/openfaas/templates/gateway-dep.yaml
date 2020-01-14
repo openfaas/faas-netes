@@ -122,10 +122,17 @@ spec:
           value: "true"
         - name: secret_mount_path
           value: "/var/secrets"
+        {{- if .Values.oauth2Plugin.enabled }}
+        - name: auth_proxy_url
+          value: "http://oauth2-plugin.{{ .Release.Namespace }}:8080/validate"
+        - name: auth_pass_body
+          value: "false"
+        {{- else }}
         - name: auth_proxy_url
           value: "http://basic-auth-plugin.{{ .Release.Namespace }}:8080/validate"
         - name: auth_pass_body
           value: "false"
+        {{- end }}
         {{- end }}
         - name: scale_from_zero
           value: "{{ .Values.gateway.scaleFromZero }}"

@@ -4,6 +4,9 @@ gateway:
   image: openfaas/gateway:0.18.2-armhf
   directFunctions: true
 
+oauth2Plugin:
+  enabled: false
+
 faasnetes:
   image: openfaas/faas-netes:0.9.7-armhf
 
