@@ -13,9 +13,7 @@ curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 
 That's it, no tiller is required for using helm3.
 
-Now deploy OpenFaaS via Helm:
-
-How to install chart please follow install instructions in chart's [readme](chart/openfaas/README.md).
+Now deploy OpenFaaS via Helm: using the [Chart's readme](chart/openfaas/README.md).
 
 ## Helm 2 (legacy)
 
@@ -61,6 +59,4 @@ helm init --skip-refresh --upgrade --service-account tiller
 
 > Note: this step installs a server component in your cluster. It can take anywhere between a few seconds to a few minutes to be installed properly. You should see tiller appear on: `kubectl get pods -n kube-system`.
 
-Now deploy OpenFaaS via Helm:
-
-How to install chart please follow install instructions in chart's [readme](chart/openfaas/README.md).
+Now deploy OpenFaaS via Helm: using the [Chart's readme](chart/openfaas/README.md).
