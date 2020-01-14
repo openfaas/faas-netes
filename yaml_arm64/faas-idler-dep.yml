@@ -36,9 +36,9 @@ spec:
             - name: prometheus_port
               value: "9090"
             - name: inactivity_duration
-              value: 15m
+              value: 30m
             - name: reconcile_interval
-              value: 1m
+              value: 2m
           command:
             - /home/app/faas-idler
             - -dry-run=true

@@ -131,7 +131,7 @@ ingress:
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
 # https://github.com/openfaas-incubator/ingress-operator
 ingressOperator:
-  image: openfaas/ingress-operator:0.4.0
+  image: openfaas/ingress-operator:0.5.0
   replicas: 1
   create: false
   resources:
@@ -143,8 +143,8 @@ faasIdler:
   image: openfaas/faas-idler:0.2.1
   replicas: 1
   create: true
-  inactivityDuration: 15m               # If a function is inactive for 15 minutes, it may be scaled to zero
-  reconcileInterval: 1m                 # The interval between each attempt to scale functions to zero
+  inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
+  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
   dryRun: true                          # Set to false to enable the idler to apply changes and scale to zero
   resources:
     requests:
