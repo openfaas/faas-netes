@@ -38,6 +38,37 @@ gateway:
       memory: "120Mi"
       cpu: "50m"
 
+basicAuthPlugin:
+  image: openfaas/basic-auth-plugin:0.17.0
+  replicas: 1
+  resources:
+    requests:
+      memory: "50Mi"
+      cpu: "20m"
+
+oauth2Plugin:
+  enabled: false
+  license: "example"
+  insecureTLS: false
+  scopes: "openid profile email"
+  jwksURL: https://example.eu.auth0.com/.well-known/jwks.json
+  tokenURL: https://example.eu.auth0.com/oauth/token
+  audience: https://example.eu.auth0.com/api/v2/
+  authorizeURL: https://example.eu.auth0.com/authorize
+  welcomePageURL: https://gw.oauth.example.com
+  cookieDomain: ".oauth.example.com"
+  baseHost: "http://auth.oauth.example.com"
+  clientSecret: SECRET
+  clientID: ID
+
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
+  replicas: 1
+  image: alexellis2/openfaas-oidc-plugin:0.2.5-arm64
+  securityContext: true
+
 faasnetes:
   image: openfaas/faas-netes:0.9.15
   readTimeout : "60s"
@@ -149,14 +180,6 @@ faasIdler:
   resources:
     requests:
       memory: "64Mi"
-
-basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.17.0
-  replicas: 1
-  resources:
-    requests:
-      memory: "50Mi"
-      cpu: "20m"
 
 nodeSelector:
   beta.kubernetes.io/arch: amd64
