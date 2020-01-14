@@ -26,7 +26,9 @@
 ---
 ### Install
 
-See also: [Install Helm](https://github.com/openfaas/faas-netes/blob/master/HELM.md)
+To use the chart, you will need Helm 2 or 3:
+
+* [Install helm](https://github.com/openfaas/faas-netes/blob/master/HELM.md)
 
 We recommend creating two namespaces, one for the OpenFaaS *core services* and one for the *functions*:
 
@@ -49,6 +51,10 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 * To use an IngressController add `--set ingress.enabled=true`
 
 > Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
+
+### Deploy
+
+Note that the commands will differ slightly between versions, if not specified, the instructions are for helm 2.
 
 Now deploy OpenFaaS from the helm chart repo:
 
@@ -166,25 +172,42 @@ The faas-netes controller is the most tested, stable and supported version of th
 See also: [Introducing the OpenFaaS Operator](https://www.openfaas.com/blog/kubernetes-operator-crd/)
 
 ## Deployment with `helm template`
-This option is good for those that have issues with installing Tiller, the server/cluster component of helm. Using the `helm` CLI, we can pre-render and then apply the templates using `kubectl`.
+
+This option is good for those that have issues with or concerns about installing Tiller, the server/cluster component of helm. Using the `helm` CLI, we can pre-render and then apply the templates using `kubectl`.
 
 1. Clone the faas-netes repository
+    ```sh
     git clone https://github.com/openfaas/faas-netes.git
+    cd faas-netes
+    ```
 
 2. Render the chart to a Kubernetes manifest called `openfaas.yaml`
+
+    Helm 3:
     ```sh
-    helm template faas-netes/chart/openfaas \
+    helm template \
+      openfaas chart/openfaas/ \
+      --namespace openfaas \
+      --set basic_auth=true \
+      --set functionNamespace=openfaas-fn > openfaas.yaml
+    ```
+
+    Helm 2:
+
+    ```sh
+    helm template chart/openfaas \
         --name openfaas \
         --namespace openfaas  \
         --set basic_auth=true \
-        --set functionNamespace=openfaas-fn > $HOME/openfaas.yaml
+        --set functionNamespace=openfaas-fn > openfaas.yaml
     ```
+
     You can set the values and overrides just as you would in the install/upgrade commands above.
 
 3. Install the components using `kubectl`
+
     ```sh
-    kubectl apply -f faas-netes/namespaces.yml
-    kubectl apply -f $HOME/openfaas.yaml
+    kubectl apply -f namespaces.yml,openfaas.yaml
     ```
 
 Now [verify your installation](#verify-the-installation).
@@ -355,6 +378,14 @@ See values.yaml for detailed configuration.
 ## Removing the OpenFaaS
 
 All control plane components can be cleaned up with helm:
+
+Helm 3:
+
+```sh
+helm delete openfaas --namespace openfaas
+```
+
+Helm 2:
 
 ```sh
 helm delete --purge openfaas

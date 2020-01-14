@@ -1,7 +1,25 @@
 # Helm
 
 [Helm](https://github.com/kubernetes/helm) is a client CLI used to deploy Kubernetes
-applications. It supports templating of configuration files, but also needs a server
+applications.
+
+## Helm 3
+
+Get the binary:
+
+```sh
+curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+```
+
+That's it, no tiller is required for using helm3.
+
+Now deploy OpenFaaS via Helm:
+
+How to install chart please follow install instructions in chart's [readme](chart/openfaas/README.md).
+
+## Helm 2 (legacy)
+
+It supports templating of configuration files, but also needs a server
 component installing called `tiller`.
 
 For more information on using Helm, refer to the Helm's [documentation](https://docs.helm.sh/using_helm/#quickstart-guide).
@@ -43,6 +61,6 @@ helm init --skip-refresh --upgrade --service-account tiller
 
 > Note: this step installs a server component in your cluster. It can take anywhere between a few seconds to a few minutes to be installed properly. You should see tiller appear on: `kubectl get pods -n kube-system`.
 
-## Deploy OpenFaaS via Helm
+Now deploy OpenFaaS via Helm:
 
 How to install chart please follow install instructions in chart's [readme](chart/openfaas/README.md).
