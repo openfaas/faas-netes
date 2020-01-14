@@ -314,6 +314,34 @@ The faas-idler will only scale down functions which have marked themselves as el
 
 See also: [faas-idler README](https://docs.openfaas.com/architecture/autoscaling/#zero-scale).
 
+## Removing the OpenFaaS
+
+All control plane components can be cleaned up with helm:
+
+Helm 3:
+
+```sh
+helm delete openfaas --namespace openfaas
+```
+
+Helm 2:
+
+```sh
+helm delete --purge openfaas
+```
+
+Follow this by the following to remove all other associated objects:
+
+```sh
+kubectl delete namespace openfaas openfaas-fn
+```
+
+In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
+
+## Getting help
+
+Feel free to seek out help using the [OpenFaaS Slack workspace](https://slack.openfaas.io/), please do not raise issues for technical support, unless you suspect and can provide instructions for reproducing an error in the chart.
+
 ## Configuration
 
 Additional OpenFaaS options in `values.yaml`.
@@ -374,27 +402,3 @@ Additional OpenFaaS options in `values.yaml`.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
-
-## Removing the OpenFaaS
-
-All control plane components can be cleaned up with helm:
-
-Helm 3:
-
-```sh
-helm delete openfaas --namespace openfaas
-```
-
-Helm 2:
-
-```sh
-helm delete --purge openfaas
-```
-
-Follow this by the following to remove all other associated objects:
-
-```sh
-kubectl delete namespace openfaas openfaas-fn
-```
-
-In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
