@@ -2,6 +2,8 @@
 
 The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) brings Kafka to OpenFaaS by invoking functions based on Kafka topic annotations.
 
+* See also: [Staying on topic: trigger your OpenFaaS functions with Apache Kafka](https://www.openfaas.com/blog/kafka-connector/)
+
 ## Prerequisites
 
 - Install OpenFaaS
