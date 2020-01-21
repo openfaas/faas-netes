@@ -1,23 +1,28 @@
-FROM golang:1.11 as build
+FROM golang:1.13 as build
 ENV CGO_ENABLED=0
+ENV GO111MODULE=on
+ENV GOFLAGS=-mod=vendor
 
 RUN curl -sLSf https://raw.githubusercontent.com/teamserverless/license-check/master/get.sh | sh
 RUN mv ./license-check /usr/bin/license-check && chmod +x /usr/bin/license-check
 
+RUN mkdir -p /go/src/github.com/openfaas/faas-netes
 WORKDIR /go/src/github.com/openfaas/faas-netes
 COPY . .
 
 RUN license-check -path /go/src/github.com/openfaas/faas-netes/ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") \
-    && go test ./... \
-    && VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
+    && go test -v ./...
+
+RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
     && GIT_COMMIT=$(git rev-list -1 HEAD) \
-    && CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w \
+    && GOOS=linux go build \
+        --ldflags "-s -w \
         -X github.com/openfaas/faas-netes/version.GitCommit=${GIT_COMMIT}\
         -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
         -a -installsuffix cgo -o faas-netes .
 
-FROM alpine:3.10 as ship
+FROM alpine:3.11 as ship
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
