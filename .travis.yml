@@ -3,7 +3,7 @@ sudo: required
 language: go
 
 go:
-  - 1.11.x
+  - 1.13.x
 
 install:
   - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
