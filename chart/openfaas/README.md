@@ -381,6 +381,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `gateway.maxIdleConns` | Set max idle connections from gateway to functions | `1024` |
 | `gateway.maxIdleConnsPerHost` | Set max idle connections from gateway to functions per host | `1024` |
+| `gateway.logsProviderURL` | Set a custom logs provider url | `""` |
 | `queueWorker.durableQueueSubscriptions` | Whether to use a durable queue subscription | `false` |
 | `queueWorker.queueGroup` | The name of the queue group used to process asynchronous function invocations | `faas` |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
