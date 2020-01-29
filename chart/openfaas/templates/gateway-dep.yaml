@@ -80,6 +80,10 @@ spec:
           {{- end }}
           timeoutSeconds: 5
         env:
+        {{- if .Values.gateway.logsProviderURL }}
+        - name: logs_provider_url
+          value: "{{ .Values.gateway.logsProviderURL }}"
+        {{- end }}
         - name: read_timeout
           value: "{{ .Values.gateway.readTimeout }}"
         - name: write_timeout
