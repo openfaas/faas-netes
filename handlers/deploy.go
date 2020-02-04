@@ -86,7 +86,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		log.Printf("Deployment created: %s.%s\n", request.Service, namespace)
 
-		service := factory.Client.Core().Services(namespace)
+		service := factory.Client.CoreV1().Services(namespace)
 		serviceSpec := makeServiceSpec(request, factory)
 		_, err = service.Create(serviceSpec)
 
