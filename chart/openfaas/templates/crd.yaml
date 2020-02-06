@@ -7,11 +7,14 @@ metadata:
   name: functions.openfaas.com
 spec:
   group: openfaas.com
-  version: v1alpha2
+  version: v1
   versions:
-    - name: v1alpha2
+    - name: v1
       served: true
       storage: true
+    - name: v1alpha2
+      served: true
+      storage: false
   names:
     plural: functions
     singular: function
@@ -32,6 +35,20 @@ spec:
               pattern: "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
             image:
               type: string
+            annotations:
+              anyOf:
+                - type: string
+                - type: object
+            labels:
+              anyOf:
+                - type: string
+                - type: object
+            constraints:
+              type: array
+            secrets:
+              type: array
+            readOnlyRootFilesystem:
+              type: boolean
             limits:
               properties:
                 cpu:
