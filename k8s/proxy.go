@@ -73,7 +73,15 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 		return url.URL{}, fmt.Errorf("error listing %s.%s %s", name, namespace, err.Error())
 	}
 
+	if len(svc.Subsets) == 0 {
+		return url.URL{}, fmt.Errorf("no subsets available for %s.%s", name, namespace)
+	}
+
 	all := len(svc.Subsets[0].Addresses)
+	if len(svc.Subsets[0].Addresses) == 0 {
+		return url.URL{}, fmt.Errorf("no addresses in subset for %s.%s", name, namespace)
+	}
+
 	target := rand.Intn(all)
 
 	serviceIP := svc.Subsets[0].Addresses[target].IP
