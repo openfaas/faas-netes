@@ -9,7 +9,7 @@
 * Ease of use through UI portal and *one-click* install
 * Write functions in any language for Linux or Windows and package in Docker/OCI image format
 * Portable - runs on existing hardware or public/private cloud. Native [Kubernetes](https://github.com/openfaas/faas-netes) support, Docker Swarm also available
-* [Operator / CRD option available](https://github.com/openfaas-incubator/openfaas-operator/)
+* [Operator / CRD option available](https://github.com/openfaas/openfaas-operator/)
 * [faas-cli](http://github.com/openfaas/faas-cli) available with stack.yml for creating and managing functions
 * Auto-scales according to metrics from Prometheus
 * Scales to zero and back again and can be tuned at a per-function level
@@ -86,7 +86,7 @@ PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
 kubectl -n openfaas create secret generic basic-auth \	
 --from-literal=basic-auth-user=admin \	
 --from-literal=basic-auth-password="$PASSWORD"	
-```	
+```
 
 #### Tuning cold-start
 
@@ -233,7 +233,7 @@ By default a NodePort will be created for the API Gateway.
 
 You temporarily access the Prometheus metrics by ueing `port-forward`
 
-```
+```sh
 kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
 ```
 
@@ -275,7 +275,7 @@ If you require TLS/SSL then please make use of an IngressController. A full guid
 
 To install OpenFaaS with Istio mTLS pass  `--set istio.mtls=true` and disable the HTTP probes:
 
-```
+```sh
 helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \

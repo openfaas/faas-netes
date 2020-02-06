@@ -162,8 +162,6 @@ spec:
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - ./openfaas-operator
-          - -logtostderr
-          - -v=2
         env:
           - name: port
             value: "8081"

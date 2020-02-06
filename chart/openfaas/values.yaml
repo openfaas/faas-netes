@@ -94,7 +94,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/openfaas-operator:0.12.0
+  image: openfaas/openfaas-operator:0.14.1
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
