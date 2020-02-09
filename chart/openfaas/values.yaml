@@ -63,13 +63,12 @@ oauth2Plugin:
   baseHost: "http://auth.oauth.example.com"
   clientSecret: SECRET
   clientID: ID
-
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: alexellis2/openfaas-oidc-plugin:0.2.5-arm64
+  image: alexellis2/openfaas-oidc-plugin:0.2.4
   securityContext: true
 
 faasnetes:
