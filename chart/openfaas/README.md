@@ -24,7 +24,10 @@
 **Note:** If you can not use helm with Tiller, you can still use the `helm` CLI to [generate custom YAML](#deployment-with-helm-template) without server-side components.
 
 ---
+
 ### Install
+
+These instructions are for Intel (normal computers), jump to the end of the document for ARM and Raspberry Pi.
 
 To use the chart, you will need Helm 2 or 3:
 
@@ -74,6 +77,7 @@ Retrieve the OpenFaaS credentials with:
 PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode) && \
 echo "OpenFaaS admin password: $PASSWORD"
 ```
+
 #### Generate basic-auth credentials
 
 The chart has a pre-install hook which can generate basic-auth credentials, enable it with `--set generateBasicAuth=true`.
@@ -337,6 +341,17 @@ kubectl delete namespace openfaas openfaas-fn
 ```
 
 In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
+
+## ARM
+
+If you would like to deploy OpenFaaS to ARM i.e. Raspberry Pi, ARM64 machines provided by Packet.net, Scaleway or to AWS Graviton, then you should use the appropriate values.yaml file.
+
+* `values-armhf.yml` - for Raspberry Pi and other ARMv7 boards (run `uname -a` to find out which you have)
+* `values-arm64.yml` - for everything else (`arm64` or `aarch64`)
+
+It is recommended that you install OpenFaaS to ARM machines [using k3sup](https://k3sup.dev/) instead of helm directly since it will determine the correct values to be used.
+
+See also: [Kubernetes and Raspberry Pi in the docs](https://docs.openfaas.com/deployment/kubernetes)
 
 ## Getting help
 
