@@ -141,7 +141,7 @@ nats:
     enabled: false
     host: ""
     port: ""
-  image: nats-streaming:0.11.2
+  image: nats-streaming:0.17.0
   enableMonitoring: false
   resources:
     requests:
