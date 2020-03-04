@@ -142,11 +142,26 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 	annotations := buildAnnotations(request)
 
 	var serviceAccount string
+	var volumeName string
+	var pvcMountPath string
+	var pvcName string
 
 	if request.Annotations != nil {
 		annotations := *request.Annotations
 		if val, ok := annotations["com.openfaas.serviceaccount"]; ok && len(val) > 0 {
 			serviceAccount = val
+		}
+
+		if val, ok := annotations["com.openfaas.volumename"]; ok && len(val) > 0 {
+			volumeName = val
+		}
+
+		if val, ok := annotations["com.openfaas.pvcmountpath"]; ok && len(val) > 0 {
+			pvcMountPath = val
+		}
+
+		if val, ok := annotations["com.openfaas.pvcname"]; ok && len(val) > 0 {
+			pvcName = val
 		}
 	}
 
@@ -207,11 +222,27 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 							SecurityContext: &corev1.SecurityContext{
 								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 							},
+							VolumeMounts: []apiv1.VolumeMount{
+								apiv1.VolumeMount{
+									Name:      volumeName,
+									MountPath: pvcMountPath,
+								},
+							},
 						},
 					},
 					ServiceAccountName: serviceAccount,
 					RestartPolicy:      corev1.RestartPolicyAlways,
 					DNSPolicy:          corev1.DNSClusterFirst,
+					Volumes: []apiv1.Volume{
+						apiv1.Volume{
+							Name: volumeName,
+							VolumeSource: apiv1.VolumeSource{
+								PersistentVolumeClaim: &apiv1.PersistentVolumeClaimVolumeSource{
+									ClaimName: pvcName,
+								},
+							},
+						},
+					},
 				},
 			},
 		},
