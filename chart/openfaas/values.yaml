@@ -22,7 +22,7 @@ gatewayExternal:
   annotations: {}
 
 gateway:
-  image: openfaas/gateway:0.18.10
+  image: openfaas/gateway:0.18.11
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -42,7 +42,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.17.0
+  image: openfaas/basic-auth-plugin:0.18.11
   replicas: 1
   resources:
     requests:
