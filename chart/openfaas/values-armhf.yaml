@@ -1,37 +1,36 @@
 basic_auth: false
 
 gateway:
-  image: openfaas/gateway:0.18.2-armhf
+  image: openfaas/gateway:0.18.13-armhf
   directFunctions: true
 
 oauth2Plugin:
   enabled: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.9.7-armhf
+  image: openfaas/faas-netes:0.10.1-armhf
 
 queueWorker:
-  image: openfaas/queue-worker:0.8.1-armhf
+  image: openfaas/queue-worker:0.9.0-armhf
 
 prometheus:
   image: prom/prometheus:v2.11.0
   resources:
     requests:
-      memory: "125Mi"
+      memory: "100Mi"
 
 alertmanager:
   image: prom/alertmanager:v0.18.0
 
 faasIdler:
-  image: openfaas/faas-idler:0.2.0-armhf
+  image: openfaas/faas-idler:0.3.0-armhf
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.2-armhf
+  image: openfaas/basic-auth-plugin:0.18.13-armhf
   replicas: 0
 
 ingressOperator:
   create: false
-
 
 nodeSelector:
   beta.kubernetes.io/arch: arm

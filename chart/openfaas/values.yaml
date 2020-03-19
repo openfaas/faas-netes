@@ -173,7 +173,7 @@ ingressOperator:
 
 # faas-idler configuration
 faasIdler:
-  image: openfaas/faas-idler:0.2.1
+  image: openfaas/faas-idler:0.3.0
   replicas: 1
   create: true
   inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
