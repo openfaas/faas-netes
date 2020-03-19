@@ -22,7 +22,7 @@ gatewayExternal:
   annotations: {}
 
 gateway:
-  image: openfaas/gateway:0.18.11
+  image: openfaas/gateway:0.18.13
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -42,7 +42,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.11
+  image: openfaas/basic-auth-plugin:0.18.13
   replicas: 1
   resources:
     requests:
@@ -164,7 +164,7 @@ ingress:
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
 # https://github.com/openfaas-incubator/ingress-operator
 ingressOperator:
-  image: openfaas/ingress-operator:0.5.0
+  image: openfaas/ingress-operator:0.6.1
   replicas: 1
   create: false
   resources:
@@ -173,7 +173,7 @@ ingressOperator:
 
 # faas-idler configuration
 faasIdler:
-  image: openfaas/faas-idler:0.2.1
+  image: openfaas/faas-idler:0.3.0
   replicas: 1
   create: true
   inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
