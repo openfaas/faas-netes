@@ -8,7 +8,7 @@ faas-netes
 
 `faas-netes` is an OpenFaaS provider which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). The existing REST API, CLI and UI are fully compatible.
 
-> OpenFaaS also runs well on managed Kubernetes services like AKS, EKS and GKE. See our list of tutorials in the documentation site for more.
+> OpenFaaS also runs well on managed Kubernetes services like AKS, DOKS, EKS and GKE. See our list of tutorials in the documentation site for more.
 
 [OpenFaaS (Functions as a Service)](https://github.com/openfaas/faas) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
