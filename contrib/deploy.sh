@@ -25,8 +25,10 @@ kubectl -n openfaas create secret generic basic-auth \
 
 echo "Waiting for helm install to complete."
 
-helm install ./chart/openfaas \
-    --name openfaas \
+helm upgrade \
+    --install \
+    openfaas \
+    ./chart/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn \

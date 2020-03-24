@@ -12,9 +12,12 @@ kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
 
-helm upgrade openfaas --install openfaas/openfaas \
+helm upgrade \
+    --install \
+    openfaas \
+    ./chart/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn \
-    --set serviceType=LoadBalancer
-
+    --set serviceType=LoadBalancer \
+    --wait

@@ -6,7 +6,7 @@ go:
   - 1.13.x
 
 install:
-  - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+  - curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
   - helm version -c
   - helm init --client-only
 
@@ -23,7 +23,6 @@ script:
   - ./contrib/lint_chart.sh
   - ./contrib/get_kind.sh
   - ./contrib/create_kind_cluster.sh
-  - ./contrib/install_tiller.sh
   - ./contrib/deploy.sh
   - ./contrib/get_faas.sh
   - ./contrib/run_function.sh
