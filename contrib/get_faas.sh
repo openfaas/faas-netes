@@ -1,3 +1,5 @@
 #!/bin/bash
 
-curl -sL https://cli.openfaas.com | sudo sh
+set -e
+
+curl -sSLf https://cli.openfaas.com | sudo sh
