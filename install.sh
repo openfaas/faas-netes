@@ -12,10 +12,11 @@ kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
 
+echo "Installing chart 🍻"
 helm upgrade \
     --install \
     openfaas \
-    ./chart/openfaas \
+    openfaas/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn \
