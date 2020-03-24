@@ -22,7 +22,7 @@ gatewayExternal:
   annotations: {}
 
 gateway:
-  image: openfaas/gateway:0.18.11
+  image: openfaas/gateway:0.18.13
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout

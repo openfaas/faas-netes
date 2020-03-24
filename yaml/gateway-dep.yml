@@ -34,7 +34,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/gateway:0.18.11
+        image: openfaas/gateway:0.18.13
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
