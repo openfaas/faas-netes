@@ -8,7 +8,6 @@ go:
 install:
   - curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
   - helm version -c
-  - helm init --client-only
 
 services:
   - docker
