@@ -14,7 +14,7 @@ faas-netes
 
 ![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
 
-In this README you'll find a technical overview and instructions for deploying to a Kubernetes cluster. 
+In this README you'll find a technical overview and instructions for deploying to a Kubernetes cluster.
 
 * Platform for deploying [serverless-style workloads](https://docs.openfaas.com/reference/workloads/) - microservices and functions
 * Native Kubernetes integrations (API and ecosystem)
@@ -39,21 +39,21 @@ OpenFaaS can form a complete stack for Cloud Native application development call
 
 faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
 
-| Option              | Usage                                                                                           |
-|---------------------|-------------------------------------------------------------------------------------------------|
-| `httpProbe`         | Boolean - use http probe type for function readiness and liveness. Default: `false`             |
-| `write_timeout`     | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`        |
-| `read_timeout`      | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`        |
-| `image_pull_policy` | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`).  Default: `Always` |
-| `gateway.resources`        | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `faasnetes.resources`      | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `operator.resources`       | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `queueWorker.resources`    | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `prometheus.resources`     | CPU/Memory resources requests/limits (memory: `512Mi`)             |
-| `alertmanager.resources`   | CPU/Memory resources requests/limits (memory: `25Mi`)              |
-| `nats.resources`           | CPU/Memory resources requests/limits (memory: `120Mi`)             |
-| `faasIdler.resources`      | CPU/Memory resources requests/limits (memory: `64Mi`)              |
-| `basicAuthPlugin.resources`| CPU/Memory resources requests/limits (memory: `50Mi`, cpu: `20m`)  |
+| Option                      | Usage                                                                                            |
+|-----------------------------|--------------------------------------------------------------------------------------------------|
+| `httpProbe`                 | Boolean - use http probe type for function readiness and liveness. Default: `false`              |
+| `write_timeout`             | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`         |
+| `read_timeout`              | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`         |
+| `image_pull_policy`         | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`).  Default: `Always` |
+| `gateway.resources`         | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `faasnetes.resources`       | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `operator.resources`        | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `queueWorker.resources`     | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `prometheus.resources`      | CPU/Memory resources requests/limits (memory: `512Mi`)                                           |
+| `alertmanager.resources`    | CPU/Memory resources requests/limits (memory: `25Mi`)                                            |
+| `nats.resources`            | CPU/Memory resources requests/limits (memory: `120Mi`)                                           |
+| `faasIdler.resources`       | CPU/Memory resources requests/limits (memory: `64Mi`)                                            |
+| `basicAuthPlugin.resources` | CPU/Memory resources requests/limits (memory: `50Mi`, cpu: `20m`)                                |
 
 ### Readiness checking
 
@@ -91,3 +91,6 @@ make start-kind
 this will use [KinD](https://github.com/kubernetes-sigs/kind) to create a single node cluster and install the latest version of OpenFaaS via the Helm chart.
 
 Check the contributor guide in `CONTRIBUTING.md` for more details on the workflow, processes, and additional tips.
+
+
+
