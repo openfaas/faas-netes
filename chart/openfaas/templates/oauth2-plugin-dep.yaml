@@ -28,6 +28,11 @@ spec:
       volumes:
       - name: oauth2-plugin-temp-volume
         emptyDir: {}
+      {{- if .Values.basic_auth }}
+      - name: auth
+        secret:
+          secretName: basic-auth
+      {{- end }}
       containers:
       - name:  oauth2-plugin
         resources:
@@ -73,6 +78,7 @@ spec:
           timeoutSeconds: 5
         args:
         - "-license={{- .Values.oauth2Plugin.license}}"
+        - "-provider={{- .Values.oauth2Plugin.provider}}"
         env:
         - name: client_id
           value: "{{- .Values.oauth2Plugin.clientID}}"
@@ -100,9 +106,18 @@ spec:
           value: "{{- .Values.oauth2Plugin.jwksURL}}"
         - name: insecure_tls
           value: "{{- .Values.oauth2Plugin.insecureTLS}}"
+        {{- if .Values.basic_auth }}
+        - name: secret_mount_path
+          value: "/var/secrets"
+        {{- end }}
         volumeMounts:
-        - mountPath: /tmp
-          name: oauth2-plugin-temp-volume
+        - name: oauth2-plugin-temp-volume
+          mountPath: /tmp
+        {{- if .Values.basic_auth }}
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        {{- end }}
         ports:
         - name: http
           containerPort: 8080
