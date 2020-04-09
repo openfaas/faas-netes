@@ -21,3 +21,4 @@ faas-netes
 .vscode
 of_kind_portforward.pid
 /kind*
+/kubectl
