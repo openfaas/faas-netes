@@ -69,7 +69,7 @@ oauth2Plugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: alexellis2/openfaas-oidc-plugin:0.3.0
+  image: openfaas/openfaas-oidc-plugin:0.3.3
   securityContext: true
 
 faasnetes:
@@ -94,7 +94,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/openfaas-operator:0.14.2
+  image: openfaas/openfaas-operator:0.14.3
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
