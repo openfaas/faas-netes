@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DEVENV=${OF_DEV_ENV:-kind}
+DEVENV=${OF_DEV_ENV:-kind-kind}
 
 if [ -f "of_${DEVENV}_portforward.pid" ]; then
     kill $(<of_${DEVENV}_portforward.pid)
