@@ -161,7 +161,8 @@ spec:
         image: {{ .Values.operator.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
-          - ./openfaas-operator
+          - ./faas-netes
+          - -operator=true
         env:
           - name: port
             value: "8081"

@@ -2,6 +2,6 @@
 
 # Creates an installation of OpenFaaS in kind for development
 
-contrib/create_kind_cluster.sh
+contrib/create_cluster.sh
 contrib/deploy.sh
 contrib/run_function.sh

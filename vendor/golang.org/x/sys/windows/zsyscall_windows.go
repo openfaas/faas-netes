@@ -197,10 +197,6 @@ var (
 	procSetEvent                           = modkernel32.NewProc("SetEvent")
 	procResetEvent                         = modkernel32.NewProc("ResetEvent")
 	procPulseEvent                         = modkernel32.NewProc("PulseEvent")
-	procCreateMutexW                       = modkernel32.NewProc("CreateMutexW")
-	procCreateMutexExW                     = modkernel32.NewProc("CreateMutexExW")
-	procOpenMutexW                         = modkernel32.NewProc("OpenMutexW")
-	procReleaseMutex                       = modkernel32.NewProc("ReleaseMutex")
 	procSleepEx                            = modkernel32.NewProc("SleepEx")
 	procCreateJobObjectW                   = modkernel32.NewProc("CreateJobObjectW")
 	procAssignProcessToJobObject           = modkernel32.NewProc("AssignProcessToJobObject")
@@ -234,10 +230,6 @@ var (
 	procSetVolumeLabelW                    = modkernel32.NewProc("SetVolumeLabelW")
 	procSetVolumeMountPointW               = modkernel32.NewProc("SetVolumeMountPointW")
 	procMessageBoxW                        = moduser32.NewProc("MessageBoxW")
-	procExitWindowsEx                      = moduser32.NewProc("ExitWindowsEx")
-	procInitiateSystemShutdownExW          = modadvapi32.NewProc("InitiateSystemShutdownExW")
-	procSetProcessShutdownParameters       = modkernel32.NewProc("SetProcessShutdownParameters")
-	procGetProcessShutdownParameters       = modkernel32.NewProc("GetProcessShutdownParameters")
 	procCLSIDFromString                    = modole32.NewProc("CLSIDFromString")
 	procStringFromGUID2                    = modole32.NewProc("StringFromGUID2")
 	procCoCreateGuid                       = modole32.NewProc("CoCreateGuid")
@@ -694,14 +686,7 @@ func ExitProcess(exitcode uint32) {
 }
 
 func IsWow64Process(handle Handle, isWow64 *bool) (err error) {
-	var _p0 uint32
-	if *isWow64 {
-		_p0 = 1
-	} else {
-		_p0 = 0
-	}
-	r1, _, e1 := syscall.Syscall(procIsWow64Process.Addr(), 2, uintptr(handle), uintptr(unsafe.Pointer(&_p0)), 0)
-	*isWow64 = _p0 != 0
+	r1, _, e1 := syscall.Syscall(procIsWow64Process.Addr(), 2, uintptr(handle), uintptr(unsafe.Pointer(isWow64)), 0)
 	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
@@ -2124,69 +2109,6 @@ func PulseEvent(event Handle) (err error) {
 	return
 }
 
-func CreateMutex(mutexAttrs *SecurityAttributes, initialOwner bool, name *uint16) (handle Handle, err error) {
-	var _p0 uint32
-	if initialOwner {
-		_p0 = 1
-	} else {
-		_p0 = 0
-	}
-	r0, _, e1 := syscall.Syscall(procCreateMutexW.Addr(), 3, uintptr(unsafe.Pointer(mutexAttrs)), uintptr(_p0), uintptr(unsafe.Pointer(name)))
-	handle = Handle(r0)
-	if handle == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func CreateMutexEx(mutexAttrs *SecurityAttributes, name *uint16, flags uint32, desiredAccess uint32) (handle Handle, err error) {
-	r0, _, e1 := syscall.Syscall6(procCreateMutexExW.Addr(), 4, uintptr(unsafe.Pointer(mutexAttrs)), uintptr(unsafe.Pointer(name)), uintptr(flags), uintptr(desiredAccess), 0, 0)
-	handle = Handle(r0)
-	if handle == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func OpenMutex(desiredAccess uint32, inheritHandle bool, name *uint16) (handle Handle, err error) {
-	var _p0 uint32
-	if inheritHandle {
-		_p0 = 1
-	} else {
-		_p0 = 0
-	}
-	r0, _, e1 := syscall.Syscall(procOpenMutexW.Addr(), 3, uintptr(desiredAccess), uintptr(_p0), uintptr(unsafe.Pointer(name)))
-	handle = Handle(r0)
-	if handle == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func ReleaseMutex(mutex Handle) (err error) {
-	r1, _, e1 := syscall.Syscall(procReleaseMutex.Addr(), 1, uintptr(mutex), 0, 0)
-	if r1 == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
 func SleepEx(milliseconds uint32, alertable bool) (ret uint32) {
 	var _p0 uint32
 	if alertable {
@@ -2586,66 +2508,6 @@ func MessageBox(hwnd Handle, text *uint16, caption *uint16, boxtype uint32) (ret
 	r0, _, e1 := syscall.Syscall6(procMessageBoxW.Addr(), 4, uintptr(hwnd), uintptr(unsafe.Pointer(text)), uintptr(unsafe.Pointer(caption)), uintptr(boxtype), 0, 0)
 	ret = int32(r0)
 	if ret == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func ExitWindowsEx(flags uint32, reason uint32) (err error) {
-	r1, _, e1 := syscall.Syscall(procExitWindowsEx.Addr(), 2, uintptr(flags), uintptr(reason), 0)
-	if r1 == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func InitiateSystemShutdownEx(machineName *uint16, message *uint16, timeout uint32, forceAppsClosed bool, rebootAfterShutdown bool, reason uint32) (err error) {
-	var _p0 uint32
-	if forceAppsClosed {
-		_p0 = 1
-	} else {
-		_p0 = 0
-	}
-	var _p1 uint32
-	if rebootAfterShutdown {
-		_p1 = 1
-	} else {
-		_p1 = 0
-	}
-	r1, _, e1 := syscall.Syscall6(procInitiateSystemShutdownExW.Addr(), 6, uintptr(unsafe.Pointer(machineName)), uintptr(unsafe.Pointer(message)), uintptr(timeout), uintptr(_p0), uintptr(_p1), uintptr(reason))
-	if r1 == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func SetProcessShutdownParameters(level uint32, flags uint32) (err error) {
-	r1, _, e1 := syscall.Syscall(procSetProcessShutdownParameters.Addr(), 2, uintptr(level), uintptr(flags), 0)
-	if r1 == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func GetProcessShutdownParameters(level *uint32, flags *uint32) (err error) {
-	r1, _, e1 := syscall.Syscall(procGetProcessShutdownParameters.Addr(), 2, uintptr(unsafe.Pointer(level)), uintptr(unsafe.Pointer(flags)), 0)
-	if r1 == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {

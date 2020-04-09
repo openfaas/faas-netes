@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
+
 DEVENV=${OF_DEV_ENV:-kind}
+OPERATOR=${OPERATOR:-0}
 
 export KUBECONFIG="$(kind get kubeconfig-path --name="$DEVENV")"
 
@@ -10,7 +13,6 @@ if [ $? != 0 ];
 then
    exit 1
 fi
-
 
 if [ -f "of_${DEVENV}_portforward.pid" ]; then
     kill $(<of_${DEVENV}_portforward.pid)
@@ -24,11 +26,12 @@ kubectl port-forward deploy/gateway -n openfaas 31112:8080 &>/dev/null & \
 # port-forward needs some time to start
 sleep 10
 
-# Login in OpenFaas
 export OPENFAAS_URL=http://127.0.0.1:31112
 
+# Login into the gateway
 cat ./password.txt | faas-cli login --username admin --password-stdin
 
+# Deploy via the REST API which can test either the controller or operator
 faas-cli deploy --image=functions/alpine:latest --fprocess=cat --name "echo"
 
 # Call echo function
@@ -41,5 +44,21 @@ do
     fi
     sleep 1
 done
+
+# Apply a CRD to test the operator
+
+if [ "${OPERATOR}" == "1" ]; then
+    kubectl apply ./alpine-fn.yaml
+
+    for i in {1..180};
+    do
+        Ready="$(faas-cli describe nodeinfo | awk '{ if($1 ~ /Status:/) print $2 }')"
+        if [[ $Ready == "Ready" ]];
+        then
+            exit 0
+        fi
+        sleep 1
+    done
+fi
 
 exit 1
