@@ -11,12 +11,12 @@ if [[ "$1" ]]; then
 fi
 
 echo ">>> Installing kind $KIND_VERSION"
-curl -sSLfO kind "https://github.com/kubernetes-sigs/kind/releases/download/$KIND_VERSION/kind-linux-amd64"
+curl -sSLfo kind "https://github.com/kubernetes-sigs/kind/releases/download/$KIND_VERSION/kind-linux-amd64"
 chmod +x kind
 sudo mv kind /usr/local/bin/kind
 
 echo ">>> Installing kubectl"
-curl -sSLfO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+curl -sSLfo https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
 chmod +x kubectl && \
 sudo mv kubectl /usr/local/bin/
 
