@@ -2,13 +2,11 @@
 
 set -e
 
-DEVENV=${OF_DEV_ENV:-kind}
+DEVENV=${OF_DEV_ENV:-kind-kind}
 OPERATOR=${OPERATOR:-0}
 
-export KUBECONFIG="$(kind get kubeconfig-path --name="$DEVENV")"
-
 echo "Applying namespaces"
-kubectl apply -f ./namespaces.yml
+kubectl --context "$DEVENV" apply -f ./namespaces.yml
 
 sha_cmd="sha256sum"
 if [ ! -x "$(command -v $sha_cmd)" ]; then
@@ -22,7 +20,7 @@ fi
 PASSWORD=$(head -c 16 /dev/urandom| $sha_cmd | cut -d " " -f 1)
 echo -n $PASSWORD > password.txt
 
-kubectl -n openfaas create secret generic basic-auth \
+kubectl --context "$DEVENV" -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
 
@@ -34,6 +32,7 @@ fi
 echo "Waiting for helm install to complete."
 
 helm upgrade \
+    --kube-context "$DEVENV" \
     --install \
     openfaas \
     ./chart/openfaas \
@@ -44,9 +43,9 @@ helm upgrade \
 
 if [ "${OPERATOR}" == "1" ]; then
 
-    kubectl patch -n openfaas deploy/gateway \
+    kubectl --context "$DEVENV" patch -n openfaas deploy/gateway \
       -p='[{"op": "add", "path": "/spec/template/spec/containers/1/command", "value": ["./faas-netes", "-operator=true"]} ]' --type=json
 fi
 
-kubectl rollout status deploy/prometheus -n openfaas
-kubectl rollout status deploy/gateway -n openfaas
+kubectl --context "$DEVENV" rollout status deploy/prometheus -n openfaas
+kubectl --context "$DEVENV" rollout status deploy/gateway -n openfaas

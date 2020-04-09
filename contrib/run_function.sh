@@ -2,12 +2,10 @@
 
 set -e
 
-DEVENV=${OF_DEV_ENV:-kind}
+DEVENV=${OF_DEV_ENV:-kind-kind}
 OPERATOR=${OPERATOR:-0}
 
-export KUBECONFIG="$(kind get kubeconfig-path --name="$DEVENV")"
-
-kubectl rollout status deploy/gateway -n openfaas --timeout=1m
+kubectl --context "$DEVENV" rollout status deploy/gateway -n openfaas --timeout=1m
 
 if [ $? != 0 ];
 then
@@ -20,7 +18,7 @@ fi
 
 # quietly start portforward and put it in the background, it will not
 # print every connection handled
-kubectl port-forward deploy/gateway -n openfaas 31112:8080 &>/dev/null & \
+kubectl --context "$DEVENV" port-forward deploy/gateway -n openfaas 31112:8080 &>/dev/null & \
     echo -n "$!" > "of_${DEVENV}_portforward.pid"
 
 # port-forward needs some time to start
@@ -48,7 +46,7 @@ done
 # Apply a CRD to test the operator
 
 if [ "${OPERATOR}" == "1" ]; then
-    kubectl apply ./alpine-fn.yaml
+    kubectl --context "$DEVENV" apply ./alpine-fn.yaml
 
     for i in {1..180};
     do
