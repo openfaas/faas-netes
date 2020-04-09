@@ -9,7 +9,7 @@
 * Ease of use through UI portal and *one-click* install
 * Write functions in any language for Linux or Windows and package in Docker/OCI image format
 * Portable - runs on existing hardware or public/private cloud. Native [Kubernetes](https://github.com/openfaas/faas-netes) support, Docker Swarm also available
-* [Operator / CRD option available](https://github.com/openfaas/openfaas-operator/)
+* [Operator / CRD option available](https://github.com/openfaas/faas-netes/)
 * [faas-cli](http://github.com/openfaas/faas-cli) available with stack.yml for creating and managing functions
 * Auto-scales according to metrics from Prometheus
 * Scales to zero and back again and can be tuned at a per-function level

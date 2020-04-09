@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 DEVENV=${OF_DEV_ENV:-kind}
 
 if [ -f "of_${DEVENV}_portforward.pid" ]; then

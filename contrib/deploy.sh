@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
+
 DEVENV=${OF_DEV_ENV:-kind}
+OPERATOR=${OPERATOR:-0}
 
 export KUBECONFIG="$(kind get kubeconfig-path --name="$DEVENV")"
 
@@ -23,6 +26,11 @@ kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
 
+CREATE_OPERATOR=false
+if [ "${OPERATOR}" == "1" ]; then
+    CREATE_OPERATOR="true"
+fi
+
 echo "Waiting for helm install to complete."
 
 helm upgrade \
@@ -32,4 +40,13 @@ helm upgrade \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn \
-    --wait
+    --set operator.create=$CREATE_OPERATOR
+
+if [ "${OPERATOR}" == "1" ]; then
+
+    kubectl patch -n openfaas deploy/gateway \
+      -p='[{"op": "add", "path": "/spec/template/spec/containers/1/command", "value": ["./faas-netes", "-operator=true"]} ]' --type=json
+fi
+
+kubectl rollout status deploy/prometheus -n openfaas
+kubectl rollout status deploy/gateway -n openfaas

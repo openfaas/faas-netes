@@ -6,8 +6,7 @@ go:
   - 1.13.x
 
 install:
-  - curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-  - helm version -c
+  - "echo helm now installed via scripts."
 
 services:
   - docker
@@ -19,12 +18,16 @@ before_script:
 
 script:
   - make build
+  - ./contrib/get_tools.sh
   - ./contrib/lint_chart.sh
-  - ./contrib/get_kind.sh
-  - ./contrib/create_kind_cluster.sh
-  - ./contrib/deploy.sh
-  - ./contrib/get_faas.sh
+  - ./contrib/create_cluster.sh
+  - OPERATOR=0 ./contrib/deploy.sh
   - ./contrib/run_function.sh
+  - ./contrib/stop_dev.sh
+  - ./contrib/create_cluster.sh
+  - OPERATOR=1 ./contrib/deploy.sh
+  - OPERATOR=1 ./contrib/run_function.sh
+  - ./contrib/stop_dev.sh
 
 after_success:
     - if [ -z $DOCKER_NS ] ; then
