@@ -16,13 +16,11 @@ import (
 	"github.com/openfaas/faas-netes/pkg/controller"
 	"github.com/openfaas/faas-netes/pkg/server"
 	"github.com/openfaas/faas-netes/pkg/signals"
-	faasnetessignals "github.com/openfaas/faas-netes/pkg/signals"
 	"github.com/openfaas/faas-netes/types"
-	faasnetesversion "github.com/openfaas/faas-netes/version"
-	bootstrap "github.com/openfaas/faas-provider"
+	version "github.com/openfaas/faas-netes/version"
+	faasProvider "github.com/openfaas/faas-provider"
 	"github.com/openfaas/faas-provider/logs"
 	"github.com/openfaas/faas-provider/proxy"
-	bootTypes "github.com/openfaas/faas-provider/types"
 	providertypes "github.com/openfaas/faas-provider/types"
 	kubeinformers "k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
@@ -82,7 +80,7 @@ func runController(kubeconfig, masterURL string) {
 	}
 
 	readConfig := types.ReadConfig{}
-	osEnv := bootTypes.OsEnv{}
+	osEnv := providertypes.OsEnv{}
 	cfg, err := readConfig.Read(osEnv)
 	if err != nil {
 		log.Fatalf("Error reading config: %s", err.Error())
@@ -93,7 +91,7 @@ func runController(kubeconfig, masterURL string) {
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
 	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
-	sha, release := faasnetesversion.GetReleaseInfo()
+	sha, release := version.GetReleaseInfo()
 	log.Printf("Starting operator. Version: %s\tcommit: %s", release, sha)
 
 	deployConfig := k8s.DeploymentConfig{
@@ -120,7 +118,7 @@ func runController(kubeconfig, masterURL string) {
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(clientset, defaultResync, kubeInformerOpt)
 
 	// set up signals so we handle the first shutdown signal gracefully
-	stopCh := faasnetessignals.SetupSignalHandler()
+	stopCh := signals.SetupSignalHandler()
 
 	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
 	go kubeInformerFactory.Start(stopCh)
@@ -128,7 +126,7 @@ func runController(kubeconfig, masterURL string) {
 
 	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
 
-	bootstrapHandlers := bootTypes.FaaSHandlers{
+	bootstrapHandlers := providertypes.FaaSHandlers{
 		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
@@ -137,13 +135,13 @@ func runController(kubeconfig, masterURL string) {
 		ReplicaUpdater:       handlers.MakeReplicaUpdater(functionNamespace, clientset),
 		UpdateHandler:        handlers.MakeUpdateHandler(functionNamespace, factory),
 		HealthHandler:        handlers.MakeHealthHandler(),
-		InfoHandler:          handlers.MakeInfoHandler(faasnetesversion.BuildVersion(), faasnetesversion.GitCommit),
+		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, clientset),
 		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(clientset, functionNamespace), cfg.FaaSConfig.WriteTimeout),
 		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clientset),
 	}
 
-	bootstrap.Serve(&bootstrapHandlers, &cfg.FaaSConfig)
+	faasProvider.Serve(&bootstrapHandlers, &cfg.FaaSConfig)
 }
 
 // runOperator runs the CRD Operator
@@ -151,7 +149,7 @@ func runOperator(kubeconfig, masterURL string) {
 
 	setupLogging()
 
-	sha, release := faasnetesversion.GetReleaseInfo()
+	sha, release := version.GetReleaseInfo()
 	glog.Infof("Starting operator. Version: %s\tcommit: %s", release, sha)
 
 	// set up signals so we handle the first shutdown signal gracefully
