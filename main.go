@@ -9,15 +9,14 @@ import (
 	"os"
 	"time"
 
-	"github.com/openfaas-incubator/openfaas-operator/pkg/signals"
 	"github.com/openfaas/faas-netes/handlers"
 	"github.com/openfaas/faas-netes/k8s"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
 	"github.com/openfaas/faas-netes/pkg/controller"
 	"github.com/openfaas/faas-netes/pkg/server"
+	"github.com/openfaas/faas-netes/pkg/signals"
 	faasnetessignals "github.com/openfaas/faas-netes/pkg/signals"
-	"github.com/openfaas/faas-netes/pkg/version"
 	"github.com/openfaas/faas-netes/types"
 	faasnetesversion "github.com/openfaas/faas-netes/version"
 	bootstrap "github.com/openfaas/faas-provider"
@@ -94,6 +93,9 @@ func runController(kubeconfig, masterURL string) {
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
 	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
+	sha, release := faasnetesversion.GetReleaseInfo()
+	log.Printf("Starting operator. Version: %s\tcommit: %s", release, sha)
+
 	deployConfig := k8s.DeploymentConfig{
 		RuntimeHTTPPort: 8080,
 		HTTPProbe:       cfg.HTTPProbe,
@@ -149,8 +151,8 @@ func runOperator(kubeconfig, masterURL string) {
 
 	setupLogging()
 
-	sha, release := version.GetReleaseInfo()
-	glog.Infof("Starting OpenFaaS controller version: %s commit: %s", release, sha)
+	sha, release := faasnetesversion.GetReleaseInfo()
+	glog.Infof("Starting operator. Version: %s\tcommit: %s", release, sha)
 
 	// set up signals so we handle the first shutdown signal gracefully
 	stopCh := signals.SetupSignalHandler()

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/openfaas/faas-netes/pkg/version"
+	"github.com/openfaas/faas-netes/version"
 	"github.com/openfaas/faas-provider/types"
 )
 
@@ -31,6 +31,7 @@ func makeInfoHandler() http.HandlerFunc {
 			w.Write([]byte(err.Error()))
 			return
 		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(infoBytes)
