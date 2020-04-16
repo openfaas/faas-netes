@@ -35,6 +35,13 @@ OpenFaaS can form a complete stack for Cloud Native application development call
 
 ## Reference guide
 
+There are two modes available for faas-netes:
+
+* Classic - mode REST API, but without CRD (default)
+* [Operator - mode REST API, with a "Function" CRD](README-OPERATOR.md)
+
+The single faas-netes image and binary contains both modes, switch between one or the other using the helm chart or the flag `-operator=true/false`.
+
 ### Configuration via Environmental variables
 
 faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
