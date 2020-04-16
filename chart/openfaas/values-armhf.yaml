@@ -8,7 +8,11 @@ oauth2Plugin:
   enabled: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.10.1-armhf
+  image: openfaas/faas-netes:0.10.2-armhf
+
+operator:
+  image: openfaas/faas-netes:0.10.2-armhf
+  create: false
 
 queueWorker:
   image: openfaas/queue-worker:0.9.0-armhf
