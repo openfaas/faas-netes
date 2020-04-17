@@ -1,22 +1,39 @@
-.PHONY: build local build-arm64 build-armhf push namespaces install install-armhf charts ci-armhf-build ci-armhf-push ci-arm64-build ci-arm64-push
+.PHONY: local build build-amd64 build-armhf build-arm64 build-all push-amd64 push-armhf push-arm64 push-manifest-list push-all namespaces install install-armhf charts
 TAG?=latest
 
 all: build
 
+# Maintain build as alias target for build-amd64 target for backwards compatibility.
+build: build-amd64
+
 local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
 
-build-arm64:
-	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
+build-amd64:
+	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG)-amd64 .
 
 build-armhf:
 	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
 
-build:
-	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG) .
+build-arm64:
+	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
 
-push:
-	docker push openfaas/faas-netes:$(TAG)
+push-amd64:
+	docker push openfaas/faas-netes:$(TAG)-amd64
+
+push-armhf:
+	docker push openfaas/faas-netes:$(TAG)-armhf
+
+push-arm64:
+	docker push openfaas/faas-netes:$(TAG)-arm64
+
+push-manifest-list:
+	docker manifest create openfaas/faas-netes:$(TAG) openfaas/faas-netes:$(TAG)-amd64 openfaas/faas-netes:$(TAG)-armhf openfaas/faas-netes:$(TAG)-arm64
+	docker manifest push openfaas/faas-netes:$(TAG)
+
+build-all: build-arm64 build-armhf build-amd64
+
+push-all: push-amd64 push-armhf push-arm64 push-manifest-list
 
 namespaces:
 	kubectl apply -f namespaces.yml
@@ -34,18 +51,6 @@ charts:
 	./contrib/create-static-manifest.sh
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_arm64 ./chart/openfaas/values-arm64.yaml
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_armhf ./chart/openfaas/values-armhf.yaml
-
-ci-armhf-build:
-	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
-
-ci-armhf-push:
-	docker push openfaas/faas-netes:$(TAG)-armhf
-
-ci-arm64-build:
-	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
-
-ci-arm64-push:
-	docker push openfaas/faas-netes:$(TAG)-arm64
 
 start-kind: ## attempt to start a new dev environment
 	@./contrib/create_dev.sh \
