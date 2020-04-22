@@ -15,7 +15,7 @@ operator:
   create: false
 
 queueWorker:
-  image: openfaas/queue-worker:0.9.0-arm64
+  image: openfaas/queue-worker:0.10.0-arm64
 
 prometheus:
   image: prom/prometheus:v2.11.0
