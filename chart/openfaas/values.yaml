@@ -22,7 +22,7 @@ gatewayExternal:
   annotations: {}
 
 gateway:
-  image: openfaas/gateway:0.18.13
+  image: openfaas/gateway:0.18.16
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -107,7 +107,7 @@ operator:
 queueWorker:
   durableQueueSubscription: false
   queueGroup: "faas"
-  image: openfaas/queue-worker:0.10.0
+  image: openfaas/queue-worker:0.10.1
   ackWait : "60s"
   replicas: 1
   gatewayInvoke: true

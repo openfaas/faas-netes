@@ -1,7 +1,7 @@
 basic_auth: false
 
 gateway:
-  image: openfaas/gateway:0.18.13-armhf
+  image: openfaas/gateway:0.18.16-armhf
   directFunctions: true
 
 oauth2Plugin:
@@ -15,7 +15,7 @@ operator:
   create: false
 
 queueWorker:
-  image: openfaas/queue-worker:0.10.0-armhf
+  image: openfaas/queue-worker:0.10.1-armhf
 
 prometheus:
   image: prom/prometheus:v2.11.0
