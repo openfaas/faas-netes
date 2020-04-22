@@ -1,7 +1,7 @@
 basic_auth: true
 
 gateway:
-  image: openfaas/gateway:0.18.16-arm64
+  image: openfaas/gateway:0.18.17-arm64
   directFunctions: true
 
 oauth2Plugin:
