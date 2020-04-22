@@ -98,7 +98,7 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/faas-netes:0.10.2-rc1
+        image: openfaas/faas-netes:0.10.2
         imagePullPolicy: 
         securityContext:
           readOnlyRootFilesystem: true
