@@ -1,17 +1,17 @@
 basic_auth: false
 
 gateway:
-  image: openfaas/gateway:0.18.16-armhf
+  image: openfaas/gateway:0.18.17-armhf
   directFunctions: true
 
 oauth2Plugin:
   enabled: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.10.2-armhf
+  image: openfaas/faas-netes:0.10.3-armhf
 
 operator:
-  image: openfaas/faas-netes:0.10.2-armhf
+  image: openfaas/faas-netes:0.10.3-armhf
   create: false
 
 queueWorker:
