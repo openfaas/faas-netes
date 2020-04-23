@@ -178,7 +178,7 @@ func startFunctionPodInformer(ctx context.Context, client kubernetes.Interface, 
 		return nil, err
 	}
 
-	log.Printf("PodInformer: starting informer for %s\n", selector.String())
+	log.Printf("PodInformer: starting informer for %s in: %s\n", selector.String(), namespace)
 	factory := informers.NewFilteredSharedInformerFactory(
 		client,
 		podInformerResync,
