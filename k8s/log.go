@@ -53,6 +53,7 @@ func (l LogRequestor) Query(ctx context.Context, r logs.Request) (<-chan logs.Me
 				Text:      msg.Text,
 				Name:      msg.FunctionName,
 				Instance:  msg.PodName,
+				Namespace: msg.Namespace,
 			}
 		}
 	}()
