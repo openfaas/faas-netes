@@ -12,7 +12,7 @@ require (
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/openfaas/faas v0.0.0-20191125105239-365f459b3f3a
-	github.com/openfaas/faas-provider v0.0.0-20200101101649-8f7c35975e1b
+	github.com/openfaas/faas-provider v0.15.1
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v0.9.2
 	go.uber.org/goleak v1.0.0 // indirect
