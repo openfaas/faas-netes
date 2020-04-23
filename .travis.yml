@@ -24,6 +24,7 @@ script:
   - OPERATOR=0 ./contrib/deploy.sh
   - ./contrib/run_function.sh
   - ./contrib/stop_dev.sh
+  - sleep 10
   - ./contrib/create_cluster.sh
   - OPERATOR=1 ./contrib/deploy.sh
   - OPERATOR=1 ./contrib/run_function.sh
