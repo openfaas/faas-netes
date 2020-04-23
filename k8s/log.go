@@ -6,6 +6,7 @@ package k8s
 import (
 	"context"
 	"log"
+	"strings"
 
 	"github.com/openfaas/faas-provider/logs"
 	"k8s.io/client-go/kubernetes"
@@ -29,7 +30,13 @@ func NewLogRequestor(client kubernetes.Interface, functionNamespace string) *Log
 // This implementation ignores the r.Limit value because the OF-Provider already handles server side
 // line limits.
 func (l LogRequestor) Query(ctx context.Context, r logs.Request) (<-chan logs.Message, error) {
-	logStream, err := GetLogs(ctx, l.client, r.Name, l.functionNamespace, int64(r.Tail), r.Since, r.Follow)
+	ns := l.functionNamespace
+
+	if len(r.Namespace) > 0 && strings.ToLower(r.Namespace) != "kube-system" {
+		ns = r.Namespace
+	}
+
+	logStream, err := GetLogs(ctx, l.client, r.Name, ns, int64(r.Tail), r.Since, r.Follow)
 	if err != nil {
 		log.Printf("LogRequestor: get logs failed: %s\n", err)
 		return nil, err
