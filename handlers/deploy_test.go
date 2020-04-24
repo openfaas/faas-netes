@@ -27,8 +27,9 @@ func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
 		t.Errorf("missing prometheus.io.scrape key")
 	}
 
-	if v != "false" {
-		t.Errorf("want: %s for annotation prometheus.io.scrape got: %s", "false", v)
+	want := "false"
+	if v != want {
+		t.Errorf("want: %s for annotation prometheus.io.scrape got: %s", want, v)
 	}
 }
 
@@ -45,9 +46,9 @@ func Test_buildAnnotations_Premetheus_NotOverridden(t *testing.T) {
 	if !ok {
 		t.Errorf("missing prometheus.io.scrape key")
 	}
-
-	if v != "true" {
-		t.Errorf("want: %s for annotation prometheus.io.scrape got: %s", "true", v)
+	want := "true"
+	if v != want {
+		t.Errorf("want: %s for annotation prometheus.io.scrape got: %s", want, v)
 	}
 }
 
