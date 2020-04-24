@@ -107,7 +107,9 @@ func Test_newDeployment_PrometheusScrape_NotOverridden(t *testing.T) {
 
 	deployment := newDeployment(function, nil, secrets, factory)
 
-	if deployment.Spec.Template.Annotations["prometheus.io.scrape"] != "true" {
-		t.Errorf("Annotation prometheus.io.scrape should be %s, was: %s", "true", deployment.Spec.Template.Annotations["prometheus.io.scrape"])
+	want := "true"
+
+	if deployment.Spec.Template.Annotations["prometheus.io.scrape"] != want {
+		t.Errorf("Annotation prometheus.io.scrape should be %s, was: %s", want, deployment.Spec.Template.Annotations["prometheus.io.scrape"])
 	}
 }
