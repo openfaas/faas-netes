@@ -6,7 +6,7 @@ metadata:
   labels:
     app: openfaas
     component: faas-controller
-  name: faas-controller
+  name: openfaas-controller
   namespace: "openfaas"
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -15,7 +15,7 @@ metadata:
   labels:
     app: openfaas
     component: faas-controller
-  name: faas-controller
+  name: openfaas-controller
   namespace: "openfaas-fn"
 rules:
   - apiGroups:
@@ -71,13 +71,13 @@ metadata:
   labels:
     app: openfaas
     component: faas-controller
-  name: faas-controller
+  name: openfaas-controller
   namespace: "openfaas-fn"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: faas-controller
+  name: openfaas-controller
 subjects:
   - kind: ServiceAccount
-    name: faas-controller
+    name: openfaas-controller
     namespace: "openfaas"
