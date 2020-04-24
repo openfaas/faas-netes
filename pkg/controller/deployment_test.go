@@ -72,3 +72,42 @@ func Test_newDeployment(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_newDeployment_PrometheusScrape_NotOverridden(t *testing.T) {
+	function := &faasv1.Function{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "kubesec",
+		},
+		Spec: faasv1.FunctionSpec{
+			Name:  "kubesec",
+			Image: "docker.io/kubesec/kubesec",
+			Annotations: &map[string]string{
+				"prometheus.io.scrape": "true",
+			},
+		},
+	}
+
+	factory := NewFunctionFactory(fake.NewSimpleClientset(),
+		k8s.DeploymentConfig{
+			HTTPProbe:      false,
+			SetNonRootUser: true,
+			LivenessProbe: &k8s.ProbeConfig{
+				PeriodSeconds:       1,
+				TimeoutSeconds:      3,
+				InitialDelaySeconds: 0,
+			},
+			ReadinessProbe: &k8s.ProbeConfig{
+				PeriodSeconds:       1,
+				TimeoutSeconds:      3,
+				InitialDelaySeconds: 0,
+			},
+		})
+
+	secrets := map[string]*corev1.Secret{}
+
+	deployment := newDeployment(function, nil, secrets, factory)
+
+	if deployment.Spec.Template.Annotations["prometheus.io.scrape"] != "true" {
+		t.Errorf("Annotation prometheus.io.scrape should be %s, was: %s", "true", deployment.Spec.Template.Annotations["prometheus.io.scrape"])
+	}
+}

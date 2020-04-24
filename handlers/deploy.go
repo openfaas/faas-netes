@@ -268,7 +268,9 @@ func buildAnnotations(request types.FunctionDeployment) map[string]string {
 		annotations = map[string]string{}
 	}
 
-	annotations["prometheus.io.scrape"] = "false"
+	if _, ok := annotations["prometheus.io.scrape"]; !ok {
+		annotations["prometheus.io.scrape"] = "false"
+	}
 	return annotations
 }
 
