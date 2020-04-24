@@ -32,6 +32,25 @@ func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
 	}
 }
 
+func Test_buildAnnotations_Premetheus_NotOverridden(t *testing.T) {
+	request := types.FunctionDeployment{Annotations: &map[string]string{"prometheus.io.scrape": "true"}}
+
+	annotations := buildAnnotations(request)
+
+	if len(annotations) != 1 {
+		t.Errorf("want: %d annotations got: %d", 1, len(annotations))
+	}
+
+	v, ok := annotations["prometheus.io.scrape"]
+	if !ok {
+		t.Errorf("missing prometheus.io.scrape key")
+	}
+
+	if v != "true" {
+		t.Errorf("want: %s for annotation prometheus.io.scrape got: %s", "true", v)
+	}
+}
+
 func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
 	request := types.FunctionDeployment{
 		Annotations: &map[string]string{
