@@ -1,0 +1,22 @@
+# number of replicas for connector
+replicas: 1
+# nats-connector image
+image: openfaas/nats-connector:0.2.2
+# enable basic authentication for the gateway
+basic_auth: true
+# OpenFaaS gateway URL
+gateway_url: http://gateway.openfaas:8080
+# list of topics separated by delimiter
+topics: "nats-test,"
+# print function response
+print_response: true
+# print function response body
+print_response_body: false
+# delimiter for topic names
+topic_delimiter: ","
+# invoke function asynchronously
+asynchronous_invocation: false
+# broker hostname
+broker_host: nats
+# timeout for upstream calls
+upstream_timeout: 30s

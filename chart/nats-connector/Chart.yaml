@@ -1,0 +1,17 @@
+apiVersion: v1
+description: Connect OpenFaaS functions to nats queues
+name: nats-connector
+version: 0.1.0
+sources:
+  - https://github.com/openfaas-incubator/nats-connector
+home: https://www.openfaas.com
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+keywords:
+  - functions
+  - service
+  - nats
+maintainers:
+  - name: alexellis
+    email: alex@openfaas.com
+  - name: viveksyngh
+    email: vivekkmr45@yahoo.in
