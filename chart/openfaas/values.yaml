@@ -42,7 +42,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.11
+  image: openfaas/basic-auth-plugin:0.18.17
   replicas: 1
   resources:
     requests:
@@ -105,12 +105,14 @@ operator:
       cpu: "50m"
 
 queueWorker:
-  durableQueueSubscription: false
-  queueGroup: "faas"
-  image: openfaas/queue-worker:0.10.1
-  ackWait : "60s"
+  image: openfaas/queue-worker:0.11.0
+  # Control HA of queue-worker
   replicas: 1
+  # Control the concurrent invocations
+  maxInflight: 1
   gatewayInvoke: true
+  queueGroup: "faas"
+  ackWait : "60s"
   resources:
     requests:
       memory: "120Mi"

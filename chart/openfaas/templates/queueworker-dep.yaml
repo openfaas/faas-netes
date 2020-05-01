@@ -46,8 +46,6 @@ spec:
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end}}
-        - name: faas_nats_durable_queue_subscription
-          value: "{{ .Values.queueWorker.durableQueueSubscription }}"
         - name: faas_nats_channel
           value: "{{ .Values.nats.channel }}"
         - name: faas_nats_queue_group
@@ -60,6 +58,8 @@ spec:
         - name: faas_function_suffix
           value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end }}
+        - name: max_inflight
+          value: "{{ .Values.queueWorker.maxInflight }}"
         - name: ack_wait    # Max duration of any async task / request
           value: {{ .Values.queueWorker.ackWait }}
         {{- if .Values.basic_auth }}
