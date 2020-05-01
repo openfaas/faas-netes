@@ -26,13 +26,11 @@ spec:
               cpu: 50m
               memory: 120Mi
             
-        image: openfaas/queue-worker:0.10.1-armhf
+        image: openfaas/queue-worker:0.11.0-armhf
         imagePullPolicy: Always
         env:
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
-        - name: faas_nats_durable_queue_subscription
-          value: "false"
         - name: faas_nats_channel
           value: "faas-request"
         - name: faas_nats_queue_group
@@ -43,6 +41,8 @@ spec:
           value: "true"
         - name: faas_function_suffix
           value: ".openfaas-fn.svc.cluster.local"
+        - name: max_inflight
+          value: "1"
         - name: ack_wait    # Max duration of any async task / request
           value: 60s
       nodeSelector:
