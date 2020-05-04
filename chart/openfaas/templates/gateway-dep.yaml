@@ -198,7 +198,7 @@ spec:
         resources:
           {{- .Values.faasnetes.resources | toYaml | nindent 12 }}
         image: {{ .Values.faasnetes.image }}
-        imagePullPolicy: {{ .Values.openFaasImagePullPolicy }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
         securityContext:
           readOnlyRootFilesystem: true
