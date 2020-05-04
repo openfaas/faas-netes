@@ -99,7 +99,7 @@ spec:
               memory: 120Mi
             
         image: openfaas/faas-netes:0.10.3
-        imagePullPolicy: 
+        imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
