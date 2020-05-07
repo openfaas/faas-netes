@@ -12,7 +12,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
 	"strings"
 )
@@ -77,17 +76,12 @@ func findExternalDriver(cfg *Config) driver {
 		}
 
 		buf := new(bytes.Buffer)
-		stderr := new(bytes.Buffer)
 		cmd := exec.CommandContext(cfg.Context, tool, words...)
 		cmd.Dir = cfg.Dir
 		cmd.Env = cfg.Env
 		cmd.Stdin = bytes.NewReader(req)
 		cmd.Stdout = buf
-		cmd.Stderr = stderr
-		if len(stderr.Bytes()) != 0 && os.Getenv("GOPACKAGESPRINTDRIVERERRORS") != "" {
-			fmt.Fprintf(os.Stderr, "%s stderr: <<%s>>\n", cmdDebugStr(cmd, words...), stderr)
-		}
-
+		cmd.Stderr = new(bytes.Buffer)
 		if err := cmd.Run(); err != nil {
 			return nil, fmt.Errorf("%v: %v: %s", tool, err, cmd.Stderr)
 		}

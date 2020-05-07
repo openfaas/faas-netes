@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/parser"
 	"go/token"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -86,9 +87,25 @@ func processGolistOverlay(cfg *Config, response *responseDeduper, rootDirs func(
 		if pkg == nil {
 			// Try to find the module or gopath dir the file is contained in.
 			// Then for modules, add the module opath to the beginning.
-			pkgPath, ok := getPkgPath(cfg, dir, rootDirs)
-			if !ok {
+			var pkgPath string
+			for rdir, rpath := range rootDirs().rootDirs {
+				// TODO(matloob): This doesn't properly handle symlinks.
+				r, err := filepath.Rel(rdir, dir)
+				if err != nil {
+					continue
+				}
+				pkgPath = filepath.ToSlash(r)
+				if rpath != "" {
+					pkgPath = path.Join(rpath, pkgPath)
+				}
+				// We only create one new package even it can belong in multiple modules or GOPATH entries.
+				// This is okay because tools (such as the LSP) that use overlays will recompute the overlay
+				// once the file is saved, and golist will do the right thing.
+				// TODO(matloob): Implement module tiebreaking?
 				break
+			}
+			if pkgPath == "" {
+				continue
 			}
 			isXTest := strings.HasSuffix(pkgName, "_test")
 			if isXTest {
