@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -81,7 +82,7 @@ func updateDeploymentSpec(
 
 	deployment, findDeployErr := factory.Client.AppsV1().
 		Deployments(functionNamespace).
-		Get(request.Service, getOpts)
+		Get(context.TODO(), request.Service, getOpts)
 
 	if findDeployErr != nil {
 		return findDeployErr, http.StatusNotFound
@@ -165,7 +166,7 @@ func updateDeploymentSpec(
 
 	if _, updateErr := factory.Client.AppsV1().
 		Deployments(functionNamespace).
-		Update(deployment); updateErr != nil {
+		Update(context.TODO(), deployment, metav1.UpdateOptions{}); updateErr != nil {
 
 		return updateErr, http.StatusInternalServerError
 	}
@@ -183,7 +184,7 @@ func updateService(
 
 	service, findServiceErr := factory.Client.CoreV1().
 		Services(functionNamespace).
-		Get(request.Service, getOpts)
+		Get(context.TODO(), request.Service, getOpts)
 
 	if findServiceErr != nil {
 		return findServiceErr, http.StatusNotFound
@@ -193,7 +194,7 @@ func updateService(
 
 	if _, updateErr := factory.Client.CoreV1().
 		Services(functionNamespace).
-		Update(service); updateErr != nil {
+		Update(context.TODO(), service, metav1.UpdateOptions{}); updateErr != nil {
 
 		return updateErr, http.StatusInternalServerError
 	}

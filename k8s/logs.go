@@ -107,7 +107,7 @@ func podLogs(ctx context.Context, i v1.PodInterface, pod, container, namespace s
 		opts.SinceSeconds = parseSince(since)
 	}
 
-	stream, err := i.GetLogs(pod, opts).Stream()
+	stream, err := i.GetLogs(pod, opts).Stream(context.TODO())
 	if err != nil {
 		return err
 	}
@@ -187,7 +187,7 @@ func startFunctionPodInformer(ctx context.Context, client kubernetes.Interface, 
 	)
 
 	podInformer := factory.Core().V1().Pods()
-	podsResp, err := client.CoreV1().Pods(namespace).List(metav1.ListOptions{LabelSelector: selector.String()})
+	podsResp, err := client.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{LabelSelector: selector.String()})
 	if err != nil {
 		log.Printf("PodInformer: %s", err)
 		return nil, err

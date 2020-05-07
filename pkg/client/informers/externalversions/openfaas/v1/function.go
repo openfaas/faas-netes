@@ -9,6 +9,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 package v1
 
 import (
+	"context"
 	time "time"
 
 	openfaasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
@@ -51,13 +52,13 @@ func NewFilteredFunctionInformer(client versioned.Interface, namespace string, r
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.OpenfaasV1().Functions(namespace).List(options)
+				return client.OpenfaasV1().Functions(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.OpenfaasV1().Functions(namespace).Watch(options)
+				return client.OpenfaasV1().Functions(namespace).Watch(context.TODO(), options)
 			},
 		},
 		&openfaasv1.Function{},

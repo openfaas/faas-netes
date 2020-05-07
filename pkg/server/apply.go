@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -49,19 +50,19 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 				ReadOnlyRootFilesystem: req.ReadOnlyRootFilesystem,
 			},
 		}
-		_, err = client.OpenfaasV1().Functions(namespace).Update(newFunc)
+		_, err = client.OpenfaasV1().Functions(namespace).Update(context.TODO(), newFunc, metav1.UpdateOptions{})
 		if err != nil {
 			errMsg := err.Error()
 			if strings.Contains(errMsg, "not found") {
-				_, err = client.OpenfaasV1().Functions(namespace).Create(newFunc)
+				_, err = client.OpenfaasV1().Functions(namespace).Create(context.TODO(), newFunc, metav1.CreateOptions{})
 				if err != nil {
 					w.WriteHeader(http.StatusInternalServerError)
 					w.Write([]byte(err.Error()))
 					glog.Errorf("Function %s create error: %v", req.Service, err)
 					return
-				} else {
-					glog.Infof("Function %s created", req.Service)
 				}
+
+				glog.Infof("Function %s created", req.Service)
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(err.Error()))

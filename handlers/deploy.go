@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -76,7 +77,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		deploy := factory.Client.AppsV1().Deployments(namespace)
 
-		_, err = deploy.Create(deploymentSpec)
+		_, err = deploy.Create(context.TODO(), deploymentSpec, metav1.CreateOptions{})
 		if err != nil {
 			wrappedErr := fmt.Errorf("unable create Deployment: %s", err.Error())
 			log.Println(wrappedErr)
@@ -88,7 +89,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		service := factory.Client.CoreV1().Services(namespace)
 		serviceSpec := makeServiceSpec(request, factory)
-		_, err = service.Create(serviceSpec)
+		_, err = service.Create(context.TODO(), serviceSpec, metav1.CreateOptions{})
 
 		if err != nil {
 			wrappedErr := fmt.Errorf("failed create Service: %s", err.Error())
