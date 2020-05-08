@@ -45,20 +45,13 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 			}
 		}
 
+		// Sometimes there was a non-nil "got" value when the miss was
+		// true.
 		if miss == false && got != nil {
 			updated := got.DeepCopy()
 			klog.Infof("Updating %s\n", updated.ObjectMeta.Name)
-			updated.Spec.Name = req.Service
-			updated.Spec.Image = req.Image
-			updated.Spec.Handler = req.EnvProcess
-			updated.Spec.Labels = req.Labels
-			updated.Spec.Annotations = req.Annotations
-			updated.Spec.Environment = &req.EnvVars
-			updated.Spec.Constraints = req.Constraints
-			updated.Spec.Secrets = req.Secrets
-			updated.Spec.Limits = getResources(req.Limits)
-			updated.Spec.Requests = getResources(req.Requests)
-			updated.Spec.ReadOnlyRootFilesystem = req.ReadOnlyRootFilesystem
+
+			updated.Spec = toFunctionSpec(req)
 
 			if _, err = client.OpenfaasV1().Functions(namespace).Update(updated); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
@@ -72,28 +65,34 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 					Name:      req.Service,
 					Namespace: namespace,
 				},
-				Spec: faasv1.FunctionSpec{
-
-					Name:                   req.Service,
-					Image:                  req.Image,
-					Handler:                req.EnvProcess,
-					Labels:                 req.Labels,
-					Annotations:            req.Annotations,
-					Environment:            &req.EnvVars,
-					Constraints:            req.Constraints,
-					Secrets:                req.Secrets,
-					Limits:                 getResources(req.Limits),
-					Requests:               getResources(req.Requests),
-					ReadOnlyRootFilesystem: req.ReadOnlyRootFilesystem,
-				},
+				Spec: toFunctionSpec(req),
 			}
+
 			if _, err = client.OpenfaasV1().Functions(namespace).Create(newFunc); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(fmt.Sprintf("Error creating function: %s", err.Error())))
 				return
 			}
 		}
+
 		w.WriteHeader(http.StatusAccepted)
+	}
+}
+
+func toFunctionSpec(req types.FunctionDeployment) faasv1.FunctionSpec {
+	return faasv1.FunctionSpec{
+
+		Name:                   req.Service,
+		Image:                  req.Image,
+		Handler:                req.EnvProcess,
+		Labels:                 req.Labels,
+		Annotations:            req.Annotations,
+		Environment:            &req.EnvVars,
+		Constraints:            req.Constraints,
+		Secrets:                req.Secrets,
+		Limits:                 getResources(req.Limits),
+		Requests:               getResources(req.Requests),
+		ReadOnlyRootFilesystem: req.ReadOnlyRootFilesystem,
 	}
 }
 
