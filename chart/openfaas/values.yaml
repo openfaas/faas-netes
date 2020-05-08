@@ -73,7 +73,7 @@ oauth2Plugin:
   securityContext: true
 
 faasnetes:
-  image: openfaas/faas-netes:0.10.3
+  image: openfaas/faas-netes:0.10.5
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -94,7 +94,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/faas-netes:0.10.3
+  image: openfaas/faas-netes:0.10.5
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
