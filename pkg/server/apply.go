@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strings"
 
+	"github.com/openfaas/faas-netes/k8s"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	"github.com/openfaas/faas-provider/types"
 
@@ -26,52 +27,58 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 		err := json.Unmarshal(body, &req)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			_, writeErr := w.Write([]byte(err.Error()))
+			if writeErr != nil {
+				glog.Errorf("response writing error: %s", writeErr)
+			}
 			return
 		}
 
-		newFunc := &faasv1.Function{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      req.Service,
-				Namespace: namespace,
-			},
-			Spec: faasv1.FunctionSpec{
-				Name:                   req.Service,
-				Image:                  req.Image,
-				Handler:                req.EnvProcess,
-				Labels:                 req.Labels,
-				Annotations:            req.Annotations,
-				Environment:            &req.EnvVars,
-				Constraints:            req.Constraints,
-				Secrets:                req.Secrets,
-				Limits:                 getResources(req.Limits),
-				Requests:               getResources(req.Requests),
-				ReadOnlyRootFilesystem: req.ReadOnlyRootFilesystem,
-			},
-		}
-		_, err = client.OpenfaasV1().Functions(namespace).Update(newFunc)
-		if err != nil {
-			errMsg := err.Error()
-			if strings.Contains(errMsg, "not found") {
-				_, err = client.OpenfaasV1().Functions(namespace).Create(newFunc)
-				if err != nil {
-					w.WriteHeader(http.StatusInternalServerError)
-					w.Write([]byte(err.Error()))
-					glog.Errorf("Function %s create error: %v", req.Service, err)
-					return
-				} else {
-					glog.Infof("Function %s created", req.Service)
-				}
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(err.Error()))
-				glog.Errorf("Function %s update error: %v", req.Service, err)
-				return
-			}
-		} else {
-			glog.Infof("Function %s updated", req.Service)
+		var newFunc *faasv1.Function
+		spec := faasv1.FunctionSpec{
+			Name:                   req.Service,
+			Image:                  req.Image,
+			Handler:                req.EnvProcess,
+			Labels:                 req.Labels,
+			Annotations:            req.Annotations,
+			Environment:            &req.EnvVars,
+			Constraints:            req.Constraints,
+			Secrets:                req.Secrets,
+			Limits:                 getResources(req.Limits),
+			Requests:               getResources(req.Requests),
+			ReadOnlyRootFilesystem: req.ReadOnlyRootFilesystem,
 		}
 
+		var method func(*v1.Function) (*v1.Function, error)
+		method = client.OpenfaasV1().Functions(namespace).Update
+
+		found, err := client.OpenfaasV1().Functions(namespace).Get(req.Service, metav1.GetOptions{})
+		if k8s.IsNotFound(err) {
+			method = client.OpenfaasV1().Functions(namespace).Create
+			newFunc = &faasv1.Function{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      req.Service,
+					Namespace: namespace,
+				},
+				Spec: spec,
+			}
+		} else {
+			newFunc = found
+			newFunc.Spec = spec
+		}
+
+		_, err = method(newFunc)
+		if err != nil {
+			glog.Errorf("Function %s update error: %v", req.Service, err)
+			w.WriteHeader(http.StatusInternalServerError)
+			_, writeErr := w.Write([]byte(err.Error()))
+			if writeErr != nil {
+				glog.Errorf("response writing error: %s", writeErr)
+			}
+			return
+		}
+
+		glog.Infof("Function %s updated", req.Service)
 		w.WriteHeader(http.StatusAccepted)
 	}
 }
