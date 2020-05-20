@@ -19,7 +19,10 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
-        prometheus.io.scrape: "false"
+        prometheus.io.scrape: {{ .Values.nats.metrics.enabled | quote }}
+        {{- if .Values.nats.metrics.enabled }}
+        prometheus.io.port: "7777"
+        {{- end }} 
       labels:
         app: nats
     spec:
@@ -42,10 +45,28 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
-          {{- if .Values.nats.enableMonitoring }}
+          {{- if or .Values.nats.enableMonitoring .Values.nats.metrics.enabled }}
           - -m
           - "8222"
           {{- end }}
+      {{- if .Values.nats.metrics.enabled }}
+      - name: metrics
+        image: {{ .Values.nats.metrics.image }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        ports:
+        - containerPort: 7777
+          protocol: TCP
+        args:
+        - -port
+        - "7777"
+        - -connz
+        - -routez
+        - -subz
+        - -varz
+        - -channelz
+        - -serverz
+        - http://localhost:8222
+      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

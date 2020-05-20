@@ -22,6 +22,11 @@ spec:
       protocol: TCP
       name: monitoring
     {{- end }}
+    {{- if .Values.nats.metrics.enabled }}
+    - port: 7777
+      protocol: TCP
+      name: metrics
+    {{- end }}
   selector:
     app: nats
 {{- end }}
