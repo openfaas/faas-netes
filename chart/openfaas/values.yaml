@@ -146,6 +146,9 @@ nats:
     port: ""
   image: nats-streaming:0.17.0
   enableMonitoring: false
+  metrics:
+    enabled: false
+    image: synadia/prometheus-nats-exporter:0.6.2 
   resources:
     requests:
       memory: "120Mi"
