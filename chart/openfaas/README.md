@@ -407,8 +407,8 @@ Additional OpenFaaS options in `values.yaml`.
 | `nats.external.host` | The host at which the externally-managed NATS Streaming server can be reached | `""` |
 | `nats.external.port` | The port at which the externally-managed NATS Streaming server can be reached | `""` |
 | `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
-| `nats.metrics.enabled` | Whether to start the prometheus exporter  | `false` |
-| `nats.metrics.image` | Container image used for the prometheus exporter | `synadia/prometheus-nats-exporter:0.6.2` |
+| `nats.metrics.enabled` | Export Prometheus metrics for NATS, no multi-arch support  | `false` |
+| `nats.metrics.image` | Container image used for the NATS Prometheus exporter, not multi-arch | `synadia/prometheus-nats-exporter:0.6.2` |
 | `faasIdler.create` | Create the faasIdler component | `true` |
 | `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `15m` |
 | `faasIdler.reconcileInterval` | The time between each of reconciliation | `1m` |

@@ -16,7 +16,7 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
-        prometheus.io.scrape: "false"
+        prometheus.io.scrape: "false" 
       labels:
         app: nats
     spec:

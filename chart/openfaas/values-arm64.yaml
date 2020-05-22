@@ -1,5 +1,8 @@
 basic_auth: true
 
+nodeSelector:
+  beta.kubernetes.io/arch: arm64
+
 gateway:
   image: openfaas/gateway:0.18.17-arm64
   directFunctions: true
@@ -36,5 +39,7 @@ basicAuthPlugin:
 ingressOperator:
   create: false
 
-nodeSelector:
-  beta.kubernetes.io/arch: arm64
+# Unfortunately the exporter is not multi-arch (yet)
+nats:
+  metrics:
+    enabled: false
