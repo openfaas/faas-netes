@@ -117,7 +117,7 @@ faasnetes:
     timeoutSeconds: 1
     periodSeconds: 1
 # redacted
-  imagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
+openfaasImagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
 ```
 
 
