@@ -1,0 +1,6 @@
+Thanks for installing the mqtt-connector. Please follow the instructions below to get you started.
+
+You can watch the Connector logs to see it invoke your functions:
+
+$ kubectl logs -n {{ .Release.Namespace }} deploy/mqtt-connector -f
+
