@@ -1,0 +1,25 @@
+image: openfaas/mqtt-connector:0.3.0
+replicas: 1
+
+# # Emitter.io example
+topic: sample-topic/
+
+# Formal MQTT topic example:
+# topic: sample-topic,
+
+# For use with emitter.io
+trimChannelKey: false
+
+broker: tcp://emitter:8080
+clientID: testgoid
+authPassword: ""
+
+upstream_timeout: 15s # Maximum duration for an invocation
+rebuild_interval: 10s
+asyncInvoke: false # Invoke via NATS using the function's asynchronous route
+basic_auth: true
+gateway_url: http://gateway.openfaas:8080
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

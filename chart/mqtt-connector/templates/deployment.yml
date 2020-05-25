@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    # Original Helm labels v
+    app: {{ template "connector.fullname" . }}
+    component: mqtt-connector
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    # Helm/k8s recommended label names v
+    app.kubernetes.io/name: {{ template "connector.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
+    app.kubernetes.io/component: mqtt-connector
+    app.kubernetes.io/part-of: openfaas
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "connector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "connector.fullname" . }}
+      component: mqtt-connector
+
+  template:
+    metadata:
+      annotations:
+        prometheus.io.scrape: "false"
+      labels:
+        app: {{ template "connector.fullname" . }}
+        component: mqtt-connector
+    spec:
+      {{- if .Values.basic_auth }}
+      volumes:
+        - name: auth
+          secret:
+            secretName: basic-auth
+      {{- end }}
+      containers:
+        - name: connector
+          image: {{ .Values.image }}
+          command:
+          - "/usr/bin/connector"
+          args:
+          {{- if .Values.broker }}
+           - "-broker={{.Values.broker}}"
+          {{- end }}
+          {{- if .Values.topic }}
+           - "-topic={{.Values.topic}}"
+          {{- end }}
+          {{- if .Values.clientID }}
+           - "-id={{.Values.clientID}}"
+          {{- end }}
+          {{- if .Values.authPassword }}
+           - "-password={{.Values.authPassword}}"
+          {{- end }}
+          {{- if .Values.trimChannelKey }}
+           - "-trim-channel-key={{.Values.trimChannelKey}}"
+          {{- end }}
+          {{- if .Values.asyncInvoke }}
+           - "-async-invoke={{.Values.asyncInvoke}}"
+          {{- end }}
+          env:
+            - name: gateway_url
+              value: {{ .Values.gateway_url | quote }}
+            - name: print_response
+              value: {{ .Values.print_response | quote }}
+            - name: print_response_body
+              value: {{ .Values.print_response_body | quote }}
+            {{- if .Values.basic_auth }}
+            - name: basic_auth
+              value: "true"
+            - name: secret_mount_path
+              value: "/var/secrets"
+            {{- end }}
+            {{- if .Values.upstream_timeout }}
+            - name: upstream_timeout
+              value: {{ .Values.upstream_timeout | quote }}
+            {{- end }}
+            {{- if .Values.rebuild_interval }}
+            - name: rebuild_interval
+              value: {{ .Values.rebuild_interval | quote }}
+            {{- end }}
+          {{- if .Values.basic_auth }}
+          volumeMounts:
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+          {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
