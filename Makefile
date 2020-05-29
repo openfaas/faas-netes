@@ -28,7 +28,7 @@ install-armhf: namespaces
 	kubectl apply -f yaml_armhf/
 
 charts:
-	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/
+	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh
