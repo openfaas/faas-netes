@@ -33,7 +33,6 @@ spec:
         command:
           - ./ingress-operator
           - -logtostderr
-          - -v=2
         env:
         - name: function_namespace
           value: {{ $functionNs | quote }}
