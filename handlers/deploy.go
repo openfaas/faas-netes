@@ -31,6 +31,7 @@ const initialReplicasCount = 1
 // MakeDeployHandler creates a handler to create new functions in the cluster
 func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
 	secrets := k8s.NewSecretsClient(factory.Client)
+	policies := k8s.NewConfigMapPolicyClient(factory.Client)
 
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -67,6 +68,21 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		}
 
 		deploymentSpec, specErr := makeDeploymentSpec(request, existingSecrets, factory)
+
+		var policyList []k8s.Policy
+		if request.Annotations != nil {
+			policyNames := k8s.ParsePolicyNames(*request.Annotations)
+			policyList, err = policies.Get(namespace, policyNames...)
+			if err != nil {
+				wrappedErr := fmt.Errorf("failed create Deployment spec: %s", err.Error())
+				log.Println(wrappedErr)
+				http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+		for _, policy := range policyList {
+			deploymentSpec = policy.Apply(deploymentSpec)
+		}
 
 		if specErr != nil {
 			wrappedErr := fmt.Errorf("failed create Deployment spec: %s", specErr.Error())
