@@ -162,6 +162,31 @@ func updateDeploymentSpec(
 
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
+
+		var annotations map[string]string
+		if request.Annotations != nil {
+			annotations = *request.Annotations
+		}
+
+		// if a policy is removed ... how do we remove the consequences?
+		policies := k8s.NewConfigMapPolicyClient(factory.Client)
+		toRemove := k8s.PoliciesToRemove(annotations, deployment.Annotations)
+		policyList, err := policies.Get(functionNamespace, toRemove...)
+		if err != nil {
+			return err, http.StatusBadRequest
+		}
+		for _, policy := range policyList {
+			deployment = policy.Remove(deployment)
+		}
+
+		policyNames := k8s.ParsePolicyNames(annotations)
+		policyList, err = policies.Get(functionNamespace, policyNames...)
+		if err != nil {
+			return err, http.StatusBadRequest
+		}
+		for _, policy := range policyList {
+			deployment = policy.Apply(deployment)
+		}
 	}
 
 	if _, updateErr := factory.Client.AppsV1().
