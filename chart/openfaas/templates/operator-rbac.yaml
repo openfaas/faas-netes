@@ -64,5 +64,57 @@ subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-operator
   namespace: {{ .Release.Namespace | quote }}
+{{- if .Values.clusterRole}}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-operator-controller
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: openaas-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-operator-controller
+  namespace: {{ .Release.Namespace | quote }}
+rules:
+  - apiGroups: ["openfaas.com"]
+    resources: ["functions"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch", "create", "delete", "update"]
+  - apiGroups: ["extensions", "apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "delete", "update"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "namespaces", "endpoints"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Release.Name }}-operator-controller
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: openfaas-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Release.Name }}-operator-controller
+subjects:
+- kind: ServiceAccount
+  name: {{ .Release.Name }}-operator
+  namespace: {{ .Release.Namespace | quote }}
+{{- end }}
 {{- end }}
 {{- end }}
