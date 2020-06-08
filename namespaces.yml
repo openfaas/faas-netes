@@ -2,6 +2,10 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: openfaas
+  annotations:
+    linkerd.io/inject: enabled
+    config.linkerd.io/skip-inbound-ports: "4222"
+    config.linkerd.io/skip-outbound-ports: "4222"
   labels:
     role: openfaas-system
     access: openfaas-system
@@ -11,7 +15,10 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: openfaas-fn
+  annotations:
+    linkerd.io/inject: enabled
+    config.linkerd.io/skip-inbound-ports: "4222"
+    config.linkerd.io/skip-outbound-ports: "4222"
   labels:
     istio-injection: enabled
     role: openfaas-fn
-
