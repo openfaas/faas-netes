@@ -89,8 +89,8 @@ func NewController(
 	// Create event broadcaster
 	// Add o6s types to the default Kubernetes Scheme so Events can be
 	// logged for faas-controller types.
-	faasscheme.AddToScheme(scheme.Scheme)
-	glog.V(4).Info("Creating event broadcaster")
+	err := faasscheme.AddToScheme(scheme.Scheme)
+	glog.V(4).Infof("Creating event broadcaster. Error: %v", err)
 	eventBroadcaster := record.NewBroadcaster()
 	eventBroadcaster.StartLogging(glog.V(4).Infof)
 	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: kubeclientset.CoreV1().Events("")})
@@ -267,8 +267,8 @@ func (c *Controller) syncHandler(key string) error {
 		if _, err := c.kubeclientset.CoreV1().Services(function.Namespace).Create(newService(function)); err != nil {
 			// If an error occurs during Service Create, we'll requeue the item
 			if errors.IsAlreadyExists(err) {
-				err = nil
 				glog.V(2).Infof("ClusterIP service '%s' already exists. Skipping creation.", function.Spec.Name)
+				err = nil
 			} else {
 				return err
 			}
@@ -326,8 +326,41 @@ func (c *Controller) syncHandler(key string) error {
 		return err
 	}
 
+	// Finally, we update the status block of the Foo resource to reflect the
+	// current state of the world
+	err = c.updateFunctionStatus(function, deployment)
+	if err != nil {
+		return err
+	}
+
 	c.recorder.Event(function, corev1.EventTypeNormal, SuccessSynced, MessageResourceSynced)
 	return nil
+}
+
+func (c *Controller) updateFunctionStatus(fn *faasv1.Function, deployment *appsv1.Deployment) error {
+	// NEVER modify objects from the store. It's a read-only, local cache.
+	// You can use DeepCopy() to make a deep copy of original object and modify this copy
+	// Or create a copy manually for better performance
+	fnCopy := fn.DeepCopy()
+	var status metav1.ConditionStatus = "True"
+	if deployment.Status.UnavailableReplicas > 0 {
+		status = "False"
+	}
+	fnCopy.Status.Conditions = []faasv1.FunctionCondition{
+		{
+			Status: status,
+			Type:   "Ready",
+		},
+	}
+	fnCopy.Status.UnavailableReplicas = deployment.Status.UnavailableReplicas
+	fnCopy.Status.ObservedGeneration = fn.ObjectMeta.Generation
+	// If the CustomResourceSubresources feature gate is not enabled,
+	// we must use Update instead of UpdateStatus to update the Status block of the Function resource.
+	// UpdateStatus will not allow changes to the Spec of the resource,
+	// which is ideal for ensuring nothing other than resource status has been updated.
+	_, err := c.faasclientset.OpenfaasV1().Functions(fn.Namespace).UpdateStatus(fnCopy)
+	glog.Infof("Updated Function status '%s' err: '%v', status '%v', unavailable: '%v'", fn.Spec.Name, err, status, deployment.Status.UnavailableReplicas)
+	return err
 }
 
 // enqueueFunction takes a Function resource and converts it into a namespace/name

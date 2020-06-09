@@ -5,7 +5,6 @@ import (
 )
 
 // +genclient
-// +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // Function describes an OpenFaaS function
@@ -13,7 +12,8 @@ type Function struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec FunctionSpec `json:"spec"`
+	Spec   FunctionSpec   `json:"spec"`
+	Status FunctionStatus `json:"status"`
 }
 
 // FunctionSpec is the spec for a Function resource
@@ -44,6 +44,20 @@ type FunctionSpec struct {
 type FunctionResources struct {
 	Memory string `json:"memory,omitempty"`
 	CPU    string `json:"cpu,omitempty"`
+}
+
+// FooStatus is the status for a Foo resource
+type FunctionStatus struct {
+	Conditions          []FunctionCondition `json:"conditions"`
+	UnavailableReplicas int32               `json:"unavailableReplicas"`
+	ObservedGeneration  int64               `json:"observedGeneration"`
+}
+
+const Ready = "Ready"
+
+type FunctionCondition struct {
+	Type   string                 `json:"type"`   // Ready
+	Status metav1.ConditionStatus `json:"status"` // True, False, Unknown string
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

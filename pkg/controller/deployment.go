@@ -57,6 +57,7 @@ func newDeployment(
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        function.Spec.Name,
 			Annotations: annotations,
+			Labels:      labels,
 			Namespace:   function.Namespace,
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(function, schema.GroupVersionKind{

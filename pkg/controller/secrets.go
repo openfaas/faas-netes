@@ -38,10 +38,7 @@ func UpdateSecrets(function *faasv1.Function, deployment *appsv1.Deployment, exi
 				},
 			)
 
-			break
-
 		default:
-
 			projectedPaths := []corev1.KeyToPath{}
 			for secretKey := range deployedSecret.Data {
 				projectedPaths = append(projectedPaths, corev1.KeyToPath{Key: secretKey, Path: secretKey})
@@ -53,8 +50,6 @@ func UpdateSecrets(function *faasv1.Function, deployment *appsv1.Deployment, exi
 				Secret: projection,
 			}
 			secretVolumeProjections = append(secretVolumeProjections, secretProjection)
-
-			break
 		}
 	}
 

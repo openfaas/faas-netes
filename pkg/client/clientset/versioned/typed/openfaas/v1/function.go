@@ -29,6 +29,7 @@ type FunctionsGetter interface {
 type FunctionInterface interface {
 	Create(*v1.Function) (*v1.Function, error)
 	Update(*v1.Function) (*v1.Function, error)
+	UpdateStatus(*v1.Function) (*v1.Function, error)
 	Delete(name string, options *metav1.DeleteOptions) error
 	DeleteCollection(options *metav1.DeleteOptions, listOptions metav1.ListOptions) error
 	Get(name string, options metav1.GetOptions) (*v1.Function, error)
@@ -116,6 +117,22 @@ func (c *functions) Update(function *v1.Function) (result *v1.Function, err erro
 		Namespace(c.ns).
 		Resource("functions").
 		Name(function.Name).
+		Body(function).
+		Do().
+		Into(result)
+	return
+}
+
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+
+func (c *functions) UpdateStatus(function *v1.Function) (result *v1.Function, err error) {
+	result = &v1.Function{}
+	err = c.client.Put().
+		Namespace(c.ns).
+		Resource("functions").
+		Name(function.Name).
+		SubResource("status").
 		Body(function).
 		Do().
 		Into(result)

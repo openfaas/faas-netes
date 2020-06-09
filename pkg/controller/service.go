@@ -17,6 +17,7 @@ func newService(function *faasv1.Function) *corev1.Service {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        function.Spec.Name,
 			Namespace:   function.Namespace,
+			Labels:      function.Labels,
 			Annotations: map[string]string{"prometheus.io.scrape": "false"},
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(function, schema.GroupVersionKind{

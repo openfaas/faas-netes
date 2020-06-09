@@ -19,7 +19,7 @@ func Test_makeAnnotations_NoKeys(t *testing.T) {
 		t.Errorf("wanted annotation " + "prometheus.io.scrape" + " to be added")
 		t.Fail()
 	}
-	if val, _ := annotations["prometheus.io.scrape"]; val != "false" {
+	if val := annotations["prometheus.io.scrape"]; val != "false" {
 		t.Errorf("wanted annotation " + "prometheus.io.scrape" + ` to equal "false"`)
 		t.Fail()
 	}
@@ -29,7 +29,7 @@ func Test_makeAnnotations_NoKeys(t *testing.T) {
 		t.Fail()
 	}
 
-	if val, _ := annotations[annotationFunctionSpec]; val != annotationVal {
+	if val := annotations[annotationFunctionSpec]; val != annotationVal {
 		t.Errorf("Annotation " + annotationFunctionSpec + "\nwant: '" + annotationVal + "'\ngot: '" + val + "'")
 		t.Fail()
 	}
@@ -53,7 +53,7 @@ func Test_makeAnnotations_WithKeyAndValue(t *testing.T) {
 		t.Errorf("wanted annotation " + "prometheus.io.scrape" + " to be added")
 		t.Fail()
 	}
-	if val, _ := annotations["prometheus.io.scrape"]; val != "false" {
+	if val := annotations["prometheus.io.scrape"]; val != "false" {
 		t.Errorf("wanted annotation " + "prometheus.io.scrape" + ` to equal "false"`)
 		t.Fail()
 	}
@@ -63,7 +63,7 @@ func Test_makeAnnotations_WithKeyAndValue(t *testing.T) {
 		t.Fail()
 	}
 
-	if val, _ := annotations[annotationFunctionSpec]; val != annotationVal {
+	if val := annotations[annotationFunctionSpec]; val != annotationVal {
 		t.Errorf("Annotation " + annotationFunctionSpec + "\nwant: '" + annotationVal + "'\ngot: '" + val + "'")
 		t.Fail()
 	}
