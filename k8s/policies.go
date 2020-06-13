@@ -27,7 +27,7 @@ type PolicyClient interface {
 type Policy struct {
 	// If specified, the function's pod tolerations.
 	//
-	// copied to the Pod Tolerations
+	// merged into the Pod Tolerations
 	//
 	// +optional
 	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
@@ -39,10 +39,21 @@ type Policy struct {
 	// More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md
 	// This is a beta feature as of Kubernetes v1.14.
 	//
-	// copied to the Pod RunTimeClass
+	// copied to the Pod RunTimeClass, this will replace any existing value or previously
+	// applied Policy.
 	//
 	// +optional
 	RuntimeClassName *string `json:"runtimeClassName,omitempty"`
+
+	// If specified, the pod's scheduling constraints
+	//
+	// copied to the Pod Affinity, this will replace any existing value or previously
+	// applied Policy. We use a replacement strategy because it is not clear that merging
+	// affinities will actually produce a meaning Affinity definition, it would likely result in
+	// an impossible to satisfy constraint
+	//
+	// +optional
+	Affinity *corev1.Affinity
 }
 
 // Apply adds or mutates the configuration of the Deployment with the values defined
@@ -55,6 +66,13 @@ func (p Policy) Apply(deployment *appsv1.Deployment) *appsv1.Deployment {
 
 	if p.RuntimeClassName != nil {
 		deployment.Spec.Template.Spec.RuntimeClassName = p.RuntimeClassName
+	}
+
+	if p.Affinity != nil {
+		// use a replacement strategy because it is not clear that merging affinities will
+		// actually produce a meaning Affinity definition, it would likely result in
+		// an impossible to satisfy constraint
+		deployment.Spec.Template.Spec.Affinity = p.Affinity
 	}
 
 	return deployment
@@ -80,6 +98,10 @@ func (p Policy) Remove(deployment *appsv1.Deployment) *appsv1.Deployment {
 		if equalStrings(deployment.Spec.Template.Spec.RuntimeClassName, p.RuntimeClassName) {
 			deployment.Spec.Template.Spec.RuntimeClassName = nil
 		}
+	}
+
+	if p.Affinity != nil && reflect.DeepEqual(p.Affinity, deployment.Spec.Template.Spec.Affinity) {
+		deployment.Spec.Template.Spec.Affinity = nil
 	}
 
 	return deployment

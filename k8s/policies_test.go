@@ -268,6 +268,142 @@ func Test_TolerationsPolicy_Remove(t *testing.T) {
 	}
 }
 
+func Test_AffinityPolicy_Apply(t *testing.T) {
+	expectedAffinity := corev1.Affinity{
+		NodeAffinity: &corev1.NodeAffinity{
+			RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
+				NodeSelectorTerms: []corev1.NodeSelectorTerm{
+					{
+						MatchFields: []corev1.NodeSelectorRequirement{
+							{
+								Key:      "gpu",
+								Operator: apiv1.NodeSelectorOpExists,
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	p := Policy{Affinity: &expectedAffinity}
+
+	basicDeployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
+					},
+				},
+			},
+		},
+	}
+
+	basicDeployment = p.Apply(basicDeployment)
+	result := basicDeployment.Spec.Template.Spec.Affinity
+	if !reflect.DeepEqual(&expectedAffinity, result) {
+		t.Fatalf("expected %+v\n got %+v", &expectedAffinity, result)
+	}
+}
+
+func Test_AffinityPolicy_Remove(t *testing.T) {
+	t.Run("removes matching affinity definition", func(t *testing.T) {
+		affinity := corev1.Affinity{
+			NodeAffinity: &corev1.NodeAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
+					NodeSelectorTerms: []corev1.NodeSelectorTerm{
+						{
+							MatchFields: []corev1.NodeSelectorRequirement{
+								{
+									Key:      "gpu",
+									Operator: apiv1.NodeSelectorOpExists,
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+		p := Policy{Affinity: &affinity}
+
+		basicDeployment := &appsv1.Deployment{
+			Spec: appsv1.DeploymentSpec{
+				Template: apiv1.PodTemplateSpec{
+					Spec: apiv1.PodSpec{
+						Affinity: &affinity,
+						Containers: []apiv1.Container{
+							{Name: "testfunc", Image: "alpine:latest"},
+						},
+					},
+				},
+			},
+		}
+
+		basicDeployment = p.Remove(basicDeployment)
+		result := basicDeployment.Spec.Template.Spec.Affinity
+		if result != nil {
+			t.Fatalf("expected nil\n got %+v", result)
+		}
+	})
+
+	t.Run("does not remove non-matching affinity definition", func(t *testing.T) {
+		policyAffinity := corev1.Affinity{
+			NodeAffinity: &corev1.NodeAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
+					NodeSelectorTerms: []corev1.NodeSelectorTerm{
+						{
+							MatchFields: []corev1.NodeSelectorRequirement{
+								{
+									Key:      "gpu",
+									Operator: apiv1.NodeSelectorOpExists,
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+		p := Policy{Affinity: &policyAffinity}
+
+		expectedAffinity := corev1.Affinity{
+			NodeAffinity: &corev1.NodeAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
+					NodeSelectorTerms: []corev1.NodeSelectorTerm{
+						{
+							MatchFields: []corev1.NodeSelectorRequirement{
+								{
+									Key:      "bigcpu",
+									Operator: apiv1.NodeSelectorOpExists,
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+		basicDeployment := &appsv1.Deployment{
+			Spec: appsv1.DeploymentSpec{
+				Template: apiv1.PodTemplateSpec{
+					Spec: apiv1.PodSpec{
+						Affinity: &expectedAffinity,
+						Containers: []apiv1.Container{
+							{Name: "testfunc", Image: "alpine:latest"},
+						},
+					},
+				},
+			},
+		}
+
+		basicDeployment = p.Remove(basicDeployment)
+		result := basicDeployment.Spec.Template.Spec.Affinity
+
+		// the GPU affinity policy _should not_ remove the bigcpu affinity
+		if !reflect.DeepEqual(&expectedAffinity, result) {
+			t.Fatalf("expected %+v\n got %+v", &expectedAffinity, result)
+		}
+	})
+}
+
 func Test_ConfigMapPolicyParsing(t *testing.T) {
 	allowSpotConfig := corev1.ConfigMap{}
 	allowSpotConfig.Name = "allowSpot"
