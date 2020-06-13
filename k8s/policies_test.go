@@ -153,6 +153,83 @@ func Test_TolerationsPolicy_Apply(t *testing.T) {
 	}
 }
 
+func Test_RunTimeClassPolicy_Apply(t *testing.T) {
+	expectedClass := "fastRunTime"
+	p := Policy{RuntimeClassName: &expectedClass}
+
+	basicDeployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
+					},
+				},
+			},
+		},
+	}
+
+	basicDeployment = p.Apply(basicDeployment)
+	result := basicDeployment.Spec.Template.Spec.RuntimeClassName
+	if result == nil {
+		t.Fatalf("expected %s, got nil", expectedClass)
+	}
+	if expectedClass != *result {
+		t.Fatalf("expected %s, got %v", expectedClass, *result)
+	}
+}
+
+func Test_RunTimeClaasPolicy_Remove(t *testing.T) {
+	t.Run("remove matching runtime class ", func(t *testing.T) {
+		expectedClass := "fastRunTime"
+		p := Policy{RuntimeClassName: &expectedClass}
+
+		basicDeployment := &appsv1.Deployment{
+			Spec: appsv1.DeploymentSpec{
+				Template: apiv1.PodTemplateSpec{
+					Spec: apiv1.PodSpec{
+						RuntimeClassName: &expectedClass,
+						Containers: []apiv1.Container{
+							{Name: "testfunc", Image: "alpine:latest"},
+						},
+					},
+				},
+			},
+		}
+
+		basicDeployment = p.Remove(basicDeployment)
+		result := basicDeployment.Spec.Template.Spec.RuntimeClassName
+		if result != nil {
+			t.Fatalf("expected nil, got %s", *result)
+		}
+	})
+
+	t.Run("leaves runtime class that does not match", func(t *testing.T) {
+		expectedClass := "fastRunTime"
+		policyClass := "slowRunTime"
+		p := Policy{RuntimeClassName: &policyClass}
+
+		basicDeployment := &appsv1.Deployment{
+			Spec: appsv1.DeploymentSpec{
+				Template: apiv1.PodTemplateSpec{
+					Spec: apiv1.PodSpec{
+						RuntimeClassName: &expectedClass,
+						Containers: []apiv1.Container{
+							{Name: "testfunc", Image: "alpine:latest"},
+						},
+					},
+				},
+			},
+		}
+
+		basicDeployment = p.Remove(basicDeployment)
+		result := basicDeployment.Spec.Template.Spec.RuntimeClassName
+		if !equalStrings(result, &expectedClass) {
+			t.Fatalf("expected %s, got %v", expectedClass, result)
+		}
+	})
+}
+
 func Test_TolerationsPolicy_Remove(t *testing.T) {
 	tolerations := []corev1.Toleration{
 		{
