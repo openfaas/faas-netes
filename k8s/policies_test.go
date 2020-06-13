@@ -154,14 +154,20 @@ func Test_TolerationsPolicy_Apply(t *testing.T) {
 }
 
 func Test_TolerationsPolicy_Remove(t *testing.T) {
-	expectedTolerations := []corev1.Toleration{
+	tolerations := []corev1.Toleration{
 		{
 			Key:      "foo",
 			Value:    "fooValue",
 			Operator: apiv1.TolerationOpEqual,
 		},
 	}
-	p := Policy{Tolerations: expectedTolerations}
+	nonPolicyToleration := corev1.Toleration{
+		Key:      "second-key",
+		Value:    "anotherValue",
+		Operator: apiv1.TolerationOpEqual,
+	}
+
+	p := Policy{Tolerations: tolerations}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -170,15 +176,18 @@ func Test_TolerationsPolicy_Remove(t *testing.T) {
 					Containers: []apiv1.Container{
 						{Name: "testfunc", Image: "alpine:latest"},
 					},
-					Tolerations: expectedTolerations,
+					Tolerations: append(tolerations, nonPolicyToleration),
 				},
 			},
 		},
 	}
 
 	basicDeployment = p.Remove(basicDeployment)
-	if basicDeployment.Spec.Template.Spec.Tolerations != nil {
-		t.Fatalf("expected nil, got %v", basicDeployment.Spec.Template.Spec.Tolerations)
+
+	got := basicDeployment.Spec.Template.Spec.Tolerations
+	expected := []corev1.Toleration{nonPolicyToleration}
+	if !reflect.DeepEqual(got, expected) {
+		t.Fatalf("expected %v, got %v", expected, got)
 	}
 }
 

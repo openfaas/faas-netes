@@ -121,6 +121,9 @@ func updateDeploymentSpec(
 		// deployment.Labels = labels
 		deployment.Spec.Template.ObjectMeta.Labels = labels
 
+		// store the current annotations so that we can diff the annotations
+		// and determine which policies need to be removed
+		currentAnnotations := deployment.Annotations
 		deployment.Annotations = annotations
 		deployment.Spec.Template.Annotations = annotations
 		deployment.Spec.Template.ObjectMeta.Annotations = annotations
@@ -163,14 +166,12 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 
-		var annotations map[string]string
-		if request.Annotations != nil {
-			annotations = *request.Annotations
-		}
-
-		// if a policy is removed ... how do we remove the consequences?
 		policies := k8s.NewConfigMapPolicyClient(factory.Client)
-		toRemove := k8s.PoliciesToRemove(annotations, deployment.Annotations)
+
+		// compare the annotations from args to the cache copy of the deployment annotations
+		// at this point we have already updated the annotations to the new value, if we
+		// compare to that it will produce an empty list
+		toRemove := k8s.PoliciesToRemove(annotations, currentAnnotations)
 		policyList, err := policies.Get(functionNamespace, toRemove...)
 		if err != nil {
 			return err, http.StatusBadRequest

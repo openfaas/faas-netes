@@ -17,12 +17,12 @@ import (
 const PolicyAnnotationKey = "com.openfaas.policies"
 
 // PolicyClient defines the interface for CRUD operations on policies
-// and applying faaas-netes policies to function Deployments.
+// and applying faas-netes policies to function Deployments.
 type PolicyClient interface {
 	Get(namespace string, names ...string) ([]Policy, error)
 }
 
-// Policy defined kubernetest specific api extensions that can be predefined and applied
+// Policy is and openfaas api extensions that can be predefined and applied
 // to functions by annotating them with `com.openfaas/policy: name1,name2`
 type Policy struct {
 	// If specified, the function's pod tolerations.
@@ -35,16 +35,27 @@ type Policy struct {
 // override preceding Policies with overlapping configurations.
 func (p Policy) Apply(deployment *appsv1.Deployment) *appsv1.Deployment {
 	if len(p.Tolerations) > 0 {
-		deployment.Spec.Template.Spec.Tolerations = p.Tolerations
+		deployment.Spec.Template.Spec.Tolerations = append(deployment.Spec.Template.Spec.Tolerations, p.Tolerations...)
 	}
 	return deployment
 }
 
 // Remove is the inverse of Apply, removing the mutations that the Policy would have applied
 func (p Policy) Remove(deployment *appsv1.Deployment) *appsv1.Deployment {
-	if reflect.DeepEqual(deployment.Spec.Template.Spec.Tolerations, p.Tolerations) {
-		deployment.Spec.Template.Spec.Tolerations = nil
+
+	for _, policyToleration := range p.Tolerations {
+		// filter the existing tolerations and then update the deployment
+		// filter without allocation implementation from
+		// https://github.com/golang/go/wiki/SliceTricks#filtering-without-allocating
+		newTolerations := deployment.Spec.Template.Spec.Tolerations[:0]
+		for _, toleration := range deployment.Spec.Template.Spec.Tolerations {
+			if !reflect.DeepEqual(policyToleration, toleration) {
+				newTolerations = append(newTolerations, toleration)
+			}
+		}
+		deployment.Spec.Template.Spec.Tolerations = newTolerations
 	}
+
 	return deployment
 }
 
