@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"github.com/goccy/go-yaml"
 
 	typedCorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 
@@ -54,6 +54,15 @@ type Policy struct {
 	//
 	// +optional
 	Affinity *corev1.Affinity
+
+	// SecurityContext holds pod-level security attributes and common container settings.
+	// Optional: Defaults to empty.  See type description for default values of each field.
+	//
+	// each non-nil value will be merged into the function's PodSecurityContext, the value will
+	// replace any existing value or previously applied Policy
+	//
+	// +optional
+	PodSecurityContext *corev1.PodSecurityContext `json:"podSecurityContext,omitempty"`
 }
 
 // Apply adds or mutates the configuration of the Deployment with the values defined
@@ -73,6 +82,14 @@ func (p Policy) Apply(deployment *appsv1.Deployment) *appsv1.Deployment {
 		// actually produce a meaning Affinity definition, it would likely result in
 		// an impossible to satisfy constraint
 		deployment.Spec.Template.Spec.Affinity = p.Affinity
+	}
+
+	if p.PodSecurityContext != nil {
+		if deployment.Spec.Template.Spec.SecurityContext == nil {
+			deployment.Spec.Template.Spec.SecurityContext = &corev1.PodSecurityContext{}
+		}
+
+		p.PodSecurityContext.DeepCopyInto(deployment.Spec.Template.Spec.SecurityContext)
 	}
 
 	return deployment
@@ -102,6 +119,35 @@ func (p Policy) Remove(deployment *appsv1.Deployment) *appsv1.Deployment {
 
 	if p.Affinity != nil && reflect.DeepEqual(p.Affinity, deployment.Spec.Template.Spec.Affinity) {
 		deployment.Spec.Template.Spec.Affinity = nil
+	}
+
+	if p.PodSecurityContext != nil {
+		sc := deployment.Spec.Template.Spec.SecurityContext
+
+		if reflect.DeepEqual(p.PodSecurityContext.SELinuxOptions, sc.SELinuxOptions) {
+			deployment.Spec.Template.Spec.SecurityContext.SELinuxOptions = nil
+		}
+		if reflect.DeepEqual(p.PodSecurityContext.SELinuxOptions, sc.WindowsOptions) {
+			deployment.Spec.Template.Spec.SecurityContext.WindowsOptions = nil
+		}
+		if p.PodSecurityContext.RunAsUser != nil {
+			deployment.Spec.Template.Spec.SecurityContext.RunAsUser = nil
+		}
+		if p.PodSecurityContext.RunAsGroup != nil {
+			deployment.Spec.Template.Spec.SecurityContext.RunAsGroup = nil
+		}
+		if p.PodSecurityContext.RunAsNonRoot != nil {
+			deployment.Spec.Template.Spec.SecurityContext.RunAsNonRoot = nil
+		}
+		if p.PodSecurityContext.SupplementalGroups != nil {
+			deployment.Spec.Template.Spec.SecurityContext.SupplementalGroups = nil
+		}
+		if p.PodSecurityContext.FSGroup != nil {
+			deployment.Spec.Template.Spec.SecurityContext.FSGroup = nil
+		}
+		if p.PodSecurityContext.Sysctls != nil {
+			deployment.Spec.Template.Spec.SecurityContext.Sysctls = nil
+		}
 	}
 
 	return deployment
