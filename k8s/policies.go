@@ -26,8 +26,23 @@ type PolicyClient interface {
 // to functions by annotating them with `com.openfaas/policy: name1,name2`
 type Policy struct {
 	// If specified, the function's pod tolerations.
+	//
+	// copied to the Pod Tolerations
+	//
 	// +optional
 	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
+
+	// RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used
+	// to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run.
+	// If unset or empty, the "legacy" RuntimeClass will be used, which is an implicit class with an
+	// empty definition that uses the default runtime handler.
+	// More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md
+	// This is a beta feature as of Kubernetes v1.14.
+	//
+	// copied to the Pod RunTimeClass
+	//
+	// +optional
+	RuntimeClassName *string `json:"runtimeClassName,omitempty"`
 }
 
 // Apply adds or mutates the configuration of the Deployment with the values defined
@@ -37,6 +52,11 @@ func (p Policy) Apply(deployment *appsv1.Deployment) *appsv1.Deployment {
 	if len(p.Tolerations) > 0 {
 		deployment.Spec.Template.Spec.Tolerations = append(deployment.Spec.Template.Spec.Tolerations, p.Tolerations...)
 	}
+
+	if p.RuntimeClassName != nil {
+		deployment.Spec.Template.Spec.RuntimeClassName = p.RuntimeClassName
+	}
+
 	return deployment
 }
 
@@ -56,7 +76,30 @@ func (p Policy) Remove(deployment *appsv1.Deployment) *appsv1.Deployment {
 		deployment.Spec.Template.Spec.Tolerations = newTolerations
 	}
 
+	if p.RuntimeClassName != nil {
+		if equalStrings(deployment.Spec.Template.Spec.RuntimeClassName, p.RuntimeClassName) {
+			deployment.Spec.Template.Spec.RuntimeClassName = nil
+		}
+	}
+
 	return deployment
+}
+
+func equalStrings(a, b *string) bool {
+	if a == nil && b == nil {
+		return true
+	}
+
+	if a != nil && b == nil {
+		return false
+	}
+
+	if a == nil && b != nil {
+		return false
+	}
+
+	// now we know both values are non-nil
+	return *a == *b
 }
 
 type policyClient struct {
