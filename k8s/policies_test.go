@@ -11,6 +11,21 @@ import (
 )
 
 const testPolicy = `
+runtimeClassName: "gVisor"
+podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/e2e-az-name
+            operator: In
+            values:
+            - e2e-az1
+            - e2e-az2
 tolerations:
 - key: "key1"
   operator: "Equal"
@@ -404,13 +419,73 @@ func Test_AffinityPolicy_Remove(t *testing.T) {
 	})
 }
 
-func Test_ConfigMapPolicyParsing(t *testing.T) {
-	allowSpotConfig := corev1.ConfigMap{}
-	allowSpotConfig.Name = "allowSpot"
-	allowSpotConfig.Namespace = "functions"
-	allowSpotConfig.Data = map[string]string{"policy": testPolicy}
+func Test_PodSecurityPolicy_Apply(t *testing.T) {
+	expectedPolicy := apiv1.PodSecurityContext{
+		RunAsUser:  intp(1001),
+		RunAsGroup: intp(2002),
+	}
+	p := Policy{PodSecurityContext: &expectedPolicy}
 
+	basicDeployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
+					},
+				},
+			},
+		},
+	}
+
+	basicDeployment = p.Apply(basicDeployment)
+	result := basicDeployment.Spec.Template.Spec.SecurityContext
+	if !reflect.DeepEqual(&expectedPolicy, result) {
+		t.Fatalf("expected %+v\n got %+v", &expectedPolicy, result)
+	}
+}
+
+func Test_PodSecurityPolicy_Remove(t *testing.T) {
+	p := Policy{PodSecurityContext: &apiv1.PodSecurityContext{
+		RunAsUser:  intp(1001),
+		RunAsGroup: intp(2002),
+	}}
+
+	runAsNonRoot := true
+	expectedPolicy := &apiv1.PodSecurityContext{RunAsNonRoot: &runAsNonRoot}
+	basicDeployment := &appsv1.Deployment{
+		Spec: appsv1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					SecurityContext: &apiv1.PodSecurityContext{
+						RunAsUser:    intp(1001),
+						RunAsGroup:   intp(2002),
+						RunAsNonRoot: &runAsNonRoot,
+					},
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
+					},
+				},
+			},
+		},
+	}
+
+	basicDeployment = p.Remove(basicDeployment)
+	result := basicDeployment.Spec.Template.Spec.SecurityContext
+	if !reflect.DeepEqual(expectedPolicy, result) {
+		t.Fatalf("expected %+v\n got %+v", &expectedPolicy, result)
+	}
+}
+
+func Test_ConfigMapPolicyParsing(t *testing.T) {
+	validConfig := corev1.ConfigMap{}
+	validConfig.Name = "allowSpot"
+	validConfig.Namespace = "functions"
+	validConfig.Data = map[string]string{"policy": testPolicy}
+
+	runtime := "gVisor"
 	allowSpot := Policy{
+		RuntimeClassName: &runtime,
 		Tolerations: []apiv1.Toleration{
 			{
 				Key:               "key1",
@@ -418,6 +493,28 @@ func Test_ConfigMapPolicyParsing(t *testing.T) {
 				Operator:          apiv1.TolerationOpEqual,
 				Effect:            apiv1.TaintEffectNoExecute,
 				TolerationSeconds: nil,
+			},
+		},
+		PodSecurityContext: &apiv1.PodSecurityContext{
+			RunAsUser:  intp(1000),
+			RunAsGroup: intp(3000),
+			FSGroup:    intp(2000),
+		},
+		Affinity: &apiv1.Affinity{
+			NodeAffinity: &apiv1.NodeAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution: &apiv1.NodeSelector{
+					NodeSelectorTerms: []apiv1.NodeSelectorTerm{
+						{
+							MatchExpressions: []apiv1.NodeSelectorRequirement{
+								{
+									Key:      "kubernetes.io/e2e-az-name",
+									Operator: apiv1.NodeSelectorOpIn,
+									Values:   []string{"e2e-az1", "e2e-az2"},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -445,7 +542,7 @@ func Test_ConfigMapPolicyParsing(t *testing.T) {
 			name:       "yaml policy parsed correctly",
 			namespace:  "functions",
 			policyName: "allowSpot",
-			configmap:  allowSpotConfig,
+			configmap:  validConfig,
 			expected:   []Policy{allowSpot},
 		},
 		{
@@ -478,9 +575,13 @@ func Test_ConfigMapPolicyParsing(t *testing.T) {
 			}
 
 			if !reflect.DeepEqual(tc.expected, got) {
-				t.Fatalf("expected %#v, got %#v", tc.expected, got)
+				t.Fatalf("\nwant %#v\n got %#v", tc.expected, got)
 			}
 
 		})
 	}
+}
+
+func intp(v int64) *int64 {
+	return &v
 }
