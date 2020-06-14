@@ -4,14 +4,12 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/goccy/go-yaml"
-
-	typedCorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
-
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/kubernetes"
+	typedCorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 )
 
 const PolicyAnnotationKey = "com.openfaas.policies"
@@ -187,8 +185,9 @@ func (c policyClient) Get(namespace string, names ...string) ([]Policy, error) {
 			return nil, err
 		}
 		policy := Policy{}
-		payload := []byte(cm.Data["policy"])
-		err = yaml.Unmarshal(payload, &policy)
+
+		data := strings.NewReader(cm.Data["policy"])
+		err = yaml.NewYAMLOrJSONDecoder(data, 100).Decode(&policy)
 		if err != nil {
 			return nil, err
 		}

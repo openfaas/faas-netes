@@ -550,7 +550,7 @@ func Test_ConfigMapPolicyParsing(t *testing.T) {
 			namespace:  "functions",
 			policyName: "allowSpot",
 			configmap:  invalidConfig,
-			err:        `yaml: line 7: could not find expected ':'`,
+			err:        `error converting YAML to JSON: yaml: line 7: could not find expected ':'`,
 		},
 	}
 
