@@ -2,6 +2,7 @@ package server
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -42,7 +43,7 @@ func Test_makeApplyHandler(t *testing.T) {
 		t.Errorf("expected status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 	}
 
-	newFunction, err := kube.OpenfaasV1().Functions(namespace).Get(fn.Service, metav1.GetOptions{})
+	newFunction, err := kube.OpenfaasV1().Functions(namespace).Get(context.TODO(), fn.Service, metav1.GetOptions{})
 	if err != nil {
 		t.Fatalf("error validating function: %v", err)
 	}
@@ -88,7 +89,7 @@ func Test_makeApplyHandler(t *testing.T) {
 		t.Errorf("expected status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 	}
 
-	updatedFunction, err := kube.OpenfaasV1().Functions(namespace).Get(fn.Service, metav1.GetOptions{})
+	updatedFunction, err := kube.OpenfaasV1().Functions(namespace).Get(context.TODO(), fn.Service, metav1.GetOptions{})
 	if err != nil {
 		t.Errorf("error validating function: %v", err)
 	}
