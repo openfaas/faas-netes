@@ -4,6 +4,7 @@
 package k8s
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strings"
@@ -65,7 +66,7 @@ func NewSecretsClient(kube kubernetes.Interface) SecretsClient {
 }
 
 func (c secretClient) List(namespace string) (names []string, err error) {
-	res, err := c.kube.Secrets(namespace).List(c.selector())
+	res, err := c.kube.Secrets(namespace).List(context.TODO(), c.selector())
 	if err != nil {
 		log.Printf("failed to list secrets in %s: %v\n", namespace, err)
 		return nil, err
@@ -99,7 +100,7 @@ func (c secretClient) Create(secret types.Secret) error {
 		},
 	}
 
-	_, err = c.kube.Secrets(secret.Namespace).Create(req)
+	_, err = c.kube.Secrets(secret.Namespace).Create(context.TODO(), req, metav1.CreateOptions{})
 	if err != nil {
 		log.Printf("failed to create secret %s.%s: %v\n", secret.Name, secret.Namespace, err)
 		return err
@@ -117,7 +118,7 @@ func (c secretClient) Replace(secret types.Secret) error {
 	}
 
 	kube := c.kube.Secrets(secret.Namespace)
-	found, err := kube.Get(secret.Name, metav1.GetOptions{})
+	found, err := kube.Get(context.TODO(), secret.Name, metav1.GetOptions{})
 	if err != nil {
 		log.Printf("can not retrieve secret for update %s.%s: %v\n", secret.Name, secret.Namespace, err)
 		return err
@@ -126,7 +127,7 @@ func (c secretClient) Replace(secret types.Secret) error {
 	found.StringData = map[string]string{
 		secret.Name: secret.Value,
 	}
-	_, err = kube.Update(found)
+	_, err = kube.Update(context.TODO(), found, metav1.UpdateOptions{})
 	if err != nil {
 		log.Printf("can not update secret %s.%s: %v\n", secret.Name, secret.Namespace, err)
 		return err
@@ -136,7 +137,7 @@ func (c secretClient) Replace(secret types.Secret) error {
 }
 
 func (c secretClient) Delete(namespace string, name string) error {
-	err := c.kube.Secrets(namespace).Delete(name, &metav1.DeleteOptions{})
+	err := c.kube.Secrets(namespace).Delete(context.TODO(), name, metav1.DeleteOptions{})
 	if err != nil {
 		log.Printf("can not delete %s.%s: %v\n", name, namespace, err)
 	}
@@ -149,7 +150,7 @@ func (c secretClient) GetSecrets(namespace string, secretNames []string) (map[st
 
 	secrets := map[string]*apiv1.Secret{}
 	for _, secretName := range secretNames {
-		secret, err := kube.Get(secretName, opts)
+		secret, err := kube.Get(context.TODO(), secretName, opts)
 		if err != nil {
 			return nil, err
 		}

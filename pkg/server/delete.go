@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -34,8 +35,8 @@ func makeDeleteHandler(namespace string, client clientset.Interface) http.Handle
 			return
 		}
 
-		opts := &metav1.DeleteOptions{}
-		err = client.OpenfaasV1().Functions(namespace).Delete(request.FunctionName, opts)
+		err = client.OpenfaasV1().Functions(namespace).
+			Delete(context.TODO(), request.FunctionName, metav1.DeleteOptions{})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))

@@ -9,3 +9,5 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 package v1
 
 type FunctionExpansion interface{}
+
+type PolicyExpansion interface{}

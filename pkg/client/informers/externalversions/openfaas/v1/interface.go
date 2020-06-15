@@ -16,6 +16,8 @@ import (
 type Interface interface {
 	// Functions returns a FunctionInformer.
 	Functions() FunctionInformer
+	// Policies returns a PolicyInformer.
+	Policies() PolicyInformer
 }
 
 type version struct {
@@ -32,4 +34,9 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 // Functions returns a FunctionInformer.
 func (v *version) Functions() FunctionInformer {
 	return &functionInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Policies returns a PolicyInformer.
+func (v *version) Policies() PolicyInformer {
+	return &policyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

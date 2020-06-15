@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -40,7 +41,7 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
 		if err != nil {
 			t.Errorf("error validting secret: %s", err)
 		}
@@ -82,7 +83,7 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
 		if err != nil {
 			t.Errorf("error validting secret: %s", err)
 		}
@@ -160,7 +161,7 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
 		if err == nil {
 			t.Errorf("want not found error, got secret payload '%s'", actualSecret)
 		}
@@ -210,7 +211,7 @@ func Test_NamespaceResolver(t *testing.T) {
 	allowedAnnotation := map[string]string{"openfaas": "true"}
 	allowedNamespace := "allowed-ns"
 	ns := &v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: allowedNamespace, Annotations: allowedAnnotation}}
-	kube.CoreV1().Namespaces().Create(ns)
+	kube.CoreV1().Namespaces().Create(context.TODO(), ns, metav1.CreateOptions{})
 
 	t.Run("no custom namespace", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "http://example.com/foo", nil)

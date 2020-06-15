@@ -57,6 +57,10 @@ type FunctionList struct {
 	Items []Function `json:"items"`
 }
 
+// +genclient
+// +genclient:noStatus
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 // Policy and PolicySpec are used to customise the Pod template for
 // functions
 type Policy struct {
@@ -107,4 +111,14 @@ type PolicySpec struct {
 	//
 	// +optional
 	PodSecurityContext *corev1.PodSecurityContext `json:"podSecurityContext,omitempty"`
+}
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// PolicyList is a list of Policies
+type PolicyList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata"`
+
+	Items []Policy `json:"items"`
 }

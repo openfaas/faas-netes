@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -113,7 +114,7 @@ func getSecrets(namespace string, kube kubernetes.Interface) ([]faastypes.Secret
 	secrets := []faastypes.Secret{}
 	selector := fmt.Sprintf("%s=%s", secretLabel, secretLabelValue)
 
-	res, err := kube.CoreV1().Secrets(namespace).List(metav1.ListOptions{LabelSelector: selector})
+	res, err := kube.CoreV1().Secrets(namespace).List(context.TODO(), metav1.ListOptions{LabelSelector: selector})
 
 	if err != nil {
 		return secrets, err
@@ -130,7 +131,7 @@ func getSecrets(namespace string, kube kubernetes.Interface) ([]faastypes.Secret
 }
 
 func createSecret(namespace string, kube kubernetes.Interface, secret *corev1.Secret) error {
-	_, err := kube.CoreV1().Secrets(namespace).Create(secret)
+	_, err := kube.CoreV1().Secrets(namespace).Create(context.TODO(), secret, metav1.CreateOptions{})
 	if err != nil {
 		return err
 	}
@@ -138,19 +139,19 @@ func createSecret(namespace string, kube kubernetes.Interface, secret *corev1.Se
 }
 
 func updateSecret(namespace string, kube kubernetes.Interface, secret *corev1.Secret) error {
-	s, err := kube.CoreV1().Secrets(namespace).Get(secret.GetName(), metav1.GetOptions{})
+	s, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), secret.GetName(), metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
 	s.StringData = secret.StringData
-	if _, err = kube.CoreV1().Secrets(namespace).Update(s); err != nil {
+	if _, err = kube.CoreV1().Secrets(namespace).Update(context.TODO(), s, metav1.UpdateOptions{}); err != nil {
 		return err
 	}
 	return nil
 }
 
 func deleteSecret(namespace string, kube kubernetes.Interface, secret *corev1.Secret) error {
-	if err := kube.CoreV1().Secrets(namespace).Delete(secret.GetName(), &metav1.DeleteOptions{}); err != nil {
+	if err := kube.CoreV1().Secrets(namespace).Delete(context.TODO(), secret.GetName(), metav1.DeleteOptions{}); err != nil {
 		return err
 	}
 	return nil

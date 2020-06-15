@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -34,7 +35,7 @@ func Test_makeSecretHandler(t *testing.T) {
 			t.Errorf("expected status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
 		if err != nil {
 			t.Errorf("error validating secret: %s", err)
 		}
@@ -67,7 +68,7 @@ func Test_makeSecretHandler(t *testing.T) {
 			t.Errorf("expected status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
 		if err != nil {
 			t.Errorf("error validting secret: %s", err)
 		}
@@ -129,7 +130,7 @@ func Test_makeSecretHandler(t *testing.T) {
 			t.Errorf("expected status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get("testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
 		if err == nil {
 			t.Errorf("expected not found error, got secret payload '%s'", actualSecret)
 		}

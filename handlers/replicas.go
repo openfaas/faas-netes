@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -58,7 +59,7 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 			},
 		}
 
-		deployment, err := clientset.AppsV1().Deployments(lookupNamespace).Get(functionName, options)
+		deployment, err := clientset.AppsV1().Deployments(lookupNamespace).Get(context.TODO(), functionName, options)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -74,7 +75,7 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 
 		deployment.Spec.Replicas = &replicas
 
-		_, err = clientset.AppsV1().Deployments(lookupNamespace).Update(deployment)
+		_, err = clientset.AppsV1().Deployments(lookupNamespace).Update(context.TODO(), deployment, metav1.UpdateOptions{})
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

@@ -9,6 +9,8 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 package fake
 
 import (
+	"context"
+
 	openfaasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
@@ -29,7 +31,7 @@ var policiesResource = schema.GroupVersionResource{Group: "openfaas.com", Versio
 var policiesKind = schema.GroupVersionKind{Group: "openfaas.com", Version: "v1", Kind: "Policy"}
 
 // Get takes name of the policy, and returns the corresponding policy object, and an error if there is any.
-func (c *FakePolicies) Get(name string, options v1.GetOptions) (result *openfaasv1.Policy, err error) {
+func (c *FakePolicies) Get(ctx context.Context, name string, options v1.GetOptions) (result *openfaasv1.Policy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(policiesResource, c.ns, name), &openfaasv1.Policy{})
 
@@ -40,7 +42,7 @@ func (c *FakePolicies) Get(name string, options v1.GetOptions) (result *openfaas
 }
 
 // List takes label and field selectors, and returns the list of Policies that match those selectors.
-func (c *FakePolicies) List(opts v1.ListOptions) (result *openfaasv1.PolicyList, err error) {
+func (c *FakePolicies) List(ctx context.Context, opts v1.ListOptions) (result *openfaasv1.PolicyList, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewListAction(policiesResource, policiesKind, c.ns, opts), &openfaasv1.PolicyList{})
 
@@ -62,14 +64,14 @@ func (c *FakePolicies) List(opts v1.ListOptions) (result *openfaasv1.PolicyList,
 }
 
 // Watch returns a watch.Interface that watches the requested policies.
-func (c *FakePolicies) Watch(opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakePolicies) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(policiesResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a policy and creates it.  Returns the server's representation of the policy, and an error, if there is any.
-func (c *FakePolicies) Create(policy *openfaasv1.Policy) (result *openfaasv1.Policy, err error) {
+func (c *FakePolicies) Create(ctx context.Context, policy *openfaasv1.Policy, opts v1.CreateOptions) (result *openfaasv1.Policy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewCreateAction(policiesResource, c.ns, policy), &openfaasv1.Policy{})
 
@@ -80,7 +82,7 @@ func (c *FakePolicies) Create(policy *openfaasv1.Policy) (result *openfaasv1.Pol
 }
 
 // Update takes the representation of a policy and updates it. Returns the server's representation of the policy, and an error, if there is any.
-func (c *FakePolicies) Update(policy *openfaasv1.Policy) (result *openfaasv1.Policy, err error) {
+func (c *FakePolicies) Update(ctx context.Context, policy *openfaasv1.Policy, opts v1.UpdateOptions) (result *openfaasv1.Policy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateAction(policiesResource, c.ns, policy), &openfaasv1.Policy{})
 
@@ -91,7 +93,7 @@ func (c *FakePolicies) Update(policy *openfaasv1.Policy) (result *openfaasv1.Pol
 }
 
 // Delete takes name of the policy and deletes it. Returns an error if one occurs.
-func (c *FakePolicies) Delete(name string, options *v1.DeleteOptions) error {
+func (c *FakePolicies) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(policiesResource, c.ns, name), &openfaasv1.Policy{})
 
@@ -99,15 +101,15 @@ func (c *FakePolicies) Delete(name string, options *v1.DeleteOptions) error {
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakePolicies) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
-	action := testing.NewDeleteCollectionAction(policiesResource, c.ns, listOptions)
+func (c *FakePolicies) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+	action := testing.NewDeleteCollectionAction(policiesResource, c.ns, listOpts)
 
 	_, err := c.Fake.Invokes(action, &openfaasv1.PolicyList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched policy.
-func (c *FakePolicies) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *openfaasv1.Policy, err error) {
+func (c *FakePolicies) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *openfaasv1.Policy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(policiesResource, c.ns, name, pt, data, subresources...), &openfaasv1.Policy{})
 
