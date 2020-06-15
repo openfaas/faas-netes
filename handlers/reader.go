@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -57,7 +58,7 @@ func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) (
 		LabelSelector: "faas_function",
 	}
 
-	res, err := clientset.AppsV1().Deployments(functionNamespace).List(listOpts)
+	res, err := clientset.AppsV1().Deployments(functionNamespace).List(context.TODO(), listOpts)
 
 	if err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func getService(functionNamespace string, functionName string, clientset *kubern
 
 	getOpts := metav1.GetOptions{}
 
-	item, err := clientset.AppsV1().Deployments(functionNamespace).Get(functionName, getOpts)
+	item, err := clientset.AppsV1().Deployments(functionNamespace).Get(context.TODO(), functionName, getOpts)
 
 	if err != nil {
 		if errors.IsNotFound(err) {

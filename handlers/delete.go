@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -54,7 +55,7 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 		// This makes sure we don't delete non-labelled deployments
 		deployment, findDeployErr := clientset.AppsV1().
 			Deployments(lookupNamespace).
-			Get(request.FunctionName, getOpts)
+			Get(context.TODO(), request.FunctionName, getOpts)
 
 		if findDeployErr != nil {
 			if errors.IsNotFound(findDeployErr) {
@@ -98,7 +99,7 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 	opts := &metav1.DeleteOptions{PropagationPolicy: &foregroundPolicy}
 
 	if deployErr := clientset.AppsV1().Deployments(functionNamespace).
-		Delete(request.FunctionName, opts); deployErr != nil {
+		Delete(context.TODO(), request.FunctionName, *opts); deployErr != nil {
 
 		if errors.IsNotFound(deployErr) {
 			w.WriteHeader(http.StatusNotFound)
@@ -111,7 +112,7 @@ func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, r
 
 	if svcErr := clientset.CoreV1().
 		Services(functionNamespace).
-		Delete(request.FunctionName, opts); svcErr != nil {
+		Delete(context.TODO(), request.FunctionName, *opts); svcErr != nil {
 
 		if errors.IsNotFound(svcErr) {
 			w.WriteHeader(http.StatusNotFound)

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -33,7 +34,7 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 		klog.Infof("Deployment request for: %s\n", req.Service)
 
 		opts := metav1.GetOptions{}
-		got, err := client.OpenfaasV1().Functions(namespace).Get(req.Service, opts)
+		got, err := client.OpenfaasV1().Functions(namespace).Get(context.TODO(), req.Service, opts)
 		miss := false
 		if err != nil {
 			if errors.IsNotFound(err) {
@@ -53,7 +54,8 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 
 			updated.Spec = toFunctionSpec(req)
 
-			if _, err = client.OpenfaasV1().Functions(namespace).Update(updated); err != nil {
+			if _, err = client.OpenfaasV1().Functions(namespace).
+				Update(context.TODO(), updated, metav1.UpdateOptions{}); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(fmt.Sprintf("Error updating function: %s", err.Error())))
 				return
@@ -68,7 +70,8 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 				Spec: toFunctionSpec(req),
 			}
 
-			if _, err = client.OpenfaasV1().Functions(namespace).Create(newFunc); err != nil {
+			if _, err = client.OpenfaasV1().Functions(namespace).
+				Create(context.TODO(), newFunc, metav1.CreateOptions{}); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(fmt.Sprintf("Error creating function: %s", err.Error())))
 				return

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -252,7 +253,9 @@ func (c *Controller) syncHandler(key string) error {
 
 		glog.Infof("Creating deployment for '%s'", function.Spec.Name)
 		deployment, err = c.kubeclientset.AppsV1().Deployments(function.Namespace).Create(
+			context.TODO(),
 			newDeployment(function, deployment, existingSecrets, c.factory),
+			metav1.CreateOptions{},
 		)
 		if err != nil {
 			return err
@@ -260,10 +263,10 @@ func (c *Controller) syncHandler(key string) error {
 	}
 
 	svcGetOptions := metav1.GetOptions{}
-	_, getSvcErr := c.kubeclientset.CoreV1().Services(function.Namespace).Get(deploymentName, svcGetOptions)
+	_, getSvcErr := c.kubeclientset.CoreV1().Services(function.Namespace).Get(context.TODO(), deploymentName, svcGetOptions)
 	if errors.IsNotFound(getSvcErr) {
 		glog.Infof("Creating ClusterIP service for '%s'", function.Spec.Name)
-		if _, err := c.kubeclientset.CoreV1().Services(function.Namespace).Create(newService(function)); err != nil {
+		if _, err := c.kubeclientset.CoreV1().Services(function.Namespace).Create(context.TODO(), newService(function), metav1.CreateOptions{}); err != nil {
 			// If an error occurs during Service Create, we'll requeue the item
 			if errors.IsAlreadyExists(err) {
 				err = nil
@@ -299,20 +302,22 @@ func (c *Controller) syncHandler(key string) error {
 		}
 
 		deployment, err = c.kubeclientset.AppsV1().Deployments(function.Namespace).Update(
+			context.TODO(),
 			newDeployment(function, deployment, existingSecrets, c.factory),
+			metav1.UpdateOptions{},
 		)
 
 		if err != nil {
 			glog.Errorf("Updating deployment for '%s' failed: %v", function.Spec.Name, err)
 		}
 
-		existingService, err := c.kubeclientset.CoreV1().Services(function.Namespace).Get(function.Spec.Name, metav1.GetOptions{})
+		existingService, err := c.kubeclientset.CoreV1().Services(function.Namespace).Get(context.TODO(), function.Spec.Name, metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
 
 		existingService.Annotations = makeAnnotations(function)
-		_, err = c.kubeclientset.CoreV1().Services(function.Namespace).Update(existingService)
+		_, err = c.kubeclientset.CoreV1().Services(function.Namespace).Update(context.TODO(), existingService, metav1.UpdateOptions{})
 		if err != nil {
 			glog.Errorf("Updating service for '%s' failed: %v", function.Spec.Name, err)
 		}
@@ -387,7 +392,7 @@ func (c *Controller) getSecrets(namespace string, secretNames []string) (map[str
 	secrets := map[string]*corev1.Secret{}
 
 	for _, secretName := range secretNames {
-		secret, err := c.kubeclientset.CoreV1().Secrets(namespace).Get(secretName, metav1.GetOptions{})
+		secret, err := c.kubeclientset.CoreV1().Secrets(namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return secrets, err
 		}

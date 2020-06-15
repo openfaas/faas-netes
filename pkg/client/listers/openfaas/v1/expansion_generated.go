@@ -15,3 +15,11 @@ type FunctionListerExpansion interface{}
 // FunctionNamespaceListerExpansion allows custom methods to be added to
 // FunctionNamespaceLister.
 type FunctionNamespaceListerExpansion interface{}
+
+// PolicyListerExpansion allows custom methods to be added to
+// PolicyLister.
+type PolicyListerExpansion interface{}
+
+// PolicyNamespaceListerExpansion allows custom methods to be added to
+// PolicyNamespaceLister.
+type PolicyNamespaceListerExpansion interface{}

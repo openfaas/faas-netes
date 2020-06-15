@@ -17,6 +17,7 @@ import (
 type OpenfaasV1Interface interface {
 	RESTClient() rest.Interface
 	FunctionsGetter
+	PoliciesGetter
 }
 
 // OpenfaasV1Client is used to interact with features provided by the openfaas.com group.
@@ -26,6 +27,10 @@ type OpenfaasV1Client struct {
 
 func (c *OpenfaasV1Client) Functions(namespace string) FunctionInterface {
 	return newFunctions(c, namespace)
+}
+
+func (c *OpenfaasV1Client) Policies(namespace string) PolicyInterface {
+	return newPolicies(c, namespace)
 }
 
 // NewForConfig creates a new OpenfaasV1Client for the given config.

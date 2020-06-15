@@ -6,6 +6,7 @@ package handlers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -74,7 +75,7 @@ func NewNamespaceResolver(defaultNamespace string, kube kubernetes.Interface) Na
 
 func list(defaultNamespace string, clientset kubernetes.Interface) []string {
 	listOptions := metav1.ListOptions{}
-	namespaces, err := clientset.CoreV1().Namespaces().List(listOptions)
+	namespaces, err := clientset.CoreV1().Namespaces().List(context.TODO(), listOptions)
 
 	set := []string{}
 
