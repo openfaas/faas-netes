@@ -1,6 +1,7 @@
 package v1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -54,4 +55,56 @@ type FunctionList struct {
 	metav1.ListMeta `json:"metadata"`
 
 	Items []Function `json:"items"`
+}
+
+// Policy and PolicySpec are used to customise the Pod template for
+// functions
+type Policy struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec PolicySpec `json:"spec"`
+}
+
+// PolicySpec is an openfaas api extensions that can be predefined and applied
+// to functions by annotating them with `com.openfaas/policy: name1,name2`
+type PolicySpec struct {
+	// If specified, the function's pod tolerations.
+	//
+	// merged into the Pod Tolerations
+	//
+	// +optional
+	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
+
+	// RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used
+	// to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run.
+	// If unset or empty, the "legacy" RuntimeClass will be used, which is an implicit class with an
+	// empty definition that uses the default runtime handler.
+	// More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md
+	// This is a beta feature as of Kubernetes v1.14.
+	//
+	// copied to the Pod RunTimeClass, this will replace any existing value or previously
+	// applied Policy.
+	//
+	// +optional
+	RuntimeClassName *string `json:"runtimeClassName,omitempty"`
+
+	// If specified, the pod's scheduling constraints
+	//
+	// copied to the Pod Affinity, this will replace any existing value or previously
+	// applied Policy. We use a replacement strategy because it is not clear that merging
+	// affinities will actually produce a meaning Affinity definition, it would likely result in
+	// an impossible to satisfy constraint
+	//
+	// +optional
+	Affinity *corev1.Affinity `json:"affinity,omitempty"`
+
+	// SecurityContext holds pod-level security attributes and common container settings.
+	// Optional: Defaults to empty.  See type description for default values of each field.
+	//
+	// each non-nil value will be merged into the function's PodSecurityContext, the value will
+	// replace any existing value or previously applied Policy
+	//
+	// +optional
+	PodSecurityContext *corev1.PodSecurityContext `json:"podSecurityContext,omitempty"`
 }
