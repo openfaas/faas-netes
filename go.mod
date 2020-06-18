@@ -9,12 +9,10 @@ require (
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2
 	github.com/imdario/mergo v0.3.7 // indirect
-	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/openfaas/faas v0.0.0-20191125105239-365f459b3f3a
 	github.com/openfaas/faas-provider v0.15.1
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.0.0
-	github.com/prometheus/client_model v0.2.0 // indirect
 	go.uber.org/goleak v1.0.0 // indirect
 	google.golang.org/appengine v1.6.2 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
@@ -23,4 +21,5 @@ require (
 	k8s.io/client-go v0.18.2
 	k8s.io/code-generator v0.18.2
 	k8s.io/klog v1.0.0
+	sigs.k8s.io/controller-tools v0.3.0 // indirect
 )

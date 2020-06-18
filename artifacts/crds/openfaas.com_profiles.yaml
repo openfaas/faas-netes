@@ -4,19 +4,19 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.3.0
   creationTimestamp: null
-  name: policies.openfaas.com
+  name: profiles.openfaas.com
 spec:
   group: openfaas.com
   names:
-    kind: Policy
-    listKind: PolicyList
-    plural: policies
-    singular: policy
+    kind: Profile
+    listKind: ProfileList
+    plural: profiles
+    singular: profile
   scope: Namespaced
   validation:
     openAPIV3Schema:
-      description: Policy and PolicySpec are used to customise the Pod template for
-        functions
+      description: Profile and ProfileSpec are used to customise the Pod template
+        for functions
       type: object
       required:
       - spec
@@ -34,15 +34,15 @@ spec:
         metadata:
           type: object
         spec:
-          description: 'PolicySpec is an openfaas api extensions that can be predefined
-            and applied to functions by annotating them with `com.openfaas/policy:
+          description: 'ProfileSpec is an openfaas api extensions that can be predefined
+            and applied to functions by annotating them with `com.openfaas/profile:
             name1,name2`'
           type: object
           properties:
             affinity:
               description: "If specified, the pod's scheduling constraints \n copied
                 to the Pod Affinity, this will replace any existing value or previously
-                applied Policy. We use a replacement strategy because it is not clear
+                applied Profile. We use a replacement strategy because it is not clear
                 that merging affinities will actually produce a meaning Affinity definition,
                 it would likely result in an impossible to satisfy constraint"
               type: object
@@ -620,7 +620,7 @@ spec:
                 common container settings. Optional: Defaults to empty.  See type
                 description for default values of each field. \n each non-nil value
                 will be merged into the function's PodSecurityContext, the value will
-                replace any existing value or previously applied Policy"
+                replace any existing value or previously applied Profile"
               type: object
               properties:
                 fsGroup:
@@ -749,7 +749,7 @@ spec:
                 More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md
                 This is a beta feature as of Kubernetes v1.14. \n copied to the Pod
                 RunTimeClass, this will replace any existing value or previously applied
-                Policy."
+                Profile."
               type: string
             tolerations:
               description: "If specified, the function's pod tolerations. \n merged
