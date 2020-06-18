@@ -16,8 +16,8 @@ import (
 type Interface interface {
 	// Functions returns a FunctionInformer.
 	Functions() FunctionInformer
-	// Policies returns a PolicyInformer.
-	Policies() PolicyInformer
+	// Profiles returns a ProfileInformer.
+	Profiles() ProfileInformer
 }
 
 type version struct {
@@ -36,7 +36,7 @@ func (v *version) Functions() FunctionInformer {
 	return &functionInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
-// Policies returns a PolicyInformer.
-func (v *version) Policies() PolicyInformer {
-	return &policyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+// Profiles returns a ProfileInformer.
+func (v *version) Profiles() ProfileInformer {
+	return &profileInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

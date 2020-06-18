@@ -61,18 +61,18 @@ type FunctionList struct {
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Policy and PolicySpec are used to customise the Pod template for
+// Profile and ProfileSpec are used to customise the Pod template for
 // functions
-type Policy struct {
+type Profile struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec PolicySpec `json:"spec"`
+	Spec ProfileSpec `json:"spec"`
 }
 
-// PolicySpec is an openfaas api extensions that can be predefined and applied
-// to functions by annotating them with `com.openfaas/policy: name1,name2`
-type PolicySpec struct {
+// ProfileSpec is an openfaas api extensions that can be predefined and applied
+// to functions by annotating them with `com.openfaas/profile: name1,name2`
+type ProfileSpec struct {
 	// If specified, the function's pod tolerations.
 	//
 	// merged into the Pod Tolerations
@@ -88,7 +88,7 @@ type PolicySpec struct {
 	// This is a beta feature as of Kubernetes v1.14.
 	//
 	// copied to the Pod RunTimeClass, this will replace any existing value or previously
-	// applied Policy.
+	// applied Profile.
 	//
 	// +optional
 	RuntimeClassName *string `json:"runtimeClassName,omitempty"`
@@ -96,7 +96,7 @@ type PolicySpec struct {
 	// If specified, the pod's scheduling constraints
 	//
 	// copied to the Pod Affinity, this will replace any existing value or previously
-	// applied Policy. We use a replacement strategy because it is not clear that merging
+	// applied Profile. We use a replacement strategy because it is not clear that merging
 	// affinities will actually produce a meaning Affinity definition, it would likely result in
 	// an impossible to satisfy constraint
 	//
@@ -107,7 +107,7 @@ type PolicySpec struct {
 	// Optional: Defaults to empty.  See type description for default values of each field.
 	//
 	// each non-nil value will be merged into the function's PodSecurityContext, the value will
-	// replace any existing value or previously applied Policy
+	// replace any existing value or previously applied Profile
 	//
 	// +optional
 	PodSecurityContext *corev1.PodSecurityContext `json:"podSecurityContext,omitempty"`
@@ -115,10 +115,10 @@ type PolicySpec struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// PolicyList is a list of Policies
-type PolicyList struct {
+// ProfileList is a list of Profiles
+type ProfileList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
 
-	Items []Policy `json:"items"`
+	Items []Profile `json:"items"`
 }

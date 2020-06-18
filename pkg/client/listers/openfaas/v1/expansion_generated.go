@@ -16,10 +16,10 @@ type FunctionListerExpansion interface{}
 // FunctionNamespaceLister.
 type FunctionNamespaceListerExpansion interface{}
 
-// PolicyListerExpansion allows custom methods to be added to
-// PolicyLister.
-type PolicyListerExpansion interface{}
+// ProfileListerExpansion allows custom methods to be added to
+// ProfileLister.
+type ProfileListerExpansion interface{}
 
-// PolicyNamespaceListerExpansion allows custom methods to be added to
-// PolicyNamespaceLister.
-type PolicyNamespaceListerExpansion interface{}
+// ProfileNamespaceListerExpansion allows custom methods to be added to
+// ProfileNamespaceLister.
+type ProfileNamespaceListerExpansion interface{}

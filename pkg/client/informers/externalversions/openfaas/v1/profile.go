@@ -22,59 +22,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// PolicyInformer provides access to a shared informer and lister for
-// Policies.
-type PolicyInformer interface {
+// ProfileInformer provides access to a shared informer and lister for
+// Profiles.
+type ProfileInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1.PolicyLister
+	Lister() v1.ProfileLister
 }
 
-type policyInformer struct {
+type profileInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewPolicyInformer constructs a new informer for Policy type.
+// NewProfileInformer constructs a new informer for Profile type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewPolicyInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredPolicyInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewProfileInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredProfileInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredPolicyInformer constructs a new informer for Policy type.
+// NewFilteredProfileInformer constructs a new informer for Profile type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredPolicyInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredProfileInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.OpenfaasV1().Policies(namespace).List(context.TODO(), options)
+				return client.OpenfaasV1().Profiles(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.OpenfaasV1().Policies(namespace).Watch(context.TODO(), options)
+				return client.OpenfaasV1().Profiles(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&openfaasv1.Policy{},
+		&openfaasv1.Profile{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *policyInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredPolicyInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *profileInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredProfileInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *policyInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&openfaasv1.Policy{}, f.defaultInformer)
+func (f *profileInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&openfaasv1.Profile{}, f.defaultInformer)
 }
 
-func (f *policyInformer) Lister() v1.PolicyLister {
-	return v1.NewPolicyLister(f.Informer().GetIndexer())
+func (f *profileInformer) Lister() v1.ProfileLister {
+	return v1.NewProfileLister(f.Informer().GetIndexer())
 }
