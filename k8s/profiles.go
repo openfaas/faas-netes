@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"context"
 	"reflect"
 	"strings"
 
@@ -180,7 +181,7 @@ func NewConfigMapProfileClient(kube kubernetes.Interface) ProfileClient {
 func (c profileClient) Get(namespace string, names ...string) ([]Profile, error) {
 	var resp []Profile
 	for _, name := range names {
-		cm, err := c.kube.ConfigMaps(namespace).Get(name, metav1.GetOptions{})
+		cm, err := c.kube.ConfigMaps(namespace).Get(context.Background(), name, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
 		}
