@@ -10,7 +10,7 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 )
 
-const testPolicy = `
+const testProfile = `
 runtimeClassName: "gVisor"
 podSecurityContext:
     runAsUser: 1000
@@ -33,8 +33,8 @@ tolerations:
   effect: "NoExecute"
 `
 
-// invalidPolicyYAML has a missing colon
-const invalidPolicyYAML = `
+// invalidProfileYAML has a missing colon
+const invalidProfileYAML = `
 tolerations:
 - key: "key1"
   operator: "Equal"
@@ -42,7 +42,7 @@ tolerations:
   effect "NoExecute"
 `
 
-func Test_ParsePolicyNames(t *testing.T) {
+func Test_ParseProfileNames(t *testing.T) {
 	cases := []struct {
 		name        string
 		annotations map[string]string
@@ -58,9 +58,9 @@ func Test_ParsePolicyNames(t *testing.T) {
 			},
 		},
 		{
-			name: "parses policy csv string",
+			name: "parses profile csv string",
 			annotations: map[string]string{
-				PolicyAnnotationKey: "name1,name2",
+				ProfileAnnotationKey: "name1,name2",
 			},
 			expected: []string{"name1", "name2"},
 		},
@@ -68,7 +68,7 @@ func Test_ParsePolicyNames(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := ParsePolicyNames(tc.annotations)
+			got := ParseProfileNames(tc.annotations)
 			if !reflect.DeepEqual(tc.expected, got) {
 				t.Fatalf("expected %#v, got %#v", tc.expected, got)
 			}
@@ -76,7 +76,7 @@ func Test_ParsePolicyNames(t *testing.T) {
 	}
 }
 
-func Test_PoliciesToRemove(t *testing.T) {
+func Test_ProfilesToRemove(t *testing.T) {
 	cases := []struct {
 		name      string
 		requested map[string]string
@@ -89,11 +89,11 @@ func Test_PoliciesToRemove(t *testing.T) {
 		{
 			name: "requested non-empty and existing is empty, returns nil list",
 			requested: map[string]string{
-				PolicyAnnotationKey: "name1,name2",
+				ProfileAnnotationKey: "name1,name2",
 			},
 		},
 		{
-			name: "missing policy annotation on request and existing, returns nil list",
+			name: "missing profile annotation on request and existing, returns nil list",
 			requested: map[string]string{
 				"something.else": "name1,name2",
 			},
@@ -102,28 +102,28 @@ func Test_PoliciesToRemove(t *testing.T) {
 			},
 		},
 		{
-			name: "matching policy annotation on request and existing, returns nil list",
+			name: "matching profile annotation on request and existing, returns nil list",
 			requested: map[string]string{
-				PolicyAnnotationKey: "name1,name2",
+				ProfileAnnotationKey: "name1,name2",
 			},
 			existing: map[string]string{
-				PolicyAnnotationKey: "name1,name2",
+				ProfileAnnotationKey: "name1,name2",
 			},
 		},
 		{
 			name: "overlapping annotations on request and existing, returns extras from existing",
 			requested: map[string]string{
-				PolicyAnnotationKey: "name2",
+				ProfileAnnotationKey: "name2",
 			},
 			existing: map[string]string{
-				PolicyAnnotationKey: "name1,name2",
+				ProfileAnnotationKey: "name1,name2",
 			},
 			expected: []string{"name1"},
 		},
 		{
 			name: "empty annotation on request and non-empty existing, returns all existing names",
 			existing: map[string]string{
-				PolicyAnnotationKey: "name1,name2",
+				ProfileAnnotationKey: "name1,name2",
 			},
 			expected: []string{"name1", "name2"},
 		},
@@ -131,7 +131,7 @@ func Test_PoliciesToRemove(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := PoliciesToRemove(tc.requested, tc.existing)
+			got := ProfilesToRemove(tc.requested, tc.existing)
 			if !reflect.DeepEqual(tc.expected, got) {
 				t.Fatalf("expected %v, got %v", tc.expected, got)
 			}
@@ -139,7 +139,7 @@ func Test_PoliciesToRemove(t *testing.T) {
 	}
 }
 
-func Test_TolerationsPolicy_Apply(t *testing.T) {
+func Test_TolerationsProfile_Apply(t *testing.T) {
 	expectedTolerations := []corev1.Toleration{
 		{
 			Key:      "foo",
@@ -147,7 +147,7 @@ func Test_TolerationsPolicy_Apply(t *testing.T) {
 			Operator: apiv1.TolerationOpEqual,
 		},
 	}
-	p := Policy{Tolerations: expectedTolerations}
+	p := Profile{Tolerations: expectedTolerations}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -168,9 +168,9 @@ func Test_TolerationsPolicy_Apply(t *testing.T) {
 	}
 }
 
-func Test_RunTimeClassPolicy_Apply(t *testing.T) {
+func Test_RunTimeClassProfile_Apply(t *testing.T) {
 	expectedClass := "fastRunTime"
-	p := Policy{RuntimeClassName: &expectedClass}
+	p := Profile{RuntimeClassName: &expectedClass}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -194,10 +194,10 @@ func Test_RunTimeClassPolicy_Apply(t *testing.T) {
 	}
 }
 
-func Test_RunTimeClaasPolicy_Remove(t *testing.T) {
+func Test_RunTimeClassProfile_Remove(t *testing.T) {
 	t.Run("remove matching runtime class ", func(t *testing.T) {
 		expectedClass := "fastRunTime"
-		p := Policy{RuntimeClassName: &expectedClass}
+		p := Profile{RuntimeClassName: &expectedClass}
 
 		basicDeployment := &appsv1.Deployment{
 			Spec: appsv1.DeploymentSpec{
@@ -221,8 +221,8 @@ func Test_RunTimeClaasPolicy_Remove(t *testing.T) {
 
 	t.Run("leaves runtime class that does not match", func(t *testing.T) {
 		expectedClass := "fastRunTime"
-		policyClass := "slowRunTime"
-		p := Policy{RuntimeClassName: &policyClass}
+		profileClass := "slowRunTime"
+		p := Profile{RuntimeClassName: &profileClass}
 
 		basicDeployment := &appsv1.Deployment{
 			Spec: appsv1.DeploymentSpec{
@@ -245,7 +245,7 @@ func Test_RunTimeClaasPolicy_Remove(t *testing.T) {
 	})
 }
 
-func Test_TolerationsPolicy_Remove(t *testing.T) {
+func Test_TolerationsProfile_Remove(t *testing.T) {
 	tolerations := []corev1.Toleration{
 		{
 			Key:      "foo",
@@ -253,13 +253,13 @@ func Test_TolerationsPolicy_Remove(t *testing.T) {
 			Operator: apiv1.TolerationOpEqual,
 		},
 	}
-	nonPolicyToleration := corev1.Toleration{
+	nonProfileToleration := corev1.Toleration{
 		Key:      "second-key",
 		Value:    "anotherValue",
 		Operator: apiv1.TolerationOpEqual,
 	}
 
-	p := Policy{Tolerations: tolerations}
+	p := Profile{Tolerations: tolerations}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -268,7 +268,7 @@ func Test_TolerationsPolicy_Remove(t *testing.T) {
 					Containers: []apiv1.Container{
 						{Name: "testfunc", Image: "alpine:latest"},
 					},
-					Tolerations: append(tolerations, nonPolicyToleration),
+					Tolerations: append(tolerations, nonProfileToleration),
 				},
 			},
 		},
@@ -277,13 +277,13 @@ func Test_TolerationsPolicy_Remove(t *testing.T) {
 	basicDeployment = p.Remove(basicDeployment)
 
 	got := basicDeployment.Spec.Template.Spec.Tolerations
-	expected := []corev1.Toleration{nonPolicyToleration}
+	expected := []corev1.Toleration{nonProfileToleration}
 	if !reflect.DeepEqual(got, expected) {
 		t.Fatalf("expected %v, got %v", expected, got)
 	}
 }
 
-func Test_AffinityPolicy_Apply(t *testing.T) {
+func Test_AffinityProfile_Apply(t *testing.T) {
 	expectedAffinity := corev1.Affinity{
 		NodeAffinity: &corev1.NodeAffinity{
 			RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
@@ -300,7 +300,7 @@ func Test_AffinityPolicy_Apply(t *testing.T) {
 			},
 		},
 	}
-	p := Policy{Affinity: &expectedAffinity}
+	p := Profile{Affinity: &expectedAffinity}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -321,7 +321,7 @@ func Test_AffinityPolicy_Apply(t *testing.T) {
 	}
 }
 
-func Test_AffinityPolicy_Remove(t *testing.T) {
+func Test_AffinityProfile_Remove(t *testing.T) {
 	t.Run("removes matching affinity definition", func(t *testing.T) {
 		affinity := corev1.Affinity{
 			NodeAffinity: &corev1.NodeAffinity{
@@ -339,7 +339,7 @@ func Test_AffinityPolicy_Remove(t *testing.T) {
 				},
 			},
 		}
-		p := Policy{Affinity: &affinity}
+		p := Profile{Affinity: &affinity}
 
 		basicDeployment := &appsv1.Deployment{
 			Spec: appsv1.DeploymentSpec{
@@ -362,7 +362,7 @@ func Test_AffinityPolicy_Remove(t *testing.T) {
 	})
 
 	t.Run("does not remove non-matching affinity definition", func(t *testing.T) {
-		policyAffinity := corev1.Affinity{
+		profileAffinity := corev1.Affinity{
 			NodeAffinity: &corev1.NodeAffinity{
 				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
 					NodeSelectorTerms: []corev1.NodeSelectorTerm{
@@ -378,7 +378,7 @@ func Test_AffinityPolicy_Remove(t *testing.T) {
 				},
 			},
 		}
-		p := Policy{Affinity: &policyAffinity}
+		p := Profile{Affinity: &profileAffinity}
 
 		expectedAffinity := corev1.Affinity{
 			NodeAffinity: &corev1.NodeAffinity{
@@ -412,19 +412,19 @@ func Test_AffinityPolicy_Remove(t *testing.T) {
 		basicDeployment = p.Remove(basicDeployment)
 		result := basicDeployment.Spec.Template.Spec.Affinity
 
-		// the GPU affinity policy _should not_ remove the bigcpu affinity
+		// the GPU affinity profile _should not_ remove the bigcpu affinity
 		if !reflect.DeepEqual(&expectedAffinity, result) {
 			t.Fatalf("expected %+v\n got %+v", &expectedAffinity, result)
 		}
 	})
 }
 
-func Test_PodSecurityPolicy_Apply(t *testing.T) {
-	expectedPolicy := apiv1.PodSecurityContext{
+func Test_PodSecurityProfile_Apply(t *testing.T) {
+	expectedProfile := apiv1.PodSecurityContext{
 		RunAsUser:  intp(1001),
 		RunAsGroup: intp(2002),
 	}
-	p := Policy{PodSecurityContext: &expectedPolicy}
+	p := Profile{PodSecurityContext: &expectedProfile}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -440,19 +440,19 @@ func Test_PodSecurityPolicy_Apply(t *testing.T) {
 
 	basicDeployment = p.Apply(basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.SecurityContext
-	if !reflect.DeepEqual(&expectedPolicy, result) {
-		t.Fatalf("expected %+v\n got %+v", &expectedPolicy, result)
+	if !reflect.DeepEqual(&expectedProfile, result) {
+		t.Fatalf("expected %+v\n got %+v", &expectedProfile, result)
 	}
 }
 
-func Test_PodSecurityPolicy_Remove(t *testing.T) {
-	p := Policy{PodSecurityContext: &apiv1.PodSecurityContext{
+func Test_PodSecurityProfile_Remove(t *testing.T) {
+	p := Profile{PodSecurityContext: &apiv1.PodSecurityContext{
 		RunAsUser:  intp(1001),
 		RunAsGroup: intp(2002),
 	}}
 
 	runAsNonRoot := true
-	expectedPolicy := &apiv1.PodSecurityContext{RunAsNonRoot: &runAsNonRoot}
+	expectedProfile := &apiv1.PodSecurityContext{RunAsNonRoot: &runAsNonRoot}
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
@@ -472,19 +472,19 @@ func Test_PodSecurityPolicy_Remove(t *testing.T) {
 
 	basicDeployment = p.Remove(basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.SecurityContext
-	if !reflect.DeepEqual(expectedPolicy, result) {
-		t.Fatalf("expected %+v\n got %+v", &expectedPolicy, result)
+	if !reflect.DeepEqual(expectedProfile, result) {
+		t.Fatalf("expected %+v\n got %+v", &expectedProfile, result)
 	}
 }
 
-func Test_ConfigMapPolicyParsing(t *testing.T) {
+func Test_ConfigMapProfileParsing(t *testing.T) {
 	validConfig := corev1.ConfigMap{}
 	validConfig.Name = "allowSpot"
 	validConfig.Namespace = "functions"
-	validConfig.Data = map[string]string{"policy": testPolicy}
+	validConfig.Data = map[string]string{"profile": testProfile}
 
 	runtime := "gVisor"
-	allowSpot := Policy{
+	allowSpot := Profile{
 		RuntimeClassName: &runtime,
 		Tolerations: []apiv1.Toleration{
 			{
@@ -522,43 +522,43 @@ func Test_ConfigMapPolicyParsing(t *testing.T) {
 	invalidConfig := corev1.ConfigMap{}
 	invalidConfig.Name = "allowSpot"
 	invalidConfig.Namespace = "functions"
-	invalidConfig.Data = map[string]string{"policy": invalidPolicyYAML}
+	invalidConfig.Data = map[string]string{"profile": invalidProfileYAML}
 
 	cases := []struct {
-		name       string
-		namespace  string
-		policyName string
-		configmap  corev1.ConfigMap
-		expected   []Policy
-		err        string
+		name        string
+		namespace   string
+		profileName string
+		configmap   corev1.ConfigMap
+		expected    []Profile
+		err         string
 	}{
 		{
-			name:       "unknown policy returns error",
-			namespace:  "functions",
-			policyName: "unknown",
-			err:        `configmaps "unknown" not found`,
+			name:        "unknown profile returns error",
+			namespace:   "functions",
+			profileName: "unknown",
+			err:         `configmaps "unknown" not found`,
 		},
 		{
-			name:       "yaml policy parsed correctly",
-			namespace:  "functions",
-			policyName: "allowSpot",
-			configmap:  validConfig,
-			expected:   []Policy{allowSpot},
+			name:        "yaml profile parsed correctly",
+			namespace:   "functions",
+			profileName: "allowSpot",
+			configmap:   validConfig,
+			expected:    []Profile{allowSpot},
 		},
 		{
-			name:       "yaml parsing errors are returned",
-			namespace:  "functions",
-			policyName: "allowSpot",
-			configmap:  invalidConfig,
-			err:        `error converting YAML to JSON: yaml: line 7: could not find expected ':'`,
+			name:        "yaml parsing errors are returned",
+			namespace:   "functions",
+			profileName: "allowSpot",
+			configmap:   invalidConfig,
+			err:         `error converting YAML to JSON: yaml: line 7: could not find expected ':'`,
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			kube := fake.NewSimpleClientset(&tc.configmap)
-			client := NewConfigMapPolicyClient(kube)
-			got, err := client.Get(tc.namespace, tc.policyName)
+			client := NewConfigMapProfileClient(kube)
+			got, err := client.Get(tc.namespace, tc.profileName)
 			if tc.err != "" {
 				if err == nil {
 					t.Fatalf("expected error %s, got nil", tc.err)

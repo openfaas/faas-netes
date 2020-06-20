@@ -122,7 +122,7 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.ObjectMeta.Labels = labels
 
 		// store the current annotations so that we can diff the annotations
-		// and determine which policies need to be removed
+		// and determine which profiles need to be removed
 		currentAnnotations := deployment.Annotations
 		deployment.Annotations = annotations
 		deployment.Spec.Template.Annotations = annotations
@@ -166,27 +166,27 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 
-		policies := k8s.NewConfigMapPolicyClient(factory.Client)
+		profiles := k8s.NewConfigMapProfileClient(factory.Client)
 
 		// compare the annotations from args to the cache copy of the deployment annotations
 		// at this point we have already updated the annotations to the new value, if we
 		// compare to that it will produce an empty list
-		toRemove := k8s.PoliciesToRemove(annotations, currentAnnotations)
-		policyList, err := policies.Get(functionNamespace, toRemove...)
+		toRemove := k8s.ProfilesToRemove(annotations, currentAnnotations)
+		profileList, err := profiles.Get(functionNamespace, toRemove...)
 		if err != nil {
 			return err, http.StatusBadRequest
 		}
-		for _, policy := range policyList {
-			deployment = policy.Remove(deployment)
+		for _, profile := range profileList {
+			deployment = profile.Remove(deployment)
 		}
 
-		policyNames := k8s.ParsePolicyNames(annotations)
-		policyList, err = policies.Get(functionNamespace, policyNames...)
+		profileNames := k8s.ParseProfileNames(annotations)
+		profileList, err = profiles.Get(functionNamespace, profileNames...)
 		if err != nil {
 			return err, http.StatusBadRequest
 		}
-		for _, policy := range policyList {
-			deployment = policy.Apply(deployment)
+		for _, profile := range profileList {
+			deployment = profile.Apply(deployment)
 		}
 	}
 
