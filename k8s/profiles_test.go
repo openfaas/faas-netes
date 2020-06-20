@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
@@ -161,7 +162,8 @@ func Test_TolerationsProfile_Apply(t *testing.T) {
 		},
 	}
 
-	basicDeployment = p.Apply(basicDeployment)
+	factory := mockFactory()
+	factory.ApplyProfile(p, basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.Tolerations
 	if !reflect.DeepEqual(expectedTolerations, result) {
 		t.Fatalf("expected %v, got %v", expectedTolerations, result)
@@ -184,7 +186,8 @@ func Test_RunTimeClassProfile_Apply(t *testing.T) {
 		},
 	}
 
-	basicDeployment = p.Apply(basicDeployment)
+	factory := mockFactory()
+	factory.ApplyProfile(p, basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.RuntimeClassName
 	if result == nil {
 		t.Fatalf("expected %s, got nil", expectedClass)
@@ -212,7 +215,8 @@ func Test_RunTimeClassProfile_Remove(t *testing.T) {
 			},
 		}
 
-		basicDeployment = p.Remove(basicDeployment)
+		factory := mockFactory()
+		factory.RemoveProfile(p, basicDeployment)
 		result := basicDeployment.Spec.Template.Spec.RuntimeClassName
 		if result != nil {
 			t.Fatalf("expected nil, got %s", *result)
@@ -237,7 +241,8 @@ func Test_RunTimeClassProfile_Remove(t *testing.T) {
 			},
 		}
 
-		basicDeployment = p.Remove(basicDeployment)
+		factory := mockFactory()
+		factory.RemoveProfile(p, basicDeployment)
 		result := basicDeployment.Spec.Template.Spec.RuntimeClassName
 		if !equalStrings(result, &expectedClass) {
 			t.Fatalf("expected %s, got %v", expectedClass, result)
@@ -274,7 +279,8 @@ func Test_TolerationsProfile_Remove(t *testing.T) {
 		},
 	}
 
-	basicDeployment = p.Remove(basicDeployment)
+	factory := mockFactory()
+	factory.RemoveProfile(p, basicDeployment)
 
 	got := basicDeployment.Spec.Template.Spec.Tolerations
 	expected := []corev1.Toleration{nonProfileToleration}
@@ -314,7 +320,8 @@ func Test_AffinityProfile_Apply(t *testing.T) {
 		},
 	}
 
-	basicDeployment = p.Apply(basicDeployment)
+	factory := mockFactory()
+	factory.ApplyProfile(p, basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.Affinity
 	if !reflect.DeepEqual(&expectedAffinity, result) {
 		t.Fatalf("expected %+v\n got %+v", &expectedAffinity, result)
@@ -354,7 +361,8 @@ func Test_AffinityProfile_Remove(t *testing.T) {
 			},
 		}
 
-		basicDeployment = p.Remove(basicDeployment)
+		factory := mockFactory()
+		factory.RemoveProfile(p, basicDeployment)
 		result := basicDeployment.Spec.Template.Spec.Affinity
 		if result != nil {
 			t.Fatalf("expected nil\n got %+v", result)
@@ -409,7 +417,8 @@ func Test_AffinityProfile_Remove(t *testing.T) {
 			},
 		}
 
-		basicDeployment = p.Remove(basicDeployment)
+		factory := mockFactory()
+		factory.RemoveProfile(p, basicDeployment)
 		result := basicDeployment.Spec.Template.Spec.Affinity
 
 		// the GPU affinity profile _should not_ remove the bigcpu affinity
@@ -438,7 +447,8 @@ func Test_PodSecurityProfile_Apply(t *testing.T) {
 		},
 	}
 
-	basicDeployment = p.Apply(basicDeployment)
+	factory := mockFactory()
+	factory.ApplyProfile(p, basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.SecurityContext
 	if !reflect.DeepEqual(&expectedProfile, result) {
 		t.Fatalf("expected %+v\n got %+v", &expectedProfile, result)
@@ -470,7 +480,8 @@ func Test_PodSecurityProfile_Remove(t *testing.T) {
 		},
 	}
 
-	basicDeployment = p.Remove(basicDeployment)
+	factory := mockFactory()
+	factory.RemoveProfile(p, basicDeployment)
 	result := basicDeployment.Spec.Template.Spec.SecurityContext
 	if !reflect.DeepEqual(expectedProfile, result) {
 		t.Fatalf("expected %+v\n got %+v", &expectedProfile, result)
@@ -478,6 +489,7 @@ func Test_PodSecurityProfile_Remove(t *testing.T) {
 }
 
 func Test_ConfigMapProfileParsing(t *testing.T) {
+	ctx := context.Background()
 	validConfig := corev1.ConfigMap{}
 	validConfig.Name = "allowSpot"
 	validConfig.Namespace = "functions"
@@ -556,9 +568,11 @@ func Test_ConfigMapProfileParsing(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			kube := fake.NewSimpleClientset(&tc.configmap)
-			client := NewConfigMapProfileClient(kube)
-			got, err := client.Get(tc.namespace, tc.profileName)
+			factory := FunctionFactory{
+				Client: fake.NewSimpleClientset(&tc.configmap),
+			}
+			client := factory.NewConfigMapProfileClient()
+			got, err := client.Get(ctx, tc.namespace, tc.profileName)
 			if tc.err != "" {
 				if err == nil {
 					t.Fatalf("expected error %s, got nil", tc.err)

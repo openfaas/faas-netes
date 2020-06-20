@@ -19,5 +19,5 @@ func mockFactory() FunctionFactory {
 				TimeoutSeconds:      3,
 				InitialDelaySeconds: 0,
 			},
-		})
+		}, nil)
 }

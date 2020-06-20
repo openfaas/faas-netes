@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 
@@ -27,6 +28,7 @@ func newDeployment(
 	existingSecrets map[string]*corev1.Secret,
 	factory FunctionFactory) *appsv1.Deployment {
 
+	ctx := context.TODO()
 	envVars := makeEnvVars(function)
 	labels := makeLabels(function)
 	nodeSelector := makeNodeSelector(function.Spec.Constraints)
@@ -120,6 +122,30 @@ func newDeployment(
 
 	factory.ConfigureReadOnlyRootFilesystem(function, deploymentSpec)
 	factory.ConfigureContainerUserID(deploymentSpec)
+
+	var currentAnnotations map[string]string
+	if existingDeployment != nil {
+		currentAnnotations = existingDeployment.Annotations
+	}
+
+	// compare the annotations from args to the cache copy of the deployment annotations
+	// at this point we have already updated the annotations to the new value, if we
+	// compare to that it will produce an empty list
+	profileList, err := factory.GetProfilesToRemove(ctx, function.Namespace, annotations, currentAnnotations)
+	if err != nil {
+		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
+	}
+	for _, profile := range profileList {
+		factory.RemoveProfile(profile, deploymentSpec)
+	}
+
+	profileList, err = factory.GetProfiles(ctx, function.Namespace, annotations)
+	if err != nil {
+		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
+	}
+	for _, profile := range profileList {
+		factory.ApplyProfile(profile, deploymentSpec)
+	}
 
 	if err := UpdateSecrets(function, deploymentSpec, existingSecrets); err != nil {
 		glog.Warningf("Function %s secrets update failed: %v",
