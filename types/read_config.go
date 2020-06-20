@@ -3,8 +3,17 @@
 package types
 
 import (
+	"fmt"
+	"os"
+
 	ftypes "github.com/openfaas/faas-provider/types"
 )
+
+var validPullPolicyOptions = map[string]bool{
+	"Always":       true,
+	"IfNotPresent": true,
+	"Never":        true,
+}
 
 // ReadConfig constitutes config from env variables
 type ReadConfig struct {
@@ -33,6 +42,10 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 	livenessProbePeriodSeconds := ftypes.ParseIntValue(hasEnv.Getenv("liveness_probe_period_seconds"), 10)
 	imagePullPolicy := ftypes.ParseString(hasEnv.Getenv("image_pull_policy"), "Always")
 
+	if !validPullPolicyOptions[imagePullPolicy] {
+		return cfg, fmt.Errorf("invalid image_pull_policy configured: %s", imagePullPolicy)
+	}
+
 	cfg.HTTPProbe = httpProbe
 	cfg.SetNonRootUser = setNonRootUser
 
@@ -45,6 +58,11 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 	cfg.LivenessProbePeriodSeconds = livenessProbePeriodSeconds
 
 	cfg.ImagePullPolicy = imagePullPolicy
+
+	cfg.DefaultFunctionNamespace = "default"
+	if namespace, exists := os.LookupEnv("function_namespace"); exists {
+		cfg.DefaultFunctionNamespace = namespace
+	}
 
 	return cfg, nil
 }
@@ -62,5 +80,6 @@ type BootstrapConfig struct {
 	LivenessProbeTimeoutSeconds       int
 	LivenessProbePeriodSeconds        int
 	ImagePullPolicy                   string
+	DefaultFunctionNamespace          string
 	FaaSConfig                        ftypes.FaaSConfig
 }

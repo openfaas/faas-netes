@@ -6,7 +6,6 @@ package main
 import (
 	"flag"
 	"log"
-	"os"
 	"time"
 
 	"github.com/openfaas/faas-netes/handlers"
@@ -36,12 +35,6 @@ import (
 	// _ "sigs.k8s.io/controller-tools/cmd/controller-gen"
 )
 
-var pullPolicyOptions = map[string]bool{
-	"Always":       true,
-	"IfNotPresent": true,
-	"Never":        true,
-}
-
 func main() {
 	var kubeconfig string
 	var masterURL string
@@ -55,121 +48,22 @@ func main() {
 	flag.BoolVar(&operator, "operator", false, "Use the operator mode instead of faas-netes")
 	flag.Parse()
 
-	if !operator {
-		runController(kubeconfig, masterURL)
-	} else {
-		runOperator(kubeconfig, masterURL)
-	}
-}
+	sha, release := version.GetReleaseInfo()
+	log.Printf("Version: %s\tcommit: %s\n", release, sha)
 
-// runController runs the faas-netes imperative controller
-func runController(kubeconfig, masterURL string) {
 	clientCmdConfig, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
 	if err != nil {
 		log.Fatalf("Error building kubeconfig: %s", err.Error())
 	}
 
-	clientset, err := kubernetes.NewForConfig(clientCmdConfig)
+	kubeClient, err := kubernetes.NewForConfig(clientCmdConfig)
 	if err != nil {
 		log.Fatalf("Error building Kubernetes clientset: %s", err.Error())
-
 	}
 
-	functionNamespace := "default"
-
-	if namespace, exists := os.LookupEnv("function_namespace"); exists {
-		functionNamespace = namespace
-	}
-
-	readConfig := types.ReadConfig{}
-	osEnv := providertypes.OsEnv{}
-	cfg, err := readConfig.Read(osEnv)
+	faasClient, err := clientset.NewForConfig(clientCmdConfig)
 	if err != nil {
-		log.Fatalf("Error reading config: %s", err.Error())
-	}
-
-	log.Printf("HTTP Read Timeout: %s\n", cfg.FaaSConfig.GetReadTimeout())
-	log.Printf("HTTP Write Timeout: %s\n", cfg.FaaSConfig.WriteTimeout)
-	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
-	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
-
-	sha, release := version.GetReleaseInfo()
-	log.Printf("Starting operator. Version: %s\tcommit: %s", release, sha)
-
-	deployConfig := k8s.DeploymentConfig{
-		RuntimeHTTPPort: 8080,
-		HTTPProbe:       cfg.HTTPProbe,
-		SetNonRootUser:  cfg.SetNonRootUser,
-		ReadinessProbe: &k8s.ProbeConfig{
-			InitialDelaySeconds: int32(cfg.ReadinessProbeInitialDelaySeconds),
-			TimeoutSeconds:      int32(cfg.ReadinessProbeTimeoutSeconds),
-			PeriodSeconds:       int32(cfg.ReadinessProbePeriodSeconds),
-		},
-		LivenessProbe: &k8s.ProbeConfig{
-			InitialDelaySeconds: int32(cfg.LivenessProbeInitialDelaySeconds),
-			TimeoutSeconds:      int32(cfg.LivenessProbeTimeoutSeconds),
-			PeriodSeconds:       int32(cfg.LivenessProbePeriodSeconds),
-		},
-		ImagePullPolicy: cfg.ImagePullPolicy,
-	}
-
-	factory := k8s.NewFunctionFactory(clientset, deployConfig)
-
-	defaultResync := time.Second * 5
-	kubeInformerOpt := kubeinformers.WithNamespace(functionNamespace)
-	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(clientset, defaultResync, kubeInformerOpt)
-
-	// set up signals so we handle the first shutdown signal gracefully
-	stopCh := signals.SetupSignalHandler()
-
-	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
-	go kubeInformerFactory.Start(stopCh)
-	lister := endpointsInformer.Lister()
-
-	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
-
-	bootstrapHandlers := providertypes.FaaSHandlers{
-		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
-		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
-		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory),
-		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),
-		ReplicaReader:        handlers.MakeReplicaReader(functionNamespace, clientset),
-		ReplicaUpdater:       handlers.MakeReplicaUpdater(functionNamespace, clientset),
-		UpdateHandler:        handlers.MakeUpdateHandler(functionNamespace, factory),
-		HealthHandler:        handlers.MakeHealthHandler(),
-		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
-		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, clientset),
-		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(clientset, functionNamespace), cfg.FaaSConfig.WriteTimeout),
-		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clientset),
-	}
-
-	faasProvider.Serve(&bootstrapHandlers, &cfg.FaaSConfig)
-}
-
-// runOperator runs the CRD Operator
-func runOperator(kubeconfig, masterURL string) {
-
-	setupLogging()
-
-	sha, release := version.GetReleaseInfo()
-	glog.Infof("Starting operator. Version: %s\tcommit: %s", release, sha)
-
-	// set up signals so we handle the first shutdown signal gracefully
-	stopCh := signals.SetupSignalHandler()
-
-	cfg, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
-	if err != nil {
-		glog.Fatalf("Error building kubeconfig: %s", err.Error())
-	}
-
-	kubeClient, err := kubernetes.NewForConfig(cfg)
-	if err != nil {
-		glog.Fatalf("Error building Kubernetes clientset: %s", err.Error())
-	}
-
-	faasClient, err := clientset.NewForConfig(cfg)
-	if err != nil {
-		glog.Fatalf("Error building OpenFaaS clientset: %s", err.Error())
+		log.Fatalf("Error building OpenFaaS clientset: %s", err.Error())
 	}
 
 	readConfig := types.ReadConfig{}
@@ -177,7 +71,7 @@ func runOperator(kubeconfig, masterURL string) {
 	config, err := readConfig.Read(osEnv)
 
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error reading config: %s", err.Error())
 	}
 
 	deployConfig := k8s.DeploymentConfig{
@@ -197,33 +91,103 @@ func runOperator(kubeconfig, masterURL string) {
 		ImagePullPolicy: config.ImagePullPolicy,
 	}
 
-	factory := controller.NewFunctionFactory(kubeClient, deployConfig)
-
-	functionNamespace := "openfaas-fn"
-	if namespace, exists := os.LookupEnv("function_namespace"); exists {
-		functionNamespace = namespace
-	}
-
-	if !pullPolicyOptions[config.ImagePullPolicy] {
-		glog.Fatalf("Invalid image_pull_policy configured: %s", config.ImagePullPolicy)
-	}
+	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, faasClient.OpenfaasV1())
 
 	// the sync interval does not affect the scale to/from zero feature
 	// auto-scaling is does via the HTTP API that acts on the deployment Spec.Replicas
 	defaultResync := time.Minute * 5
 
-	kubeInformerOpt := kubeinformers.WithNamespace(functionNamespace)
+	kubeInformerOpt := kubeinformers.WithNamespace(config.DefaultFunctionNamespace)
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(kubeClient, defaultResync, kubeInformerOpt)
 
-	faasInformerOpt := informers.WithNamespace(functionNamespace)
+	faasInformerOpt := informers.WithNamespace(config.DefaultFunctionNamespace)
 	faasInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, faasInformerOpt)
 
+	setup := serverSetup{
+		config:              config,
+		functionFactory:     factory,
+		kubeInformerFactory: kubeInformerFactory,
+		faasInformerFactory: faasInformerFactory,
+		kubeClient:          kubeClient,
+		faasClient:          faasClient,
+	}
+
+	if !operator {
+		log.Println("Starting controller")
+		runController(setup)
+	} else {
+		log.Println("Starting operator")
+		runOperator(setup)
+	}
+}
+
+// runController runs the faas-netes imperative controller
+func runController(setup serverSetup) {
+	// pull out the required config and clients fromthe setup, this is largely a
+	// leftover from refactoring the setup to a shared step and keeping the function
+	// signature readable
+	config := setup.config
+	kubeClient := setup.kubeClient
+	factory := setup.functionFactory
+	kubeInformerFactory := setup.kubeInformerFactory
+	faasInformerFactory := setup.faasInformerFactory
+
+	// set up signals so we handle the first shutdown signal gracefully
+	stopCh := signals.SetupSignalHandler()
+
+	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
+
+	log.Println("waiting for openfaas CRD cache sync")
+	faasInformerFactory.WaitForCacheSync(stopCh)
+	log.Println("cache sync complete")
+	go faasInformerFactory.Start(stopCh)
+	go kubeInformerFactory.Start(stopCh)
+
+	lister := endpointsInformer.Lister()
+	functionLookup := k8s.NewFunctionLookup(config.DefaultFunctionNamespace, lister)
+
+	bootstrapHandlers := providertypes.FaaSHandlers{
+		FunctionProxy:        proxy.NewHandlerFunc(config.FaaSConfig, functionLookup),
+		DeleteHandler:        handlers.MakeDeleteHandler(config.DefaultFunctionNamespace, kubeClient),
+		DeployHandler:        handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory),
+		FunctionReader:       handlers.MakeFunctionReader(config.DefaultFunctionNamespace, kubeClient),
+		ReplicaReader:        handlers.MakeReplicaReader(config.DefaultFunctionNamespace, kubeClient),
+		ReplicaUpdater:       handlers.MakeReplicaUpdater(config.DefaultFunctionNamespace, kubeClient),
+		UpdateHandler:        handlers.MakeUpdateHandler(config.DefaultFunctionNamespace, factory),
+		HealthHandler:        handlers.MakeHealthHandler(),
+		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
+		SecretHandler:        handlers.MakeSecretHandler(config.DefaultFunctionNamespace, kubeClient),
+		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(kubeClient, config.DefaultFunctionNamespace), config.FaaSConfig.WriteTimeout),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, kubeClient),
+	}
+
+	faasProvider.Serve(&bootstrapHandlers, &config.FaaSConfig)
+}
+
+// runOperator runs the CRD Operator
+func runOperator(setup serverSetup) {
+	// pull out the required config and clients fromthe setup, this is largely a
+	// leftover from refactoring the setup to a shared step and keeping the function
+	// signature readable
+	kubeClient := setup.kubeClient
+	faasClient := setup.faasClient
+	kubeInformerFactory := setup.kubeInformerFactory
+	faasInformerFactory := setup.faasInformerFactory
+
+	// the operator wraps the FunctionFactory with its own type
+	factory := controller.FunctionFactory{
+		Factory: setup.functionFactory,
+	}
+
+	setupLogging()
+	// set up signals so we handle the first shutdown signal gracefully
+	stopCh := signals.SetupSignalHandler()
 	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
 	deploymentInformer := kubeInformerFactory.Apps().V1().Deployments()
 
-	log.Printf("Waiting for cache sync in main")
+	glog.Infof("Waiting for cache sync in main")
 	kubeInformerFactory.WaitForCacheSync(stopCh)
-	log.Printf("Cache sync done")
+	glog.Infof("Cache sync done")
 
 	ctrl := controller.NewController(
 		kubeClient,
@@ -239,9 +203,20 @@ func runOperator(kubeconfig, masterURL string) {
 	go kubeInformerFactory.Start(stopCh)
 
 	go srv.Start()
-	if err = ctrl.Run(1, stopCh); err != nil {
+	if err := ctrl.Run(1, stopCh); err != nil {
 		glog.Fatalf("Error running controller: %s", err.Error())
 	}
+}
+
+// serverSetup is a container for the config and clients needed to start the
+// faas-netes controller or operator
+type serverSetup struct {
+	config              types.BootstrapConfig
+	kubeClient          *kubernetes.Clientset
+	faasClient          *clientset.Clientset
+	functionFactory     k8s.FunctionFactory
+	kubeInformerFactory kubeinformers.SharedInformerFactory
+	faasInformerFactory informers.SharedInformerFactory
 }
 
 func setupLogging() {

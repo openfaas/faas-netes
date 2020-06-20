@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"context"
+
 	"github.com/openfaas/faas-netes/k8s"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	"github.com/openfaas/faas-provider/types"
@@ -71,4 +73,20 @@ func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(function *faasv1.Funct
 
 func (f *FunctionFactory) ConfigureContainerUserID(deployment *appsv1.Deployment) {
 	f.Factory.ConfigureContainerUserID(deployment)
+}
+
+func (f *FunctionFactory) ApplyProfile(profile k8s.Profile, deployment *appsv1.Deployment) {
+	f.Factory.ApplyProfile(profile, deployment)
+}
+
+func (f *FunctionFactory) RemoveProfile(profile k8s.Profile, deployment *appsv1.Deployment) {
+	f.Factory.RemoveProfile(profile, deployment)
+}
+
+func (f *FunctionFactory) GetProfiles(ctx context.Context, namespace string, annotations map[string]string) ([]k8s.Profile, error) {
+	return f.Factory.GetProfiles(ctx, namespace, annotations)
+}
+
+func (f *FunctionFactory) GetProfilesToRemove(ctx context.Context, namespace string, annotations, currentAnnotations map[string]string) ([]k8s.Profile, error) {
+	return f.Factory.GetProfilesToRemove(ctx, namespace, annotations, currentAnnotations)
 }
