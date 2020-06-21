@@ -88,8 +88,11 @@ func main() {
 			TimeoutSeconds:      int32(config.LivenessProbeTimeoutSeconds),
 			PeriodSeconds:       int32(config.LivenessProbePeriodSeconds),
 		},
-		ImagePullPolicy: config.ImagePullPolicy,
+		ImagePullPolicy:   config.ImagePullPolicy,
+		ProfilesNamespace: config.ProfilesNamespace,
 	}
+
+	log.Printf("DeploymentConfig: %+v\n", deployConfig)
 
 	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, faasClient.OpenfaasV1())
 
