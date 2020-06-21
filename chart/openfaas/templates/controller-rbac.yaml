@@ -74,11 +74,13 @@ rules:
       - list
       - watch
   - apiGroups:
-      - ""
+      - "openfaas.com"
     resources:
-      - configmaps
+      - "profiles"
     verbs:
-      - get
+      - "get"
+      - "list"
+      - "watch"
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -160,11 +162,13 @@ rules:
       - list
       - watch
   - apiGroups:
-      - ""
+      - "openfaas.com"
     resources:
-      - configmaps
+      - "profiles"
     verbs:
-      - get
+      - "get"
+      - "list"
+      - "watch"
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding

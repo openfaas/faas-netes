@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/openfaas/faas-netes/k8s"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -134,21 +135,32 @@ func newDeployment(
 	profileNamespace := factory.Factory.Config.ProfilesNamespace
 	profileList, err := factory.GetProfilesToRemove(ctx, profileNamespace, annotations, currentAnnotations)
 	if err != nil {
+		// TODO: a simple warning doesn't seem strong enough if a profile can't be found or there is
+		// some other error
 		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
 	}
 	for _, profile := range profileList {
 		factory.RemoveProfile(profile, deploymentSpec)
 	}
 
+	if _, exists := annotations[k8s.ProfileAnnotationKey]; !exists {
+		glog.Infof("Function %s: no profiles specified", function.Spec.Name)
+	}
+
 	profileList, err = factory.GetProfiles(ctx, profileNamespace, annotations)
 	if err != nil {
+		// TODO: a simple warning doesn't seem strong enough if a profile can't be found or there is
+		// some other error
 		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
 	}
+	// TODO: remove this or refactor to just print names
+	glog.Infof("Function %s: Applying profiles %+v", function.Spec.Name, profileList)
 	for _, profile := range profileList {
 		factory.ApplyProfile(profile, deploymentSpec)
 	}
 
 	if err := UpdateSecrets(function, deploymentSpec, existingSecrets); err != nil {
+		// TODO: a simple warning doesn't seem strong enough if we can't update the secrets
 		glog.Warningf("Function %s secrets update failed: %v",
 			function.Spec.Name, err)
 	}

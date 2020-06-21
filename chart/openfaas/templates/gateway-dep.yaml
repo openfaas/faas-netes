@@ -102,6 +102,8 @@ spec:
           value: "{{ $functionNs }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: function_namespace
           value: {{ $functionNs | quote }}
+        - name: profiles_namespace
+          value: {{ .Release.Namespace | quote }}
         {{- if .Values.nats.external.enabled }}
         - name: faas_nats_address
           value: "{{ .Values.nats.external.host }}"
@@ -168,6 +170,8 @@ spec:
             value: "8081"
           - name: function_namespace
             value: {{ $functionNs | quote }}
+          - name: profiles_namespace
+            value: {{ .Release.Namespace | quote }}
           - name: read_timeout
             value: "{{ .Values.faasnetes.readTimeout }}"
           - name: write_timeout
