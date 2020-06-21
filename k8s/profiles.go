@@ -25,7 +25,7 @@ type ProfileClient interface {
 
 // Profile is and openfaas api extensions that can be predefined and applied
 // to functions by annotating them with `com.openfaas.profile: name1,name2`
-type Profile v1.PolicySpec
+type Profile v1.ProfileSpec
 
 type profileCMClient struct {
 	kube typedCorev1.ConfigMapsGetter
@@ -53,7 +53,7 @@ func (c profileCMClient) Get(ctx context.Context, namespace string, names ...str
 
 // profileCRDClient implements PolicyClient using the openfaas CRD Profile
 type profileCRDClient struct {
-	client openfaasv1.PoliciesGetter
+	client openfaasv1.ProfilesGetter
 }
 
 func (c profileCRDClient) Get(ctx context.Context, namespace string, names ...string) ([]Profile, error) {
@@ -62,7 +62,7 @@ func (c profileCRDClient) Get(ctx context.Context, namespace string, names ...st
 		// this is where we would consider using an informer/lister. The throughput on this
 		// API. We expect will be similar to the secrets API, since we only use it during
 		// function Deploy
-		profile, err := c.client.Policies(namespace).Get(ctx, name, metav1.GetOptions{})
+		profile, err := c.client.Profiles(namespace).Get(ctx, name, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
 		}
