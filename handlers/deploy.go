@@ -71,7 +71,8 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		var profileList []k8s.Profile
 		if request.Annotations != nil {
-			profileList, err = factory.GetProfiles(ctx, namespace, *request.Annotations)
+			profileNamespace := factory.Config.ProfilesNamespace
+			profileList, err = factory.GetProfiles(ctx, profileNamespace, *request.Annotations)
 			if err != nil {
 				wrappedErr := fmt.Errorf("failed create Deployment spec: %s", err.Error())
 				log.Println(wrappedErr)

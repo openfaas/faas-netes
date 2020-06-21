@@ -171,7 +171,8 @@ func updateDeploymentSpec(
 		// compare the annotations from args to the cache copy of the deployment annotations
 		// at this point we have already updated the annotations to the new value, if we
 		// compare to that it will produce an empty list
-		profileList, err := factory.GetProfilesToRemove(ctx, functionNamespace, annotations, currentAnnotations)
+		profileNamespace := factory.Config.ProfilesNamespace
+		profileList, err := factory.GetProfilesToRemove(ctx, profileNamespace, annotations, currentAnnotations)
 		if err != nil {
 			return err, http.StatusBadRequest
 		}
@@ -179,7 +180,7 @@ func updateDeploymentSpec(
 			factory.RemoveProfile(profile, deployment)
 		}
 
-		profileList, err = factory.GetProfiles(ctx, functionNamespace, annotations)
+		profileList, err = factory.GetProfiles(ctx, profileNamespace, annotations)
 		if err != nil {
 			return err, http.StatusBadRequest
 		}
