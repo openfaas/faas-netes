@@ -131,7 +131,8 @@ func newDeployment(
 	// compare the annotations from args to the cache copy of the deployment annotations
 	// at this point we have already updated the annotations to the new value, if we
 	// compare to that it will produce an empty list
-	profileList, err := factory.GetProfilesToRemove(ctx, function.Namespace, annotations, currentAnnotations)
+	profileNamespace := factory.Factory.Config.ProfilesNamespace
+	profileList, err := factory.GetProfilesToRemove(ctx, profileNamespace, annotations, currentAnnotations)
 	if err != nil {
 		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
 	}
@@ -139,7 +140,7 @@ func newDeployment(
 		factory.RemoveProfile(profile, deploymentSpec)
 	}
 
-	profileList, err = factory.GetProfiles(ctx, function.Namespace, annotations)
+	profileList, err = factory.GetProfiles(ctx, profileNamespace, annotations)
 	if err != nil {
 		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
 	}
