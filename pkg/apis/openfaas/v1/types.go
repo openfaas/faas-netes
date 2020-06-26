@@ -46,7 +46,7 @@ type FunctionResources struct {
 	CPU    string `json:"cpu,omitempty"`
 }
 
-// FooStatus is the status for a Foo resource
+// FunctionStatus is the status for a Function resource
 type FunctionStatus struct {
 	Conditions          []FunctionCondition `json:"conditions"`
 	UnavailableReplicas int32               `json:"unavailableReplicas"`
@@ -55,6 +55,7 @@ type FunctionStatus struct {
 
 const Ready = "Ready"
 
+// FunctionCondition describes the Ready status of a Function's deployment
 type FunctionCondition struct {
 	Type   string                 `json:"type"`   // Ready
 	Status metav1.ConditionStatus `json:"status"` // True, False, Unknown string
