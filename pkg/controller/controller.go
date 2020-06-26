@@ -120,6 +120,26 @@ func NewController(
 		},
 	})
 
+	// Set up an event handler for when Deployment resources change. This
+	// handler will lookup the owner of the given Deployment, and if it is
+	// owned by a Function resource will enqueue that Function resource for
+	// processing. This way, we don't need to implement custom logic for
+	// handling Deployment resources.
+	deploymentInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+		AddFunc: controller.handleObject,
+		UpdateFunc: func(old, new interface{}) {
+			newDepl := new.(*appsv1.Deployment)
+			oldDepl := old.(*appsv1.Deployment)
+			if newDepl.ResourceVersion == oldDepl.ResourceVersion {
+				// Periodic resync will send update events for all known Deployments.
+				// Two different versions of the same Deployment will always have different RVs.
+				return
+			}
+			controller.handleObject(new)
+		},
+		DeleteFunc: controller.handleObject,
+	})
+
 	// Set up an event handler for when functions related resources like pods, deployments, replica sets
 	// can't be materialized. This logs abnormal events like ImagePullBackOff, back-off restarting failed container,
 	// failed to start container, oci runtime errors, etc
@@ -264,7 +284,7 @@ func (c *Controller) syncHandler(key string) error {
 	_, getSvcErr := c.kubeclientset.CoreV1().Services(function.Namespace).Get(deploymentName, svcGetOptions)
 	if errors.IsNotFound(getSvcErr) {
 		glog.Infof("Creating ClusterIP service for '%s'", function.Spec.Name)
-		if _, err := c.kubeclientset.CoreV1().Services(function.Namespace).Create(newService(function)); err != nil {
+		if _, err = c.kubeclientset.CoreV1().Services(function.Namespace).Create(newService(function)); err != nil {
 			// If an error occurs during Service Create, we'll requeue the item
 			if errors.IsAlreadyExists(err) {
 				glog.V(2).Infof("ClusterIP service '%s' already exists. Skipping creation.", function.Spec.Name)
@@ -325,9 +345,6 @@ func (c *Controller) syncHandler(key string) error {
 	if err != nil {
 		return err
 	}
-
-	glog.Infof("Dep: %v Fn: %v", deployment.Name, function.Name)
-
 	// // Finally, we update the status block of the Function resource to reflect the
 	// // current state of the world
 	err = c.updateFunctionStatus(function, deployment)
