@@ -326,8 +326,10 @@ func (c *Controller) syncHandler(key string) error {
 		return err
 	}
 
-	// Finally, we update the status block of the Foo resource to reflect the
-	// current state of the world
+	glog.Infof("Dep: %v Fn: %v", deployment.Name, function.Name)
+
+	// // Finally, we update the status block of the Function resource to reflect the
+	// // current state of the world
 	err = c.updateFunctionStatus(function, deployment)
 	if err != nil {
 		return err
@@ -341,25 +343,37 @@ func (c *Controller) updateFunctionStatus(fn *faasv1.Function, deployment *appsv
 	// NEVER modify objects from the store. It's a read-only, local cache.
 	// You can use DeepCopy() to make a deep copy of original object and modify this copy
 	// Or create a copy manually for better performance
-	fnCopy := fn.DeepCopy()
 	var status metav1.ConditionStatus = "True"
 	if deployment.Status.UnavailableReplicas > 0 {
 		status = "False"
 	}
-	fnCopy.Status.Conditions = []faasv1.FunctionCondition{
-		{
-			Status: status,
-			Type:   "Ready",
-		},
+	var replace = false
+	for _, condition := range fn.Status.Conditions {
+		if condition.Type == "Ready" && condition.Status != status {
+			replace = true
+		}
 	}
-	fnCopy.Status.UnavailableReplicas = deployment.Status.UnavailableReplicas
-	fnCopy.Status.ObservedGeneration = fn.ObjectMeta.Generation
-	// If the CustomResourceSubresources feature gate is not enabled,
-	// we must use Update instead of UpdateStatus to update the Status block of the Function resource.
-	// UpdateStatus will not allow changes to the Spec of the resource,
-	// which is ideal for ensuring nothing other than resource status has been updated.
-	_, err := c.faasclientset.OpenfaasV1().Functions(fn.Namespace).UpdateStatus(fnCopy)
-	glog.Infof("Updated Function status '%s' err: '%v', status '%v', unavailable: '%v'", fn.Spec.Name, err, status, deployment.Status.UnavailableReplicas)
+	if fn.Status.UnavailableReplicas != deployment.Status.UnavailableReplicas || fn.Status.ObservedGeneration != fn.ObjectMeta.Generation {
+		replace = true
+	}
+	var err error
+	if replace {
+		fnCopy := fn.DeepCopy()
+		fnCopy.Status.Conditions = []faasv1.FunctionCondition{
+			{
+				Status: status,
+				Type:   "Ready",
+			},
+		}
+		fnCopy.Status.UnavailableReplicas = deployment.Status.UnavailableReplicas
+		fnCopy.Status.ObservedGeneration = fn.ObjectMeta.Generation
+		// If the CustomResourceSubresources feature gate is not enabled,
+		// we must use Update instead of UpdateStatus to update the Status block of the Function resource.
+		// UpdateStatus will not allow changes to the Spec of the resource,
+		// which is ideal for ensuring nothing other than resource status has been updated.
+		_, err = c.faasclientset.OpenfaasV1().Functions(fn.Namespace).UpdateStatus(fnCopy)
+		glog.Infof("Updated Function status '%s' err: '%v', status '%v', unavailable: '%v'", fn.Spec.Name, err, status, deployment.Status.UnavailableReplicas)
+	}
 	return err
 }
 
