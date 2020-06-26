@@ -173,6 +173,7 @@ ingressOperator:
   image: openfaas/ingress-operator:0.6.2
   replicas: 1
   create: false
+  ingressNamespace: ""
   resources:
     requests:
       memory: "25Mi"

@@ -37,5 +37,5 @@ spec:
         - name: function_namespace
           value: {{ $functionNs | quote }}
         - name: ingress_namespace
-          value: {{ .Release.Namespace | quote }}
+          value: {{ default .Release.Namespace .Values.ingressOperator.ingressNamespace | quote }}
 {{- end }}
