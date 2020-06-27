@@ -22,8 +22,12 @@ Configure via `values.yaml`.
 
 | Parameter                | Description                                                               | Example                                     |
 | ------------------------ | ------------------------------------------------------------------------- | ------------------------------------------- |
-| `topic`                  | A single topic for subscription, install broker once for each topic       | `drone-position`                            |
-| `broker`                 | A TCP address or websocket for the MQTT broker subscription               | `tcp://test.mosquitto.org:1883`             |
+| `topic`                  | A single topic for subscription, install broker once for each topic       | `sample-topic/`                            |
+| `broker`                 | A TCP address or websocket for the MQTT broker subscription               | `tcp://emitter:8080`             |
 | `clientID`               | An ID to represent this client                                            | `testgoid`                                  |
 | `upstream_timeout`       | Maximum timeout for function as (Golang duration)                         | `15s`                                       |
 | `rebuild_interval`       | Interval between rebuilding map of functions vs. topics (Golang duration) | `10s`                                       |
+| `authPassword`       | Password for broker authentication| `""`                                       |
+| `asyncInvoke`       | Invoke using function's asynchronous route | `false`                                       |
+| `basic_auth`       | Basic authentication for gateway enabled | `true`                                       |
+
