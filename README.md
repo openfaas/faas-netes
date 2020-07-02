@@ -12,7 +12,9 @@ faas-netes
 
 [OpenFaaS (Functions as a Service)](https://github.com/openfaas/faas) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
-![Stack](https://camo.githubusercontent.com/08bc7c0c4f882ef5eadaed797388b27b1a3ca056/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f4446726b46344e586f41414a774e322e6a7067)
+<img alt="OpenFaaS workflow" src="https://raw.githubusercontent.com/openfaas/faas/master/docs/of-workflow.png"></img>
+                                                                                                                         
+> [OpenFaaS Stack](https://docs.openfaas.com/architecture/stack/)
 
 In this README you'll find a technical overview and instructions for deploying to a Kubernetes cluster. 
 
