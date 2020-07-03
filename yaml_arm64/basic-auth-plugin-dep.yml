@@ -1,5 +1,4 @@
 ---
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,7 +29,6 @@ spec:
             requests:
               cpu: 20m
               memory: 50Mi
-            
         image: openfaas/basic-auth-plugin:0.18.17-arm64
         imagePullPolicy: Always
         securityContext:
@@ -61,4 +59,3 @@ spec:
           protocol: TCP
       nodeSelector:
         beta.kubernetes.io/arch: arm64
-        

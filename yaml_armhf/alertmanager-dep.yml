@@ -1,5 +1,4 @@
 ---
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +18,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "1c9fea7b28a6944f5d6f2b7c3db241d81ee3d7a33daa9156187cbe95545b5a95"
+        checksum/alertmanager-config: "e09436a85860cf285538ba21c899b3de3f7a38c69a65d4c173ee91b891c0f3a1"
     spec:
       containers:
       - name: alertmanager
@@ -48,7 +47,6 @@ spec:
               memory: 50Mi
             requests:
               memory: 25Mi
-            
         volumeMounts:
         - mountPath: /alertmanager.yml
           name: alertmanager-config
@@ -63,4 +61,3 @@ spec:
                 mode: 0644
       nodeSelector:
         beta.kubernetes.io/arch: arm
-        
