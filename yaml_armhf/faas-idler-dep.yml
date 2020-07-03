@@ -1,5 +1,4 @@
 ---
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,7 +24,6 @@ spec:
           resources:
             requests:
               memory: 64Mi
-            
           image: openfaas/faas-idler:0.3.0-armhf
           imagePullPolicy: Always
           env:
@@ -44,4 +42,3 @@ spec:
             - -dry-run=true
       nodeSelector:
         beta.kubernetes.io/arch: arm
-        

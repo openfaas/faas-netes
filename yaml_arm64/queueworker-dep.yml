@@ -29,7 +29,6 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-            
         image: openfaas/queue-worker:0.11.0-arm64
         imagePullPolicy: Always
         env:
@@ -59,4 +58,3 @@ spec:
           mountPath: "/var/secrets"
       nodeSelector:
         beta.kubernetes.io/arch: arm64
-        

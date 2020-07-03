@@ -30,7 +30,6 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-            
         image: openfaas/gateway:0.18.17-armhf
         imagePullPolicy: Always
         securityContext:
@@ -61,6 +60,8 @@ spec:
           value: "openfaas-fn.svc.cluster.local"
         - name: function_namespace
           value: "openfaas-fn"
+        - name: profiles_namespace
+          value: "openfaas"
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
@@ -82,7 +83,6 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-            
         image: openfaas/faas-netes:0.10.5-armhf
         imagePullPolicy: Always
         securityContext:
@@ -123,4 +123,3 @@ spec:
           protocol: TCP
       nodeSelector:
         beta.kubernetes.io/arch: arm
-        

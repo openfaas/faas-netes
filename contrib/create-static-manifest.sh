@@ -25,7 +25,7 @@ for filepath in $TEMPLATE_FILE; do
     filename=$(basename $filepath)
     outputname="${filename%%.*}.yml"
     # Use helm to generate the yaml and then use sed to remove the helm specific lables/annotations.
-    helm template "$CHART_DIR" --name=openfaas --namespace="$NAMEPSPACE" --set "functionNamespace=$FUNCTIONNAMESPACE" -x templates/$filename --values="$VALUESNAME" \
+    helm template openfaas "$CHART_DIR" --namespace="$NAMEPSPACE" --set "functionNamespace=$FUNCTIONNAMESPACE" -s templates/$filename --values="$VALUESNAME" \
         | sed -E '/(chart:)|(release:)|(heritage:)/d' \
         | sed -E '/# Source:/d' \
         | sed -E '/^$/d' \
@@ -35,4 +35,5 @@ for filepath in $TEMPLATE_FILE; do
     # Remove any  files that are exactly 4 characters, the are "empty" files, we expect that these
     # files will only contain "---\n"
     find $OUTPUT_DIR -size 4c -delete
+    find $OUTPUT_DIR -size 0c -delete
 done

@@ -25,7 +25,6 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-            
         image: openfaas/queue-worker:0.11.0-armhf
         imagePullPolicy: Always
         env:
@@ -47,4 +46,3 @@ spec:
           value: 60s
       nodeSelector:
         beta.kubernetes.io/arch: arm
-        

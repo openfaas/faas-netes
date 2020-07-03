@@ -25,7 +25,6 @@ spec:
         resources:
             requests:
               memory: 120Mi
-            
         image: nats-streaming:0.17.0
         imagePullPolicy: Always
         ports:
@@ -39,4 +38,3 @@ spec:
           - faas-cluster
       nodeSelector:
         beta.kubernetes.io/arch: amd64
-        
