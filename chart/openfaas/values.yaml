@@ -73,7 +73,7 @@ oauth2Plugin:
   securityContext: true
 
 faasnetes:
-  image: openfaas/faas-netes:0.10.5
+  image: martindekov/faas-netes:0.12.0-rc1
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions

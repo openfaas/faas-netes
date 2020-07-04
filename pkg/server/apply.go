@@ -16,7 +16,7 @@ import (
 	"k8s.io/klog"
 )
 
-func makeApplyHandler(namespace string, client clientset.Interface) http.HandlerFunc {
+func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		if r.Body != nil {
@@ -32,6 +32,11 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 			return
 		}
 		klog.Infof("Deployment request for: %s\n", req.Service)
+
+		namespace := defaultNamespace
+		if len(req.Namespace) > 0 {
+			namespace = req.Namespace
+		}
 
 		opts := metav1.GetOptions{}
 		got, err := client.OpenfaasV1().Functions(namespace).Get(context.TODO(), req.Service, opts)

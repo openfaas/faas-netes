@@ -198,7 +198,6 @@ func runOperator(kubeconfig, masterURL string) {
 	}
 
 	factory := controller.NewFunctionFactory(kubeClient, deployConfig)
-
 	functionNamespace := "openfaas-fn"
 	if namespace, exists := os.LookupEnv("function_namespace"); exists {
 		functionNamespace = namespace

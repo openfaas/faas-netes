@@ -15,13 +15,22 @@ import (
 	glog "k8s.io/klog"
 )
 
-func makeReplicaReader(namespace string, client clientset.Interface, lister v1.DeploymentNamespaceLister) http.HandlerFunc {
+func makeReplicaReader(defaultNamespace string, client clientset.Interface, lister v1.DeploymentNamespaceLister) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		functionName := vars["name"]
 
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
 		opts := metav1.GetOptions{}
-		k8sfunc, err := client.OpenfaasV1().Functions(namespace).
+		k8sfunc, err := client.OpenfaasV1().Functions(lookupNamespace).
 			Get(context.TODO(), functionName, opts)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
@@ -29,7 +38,7 @@ func makeReplicaReader(namespace string, client clientset.Interface, lister v1.D
 			return
 		}
 
-		desiredReplicas, availableReplicas, err := getReplicas(functionName, namespace, lister)
+		desiredReplicas, availableReplicas, err := getReplicas(functionName, lookupNamespace, lister)
 		if err != nil {
 			glog.Warningf("Function replica reader error: %v", err)
 		}
@@ -42,7 +51,7 @@ func makeReplicaReader(namespace string, client clientset.Interface, lister v1.D
 			Name:              k8sfunc.Spec.Name,
 			EnvProcess:        k8sfunc.Spec.Handler,
 			Image:             k8sfunc.Spec.Image,
-			Namespace:         namespace,
+			Namespace:         lookupNamespace,
 		}
 
 		res, _ := json.Marshal(result)

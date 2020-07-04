@@ -13,7 +13,7 @@ import (
 	glog "k8s.io/klog"
 )
 
-func makeListHandler(namespace string,
+func makeListHandler(defaultNamespace string,
 	client clientset.Interface,
 	deploymentLister appsv1.DeploymentNamespaceLister) http.HandlerFunc {
 
@@ -22,10 +22,24 @@ func makeListHandler(namespace string,
 			defer r.Body.Close()
 		}
 
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		if lookupNamespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+			return
+		}
+
 		functions := []types.FunctionStatus{}
 
 		opts := metav1.ListOptions{}
-		res, err := client.OpenfaasV1().Functions(namespace).List(context.TODO(), opts)
+		res, err := client.OpenfaasV1().Functions(lookupNamespace).List(context.TODO(), opts)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
@@ -35,7 +49,7 @@ func makeListHandler(namespace string,
 
 		for _, item := range res.Items {
 
-			desiredReplicas, availableReplicas, err := getReplicas(item.Spec.Name, namespace, deploymentLister)
+			desiredReplicas, availableReplicas, err := getReplicas(item.Spec.Name, lookupNamespace, deploymentLister)
 			if err != nil {
 				glog.Warningf("Function listing getReplicas error: %v", err)
 			}
@@ -47,7 +61,7 @@ func makeListHandler(namespace string,
 				Image:             item.Spec.Image,
 				Labels:            item.Spec.Labels,
 				Annotations:       item.Spec.Annotations,
-				Namespace:         namespace,
+				Namespace:         lookupNamespace,
 			}
 
 			functions = append(functions, function)

@@ -22,7 +22,7 @@ func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interfac
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Query namespaces")
 
-		res := list(defaultNamespace, clientset)
+		res := ListNamespaces(defaultNamespace, clientset)
 
 		out, _ := json.Marshal(res)
 		w.Header().Set("Content-Type", "application/json")
@@ -63,7 +63,7 @@ func NewNamespaceResolver(defaultNamespace string, kube kubernetes.Interface) Na
 			r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 		}
 
-		allowedNamespaces := list(defaultNamespace, kube)
+		allowedNamespaces := ListNamespaces(defaultNamespace, kube)
 		ok := findNamespace(req.Namespace, allowedNamespaces)
 		if !ok {
 			return req.Namespace, fmt.Errorf("unable to manage secrets within the %s namespace", req.Namespace)
@@ -73,7 +73,8 @@ func NewNamespaceResolver(defaultNamespace string, kube kubernetes.Interface) Na
 	}
 }
 
-func list(defaultNamespace string, clientset kubernetes.Interface) []string {
+// ListNamespaces lists all namespaces annotated with openfaas true
+func ListNamespaces(defaultNamespace string, clientset kubernetes.Interface) []string {
 	listOptions := metav1.ListOptions{}
 	namespaces, err := clientset.CoreV1().Namespaces().List(context.TODO(), listOptions)
 
