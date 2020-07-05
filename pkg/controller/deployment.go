@@ -137,7 +137,7 @@ func newDeployment(
 	if err != nil {
 		// TODO: a simple warning doesn't seem strong enough if a profile can't be found or there is
 		// some other error
-		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
+		glog.Warningf("Function %s can not retrieve required Profiles in %s: %v", function.Spec.Name, profileNamespace, err)
 	}
 	for _, profile := range profileList {
 		factory.RemoveProfile(profile, deploymentSpec)
@@ -151,7 +151,7 @@ func newDeployment(
 	if err != nil {
 		// TODO: a simple warning doesn't seem strong enough if a profile can't be found or there is
 		// some other error
-		glog.Warningf("Function %s can not retrieve required Profiles: %v", function.Spec.Name, err)
+		glog.Warningf("Function %s can not retrieve required Profiles in %s: %v", function.Spec.Name, profileNamespace, err)
 	}
 	// TODO: remove this or refactor to just print names
 	glog.Infof("Function %s: Applying profiles %+v", function.Spec.Name, profileList)

@@ -94,8 +94,6 @@ func main() {
 
 	log.Printf("DeploymentConfig: %+v\n", deployConfig)
 
-	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, faasClient.OpenfaasV1())
-
 	// the sync interval does not affect the scale to/from zero feature
 	// auto-scaling is does via the HTTP API that acts on the deployment Spec.Replicas
 	defaultResync := time.Minute * 5
@@ -106,13 +104,20 @@ func main() {
 	faasInformerOpt := informers.WithNamespace(config.DefaultFunctionNamespace)
 	faasInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, faasInformerOpt)
 
+	// this is where we need to swap to the faasInformerFactory
+	profileInformerOpt := informers.WithNamespace(config.ProfilesNamespace)
+	profileInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, profileInformerOpt)
+	profileLister := profileInformerFactory.Openfaas().V1().Profiles().Lister()
+	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, profileLister)
+
 	setup := serverSetup{
-		config:              config,
-		functionFactory:     factory,
-		kubeInformerFactory: kubeInformerFactory,
-		faasInformerFactory: faasInformerFactory,
-		kubeClient:          kubeClient,
-		faasClient:          faasClient,
+		config:                 config,
+		functionFactory:        factory,
+		kubeInformerFactory:    kubeInformerFactory,
+		faasInformerFactory:    faasInformerFactory,
+		profileInformerFactory: profileInformerFactory,
+		kubeClient:             kubeClient,
+		faasClient:             faasClient,
 	}
 
 	if !operator {
@@ -142,9 +147,11 @@ func runController(setup serverSetup) {
 
 	log.Println("waiting for openfaas CRD cache sync")
 	faasInformerFactory.WaitForCacheSync(stopCh)
+	setup.profileInformerFactory.WaitForCacheSync(stopCh)
 	log.Println("cache sync complete")
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)
+	go setup.profileInformerFactory.Start(stopCh)
 
 	lister := endpointsInformer.Lister()
 	functionLookup := k8s.NewFunctionLookup(config.DefaultFunctionNamespace, lister)
@@ -190,6 +197,7 @@ func runOperator(setup serverSetup) {
 
 	glog.Infof("Waiting for cache sync in main")
 	kubeInformerFactory.WaitForCacheSync(stopCh)
+	setup.profileInformerFactory.WaitForCacheSync(stopCh)
 	glog.Infof("Cache sync done")
 
 	ctrl := controller.NewController(
@@ -204,6 +212,7 @@ func runOperator(setup serverSetup) {
 
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)
+	go setup.profileInformerFactory.Start(stopCh)
 
 	go srv.Start()
 	if err := ctrl.Run(1, stopCh); err != nil {
@@ -214,12 +223,13 @@ func runOperator(setup serverSetup) {
 // serverSetup is a container for the config and clients needed to start the
 // faas-netes controller or operator
 type serverSetup struct {
-	config              types.BootstrapConfig
-	kubeClient          *kubernetes.Clientset
-	faasClient          *clientset.Clientset
-	functionFactory     k8s.FunctionFactory
-	kubeInformerFactory kubeinformers.SharedInformerFactory
-	faasInformerFactory informers.SharedInformerFactory
+	config                 types.BootstrapConfig
+	kubeClient             *kubernetes.Clientset
+	faasClient             *clientset.Clientset
+	functionFactory        k8s.FunctionFactory
+	kubeInformerFactory    kubeinformers.SharedInformerFactory
+	faasInformerFactory    informers.SharedInformerFactory
+	profileInformerFactory informers.SharedInformerFactory
 }
 
 func setupLogging() {
@@ -231,7 +241,7 @@ func setupLogging() {
 		f2 := klogFlags.Lookup(f1.Name)
 		if f2 != nil {
 			value := f1.Value.String()
-			f2.Value.Set(value)
+			_ = f2.Value.Set(value)
 		}
 	})
 }

@@ -4,21 +4,27 @@
 package k8s
 
 import (
-	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/openfaas/v1"
+	v1 "github.com/openfaas/faas-netes/pkg/client/listers/openfaas/v1"
 	"k8s.io/client-go/kubernetes"
 )
+
+// NamespacedProfiler is a subset of the v1.ProfileLister that is needed for the function factory
+// to support Profiles
+type NamespacedProfiler interface {
+	Profiles(namespace string) v1.ProfileNamespaceLister
+}
 
 // FunctionFactory is handling Kubernetes operations to materialise functions into deployments and services
 type FunctionFactory struct {
 	Client   kubernetes.Interface
 	Config   DeploymentConfig
-	OFClient openfaasv1.OpenfaasV1Interface
+	Profiler NamespacedProfiler
 }
 
-func NewFunctionFactory(clientset kubernetes.Interface, config DeploymentConfig, ofClient openfaasv1.OpenfaasV1Interface) FunctionFactory {
+func NewFunctionFactory(clientset kubernetes.Interface, config DeploymentConfig, profiler NamespacedProfiler) FunctionFactory {
 	return FunctionFactory{
 		Client:   clientset,
 		Config:   config,
-		OFClient: ofClient,
+		Profiler: profiler,
 	}
 }
