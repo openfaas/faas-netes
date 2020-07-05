@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
-	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/openfaas/v1"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -53,7 +52,7 @@ func (c profileCMClient) Get(ctx context.Context, namespace string, names ...str
 
 // profileCRDClient implements PolicyClient using the openfaas CRD Profile
 type profileCRDClient struct {
-	client openfaasv1.ProfilesGetter
+	client NamespacedProfiler
 }
 
 func (c profileCRDClient) Get(ctx context.Context, namespace string, names ...string) ([]Profile, error) {
@@ -62,7 +61,8 @@ func (c profileCRDClient) Get(ctx context.Context, namespace string, names ...st
 		// this is where we would consider using an informer/lister. The throughput on this
 		// API. We expect will be similar to the secrets API, since we only use it during
 		// function Deploy
-		profile, err := c.client.Profiles(namespace).Get(ctx, name, metav1.GetOptions{})
+		// Note Lister interfaces do not have context yet
+		profile, err := c.client.Profiles(namespace).Get(name)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +74,7 @@ func (c profileCRDClient) Get(ctx context.Context, namespace string, names ...st
 // NewProfileClient returns the ProfilerClient powered by the Profile CRD
 func (f FunctionFactory) NewProfileClient() ProfileClient {
 	// this is where we can replace with an informer/listener in the future
-	return &profileCRDClient{client: f.OFClient}
+	return &profileCRDClient{client: f.Profiler}
 }
 
 // NewProfileClient returns the ProfilerClient powered by ConfigMaps
