@@ -4,6 +4,7 @@ package types
 
 import (
 	"fmt"
+	"log"
 
 	ftypes "github.com/openfaas/faas-provider/types"
 )
@@ -103,4 +104,23 @@ type BootstrapConfig struct {
 	ProfilesNamespace string
 	// FaaSConfig contains the configuration for the FaaSProvider
 	FaaSConfig ftypes.FaaSConfig
+}
+
+// Fprint pretty-prints the config with the std logger. One line per config value.
+func (c BootstrapConfig) Fprint() {
+	log.Printf("HTTP Read Timeout: %s\n", c.FaaSConfig.GetReadTimeout())
+	log.Printf("HTTP Write Timeout: %s\n", c.FaaSConfig.WriteTimeout)
+	log.Printf("MaxIdleConns: %d\n", c.FaaSConfig.MaxIdleConns)
+	log.Printf("MaxIdleConnsPerHost: %d\n", c.FaaSConfig.MaxIdleConnsPerHost)
+	log.Printf("HTTPProbe: %v\n", c.HTTPProbe)
+	log.Printf("DefaultFunctionNamespace: %s\n", c.DefaultFunctionNamespace)
+	log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
+	log.Printf("ImagePullPolicy: %s\n", c.ImagePullPolicy)
+	log.Printf("SetNonRootUser: %v\n", c.SetNonRootUser)
+	log.Printf("ReadinessProbeInitialDelaySeconds: %d\n", c.ReadinessProbeInitialDelaySeconds)
+	log.Printf("ReadinessProbeTimeoutSeconds: %d\n", c.ReadinessProbeTimeoutSeconds)
+	log.Printf("ReadinessProbePeriodSeconds: %d\n", c.ReadinessProbePeriodSeconds)
+	log.Printf("LivenessProbeInitialDelaySeconds: %d\n", c.LivenessProbeInitialDelaySeconds)
+	log.Printf("LivenessProbeTimeoutSeconds: %d\n", c.LivenessProbeTimeoutSeconds)
+	log.Printf("LivenessProbePeriodSeconds: %d\n", c.LivenessProbePeriodSeconds)
 }
