@@ -145,10 +145,10 @@ func runController(setup serverSetup) {
 
 	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
 
-	log.Println("waiting for openfaas CRD cache sync")
+	log.Println("Waiting for openfaas CRD cache sync")
 	faasInformerFactory.WaitForCacheSync(stopCh)
 	setup.profileInformerFactory.WaitForCacheSync(stopCh)
-	log.Println("cache sync complete")
+	log.Println("Cache sync complete")
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)
 	go setup.profileInformerFactory.Start(stopCh)
