@@ -41,6 +41,7 @@ func (c profileConfigMapClient) Get(ctx context.Context, namespace string, names
 		profile := Profile{}
 
 		data := strings.NewReader(cm.Data["profile"])
+		// uses first 100 bytes to determine yaml or json parsing
 		err = yaml.NewYAMLOrJSONDecoder(data, 100).Decode(&profile)
 		if err != nil {
 			return nil, err
