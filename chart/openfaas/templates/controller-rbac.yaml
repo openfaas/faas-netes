@@ -161,6 +161,39 @@ rules:
       - get
       - list
       - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-controller
+  namespace: {{ $functionNs | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-controller
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-controller
+    namespace: {{ .Release.Namespace | quote }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: faas-controller
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-profiles
+  namespace: {{ .Release.Namespace | quote }}
+rules:
   - apiGroups:
       - "openfaas.com"
     resources:
@@ -179,12 +212,12 @@ metadata:
     component: faas-controller
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ .Release.Name }}-controller
-  namespace: {{ $functionNs | quote }}
+  name: {{ .Release.Name }}-profiles
+  namespace: {{ .Release.Namespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ .Release.Name }}-controller
+  name: {{ .Release.Name }}-profiles
 subjects:
   - kind: ServiceAccount
     name: {{ .Release.Name }}-controller
