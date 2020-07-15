@@ -26,12 +26,12 @@ type ProfileClient interface {
 // to functions by annotating them with `com.openfaas.profile: name1,name2`
 type Profile v1.ProfileSpec
 
-type profileCMClient struct {
+type profileConfigMapClient struct {
 	kube typedCorev1.ConfigMapsGetter
 }
 
 // Get returns the named profiles, if found, from the namespace
-func (c profileCMClient) Get(ctx context.Context, namespace string, names ...string) ([]Profile, error) {
+func (c profileConfigMapClient) Get(ctx context.Context, namespace string, names ...string) ([]Profile, error) {
 	var resp []Profile
 	for _, name := range names {
 		cm, err := c.kube.ConfigMaps(namespace).Get(ctx, name, metav1.GetOptions{})
@@ -79,7 +79,7 @@ func (f FunctionFactory) NewProfileClient() ProfileClient {
 
 // NewProfileClient returns the ProfilerClient powered by ConfigMaps
 func (f FunctionFactory) NewConfigMapProfileClient() ProfileClient {
-	return &profileCMClient{kube: f.Client.CoreV1()}
+	return &profileConfigMapClient{kube: f.Client.CoreV1()}
 
 }
 
