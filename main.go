@@ -74,6 +74,8 @@ func main() {
 		log.Fatalf("Error reading config: %s", err.Error())
 	}
 
+	config.Fprint()
+
 	deployConfig := k8s.DeploymentConfig{
 		RuntimeHTTPPort: 8080,
 		HTTPProbe:       config.HTTPProbe,
@@ -91,8 +93,6 @@ func main() {
 		ImagePullPolicy:   config.ImagePullPolicy,
 		ProfilesNamespace: config.ProfilesNamespace,
 	}
-
-	log.Printf("DeploymentConfig: %+v\n", deployConfig)
 
 	// the sync interval does not affect the scale to/from zero feature
 	// auto-scaling is does via the HTTP API that acts on the deployment Spec.Replicas
