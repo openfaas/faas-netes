@@ -35,5 +35,7 @@ for filepath in $TEMPLATE_FILE; do
     # Remove any  files that are exactly 4 characters, the are "empty" files, we expect that these
     # files will only contain "---\n"
     find $OUTPUT_DIR -size 4c -delete
+    # Remove any  files that are exactly 0 characters, the are "empty" files. These were generated
+    # by templates that are completely enclosed in an "if" block
     find $OUTPUT_DIR -size 0c -delete
 done
