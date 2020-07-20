@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/openfaas/faas-netes/k8s"
-	faasnetesk8s "github.com/openfaas/faas-netes/k8s"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
+	"github.com/openfaas/faas-netes/pkg/k8s"
+	faasnetesk8s "github.com/openfaas/faas-netes/pkg/k8s"
 	bootstrap "github.com/openfaas/faas-provider"
 
 	"github.com/openfaas/faas-provider/logs"

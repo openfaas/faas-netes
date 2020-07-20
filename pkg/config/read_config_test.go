@@ -1,12 +1,10 @@
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package test
+package config
 
 import (
 	"testing"
-
-	"github.com/openfaas/faas-netes/types"
 )
 
 type EnvBucket struct {
@@ -28,7 +26,7 @@ func (e EnvBucket) Setenv(key string, value string) {
 }
 func TestRead_EmptyProbeConfig(t *testing.T) {
 	defaults := NewEnvBucket()
-	readConfig := types.ReadConfig{}
+	readConfig := ReadConfig{}
 	config, err := readConfig.Read(defaults)
 	if err != nil {
 		t.Fatalf("Unexpected error while reading env %s", err.Error())
@@ -44,7 +42,7 @@ func TestRead_HTTPProbeConfig(t *testing.T) {
 	defaults := NewEnvBucket()
 	defaults.Setenv("http_probe", "false")
 
-	readConfig := types.ReadConfig{}
+	readConfig := ReadConfig{}
 	config, err := readConfig.Read(defaults)
 	if err != nil {
 		t.Fatalf("Unexpected error while reading env %s", err.Error())
@@ -60,7 +58,7 @@ func TestRead_HTTPProbeConfig_true(t *testing.T) {
 	defaults := NewEnvBucket()
 	defaults.Setenv("http_probe", "true")
 
-	readConfig := types.ReadConfig{}
+	readConfig := ReadConfig{}
 	config, err := readConfig.Read(defaults)
 	if err != nil {
 		t.Fatalf("Unexpected error while reading env %s", err.Error())
@@ -76,7 +74,7 @@ func TestRead_ImagePullPolicy_set(t *testing.T) {
 	defaults := NewEnvBucket()
 	defaults.Setenv("image_pull_policy", "IfNotPresent")
 
-	readConfig := types.ReadConfig{}
+	readConfig := ReadConfig{}
 	config, err := readConfig.Read(defaults)
 	if err != nil {
 		t.Fatalf("Unexpected error while reading env %s", err.Error())
@@ -92,7 +90,7 @@ func TestRead_ImagePullPolicy_empty(t *testing.T) {
 	defaults := NewEnvBucket()
 	defaults.Setenv("image_pull_policy", "")
 
-	readConfig := types.ReadConfig{}
+	readConfig := ReadConfig{}
 	config, err := readConfig.Read(defaults)
 	if err != nil {
 		t.Fatalf("Unexpected error while reading env %s", err.Error())

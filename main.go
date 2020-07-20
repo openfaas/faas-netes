@@ -1,4 +1,5 @@
 // Copyright (c) Alex Ellis 2017. All rights reserved.
+// Copyright (c) OpenFaaS Author(s) 2020. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 package main
@@ -8,14 +9,14 @@ import (
 	"log"
 	"time"
 
-	"github.com/openfaas/faas-netes/handlers"
-	"github.com/openfaas/faas-netes/k8s"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
+	"github.com/openfaas/faas-netes/pkg/config"
 	"github.com/openfaas/faas-netes/pkg/controller"
+	"github.com/openfaas/faas-netes/pkg/handlers"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 	"github.com/openfaas/faas-netes/pkg/server"
 	"github.com/openfaas/faas-netes/pkg/signals"
-	"github.com/openfaas/faas-netes/types"
 	version "github.com/openfaas/faas-netes/version"
 	faasProvider "github.com/openfaas/faas-provider"
 	"github.com/openfaas/faas-provider/logs"
@@ -70,7 +71,7 @@ func main() {
 		log.Fatalf("Error building OpenFaaS clientset: %s", err.Error())
 	}
 
-	readConfig := types.ReadConfig{}
+	readConfig := config.ReadConfig{}
 	osEnv := providertypes.OsEnv{}
 	config, err := readConfig.Read(osEnv)
 
@@ -227,7 +228,7 @@ func runOperator(setup serverSetup) {
 // serverSetup is a container for the config and clients needed to start the
 // faas-netes controller or operator
 type serverSetup struct {
-	config                 types.BootstrapConfig
+	config                 config.BootstrapConfig
 	kubeClient             *kubernetes.Clientset
 	faasClient             *clientset.Clientset
 	functionFactory        k8s.FunctionFactory

@@ -1,12 +1,11 @@
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package test
+package handlers
 
 import (
 	"testing"
 
-	"github.com/openfaas/faas-netes/handlers"
 	types "github.com/openfaas/faas-provider/types"
 )
 
@@ -26,7 +25,7 @@ func Test_ValidateDeployRequest_ValidCharacters(t *testing.T) {
 			Service: testCase.value,
 		}
 
-		err := handlers.ValidateDeployRequest(&request)
+		err := ValidateDeployRequest(&request)
 		if err != nil {
 			t.Errorf("Scenario: %s with value: %s, got: %s", testCase.scenario, testCase.value, err.Error())
 		}
@@ -52,7 +51,7 @@ func Test_ValidateDeployRequest_InvalidCharacters(t *testing.T) {
 			Service: testCase.value,
 		}
 
-		err := handlers.ValidateDeployRequest(&request)
+		err := ValidateDeployRequest(&request)
 		if err == nil {
 			t.Errorf("Expected error for scenario: %s with value: %s, got: %s", testCase.scenario, testCase.value, err.Error())
 		}

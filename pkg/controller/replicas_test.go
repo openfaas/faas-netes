@@ -6,8 +6,8 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/client-go/kubernetes/fake"
 
-	"github.com/openfaas/faas-netes/k8s"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 )
 
 func Test_Replicas(t *testing.T) {
