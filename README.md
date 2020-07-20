@@ -1,4 +1,4 @@
-faas-netes
+faas-netes - Kubernetes controller for OpenFaaS
 ===========
 
 [![Build Status](https://travis-ci.com/openfaas/faas-netes.svg?branch=master)](https://travis-ci.com/openfaas/faas-netes)
@@ -6,17 +6,18 @@ faas-netes
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenFaaS](https://img.shields.io/badge/openfaas-serverless-blue.svg)](https://www.openfaas.com)
 
-`faas-netes` is an OpenFaaS provider which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). The existing REST API, CLI and UI are fully compatible.
+## Introduction
 
-> OpenFaaS also runs well on managed Kubernetes services like AKS, DOKS, EKS and GKE. See our list of tutorials in the documentation site for more.
+`faas-netes` is an OpenFaaS provider which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). The existing REST API, CLI and UI are fully compatible. It also has an optional *operator* mode so that you can manage functions with `kubectl`.
+
+You can deploy OpenFaaS to any Kubernetes service - whether managed or local, including to OpenShift. You will find any specific instructions and additional links in the documentation.
 
 [OpenFaaS (Functions as a Service)](https://github.com/openfaas/faas) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
-<img alt="OpenFaaS workflow" src="https://raw.githubusercontent.com/openfaas/faas/master/docs/of-workflow.png"></img>
-                                                                                                                         
-> [OpenFaaS Stack](https://docs.openfaas.com/architecture/stack/)
+<img alt="OpenFaaS workflow" src="https://raw.githubusercontent.com/openfaas/faas/master/docs/of-workflow.png"></img>                                       
+> Pictured: [OpenFaaS conceptual architecture](https://docs.openfaas.com/architecture/stack/)
 
-In this README you'll find a technical overview and instructions for deploying to a Kubernetes cluster. 
+## Highlights
 
 * Platform for deploying [serverless-style workloads](https://docs.openfaas.com/reference/workloads/) - microservices and functions
 * Native Kubernetes integrations (API and ecosystem)
@@ -29,22 +30,32 @@ In this README you'll find a technical overview and instructions for deploying t
 
 ## Get started
 
-* Tutorial: [Deploy to Kubernetes with `helm` or YAML](https://docs.openfaas.com/deployment)
-* [Read the blog at openfaas.com](https://www.openfaas.com/blog/)
-* [Join the Slack community](https://docs.openfaas.com/community)
+* Tutorial: [Deploy OpenFaaS to Kubernetes with its helm chart](https://docs.openfaas.com/deployment)
+* [Read news and tutorials on the openfaas.com blog](https://www.openfaas.com/blog/)
+* Chat with the community [on OpenFaaS Slack](https://docs.openfaas.com/community)
 
-OpenFaaS can form a complete stack for Cloud Native application development called PLONK including: Prometheus, Linux/Linkerd, OpenFaaS, NATS/Nginx and Kubernetes. [Introducing PLONK](https://www.openfaas.com/blog/plonk-stack/).
+### The PLONK Stack
 
-## Reference guide
+OpenFaaS can be used as complete stack for Cloud Native application development called PLONK. The PLONK Stack includes: Prometheus, Linux/Linkerd, OpenFaaS, NATS/Nginx and Kubernetes.
 
-There are two modes available for faas-netes:
+Read more: [Introducing PLONK](https://www.openfaas.com/blog/plonk-stack/).
 
-* Classic - mode REST API, but without CRD (default)
-* [Operator - mode REST API, with a "Function" CRD](README-OPERATOR.md)
+## Technical and operational information
+
+The rest of this document is dedicated to technical and operational information for the controller.
+
+### Operating modes - classic or operator
+
+There are two modes available for faas-netes, the classic mode is the default.
+
+* Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD
+* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD, but you must use a single namespace per installation
+
+See also: [README for "The OpenFaaS Operator"](README-OPERATOR.md)
 
 The single faas-netes image and binary contains both modes, switch between one or the other using the helm chart or the flag `-operator=true/false`.
 
-### Configuration via Environmental variables
+### Configuration of the controller
 
 faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
 
@@ -76,6 +87,10 @@ By default all OpenFaaS functions and services are deployed to the `openfaas` an
 
 To configure ingress see the `helm` chart. By default NodePorts are used. These are listed in the [deployment guide](https://docs.openfaas.com/deployment).
 
+By default functions are exposed at `http://gateway:8080/function/NAME`.
+
+You can also use the [IngressOperator to set up custom domains and HTTP paths](https://github.com/openfaas-incubator/ingress-operator)
+
 ### Image pull policy
 
 By default, deployed functions will use an [imagePullPolicy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) of `Always`, which ensures functions using static image tags are refreshed during an update.
@@ -91,12 +106,16 @@ faas-netes maintainers strive to support as many Kubernetes versions as possible
 
 ## Contributing
 
-You can quickly create a standard development environment using
+You can quickly create a standard development environment using:
 
 ```sh
 make start-kind
 ```
 
-this will use [KinD](https://github.com/kubernetes-sigs/kind) to create a single node cluster and install the latest version of OpenFaaS via the Helm chart.
+This will use [KinD](https://github.com/kubernetes-sigs/kind) to create a single node cluster and install the latest version of OpenFaaS via the Helm chart.
 
 Check the contributor guide in `CONTRIBUTING.md` for more details on the workflow, processes, and additional tips.
+
+## License
+
+This project is licensed under the MIT License.

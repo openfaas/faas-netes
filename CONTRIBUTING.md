@@ -14,6 +14,8 @@ Any changes to the helm chart will also need a corresponding change in the [Char
 
     This step should only be run by a maintainer, and not by contributors because it causes merge conflicts which are hard to unpick.
 
+    > This currently requires helm3 to be in your `PATH`. The arkade tool can download helm, if you need it via `arkade get helm`.
+
     Run: `make charts`
 
 * Plain YAML files
@@ -94,7 +96,3 @@ Or stop the entire environment and cleanup using
 ```sh
 make stop-kind
 ```
-
-## License
-
-This project is licensed under the MIT License.

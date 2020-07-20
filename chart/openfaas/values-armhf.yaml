@@ -4,17 +4,17 @@ nodeSelector:
   beta.kubernetes.io/arch: arm
 
 gateway:
-  image: openfaas/gateway:0.18.17-armhf
+  image: openfaas/gateway:0.18.18-armhf
   directFunctions: true
 
 oauth2Plugin:
   enabled: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.10.5-armhf
+  image: openfaas/faas-netes:0.12.2-armhf
 
 operator:
-  image: openfaas/faas-netes:0.10.5-armhf
+  image: openfaas/faas-netes:0.12.2-armhf
   create: false
 
 queueWorker:
