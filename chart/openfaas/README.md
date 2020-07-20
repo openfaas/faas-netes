@@ -86,10 +86,12 @@ Alternatively, you can set `generateBasicAuth` to `false` and generate or supply
 
 ```sh	
 # generate a random password	
-PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)	
-kubectl -n openfaas create secret generic basic-auth \	
---from-literal=basic-auth-user=admin \	
---from-literal=basic-auth-password="$PASSWORD"	
+PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
+kubectl -n openfaas create secret generic basic-auth \
+--from-literal=basic-auth-user=admin \
+--from-literal=basic-auth-password="$PASSWORD"
+
+echo "OpenFaaS admin password: $PASSWORD"
 ```
 
 #### Tuning cold-start
@@ -221,7 +223,7 @@ Now [verify your installation](#verify-the-installation).
 You can run the following command from within the `faas-netes/chart` folder in the `faas-netes` repo.
 
 ```sh
-helm upgrade --install openfaas openfaas/openfaas \
+helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
     --set functionNamespace=openfaas-fn
