@@ -106,21 +106,26 @@ type BootstrapConfig struct {
 	FaaSConfig ftypes.FaaSConfig
 }
 
-// Fprint pretty-prints the config with the std logger. One line per config value.
-func (c BootstrapConfig) Fprint() {
+// Fprint pretty-prints the config with the stdlib logger. One line per config value.
+// When the verbose flag is set to false, it prints the same output as prior to
+// the 0.12.0 release.
+func (c BootstrapConfig) Fprint(verbose bool) {
 	log.Printf("HTTP Read Timeout: %s\n", c.FaaSConfig.GetReadTimeout())
 	log.Printf("HTTP Write Timeout: %s\n", c.FaaSConfig.WriteTimeout)
-	log.Printf("MaxIdleConns: %d\n", c.FaaSConfig.MaxIdleConns)
-	log.Printf("MaxIdleConnsPerHost: %d\n", c.FaaSConfig.MaxIdleConnsPerHost)
-	log.Printf("HTTPProbe: %v\n", c.HTTPProbe)
-	log.Printf("DefaultFunctionNamespace: %s\n", c.DefaultFunctionNamespace)
-	log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
 	log.Printf("ImagePullPolicy: %s\n", c.ImagePullPolicy)
-	log.Printf("SetNonRootUser: %v\n", c.SetNonRootUser)
-	log.Printf("ReadinessProbeInitialDelaySeconds: %d\n", c.ReadinessProbeInitialDelaySeconds)
-	log.Printf("ReadinessProbeTimeoutSeconds: %d\n", c.ReadinessProbeTimeoutSeconds)
-	log.Printf("ReadinessProbePeriodSeconds: %d\n", c.ReadinessProbePeriodSeconds)
-	log.Printf("LivenessProbeInitialDelaySeconds: %d\n", c.LivenessProbeInitialDelaySeconds)
-	log.Printf("LivenessProbeTimeoutSeconds: %d\n", c.LivenessProbeTimeoutSeconds)
-	log.Printf("LivenessProbePeriodSeconds: %d\n", c.LivenessProbePeriodSeconds)
+	log.Printf("DefaultFunctionNamespace: %s\n", c.DefaultFunctionNamespace)
+
+	if verbose {
+		log.Printf("MaxIdleConns: %d\n", c.FaaSConfig.MaxIdleConns)
+		log.Printf("MaxIdleConnsPerHost: %d\n", c.FaaSConfig.MaxIdleConnsPerHost)
+		log.Printf("HTTPProbe: %v\n", c.HTTPProbe)
+		log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
+		log.Printf("SetNonRootUser: %v\n", c.SetNonRootUser)
+		log.Printf("ReadinessProbeInitialDelaySeconds: %d\n", c.ReadinessProbeInitialDelaySeconds)
+		log.Printf("ReadinessProbeTimeoutSeconds: %d\n", c.ReadinessProbeTimeoutSeconds)
+		log.Printf("ReadinessProbePeriodSeconds: %d\n", c.ReadinessProbePeriodSeconds)
+		log.Printf("LivenessProbeInitialDelaySeconds: %d\n", c.LivenessProbeInitialDelaySeconds)
+		log.Printf("LivenessProbeTimeoutSeconds: %d\n", c.LivenessProbeTimeoutSeconds)
+		log.Printf("LivenessProbePeriodSeconds: %d\n", c.LivenessProbePeriodSeconds)
+	}
 }

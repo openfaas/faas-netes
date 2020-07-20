@@ -38,10 +38,14 @@ import (
 func main() {
 	var kubeconfig string
 	var masterURL string
-	var operator bool
+	var (
+		operator,
+		verbose bool
+	)
 
 	flag.StringVar(&kubeconfig, "kubeconfig", "",
 		"Path to a kubeconfig. Only required if out-of-cluster.")
+	flag.BoolVar(&verbose, "verbose", false, "Print verbose config information")
 	flag.StringVar(&masterURL, "master", "",
 		"The address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster.")
 
@@ -74,7 +78,7 @@ func main() {
 		log.Fatalf("Error reading config: %s", err.Error())
 	}
 
-	config.Fprint()
+	config.Fprint(verbose)
 
 	deployConfig := k8s.DeploymentConfig{
 		RuntimeHTTPPort: 8080,
