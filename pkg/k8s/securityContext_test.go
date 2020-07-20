@@ -1,4 +1,4 @@
-// Copyright 2019 OpenFaaS Authors
+// Copyright 2020 OpenFaaS Authors
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 package k8s
@@ -6,9 +6,10 @@ package k8s
 import (
 	types "github.com/openfaas/faas-provider/types"
 
+	"testing"
+
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
-	"testing"
 )
 
 func readOnlyRootDisabled(t *testing.T, deployment *appsv1.Deployment) {

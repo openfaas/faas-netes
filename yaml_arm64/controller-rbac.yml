@@ -1,4 +1,13 @@
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: openfaas
+    component: faas-controller
+  name: openfaas-controller
+  namespace: "openfaas"
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
@@ -54,6 +63,16 @@ rules:
       - get
       - list
       - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  labels:
+    app: openfaas
+    component: faas-controller
+  name: openfaas-profiles
+  namespace: "openfaas"
+rules:
   - apiGroups:
       - "openfaas.com"
     resources:
@@ -62,15 +81,6 @@ rules:
       - "get"
       - "list"
       - "watch"
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: openfaas
-    component: faas-controller
-  name: openfaas-controller
-  namespace: "openfaas"
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -84,6 +94,23 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: openfaas-controller
+subjects:
+  - kind: ServiceAccount
+    name: openfaas-controller
+    namespace: "openfaas"
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  labels:
+    app: openfaas
+    component: faas-controller
+  name: openfaas-profiles
+  namespace: "openfaas"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: openfaas-profiles
 subjects:
   - kind: ServiceAccount
     name: openfaas-controller

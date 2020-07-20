@@ -1,4 +1,13 @@
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: openfaas-prometheus
+  namespace: "openfaas"
+  labels:
+    app: openfaas
+    component: prometheus
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -18,7 +27,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: openfaas-prometheus
-  namespace: "openfaas-fn"
+  namespace: "openfaas"
   labels:
     app: openfaas
     component: prometheus
@@ -31,20 +40,11 @@ subjects:
   name: openfaas-prometheus
   namespace: "openfaas"
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: openfaas-prometheus
-  namespace: "openfaas"
-  labels:
-    app: openfaas
-    component: prometheus
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: openfaas-prometheus
-  namespace: "openfaas"
+  namespace: "openfaas-fn"
   labels:
     app: openfaas
     component: prometheus
