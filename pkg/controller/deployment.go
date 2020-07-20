@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/openfaas/faas-netes/k8s"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

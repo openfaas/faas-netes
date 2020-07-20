@@ -3,8 +3,8 @@ package controller
 import (
 	"context"
 
-	"github.com/openfaas/faas-netes/k8s"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 	"github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1"
 

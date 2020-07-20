@@ -15,7 +15,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/openfaas/faas-netes/k8s"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 )
 
 // MakeFunctionReader handler for reading functions deployed in the cluster as deployments.

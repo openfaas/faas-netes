@@ -11,7 +11,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/openfaas/faas-netes/types"
+	"github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -46,10 +46,6 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 				log.Println(msg, marshalErr)
 				return
 			}
-		}
-
-		if len(req.ServiceNamespace) > 0 {
-			lookupNamespace = req.ServiceNamespace
 		}
 
 		options := metav1.GetOptions{

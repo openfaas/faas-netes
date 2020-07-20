@@ -6,7 +6,7 @@ package handlers
 import (
 	"testing"
 
-	"github.com/openfaas/faas-netes/k8s"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 	types "github.com/openfaas/faas-provider/types"
 	"k8s.io/client-go/kubernetes/fake"
 
