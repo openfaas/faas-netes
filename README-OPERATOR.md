@@ -86,7 +86,19 @@ kubectl apply -f figlet-crd.yaml
 
 You can deploy OpenFaaS and the operator using helm, or generate static YAML through the `helm template` command.
 
-### Deploy OpenFaaS with the operator
+### Deploy OpenFaaS with the operator (arkade)
+
+Two namespaces will be created - `openfaas` for the core services and `openfaas-fn` for functions.
+
+```bash
+arkade install openfaas --operator
+```
+
+You will see the connection info and password after the command has completed, you can get the info back at any point in time with the `arkade info openfaas` command.
+
+* [Download arkade](https://github.com/alexellis/arkade)
+
+### Deploy OpenFaaS with the operator (helm 3)
 
 Two namespaces will be used - `openfaas` for the core services and `openfaas-fn` for functions.
 
