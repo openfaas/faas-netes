@@ -72,7 +72,7 @@ func New(client clientset.Interface,
 	lister := endpointsInformer.Lister()
 	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
 
-	deploymentLister := deploymentsInformer.Lister().Deployments(functionNamespace)
+	deploymentLister := deploymentsInformer.Lister()
 	bootstrapConfig := types.FaaSConfig{
 		ReadTimeout:  time.Duration(readTimeout) * time.Second,
 		WriteTimeout: time.Duration(writeTimeout) * time.Second,
@@ -91,7 +91,7 @@ func New(client clientset.Interface,
 		HealthHandler:        makeHealthHandler(),
 		InfoHandler:          makeInfoHandler(),
 		SecretHandler:        makeSecretHandler(functionNamespace, kube),
-		ListNamespaceHandler: makeListNamespaceHandler(functionNamespace),
+		ListNamespaceHandler: makeListNamespaceHandler(functionNamespace, kube),
 		LogHandler:           logs.NewLogHandlerFunc(faasnetesk8s.NewLogRequestor(kube, functionNamespace), bootstrapConfig.WriteTimeout),
 	}
 

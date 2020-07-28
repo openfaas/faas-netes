@@ -13,8 +13,21 @@ import (
 	glog "k8s.io/klog"
 )
 
-func makeDeleteHandler(namespace string, client clientset.Interface) http.HandlerFunc {
+func makeDeleteHandler(defaultNamespace string, client clientset.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		if namespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+			return
+		}
 
 		if r.Body != nil {
 			defer r.Body.Close()
@@ -35,7 +48,7 @@ func makeDeleteHandler(namespace string, client clientset.Interface) http.Handle
 			return
 		}
 
-		err = client.OpenfaasV1().Functions(namespace).
+		err = client.OpenfaasV1().Functions(lookupNamespace).
 			Delete(context.TODO(), request.FunctionName, metav1.DeleteOptions{})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

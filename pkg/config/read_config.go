@@ -49,6 +49,7 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 
 	cfg.DefaultFunctionNamespace = ftypes.ParseString(hasEnv.Getenv("function_namespace"), "default")
 	cfg.ProfilesNamespace = ftypes.ParseString(hasEnv.Getenv("profiles_namespace"), cfg.DefaultFunctionNamespace)
+	cfg.ClusterRole = ftypes.ParseBoolValue(hasEnv.Getenv("cluster_role"), false)
 
 	cfg.HTTPProbe = httpProbe
 	cfg.SetNonRootUser = setNonRootUser
@@ -105,6 +106,8 @@ type BootstrapConfig struct {
 	ProfilesNamespace string
 	// FaaSConfig contains the configuration for the FaaSProvider
 	FaaSConfig ftypes.FaaSConfig
+	// ClusterRole determines whether the operator should have cluster wide access
+	ClusterRole bool
 }
 
 // Fprint pretty-prints the config with the stdlib logger. One line per config value.
@@ -128,5 +131,6 @@ func (c BootstrapConfig) Fprint(verbose bool) {
 		log.Printf("LivenessProbeInitialDelaySeconds: %d\n", c.LivenessProbeInitialDelaySeconds)
 		log.Printf("LivenessProbeTimeoutSeconds: %d\n", c.LivenessProbeTimeoutSeconds)
 		log.Printf("LivenessProbePeriodSeconds: %d\n", c.LivenessProbePeriodSeconds)
+		log.Printf("ClusterRole: %v\n", c.ClusterRole)
 	}
 }
