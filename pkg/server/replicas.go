@@ -15,21 +15,29 @@ import (
 	glog "k8s.io/klog"
 )
 
-func makeReplicaReader(namespace string, client clientset.Interface, lister v1.DeploymentNamespaceLister) http.HandlerFunc {
+func makeReplicaReader(defaultNamespace string, client clientset.Interface, lister v1.DeploymentLister) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		functionName := vars["name"]
 
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
 		opts := metav1.GetOptions{}
-		k8sfunc, err := client.OpenfaasV1().Functions(namespace).
+		k8sfunc, err := client.OpenfaasV1().Functions(lookupNamespace).
 			Get(context.TODO(), functionName, opts)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(err.Error()))
 			return
 		}
-
-		desiredReplicas, availableReplicas, err := getReplicas(functionName, namespace, lister)
+		desiredReplicas, availableReplicas, err := getReplicas(functionName, lookupNamespace, lister)
 		if err != nil {
 			glog.Warningf("Function replica reader error: %v", err)
 		}
@@ -42,7 +50,7 @@ func makeReplicaReader(namespace string, client clientset.Interface, lister v1.D
 			Name:              k8sfunc.Spec.Name,
 			EnvProcess:        k8sfunc.Spec.Handler,
 			Image:             k8sfunc.Spec.Image,
-			Namespace:         namespace,
+			Namespace:         lookupNamespace,
 		}
 
 		res, _ := json.Marshal(result)
@@ -52,8 +60,8 @@ func makeReplicaReader(namespace string, client clientset.Interface, lister v1.D
 	}
 }
 
-func getReplicas(functionName string, namespace string, lister v1.DeploymentNamespaceLister) (uint64, uint64, error) {
-	dep, err := lister.Get(functionName)
+func getReplicas(functionName string, namespace string, lister v1.DeploymentLister) (uint64, uint64, error) {
+	dep, err := lister.Deployments(namespace).Get(functionName)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -63,10 +71,24 @@ func getReplicas(functionName string, namespace string, lister v1.DeploymentName
 	return desiredReplicas, availableReplicas, nil
 }
 
-func makeReplicaHandler(namespace string, kube kubernetes.Interface) http.HandlerFunc {
+func makeReplicaHandler(defaultNamespace string, kube kubernetes.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		functionName := vars["name"]
+
+		q := r.URL.Query()
+		namespace := q.Get("namespace")
+
+		lookupNamespace := defaultNamespace
+
+		if len(namespace) > 0 {
+			lookupNamespace = namespace
+		}
+
+		if lookupNamespace == "kube-system" {
+			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
+			return
+		}
 
 		req := types.ScaleServiceRequest{}
 		if r.Body != nil {
@@ -81,7 +103,7 @@ func makeReplicaHandler(namespace string, kube kubernetes.Interface) http.Handle
 		}
 
 		opts := metav1.GetOptions{}
-		dep, err := kube.AppsV1().Deployments(namespace).Get(context.TODO(), functionName, opts)
+		dep, err := kube.AppsV1().Deployments(lookupNamespace).Get(context.TODO(), functionName, opts)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
@@ -90,7 +112,7 @@ func makeReplicaHandler(namespace string, kube kubernetes.Interface) http.Handle
 		}
 
 		dep.Spec.Replicas = int32p(int32(req.Replicas))
-		_, err = kube.AppsV1().Deployments(namespace).Update(context.TODO(), dep, metav1.UpdateOptions{})
+		_, err = kube.AppsV1().Deployments(lookupNamespace).Update(context.TODO(), dep, metav1.UpdateOptions{})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))

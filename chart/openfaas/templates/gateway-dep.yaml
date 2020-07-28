@@ -192,6 +192,8 @@ spec:
             value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
           - name: liveness_probe_period_seconds
             value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
+          - name: cluster_role
+            value: "{{ .Values.clusterRole }}"
         ports:
         - containerPort: 8081
           protocol: TCP

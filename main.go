@@ -103,10 +103,15 @@ func main() {
 	// auto-scaling is does via the HTTP API that acts on the deployment Spec.Replicas
 	defaultResync := time.Minute * 5
 
-	kubeInformerOpt := kubeinformers.WithNamespace(config.DefaultFunctionNamespace)
+	namespaceScope := config.DefaultFunctionNamespace
+	if operator && config.ClusterRole {
+		namespaceScope = ""
+	}
+
+	kubeInformerOpt := kubeinformers.WithNamespace(namespaceScope)
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(kubeClient, defaultResync, kubeInformerOpt)
 
-	faasInformerOpt := informers.WithNamespace(config.DefaultFunctionNamespace)
+	faasInformerOpt := informers.WithNamespace(namespaceScope)
 	faasInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, faasInformerOpt)
 
 	// this is where we need to swap to the faasInformerFactory

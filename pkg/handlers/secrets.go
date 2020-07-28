@@ -14,26 +14,27 @@ import (
 )
 
 // MakeSecretHandler makes a handler for Create/List/Delete/Update of
-//secrets in the Kubernetes API
+// secrets in the Kubernetes API
 func MakeSecretHandler(defaultNamespace string, kube kubernetes.Interface) http.HandlerFunc {
-	handler := secretsHandler{
-		lookupNamespace: NewNamespaceResolver(defaultNamespace, kube),
-		secrets:         k8s.NewSecretsClient(kube),
+	handler := SecretsHandler{
+		LookupNamespace: NewNamespaceResolver(defaultNamespace, kube),
+		Secrets:         k8s.NewSecretsClient(kube),
 	}
 	return handler.ServeHTTP
 }
 
-type secretsHandler struct {
-	secrets         k8s.SecretsClient
-	lookupNamespace NamespaceResolver
+// SecretsHandler enabling to create openfaas secrets across namespaces
+type SecretsHandler struct {
+	Secrets         k8s.SecretsClient
+	LookupNamespace NamespaceResolver
 }
 
-func (h secretsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h SecretsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Body != nil {
 		defer r.Body.Close()
 	}
 
-	lookupNamespace, err := h.lookupNamespace(r)
+	lookupNamespace, err := h.LookupNamespace(r)
 	if err != nil {
 		switch err.Error() {
 		case "unable to unmarshal Secret request":
@@ -61,8 +62,8 @@ func (h secretsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h secretsHandler) listSecrets(namespace string, w http.ResponseWriter, r *http.Request) {
-	res, err := h.secrets.List(namespace)
+func (h SecretsHandler) listSecrets(namespace string, w http.ResponseWriter, r *http.Request) {
+	res, err := h.Secrets.List(namespace)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret list error reason: %s, %v\n", reason, err)
@@ -88,7 +89,7 @@ func (h secretsHandler) listSecrets(namespace string, w http.ResponseWriter, r *
 	w.Write(secretsBytes)
 }
 
-func (h secretsHandler) createSecret(namespace string, w http.ResponseWriter, r *http.Request) {
+func (h SecretsHandler) createSecret(namespace string, w http.ResponseWriter, r *http.Request) {
 	secret := types.Secret{}
 	err := json.NewDecoder(r.Body).Decode(&secret)
 	if err != nil {
@@ -98,7 +99,7 @@ func (h secretsHandler) createSecret(namespace string, w http.ResponseWriter, r 
 	}
 
 	secret.Namespace = namespace
-	err = h.secrets.Create(secret)
+	err = h.Secrets.Create(secret)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret create error reason: %s, %v\n", reason, err)
@@ -109,7 +110,7 @@ func (h secretsHandler) createSecret(namespace string, w http.ResponseWriter, r 
 	w.WriteHeader(http.StatusAccepted)
 }
 
-func (h secretsHandler) replaceSecret(namespace string, w http.ResponseWriter, r *http.Request) {
+func (h SecretsHandler) replaceSecret(namespace string, w http.ResponseWriter, r *http.Request) {
 	secret := types.Secret{}
 	err := json.NewDecoder(r.Body).Decode(&secret)
 	if err != nil {
@@ -119,7 +120,7 @@ func (h secretsHandler) replaceSecret(namespace string, w http.ResponseWriter, r
 	}
 
 	secret.Namespace = namespace
-	err = h.secrets.Replace(secret)
+	err = h.Secrets.Replace(secret)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret update error reason: %s, %v\n", reason, err)
@@ -130,7 +131,7 @@ func (h secretsHandler) replaceSecret(namespace string, w http.ResponseWriter, r
 	w.WriteHeader(http.StatusAccepted)
 }
 
-func (h secretsHandler) deleteSecret(namespace string, w http.ResponseWriter, r *http.Request) {
+func (h SecretsHandler) deleteSecret(namespace string, w http.ResponseWriter, r *http.Request) {
 	secret := types.Secret{}
 	err := json.NewDecoder(r.Body).Decode(&secret)
 	if err != nil {
@@ -139,7 +140,7 @@ func (h secretsHandler) deleteSecret(namespace string, w http.ResponseWriter, r 
 		return
 	}
 
-	err = h.secrets.Delete(namespace, secret.Name)
+	err = h.Secrets.Delete(namespace, secret.Name)
 	if err != nil {
 		status, reason := ProcessErrorReasons(err)
 		log.Printf("Secret delete error reason: %s, %v\n", reason, err)
