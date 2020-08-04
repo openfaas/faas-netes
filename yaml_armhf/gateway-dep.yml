@@ -60,8 +60,6 @@ spec:
           value: "openfaas-fn.svc.cluster.local"
         - name: function_namespace
           value: "openfaas-fn"
-        - name: profiles_namespace
-          value: "openfaas"
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
         - name: faas_nats_port
@@ -95,6 +93,8 @@ spec:
           value: "openfaas-fn"
         - name: read_timeout
           value: "60s"
+        - name: profiles_namespace
+          value: "openfaas"
         - name: write_timeout
           value: "60s"
         - name: image_pull_policy
