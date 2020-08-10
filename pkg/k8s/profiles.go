@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	glog "k8s.io/klog"
 	"reflect"
 	"strings"
 
@@ -93,6 +94,8 @@ func (f FunctionFactory) GetProfiles(ctx context.Context, namespace string, anno
 
 	client := f.NewProfileClient()
 	profileNames := ParseProfileNames(annotations)
+
+	glog.Infof("try to get profiles: %s", profileNames)
 
 	return client.Get(ctx, namespace, profileNames...)
 }

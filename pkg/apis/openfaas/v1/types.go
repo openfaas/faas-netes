@@ -21,6 +21,8 @@ type Function struct {
 type FunctionSpec struct {
 	Name  string `json:"name"`
 	Image string `json:"image"`
+
+	HostPort int32 `json:"hostPort,omitempty"`
 	// +optional
 	Handler string `json:"handler,omitempty"`
 	// +optional

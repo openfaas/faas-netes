@@ -55,6 +55,8 @@ spec:
               type: string
             image:
               type: string
+            hostPort:
+              type: integer
             labels:
               type: object
               additionalProperties:

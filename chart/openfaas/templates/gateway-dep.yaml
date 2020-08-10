@@ -171,7 +171,7 @@ spec:
           - name: function_namespace
             value: {{ $functionNs | quote }}
           - name: profiles_namespace
-            value: {{ .Release.Namespace | quote }}
+            value: {{ $functionNs | quote }}
           - name: read_timeout
             value: "{{ .Values.faasnetes.readTimeout }}"
           - name: write_timeout

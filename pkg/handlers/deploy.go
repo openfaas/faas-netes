@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	glog "k8s.io/klog"
 	"log"
 	"net/http"
 	"sort"
@@ -73,6 +74,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		var profileList []k8s.Profile
 		if request.Annotations != nil {
 			profileNamespace := factory.Config.ProfilesNamespace
+			glog.Infof("find profile in namespace: %s", profileNamespace)
 			profileList, err = factory.GetProfiles(ctx, profileNamespace, *request.Annotations)
 			if err != nil {
 				wrappedErr := fmt.Errorf("failed create Deployment spec: %s", err.Error())
@@ -82,6 +84,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			}
 		}
 		for _, profile := range profileList {
+			glog.Infof("apply profile %s", profile)
 			factory.ApplyProfile(profile, deploymentSpec)
 		}
 

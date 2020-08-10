@@ -56,6 +56,15 @@ func newDeployment(
 		}
 	}
 
+	ports := []corev1.ContainerPort{
+		{ContainerPort: int32(functionPort), Protocol: corev1.ProtocolTCP},
+	}
+	if function.Spec.HostPort > 0 {
+		ports = []corev1.ContainerPort{
+			{HostPort: function.Spec.HostPort, ContainerPort: int32(functionPort), Protocol: corev1.ProtocolTCP},
+		}
+	}
+
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        function.Spec.Name,
@@ -100,11 +109,9 @@ func newDeployment(
 					NodeSelector: nodeSelector,
 					Containers: []corev1.Container{
 						{
-							Name:  function.Spec.Name,
-							Image: function.Spec.Image,
-							Ports: []corev1.ContainerPort{
-								{ContainerPort: int32(functionPort), Protocol: corev1.ProtocolTCP},
-							},
+							Name:            function.Spec.Name,
+							Image:           function.Spec.Image,
+							Ports:           ports,
 							ImagePullPolicy: corev1.PullPolicy(factory.Factory.Config.ImagePullPolicy),
 							Env:             envVars,
 							Resources:       *resources,
@@ -147,6 +154,7 @@ func newDeployment(
 		glog.Infof("Function %s: no profiles specified", function.Spec.Name)
 	}
 
+	//glog.Infof("find profile in namespace: %s",profileNamespace)
 	profileList, err = factory.GetProfiles(ctx, profileNamespace, annotations)
 	if err != nil {
 		// TODO: a simple warning doesn't seem strong enough if a profile can't be found or there is

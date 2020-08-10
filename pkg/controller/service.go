@@ -13,6 +13,12 @@ import (
 // the appropriate OwnerReferences on the resource so handleObject can discover
 // the Function resource that 'owns' it.
 func newService(function *faasv1.Function) *corev1.Service {
+
+	port := int32(functionPort)
+	if function.Spec.HostPort > 0 {
+		port = function.Spec.HostPort
+	}
+
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        function.Spec.Name,
@@ -33,7 +39,7 @@ func newService(function *faasv1.Function) *corev1.Service {
 				{
 					Name:     "http",
 					Protocol: corev1.ProtocolTCP,
-					Port:     functionPort,
+					Port:     port,
 					TargetPort: intstr.IntOrString{
 						Type:   intstr.Int,
 						IntVal: int32(functionPort),
