@@ -9,6 +9,8 @@ import (
 	"log"
 	"time"
 
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
 	"github.com/openfaas/faas-netes/pkg/config"
@@ -103,14 +105,17 @@ func main() {
 	// auto-scaling is does via the HTTP API that acts on the deployment Spec.Replicas
 	defaultResync := time.Minute * 5
 
-	kubeInformerOpt := kubeinformers.WithNamespace(config.DefaultFunctionNamespace)
+	//kubeInformerOpt := kubeinformers.WithNamespace(config.DefaultFunctionNamespace)
+	kubeInformerOpt := kubeinformers.WithNamespace(v1.NamespaceAll)
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(kubeClient, defaultResync, kubeInformerOpt)
 
-	faasInformerOpt := informers.WithNamespace(config.DefaultFunctionNamespace)
+	//faasInformerOpt := informers.WithNamespace(config.DefaultFunctionNamespace)
+	faasInformerOpt := informers.WithNamespace(v1.NamespaceAll)
 	faasInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, faasInformerOpt)
 
 	// this is where we need to swap to the faasInformerFactory
-	profileInformerOpt := informers.WithNamespace(config.ProfilesNamespace)
+	//profileInformerOpt := informers.WithNamespace(config.ProfilesNamespace)
+	profileInformerOpt := informers.WithNamespace(v1.NamespaceAll)
 	profileInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, profileInformerOpt)
 	profileLister := profileInformerFactory.Openfaas().V1().Profiles().Lister()
 	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, profileLister)
