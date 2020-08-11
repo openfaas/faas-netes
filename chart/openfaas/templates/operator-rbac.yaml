@@ -73,15 +73,13 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: {{ .Release.Name }}-operator-controller
-  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: openaas-operator
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ .Release.Name }}-operator-controller
-  namespace: {{ .Release.Namespace | quote }}
+
 rules:
   - apiGroups: ["openfaas.com"]
     resources: ["functions"]
@@ -106,7 +104,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: {{ .Release.Name }}-operator-controller
-  namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
