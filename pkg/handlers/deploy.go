@@ -73,7 +73,8 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 
 		var profileList []k8s.Profile
 		if request.Annotations != nil {
-			profileNamespace := factory.Config.ProfilesNamespace
+			//profileNamespace := factory.Config.ProfilesNamespace
+			profileNamespace := namespace
 			glog.Infof("find profile in namespace: %s", profileNamespace)
 			profileList, err = factory.GetProfiles(ctx, profileNamespace, *request.Annotations)
 			if err != nil {

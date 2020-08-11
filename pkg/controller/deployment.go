@@ -139,7 +139,8 @@ func newDeployment(
 	// compare the annotations from args to the cache copy of the deployment annotations
 	// at this point we have already updated the annotations to the new value, if we
 	// compare to that it will produce an empty list
-	profileNamespace := factory.Factory.Config.ProfilesNamespace
+	//profileNamespace := factory.Factory.Config.ProfilesNamespace
+	profileNamespace := function.Namespace
 	profileList, err := factory.GetProfilesToRemove(ctx, profileNamespace, annotations, currentAnnotations)
 	if err != nil {
 		// TODO: a simple warning doesn't seem strong enough if a profile can't be found or there is

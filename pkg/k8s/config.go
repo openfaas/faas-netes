@@ -21,5 +21,5 @@ type DeploymentConfig struct {
 	// true, the user will set to 12000 for all functions.
 	SetNonRootUser bool
 	// ProfilesNamespace defines which namespace is used to look up available Profiles.
-	ProfilesNamespace string
+	//ProfilesNamespace string
 }

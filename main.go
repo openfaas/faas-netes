@@ -97,8 +97,8 @@ func main() {
 			TimeoutSeconds:      int32(config.LivenessProbeTimeoutSeconds),
 			PeriodSeconds:       int32(config.LivenessProbePeriodSeconds),
 		},
-		ImagePullPolicy:   config.ImagePullPolicy,
-		ProfilesNamespace: config.ProfilesNamespace,
+		ImagePullPolicy: config.ImagePullPolicy,
+		//ProfilesNamespace: config.ProfilesNamespace,
 	}
 
 	// the sync interval does not affect the scale to/from zero feature

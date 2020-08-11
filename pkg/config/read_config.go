@@ -48,7 +48,7 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 	}
 
 	cfg.DefaultFunctionNamespace = ftypes.ParseString(hasEnv.Getenv("function_namespace"), "default")
-	cfg.ProfilesNamespace = ftypes.ParseString(hasEnv.Getenv("profiles_namespace"), cfg.DefaultFunctionNamespace)
+	//cfg.ProfilesNamespace = ftypes.ParseString(hasEnv.Getenv("profiles_namespace"), cfg.DefaultFunctionNamespace)
 
 	cfg.HTTPProbe = httpProbe
 	cfg.SetNonRootUser = setNonRootUser
@@ -102,7 +102,7 @@ type BootstrapConfig struct {
 	// ProfilesNamespace defines which namespace is used to look up available Profiles.
 	// Value is set via the profiles_namespace environment variable. If the
 	// variable is not set, then it falls back to DefaultFunctionNamespace.
-	ProfilesNamespace string
+	//ProfilesNamespace string
 	// FaaSConfig contains the configuration for the FaaSProvider
 	FaaSConfig ftypes.FaaSConfig
 }
@@ -120,7 +120,7 @@ func (c BootstrapConfig) Fprint(verbose bool) {
 		log.Printf("MaxIdleConns: %d\n", c.FaaSConfig.MaxIdleConns)
 		log.Printf("MaxIdleConnsPerHost: %d\n", c.FaaSConfig.MaxIdleConnsPerHost)
 		log.Printf("HTTPProbe: %v\n", c.HTTPProbe)
-		log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
+		//log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
 		log.Printf("SetNonRootUser: %v\n", c.SetNonRootUser)
 		log.Printf("ReadinessProbeInitialDelaySeconds: %d\n", c.ReadinessProbeInitialDelaySeconds)
 		log.Printf("ReadinessProbeTimeoutSeconds: %d\n", c.ReadinessProbeTimeoutSeconds)
