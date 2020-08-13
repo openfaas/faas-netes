@@ -93,7 +93,7 @@ func New(client clientset.Interface,
 		HealthHandler:        makeHealthHandler(),
 		InfoHandler:          makeInfoHandler(),
 		SecretHandler:        makeSecretHandler(functionNamespace, kube), //未修复
-		ListNamespaceHandler: makeListNamespaceHandler(client),
+		ListNamespaceHandler: makeListNamespaceHandler(functionNamespace, client),
 		LogHandler:           logs.NewLogHandlerFunc(faasnetesk8s.NewLogRequestor(kube, functionNamespace), bootstrapConfig.WriteTimeout),
 	}
 

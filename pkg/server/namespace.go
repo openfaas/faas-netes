@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func makeListNamespaceHandler(
+func makeListNamespaceHandler(defaultFunctionNamespace string,
 	client clientset.Interface) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -26,6 +26,7 @@ func makeListNamespaceHandler(
 		}
 
 		m := make(map[string]interface{})
+		m[defaultFunctionNamespace] = nil
 		for _, item := range res.Items {
 			m[item.Namespace] = nil
 		}
