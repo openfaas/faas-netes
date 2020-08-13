@@ -1,5 +1,7 @@
 module github.com/openfaas/faas-netes
 
+// replace github.com/openfaas/faas-provider v0.15.1 => ../faas-provider
+
 go 1.13
 
 require (

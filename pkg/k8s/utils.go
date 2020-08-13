@@ -5,6 +5,7 @@ package k8s
 
 import (
 	corev1 "k8s.io/api/core/v1"
+	"strings"
 )
 
 // removeVolume returns a Volume slice with any volumes matching volumeName removed.
@@ -41,4 +42,15 @@ func removeVolumeMount(volumeName string, mounts []corev1.VolumeMount) []corev1.
 	}
 
 	return newMounts
+}
+
+func GetNamespace(name string, defaultNamespace string) (string, string) {
+	namespace := defaultNamespace
+	realname := name
+	if strings.Contains(name, ".") {
+		namespace = name[strings.LastIndexAny(name, ".")+1:]
+		realname = name[:strings.LastIndexAny(name, ".")]
+	}
+
+	return realname, namespace
 }

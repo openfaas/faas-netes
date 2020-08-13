@@ -33,6 +33,10 @@ func makeApplyHandler(namespace string, client clientset.Interface) http.Handler
 		}
 		klog.Infof("Deployment request for: %s\n", req.Service)
 
+		if req.Namespace != "" {
+			namespace = req.Namespace
+		}
+
 		opts := metav1.GetOptions{}
 		got, err := client.OpenfaasV1().Functions(namespace).Get(context.TODO(), req.Service, opts)
 		miss := false

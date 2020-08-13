@@ -6,9 +6,9 @@ package k8s
 
 import (
 	"fmt"
+	glog "k8s.io/klog"
 	"math/rand"
 	"net/url"
-	"strings"
 	"sync"
 
 	corelister "k8s.io/client-go/listers/core/v1"
@@ -46,17 +46,10 @@ func (f *FunctionLookup) SetLister(ns string, lister corelister.EndpointsNamespa
 	f.Listers[ns] = lister
 }
 
-func getNamespace(name, defaultNamespace string) string {
-	namespace := defaultNamespace
-	if strings.Contains(name, ".") {
-		namespace = name[strings.LastIndexAny(name, ".")+1:]
-	}
-	return namespace
-}
-
 func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 
-	namespace := getNamespace(name, l.DefaultNamespace)
+	realname, namespace := GetNamespace(name, l.DefaultNamespace)
+
 	if err := l.verifyNamespace(namespace); err != nil {
 		return url.URL{}, err
 	}
@@ -69,18 +62,18 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 		nsEndpointLister = l.GetLister(namespace)
 	}
 
-	svc, err := nsEndpointLister.Get(name)
+	svc, err := nsEndpointLister.Get(realname)
 	if err != nil {
-		return url.URL{}, fmt.Errorf("error listing %s.%s %s", name, namespace, err.Error())
+		return url.URL{}, fmt.Errorf("error listing %s.%s %s", realname, namespace, err.Error())
 	}
 
 	if len(svc.Subsets) == 0 {
-		return url.URL{}, fmt.Errorf("no subsets available for %s.%s", name, namespace)
+		return url.URL{}, fmt.Errorf("no subsets available for %s.%s", realname, namespace)
 	}
 
 	all := len(svc.Subsets[0].Addresses)
 	if len(svc.Subsets[0].Addresses) == 0 {
-		return url.URL{}, fmt.Errorf("no addresses in subset for %s.%s", name, namespace)
+		return url.URL{}, fmt.Errorf("no addresses in subset for %s.%s", realname, namespace)
 	}
 
 	target := rand.Intn(all)
@@ -93,6 +86,8 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 	if err != nil {
 		return url.URL{}, err
 	}
+
+	glog.Infof("Resolve %s to %s %s. url:%s", name, realname, namespace, urlRes)
 
 	return *urlRes, nil
 }

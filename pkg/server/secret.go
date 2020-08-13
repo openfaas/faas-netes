@@ -28,6 +28,12 @@ func makeSecretHandler(namespace string, kube kubernetes.Interface) http.Handler
 			defer r.Body.Close()
 		}
 
+		query := r.URL.Query()
+
+		if query.Get("namespace") != "" {
+			namespace = query.Get("namespace")
+		}
+
 		switch r.Method {
 		case http.MethodGet:
 			secrets, err := getSecrets(namespace, kube)

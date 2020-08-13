@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
+	pk8s "github.com/openfaas/faas-netes/pkg/k8s"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -35,12 +36,14 @@ func makeDeleteHandler(namespace string, client clientset.Interface) http.Handle
 			return
 		}
 
+		functionName, namespace := pk8s.GetNamespace(request.FunctionName, namespace)
+
 		err = client.OpenfaasV1().Functions(namespace).
-			Delete(context.TODO(), request.FunctionName, metav1.DeleteOptions{})
+			Delete(context.TODO(), functionName, metav1.DeleteOptions{})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
-			glog.Errorf("Function %s delete error: %v", request.FunctionName, err)
+			glog.Errorf("Function %s in %s delete error: %v", functionName, namespace, err)
 			return
 		}
 

@@ -4,7 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
+	appsinformer "k8s.io/client-go/informers/apps/v1"
 	"net/http"
+
+	pk8s "github.com/openfaas/faas-netes/pkg/k8s"
 
 	"github.com/gorilla/mux"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
@@ -15,10 +18,17 @@ import (
 	glog "k8s.io/klog"
 )
 
-func makeReplicaReader(namespace string, client clientset.Interface, lister v1.DeploymentNamespaceLister) http.HandlerFunc {
+func makeReplicaReader(namespace string, client clientset.Interface, deploymentsInformer appsinformer.DeploymentInformer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		functionName := vars["name"]
+
+		query := r.URL.Query()
+
+		if query.Get("namespace") != "" {
+			namespace = query.Get("namespace")
+		}
+
+		functionName, namespace := pk8s.GetNamespace(vars["name"], namespace)
 
 		opts := metav1.GetOptions{}
 		k8sfunc, err := client.OpenfaasV1().Functions(namespace).
@@ -29,7 +39,9 @@ func makeReplicaReader(namespace string, client clientset.Interface, lister v1.D
 			return
 		}
 
-		desiredReplicas, availableReplicas, err := getReplicas(functionName, namespace, lister)
+		deploymentLister := deploymentsInformer.Lister().Deployments(namespace)
+
+		desiredReplicas, availableReplicas, err := getReplicas(functionName, namespace, deploymentLister)
 		if err != nil {
 			glog.Warningf("Function replica reader error: %v", err)
 		}
@@ -66,7 +78,14 @@ func getReplicas(functionName string, namespace string, lister v1.DeploymentName
 func makeReplicaHandler(namespace string, kube kubernetes.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		functionName := vars["name"]
+
+		query := r.URL.Query()
+
+		if query.Get("namespace") != "" {
+			namespace = query.Get("namespace")
+		}
+
+		functionName, namespace := pk8s.GetNamespace(vars["name"], namespace)
 
 		req := types.ScaleServiceRequest{}
 		if r.Body != nil {

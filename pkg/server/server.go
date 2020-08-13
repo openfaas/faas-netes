@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	"github.com/openfaas/faas-netes/pkg/k8s"
 	faasnetesk8s "github.com/openfaas/faas-netes/pkg/k8s"
@@ -72,7 +74,7 @@ func New(client clientset.Interface,
 	lister := endpointsInformer.Lister()
 	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
 
-	deploymentLister := deploymentsInformer.Lister().Deployments(functionNamespace)
+	//deploymentLister := deploymentsInformer.Lister().Deployments(v1.NamespaceAll)
 	bootstrapConfig := types.FaaSConfig{
 		ReadTimeout:  time.Duration(readTimeout) * time.Second,
 		WriteTimeout: time.Duration(writeTimeout) * time.Second,
@@ -84,14 +86,14 @@ func New(client clientset.Interface,
 		FunctionProxy:        proxy.NewHandlerFunc(bootstrapConfig, functionLookup),
 		DeleteHandler:        makeDeleteHandler(functionNamespace, client),
 		DeployHandler:        makeApplyHandler(functionNamespace, client),
-		FunctionReader:       makeListHandler(functionNamespace, client, deploymentLister),
-		ReplicaReader:        makeReplicaReader(functionNamespace, client, deploymentLister),
+		FunctionReader:       makeListHandler(v1.NamespaceAll, client, deploymentsInformer),
+		ReplicaReader:        makeReplicaReader(functionNamespace, client, deploymentsInformer),
 		ReplicaUpdater:       makeReplicaHandler(functionNamespace, kube),
 		UpdateHandler:        makeApplyHandler(functionNamespace, client),
 		HealthHandler:        makeHealthHandler(),
 		InfoHandler:          makeInfoHandler(),
-		SecretHandler:        makeSecretHandler(functionNamespace, kube),
-		ListNamespaceHandler: makeListNamespaceHandler(functionNamespace),
+		SecretHandler:        makeSecretHandler(functionNamespace, kube), //未修复
+		ListNamespaceHandler: makeListNamespaceHandler(client),
 		LogHandler:           logs.NewLogHandlerFunc(faasnetesk8s.NewLogRequestor(kube, functionNamespace), bootstrapConfig.WriteTimeout),
 	}
 
