@@ -172,6 +172,8 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		return nil, err
 	}
 
+	isEnableServiceLinks := false
+
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        request.Service,
@@ -229,6 +231,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 					ServiceAccountName: serviceAccount,
 					RestartPolicy:      corev1.RestartPolicyAlways,
 					DNSPolicy:          corev1.DNSClusterFirst,
+					EnableServiceLinks: &isEnableServiceLinks,
 				},
 			},
 		},
