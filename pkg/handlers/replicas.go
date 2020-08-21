@@ -15,6 +15,7 @@ import (
 	"github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	glog "k8s.io/klog"
 )
 
 // MakeReplicaUpdater updates desired count of replicas
@@ -115,7 +116,14 @@ func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset)
 
 		log.Printf("Read replicas - %s %s, %d/%d\n", functionName, lookupNamespace, function.AvailableReplicas, function.Replicas)
 
-		functionBytes, _ := json.Marshal(function)
+		functionBytes, err := json.Marshal(function)
+		if err != nil {
+			glog.Errorf("Failed to marshal function: %s", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Failed to marshal function"))
+			return
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(functionBytes)

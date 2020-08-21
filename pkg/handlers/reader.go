@@ -15,6 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	glog "k8s.io/klog"
 
 	"github.com/openfaas/faas-netes/pkg/k8s"
 )
@@ -45,7 +46,14 @@ func MakeFunctionReader(defaultNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		functionBytes, _ := json.Marshal(functions)
+		functionBytes, err := json.Marshal(functions)
+		if err != nil {
+			glog.Errorf("Failed to marshal functions: %s", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Failed to marshal functions"))
+			return
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(functionBytes)

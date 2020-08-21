@@ -6,6 +6,7 @@ import (
 
 	"github.com/openfaas/faas-netes/version"
 	"github.com/openfaas/faas-provider/types"
+	glog "k8s.io/klog"
 )
 
 // makeInfoHandler provides the system/info endpoint
@@ -27,8 +28,9 @@ func makeInfoHandler() http.HandlerFunc {
 
 		infoBytes, err := json.Marshal(info)
 		if err != nil {
+			glog.Errorf("Failed to marshal info: %s", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
+			w.Write([]byte("Failed to marshal info"))
 			return
 		}
 
