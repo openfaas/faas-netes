@@ -53,7 +53,14 @@ func makeReplicaReader(defaultNamespace string, client clientset.Interface, list
 			Namespace:         lookupNamespace,
 		}
 
-		res, _ := json.Marshal(result)
+		res, err := json.Marshal(result)
+		if err != nil {
+			glog.Errorf("Failed to marshal function status: %s", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Failed to marshal function status"))
+			return
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(res)

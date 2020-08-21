@@ -15,6 +15,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	glog "k8s.io/klog"
 )
 
 // MakeNamespacesLister builds a list of namespaces with an "openfaas" tag, or the default name
@@ -24,7 +25,14 @@ func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interfac
 
 		res := ListNamespaces(defaultNamespace, clientset)
 
-		out, _ := json.Marshal(res)
+		out, err := json.Marshal(res)
+		if err != nil {
+			glog.Errorf("Failed to list namespaces: %s", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Failed to list namespaces"))
+			return
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
