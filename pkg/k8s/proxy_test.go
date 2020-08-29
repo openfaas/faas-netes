@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -30,14 +31,16 @@ func (f FakeNSLister) List(selector labels.Selector) (ret []*corev1.Endpoints, e
 }
 
 func (f FakeNSLister) Get(name string) (*corev1.Endpoints, error) {
+
+	// make sure that we only send the function name to the lister
+	if strings.Contains(name, ".") {
+		return nil, fmt.Errorf("can not look up function name with a dot!")
+	}
+
 	ep := corev1.Endpoints{
-		Subsets: []corev1.EndpointSubset{
-			corev1.EndpointSubset{
-				Addresses: []corev1.EndpointAddress{
-					corev1.EndpointAddress{IP: "127.0.0.1"},
-				},
-			},
-		},
+		Subsets: []corev1.EndpointSubset{{
+			Addresses: []corev1.EndpointAddress{{IP: "127.0.0.1"}},
+		}},
 	}
 
 	return &ep, nil

@@ -55,10 +55,14 @@ func getNamespace(name, defaultNamespace string) string {
 }
 
 func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
-
+	functionName := name
 	namespace := getNamespace(name, l.DefaultNamespace)
 	if err := l.verifyNamespace(namespace); err != nil {
 		return url.URL{}, err
+	}
+
+	if strings.Contains(name, ".") {
+		functionName = strings.TrimSuffix(name, "."+namespace)
 	}
 
 	nsEndpointLister := l.GetLister(namespace)
@@ -69,18 +73,18 @@ func (l *FunctionLookup) Resolve(name string) (url.URL, error) {
 		nsEndpointLister = l.GetLister(namespace)
 	}
 
-	svc, err := nsEndpointLister.Get(name)
+	svc, err := nsEndpointLister.Get(functionName)
 	if err != nil {
-		return url.URL{}, fmt.Errorf("error listing %s.%s %s", name, namespace, err.Error())
+		return url.URL{}, fmt.Errorf("error listing \"%s.%s\": %s", functionName, namespace, err.Error())
 	}
 
 	if len(svc.Subsets) == 0 {
-		return url.URL{}, fmt.Errorf("no subsets available for %s.%s", name, namespace)
+		return url.URL{}, fmt.Errorf("no subsets available for \"%s.%s\"", functionName, namespace)
 	}
 
 	all := len(svc.Subsets[0].Addresses)
 	if len(svc.Subsets[0].Addresses) == 0 {
-		return url.URL{}, fmt.Errorf("no addresses in subset for %s.%s", name, namespace)
+		return url.URL{}, fmt.Errorf("no addresses in subset for \"%s.%s\"", functionName, namespace)
 	}
 
 	target := rand.Intn(all)
