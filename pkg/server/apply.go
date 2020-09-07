@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -39,7 +38,7 @@ func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.
 		}
 
 		opts := metav1.GetOptions{}
-		got, err := client.OpenfaasV1().Functions(namespace).Get(context.TODO(), req.Service, opts)
+		got, err := client.OpenfaasV1().Functions(namespace).Get(r.Context(), req.Service, opts)
 		miss := false
 		if err != nil {
 			if errors.IsNotFound(err) {
@@ -60,7 +59,7 @@ func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.
 			updated.Spec = toFunctionSpec(req)
 
 			if _, err = client.OpenfaasV1().Functions(namespace).
-				Update(context.TODO(), updated, metav1.UpdateOptions{}); err != nil {
+				Update(r.Context(), updated, metav1.UpdateOptions{}); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(fmt.Sprintf("Error updating function: %s", err.Error())))
 				return
@@ -76,7 +75,7 @@ func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.
 			}
 
 			if _, err = client.OpenfaasV1().Functions(namespace).
-				Create(context.TODO(), newFunc, metav1.CreateOptions{}); err != nil {
+				Create(r.Context(), newFunc, metav1.CreateOptions{}); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(fmt.Sprintf("Error creating function: %s", err.Error())))
 				return

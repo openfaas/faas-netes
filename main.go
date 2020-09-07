@@ -104,7 +104,7 @@ func main() {
 	defaultResync := time.Minute * 5
 
 	namespaceScope := config.DefaultFunctionNamespace
-	if operator && config.ClusterRole {
+	if config.ClusterRole {
 		namespaceScope = ""
 	}
 

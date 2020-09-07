@@ -49,7 +49,7 @@ The rest of this document is dedicated to technical and operational information 
 There are two modes available for faas-netes, the classic mode is the default.
 
 * Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD
-* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD, but you must use a single namespace per installation
+* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD and multiple-namespace support
 
 See also: [README for "The OpenFaaS Operator"](README-OPERATOR.md)
 
@@ -59,21 +59,21 @@ The single faas-netes image and binary contains both modes, switch between one o
 
 faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
 
-| Option              | Usage                                                                                           |
-|---------------------|-------------------------------------------------------------------------------------------------|
-| `httpProbe`         | Boolean - use http probe type for function readiness and liveness. Default: `false`             |
-| `write_timeout`     | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`        |
-| `read_timeout`      | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`        |
-| `image_pull_policy` | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`).  Default: `Always` |
-| `gateway.resources`        | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `faasnetes.resources`      | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `operator.resources`       | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `queueWorker.resources`    | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`) |
-| `prometheus.resources`     | CPU/Memory resources requests/limits (memory: `512Mi`)             |
-| `alertmanager.resources`   | CPU/Memory resources requests/limits (memory: `25Mi`)              |
-| `nats.resources`           | CPU/Memory resources requests/limits (memory: `120Mi`)             |
-| `faasIdler.resources`      | CPU/Memory resources requests/limits (memory: `64Mi`)              |
-| `basicAuthPlugin.resources`| CPU/Memory resources requests/limits (memory: `50Mi`, cpu: `20m`)  |
+| Option                      | Usage                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+| `httpProbe`                 | Boolean - use http probe type for function readiness and liveness. Default: `false`              |
+| `write_timeout`             | HTTP timeout for writing a response body from your function (in seconds). Default: `60s`         |
+| `read_timeout`              | HTTP timeout for reading the payload from the client caller (in seconds). Default: `60s`         |
+| `image_pull_policy`         | Image pull policy for deployed functions (`Always`, `IfNotPresent`, `Never`).  Default: `Always` |
+| `gateway.resources`         | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `faasnetes.resources`       | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `operator.resources`        | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `queueWorker.resources`     | CPU/Memory resources requests/limits (memory: `120Mi`, cpu: `50m`)                               |
+| `prometheus.resources`      | CPU/Memory resources requests/limits (memory: `512Mi`)                                           |
+| `alertmanager.resources`    | CPU/Memory resources requests/limits (memory: `25Mi`)                                            |
+| `nats.resources`            | CPU/Memory resources requests/limits (memory: `120Mi`)                                           |
+| `faasIdler.resources`       | CPU/Memory resources requests/limits (memory: `64Mi`)                                            |
+| `basicAuthPlugin.resources` | CPU/Memory resources requests/limits (memory: `50Mi`, cpu: `20m`)                                |
 
 ### Readiness checking
 

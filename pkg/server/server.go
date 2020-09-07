@@ -8,6 +8,7 @@ import (
 	"time"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
+	"github.com/openfaas/faas-netes/pkg/handlers"
 	"github.com/openfaas/faas-netes/pkg/k8s"
 	faasnetesk8s "github.com/openfaas/faas-netes/pkg/k8s"
 	bootstrap "github.com/openfaas/faas-provider"
@@ -90,8 +91,8 @@ func New(client clientset.Interface,
 		UpdateHandler:        makeApplyHandler(functionNamespace, client),
 		HealthHandler:        makeHealthHandler(),
 		InfoHandler:          makeInfoHandler(),
-		SecretHandler:        makeSecretHandler(functionNamespace, kube),
-		ListNamespaceHandler: makeListNamespaceHandler(functionNamespace, kube),
+		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, kube),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, kube),
 		LogHandler:           logs.NewLogHandlerFunc(faasnetesk8s.NewLogRequestor(kube, functionNamespace), bootstrapConfig.WriteTimeout),
 	}
 
