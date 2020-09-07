@@ -129,6 +129,8 @@ helm upgrade openfaas --install openfaas/openfaas \
 
 > Note: If you are switching from the OpenFaaS `faas-netes` controller, then you will need to remove all functions and redeploy them after switching to the operator.
 
+If you want to enable multiple namespaces feature which enables you to create functions across namespaces in the cluster, set `clusterRole=true`.
+
 #### Deploy a function with kubectl:
 
 ```bash

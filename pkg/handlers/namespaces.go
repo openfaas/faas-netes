@@ -23,6 +23,10 @@ func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interfac
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Query namespaces")
 
+		if r.Body != nil {
+			defer r.Body.Close()
+		}
+
 		res := ListNamespaces(defaultNamespace, clientset)
 
 		out, err := json.Marshal(res)

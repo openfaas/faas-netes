@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -31,7 +30,7 @@ func makeReplicaReader(defaultNamespace string, client clientset.Interface, list
 
 		opts := metav1.GetOptions{}
 		k8sfunc, err := client.OpenfaasV1().Functions(lookupNamespace).
-			Get(context.TODO(), functionName, opts)
+			Get(r.Context(), functionName, opts)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(err.Error()))
@@ -110,7 +109,7 @@ func makeReplicaHandler(defaultNamespace string, kube kubernetes.Interface) http
 		}
 
 		opts := metav1.GetOptions{}
-		dep, err := kube.AppsV1().Deployments(lookupNamespace).Get(context.TODO(), functionName, opts)
+		dep, err := kube.AppsV1().Deployments(lookupNamespace).Get(r.Context(), functionName, opts)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
@@ -119,7 +118,7 @@ func makeReplicaHandler(defaultNamespace string, kube kubernetes.Interface) http
 		}
 
 		dep.Spec.Replicas = int32p(int32(req.Replicas))
-		_, err = kube.AppsV1().Deployments(lookupNamespace).Update(context.TODO(), dep, metav1.UpdateOptions{})
+		_, err = kube.AppsV1().Deployments(lookupNamespace).Update(r.Context(), dep, metav1.UpdateOptions{})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))

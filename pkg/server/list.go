@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 
@@ -39,7 +38,7 @@ func makeListHandler(defaultNamespace string,
 		functions := []types.FunctionStatus{}
 
 		opts := metav1.ListOptions{}
-		res, err := client.OpenfaasV1().Functions(lookupNamespace).List(context.TODO(), opts)
+		res, err := client.OpenfaasV1().Functions(lookupNamespace).List(r.Context(), opts)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
