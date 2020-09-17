@@ -42,7 +42,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.17
+  image: openfaas/basic-auth-plugin:0.18.18
   replicas: 1
   resources:
     requests:
@@ -73,7 +73,7 @@ oauth2Plugin:
   securityContext: true
 
 faasnetes:
-  image: openfaas/faas-netes:0.12.2
+  image: openfaas/faas-netes:0.12.3
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -94,7 +94,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: openfaas/faas-netes:0.12.2
+  image: openfaas/faas-netes:0.12.3
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
@@ -105,7 +105,7 @@ operator:
       cpu: "50m"
 
 queueWorker:
-  image: openfaas/queue-worker:0.11.0
+  image: openfaas/queue-worker:0.11.2
   # Control HA of queue-worker
   replicas: 1
   # Control the concurrent invocations
