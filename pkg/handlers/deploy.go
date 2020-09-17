@@ -172,7 +172,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		return nil, err
 	}
 
-	isEnableServiceLinks := false
+	enableServiceLinks := false
 
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -216,7 +216,11 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 							Name:  request.Service,
 							Image: request.Image,
 							Ports: []apiv1.ContainerPort{
-								{ContainerPort: factory.Config.RuntimeHTTPPort, Protocol: corev1.ProtocolTCP},
+								{
+									Name:          "http",
+									ContainerPort: factory.Config.RuntimeHTTPPort,
+									Protocol:      corev1.ProtocolTCP,
+								},
 							},
 							Env:             envVars,
 							Resources:       *resources,
@@ -231,7 +235,9 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 					ServiceAccountName: serviceAccount,
 					RestartPolicy:      corev1.RestartPolicyAlways,
 					DNSPolicy:          corev1.DNSClusterFirst,
-					EnableServiceLinks: &isEnableServiceLinks,
+					// EnableServiceLinks injects ENV vars about every other service within
+					// the namespace.
+					EnableServiceLinks: &enableServiceLinks,
 				},
 			},
 		},
