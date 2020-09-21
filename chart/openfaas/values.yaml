@@ -69,7 +69,7 @@ oauth2Plugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: openfaas/openfaas-oidc-plugin:0.3.5
+  image: openfaas/openfaas-oidc-plugin:0.3.7
   securityContext: true
 
 faasnetes:
