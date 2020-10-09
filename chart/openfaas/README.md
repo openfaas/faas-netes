@@ -173,7 +173,8 @@ export OPENFAAS_URL=http://127.0.0.1:31112
 If using a remote cluster, you can port-forward the gateway to your local machine:
 
 ```sh
-kubectl port-forward -n openfaas svc/gateway 31112:8080 &
+export OPENFAAS_URL=http://127.0.0.1:8080
+kubectl port-forward -n openfaas svc/gateway 8080:8080 &
 ```
 
 Now log in with the CLI and check connectivity:
