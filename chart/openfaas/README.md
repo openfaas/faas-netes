@@ -1,6 +1,6 @@
 # OpenFaaS - Serverless Functions Made Simple
 
-![OpenFaaS Logo](https://blog.alexellis.io/content/images/2017/08/faas_side.png)
+<img src="https://blog.alexellis.io/content/images/2017/08/faas_side.png" alt="OpenFaaS logo" width="60%">
 
 [OpenFaaS](https://github.com/openfaas/faas) (Functions as a Service) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
@@ -13,19 +13,30 @@
 * [faas-cli](http://github.com/openfaas/faas-cli) available with stack.yml for creating and managing functions
 * Auto-scales according to metrics from Prometheus
 * Scales to zero and back again and can be tuned at a per-function level
-* Works with service-mesh
+* Works with service-meshes
     * Tested with [Istio](https://istio.io) including mTLS
-    * Tested with [Linkerd2](https://github.com/openfaas-incubator/openfaas-linkerd2) including mTLS
+    * Tested with [Linkerd2](https://github.com/openfaas-incubator/openfaas-linkerd2) including mTLS and traffic splitting with SMI
 
 ## Deploy OpenFaaS
 
-**Note:** If your cluster is not configured with role-based access control, then pass `--set rbac=false`. For further information, see [Kubernetes: RBAC](https://kubernetes.io/docs/admin/authorization/rbac/).
+### 1) Install with arkade
 
-**Note:** If you can not use helm with Tiller, you can still use the `helm` CLI to [generate custom YAML](#deployment-with-helm-template) without server-side components.
+It is recommended that you use arkade to install OpenFaaS. arkade is a CLI tool which automates the helm CLI and chart download and installation. The `openfaas` app also has a number of options available via `arkade install openfaas --help`
 
----
+The installation with arkade is as simple as the following which installs OpenFaaS, sets up an Ingress record, and a TLS certificate with cert-manager.
 
-### Install
+```bash
+arkade install openfaas
+arkade install openfaas-ingress \
+  --domain openfaas.example.com \
+  --email wm@example.com
+```
+
+See a complete example here: [Get TLS for OpenFaaS the easy way with arkade](https://blog.alexellis.io/tls-the-easy-way-with-openfaas-and-k3sup/)
+
+If you wish to continue without using arkade, read on for instructions.
+
+### 2) Install with helm
 
 These instructions are for Intel (normal computers), jump to the end of the document for ARM and Raspberry Pi.
 
