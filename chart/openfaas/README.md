@@ -29,9 +29,19 @@
 
 These instructions are for Intel (normal computers), jump to the end of the document for ARM and Raspberry Pi.
 
-To use the chart, you will need Helm 2 or 3:
+To use the chart, you will need Helm, we recommend helm 3:
 
-* [Install helm](https://github.com/openfaas/faas-netes/blob/master/HELM.md)
+Get it from arkade:
+
+```bash
+arkade get helm
+```
+
+Or use the helm3 installer:
+
+```bash
+curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+```
 
 We recommend creating two namespaces, one for the OpenFaaS *core services* and one for the *functions*:
 
