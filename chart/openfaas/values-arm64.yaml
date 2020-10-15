@@ -4,7 +4,7 @@ nodeSelector:
   beta.kubernetes.io/arch: arm64
 
 gateway:
-  image: openfaas/gateway:0.18.18-arm64
+  image: openfaas/gateway:0.19.1-arm64
   directFunctions: true
 
 oauth2Plugin:

@@ -33,7 +33,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: openfaas/gateway:0.18.18-arm64
+        image: openfaas/gateway:0.19.1-arm64
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
