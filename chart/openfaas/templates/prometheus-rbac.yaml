@@ -50,6 +50,7 @@ subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-prometheus
   namespace: {{ .Release.Namespace | quote }}
+{{- if ne $functionNs (.Release.Namespace | toString) }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -70,4 +71,5 @@ subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-prometheus
   namespace: {{ .Release.Namespace | quote }}
+{{- end }}
 {{- end }}
