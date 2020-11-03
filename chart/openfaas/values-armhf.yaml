@@ -1,5 +1,8 @@
 basic_auth: false
 
+clusterRole: false
+createCRDs: true
+
 nodeSelector:
   beta.kubernetes.io/arch: arm
 
