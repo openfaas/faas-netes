@@ -1,4 +1,6 @@
 {{- if .Values.ingressOperator.create }}
+{{- if .Values.createCRDs }}
+
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -83,4 +85,8 @@ spec:
     - name: v1alpha2
       served: true
       storage: true
+
+---
+
+{{- end }}
 {{- end }}
