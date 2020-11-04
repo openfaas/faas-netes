@@ -259,7 +259,7 @@ By default a NodePort will be created for the API Gateway.
 
 ### Metrics
 
-You temporarily access the Prometheus metrics by ueing `port-forward`
+You temporarily access the Prometheus metrics by using `port-forward`
 
 ```sh
 kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
@@ -389,10 +389,11 @@ Additional OpenFaaS options in `values.yaml`.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `default` |
 | `clusterRole` | Set to `true` if you'd like to use multiple namespaces for functions | `false` |
+| `createCRDs` | Create the CRDs for OpenFaaS Functions and Profiles | `true` |
+| `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
-| `basic_auth` | Enable basic authentication on the Gateway | `true` |
 | `generateBasicAuth` | Generate admin password for basic authentication | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
@@ -401,7 +402,6 @@ Additional OpenFaaS options in `values.yaml`.
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
-| `operator.createCRD` | Create the CRD for OpenFaaS Function definition | `true` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `faasnetes.httpProbe` | Use a httpProbe instead of exec | `false` |
 | `ingressOperator.create` | Create the ingress-operator component | `false` |
