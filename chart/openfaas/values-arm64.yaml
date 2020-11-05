@@ -14,14 +14,14 @@ oauth2Plugin:
   enabled: false
 
 faasnetes:
-  image: openfaas/faas-netes:0.12.2-arm64
+  image: openfaas/faas-netes:0.12.3-arm64
 
 operator:
-  image: openfaas/faas-netes:0.12.2-arm64
+  image: openfaas/faas-netes:0.12.3-arm64
   create: false
 
 queueWorker:
-  image: openfaas/queue-worker:0.11.0-arm64
+  image: openfaas/queue-worker:0.11.2-arm64
 
 prometheus:
   image: prom/prometheus:v2.11.0
@@ -36,7 +36,7 @@ faasIdler:
   image: openfaas/faas-idler:0.3.0-arm64
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.18.17-arm64
+  image: openfaas/basic-auth-plugin:0.18.18-arm64
   replicas: 1
 
 ingressOperator:
