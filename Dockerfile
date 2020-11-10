@@ -1,4 +1,4 @@
-FROM teamserverless/license-check:0.3.6 as license-check
+FROM teamserverless/license-check:0.3.9 as license-check
 
 FROM golang:1.13 as build
 ENV CGO_ENABLED=0
@@ -25,6 +25,9 @@ RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags 
 
 FROM alpine:3.12 as ship
 
+RUN apk --no-cache add \
+    ca-certificates
+
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
       org.label-schema.vcs-type="Git" \
@@ -34,8 +37,6 @@ LABEL org.label-schema.license="MIT" \
 
 RUN addgroup -S app \
     && adduser -S -g app app \
-    && apk --no-cache add \
-    ca-certificates
 
 WORKDIR /home/app
 
