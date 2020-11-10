@@ -1,6 +1,12 @@
 FROM teamserverless/license-check:0.3.9 as license-check
 
-FROM golang:1.13 as build
+FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.13 as build
+
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+
 ENV CGO_ENABLED=0
 ENV GO111MODULE=on
 ENV GOFLAGS=-mod=vendor
@@ -13,21 +19,17 @@ COPY . .
 
 RUN license-check -path /go/src/github.com/openfaas/faas-netes/ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*")
-RUN go test -v ./...
+RUN CGO_ENABLED=${CGO_ENABLED} GOOS=${TARGETOS} GOARCH=${TARGETARCH} go test -v ./...
 
 RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
     && GIT_COMMIT=$(git rev-list -1 HEAD) \
-    && GOOS=linux go build \
+    && GOOS=${TARGETOS} GOARCH=${TARGETARCH} CGO_ENABLED=${CGO_ENABLED} go build \
         --ldflags "-s -w \
         -X github.com/openfaas/faas-netes/version.GitCommit=${GIT_COMMIT}\
         -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
         -a -installsuffix cgo -o faas-netes .
 
 FROM alpine:3.12 as ship
-
-RUN apk --no-cache add \
-    ca-certificates
-
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
       org.label-schema.vcs-type="Git" \
@@ -35,8 +37,11 @@ LABEL org.label-schema.license="MIT" \
       org.label-schema.vendor="openfaas" \
       org.label-schema.docker.schema-version="1.0"
 
+RUN apk --no-cache add \
+    ca-certificates
+
 RUN addgroup -S app \
-    && adduser -S -g app app \
+    && adduser -S -g app app
 
 WORKDIR /home/app
 
