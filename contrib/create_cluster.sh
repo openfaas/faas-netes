@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DEVENV=${OF_DEV_ENV:-kind}
-KUBE_VERSION=v1.17.0
+KUBE_VERSION=v1.18.8
 
 echo ">>> Creating Kubernetes ${KUBE_VERSION} cluster ${DEVENV}"
 
