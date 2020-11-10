@@ -1,13 +1,32 @@
-.PHONY: build local push namespaces install charts start-kind stop-kind
+.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx
 TAG?=latest
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
-all: build
+all: build-local
 
 local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
 
-build:
+build-docker:
 	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG) .
+
+.PHONY: build-buildx
+build-buildx:
+	@docker buildx create --use --name=multiarch --node=multiarch && \
+	docker buildx build \
+		--output "type=docker,push=false" \
+		--platform linux/amd64 \
+		--tag openfaas/faas-netes:$(TAG) \
+		.
+
+.PHONY: build-buildx-all
+build-buildx-all:
+	@docker buildx create --use --name=multiarch --node=multiarch && \
+	docker buildx build \
+		--platform linux/amd64,linux/arm/v7,linux/arm64 \
+		--output "type=image,push=false" \
+		--tag openfaas/faas-netes:$(TAG) \
+		.
 
 push:
 	docker push openfaas/faas-netes:$(TAG)

@@ -20,11 +20,13 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       - name: Get TAG
         id: get_tag
         run: echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
-      - name: build
-        run: make build
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to Docker Registry
