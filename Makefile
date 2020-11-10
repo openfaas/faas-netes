@@ -1,16 +1,10 @@
-.PHONY: build local build-arm64 build-armhf push namespaces install install-armhf charts ci-armhf-build ci-armhf-push ci-arm64-build ci-arm64-push
+.PHONY: build local push namespaces install charts start-kind stop-kind
 TAG?=latest
 
 all: build
 
 local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
-
-build-arm64:
-	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
-
-build-armhf:
-	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
 
 build:
 	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG) .
@@ -24,9 +18,6 @@ namespaces:
 install: namespaces
 	kubectl apply -f yaml/
 
-install-armhf: namespaces
-	kubectl apply -f yaml_armhf/
-
 charts:
 	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/
 	mv chart/*.tgz docs/
@@ -34,18 +25,6 @@ charts:
 	./contrib/create-static-manifest.sh
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_arm64 ./chart/openfaas/values-arm64.yaml
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_armhf ./chart/openfaas/values-armhf.yaml
-
-ci-armhf-build:
-	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
-
-ci-armhf-push:
-	docker push openfaas/faas-netes:$(TAG)-armhf
-
-ci-arm64-build:
-	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
-
-ci-arm64-push:
-	docker push openfaas/faas-netes:$(TAG)-arm64
 
 start-kind: ## attempt to start a new dev environment
 	@./contrib/create_dev.sh \
