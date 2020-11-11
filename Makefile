@@ -8,7 +8,8 @@ local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
 
 build-docker:
-	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG) .
+	docker build \
+	-t ghcr.io/openfaas/faas-netes:$(TAG) .
 
 .PHONY: build-buildx
 build-buildx:
@@ -16,7 +17,7 @@ build-buildx:
 	docker buildx build \
 		--output "type=docker,push=false" \
 		--platform linux/amd64 \
-		--tag openfaas/faas-netes:$(TAG) \
+		--tag ghcr.io/openfaas/faas-netes:$(TAG) \
 		.
 
 .PHONY: build-buildx-all
@@ -25,11 +26,11 @@ build-buildx-all:
 	docker buildx build \
 		--platform linux/amd64,linux/arm/v7,linux/arm64 \
 		--output "type=image,push=false" \
-		--tag openfaas/faas-netes:$(TAG) \
+		--tag ghcr.io/openfaas/faas-netes:$(TAG) \
 		.
 
 push:
-	docker push openfaas/faas-netes:$(TAG)
+	docker push ghcr.io/openfaas/faas-netes:$(TAG)
 
 namespaces:
 	kubectl apply -f namespaces.yml
