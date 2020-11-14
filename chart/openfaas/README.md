@@ -87,7 +87,7 @@ helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true 
+    --set generateBasicAuth=true
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -105,8 +105,8 @@ The chart has a pre-install hook which can generate basic-auth credentials, enab
 
 Alternatively, you can set `generateBasicAuth` to `false` and generate or supply the basic-auth credentials yourself. This is the option you may want if you are using `helm template`.
 
-```sh	
-# generate a random password	
+```sh
+# generate a random password
 PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
 kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
@@ -299,6 +299,13 @@ Some configurations in combination with client-side KeepAlive settings may becau
 
 If you require TLS/SSL then please make use of an IngressController. A full guide is provided to [enable TLS for the OpenFaaS Gateway using cert-manager and Let's Encrypt](https://docs.openfaas.com/reference/ssl/kubernetes-with-cert-manager/).
 
+### Service meshes
+If you use a service mesh like Linkerd or Istio in your cluster, then you should enable the `directFunctions` mode using:
+
+```sh
+--set gateway.directFunctions=true
+```
+
 ### Istio mTLS
 
 To install OpenFaaS with Istio mTLS pass  `--set istio.mtls=true` and disable the HTTP probes:
@@ -311,6 +318,7 @@ helm upgrade openfaas --install chart/openfaas \
     --set exposeServices=false \
     --set faasnetes.httpProbe=false \
     --set httpProbe=false \
+    --set gateway.directFunctions=true \
     --set istio.mtls=true
 ```
 
@@ -376,6 +384,11 @@ If you would like to deploy OpenFaaS to ARM i.e. Raspberry Pi, ARM64 machines pr
 It is recommended that you install OpenFaaS to ARM machines [using k3sup](https://k3sup.dev/) instead of helm directly since it will determine the correct values to be used.
 
 See also: [Kubernetes and Raspberry Pi in the docs](https://docs.openfaas.com/deployment/kubernetes)
+
+## Kubernetes versioning
+This Helm chart currently supports version 1.16+
+
+Note that OpenFaaS itself may support a wider range of versions, [see here](../../README.md#kubernetes-versions)
 
 ## Getting help
 
