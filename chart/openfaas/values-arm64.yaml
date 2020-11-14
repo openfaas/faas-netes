@@ -8,7 +8,7 @@ nodeSelector:
 
 gateway:
   image: openfaas/gateway:0.20.1-arm64
-  directFunctions: true
+  directFunctions: false
 
 oauth2Plugin:
   enabled: false
