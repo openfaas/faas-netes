@@ -1,4 +1,4 @@
-image: openfaas/kafka-connector:0.4.0
+image: ghcr.io/openfaas/kafka-connector:0.4.1
 replicas: 1
 
 # Max timeout for a function
