@@ -18,14 +18,14 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "3a8f6a63c016a00c1730d625b84e2858e5435d1ad7fec4ab51ec65161e2cd338"
+        checksum/prometheus-config: "3ffdc1883d22f2d5a11b0f3cc4e4284761895505ec20b4bdd9fd20da02d441fc"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
       - name: prometheus
         resources:
             requests:
-              memory: 125Mi
+              memory: 100Mi
         image: prom/prometheus:v2.11.0
         command:
           - "prometheus"
@@ -67,4 +67,4 @@ spec:
         - name: prom-data
           emptyDir: {}
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: arm

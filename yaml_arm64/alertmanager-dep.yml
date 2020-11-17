@@ -18,7 +18,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "56ccd34888d20b784433f6ed6adb74cf172e6e1cfbd0aa9e0046ea9a71413ad2"
+        checksum/alertmanager-config: "1d85b10c06e06df59ab09f8ae2a53dac0a4f26d25929eb805c855b95a0e9b9d0"
     spec:
       containers:
       - name: alertmanager
@@ -66,4 +66,4 @@ spec:
           secret:
             secretName: basic-auth
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: arm

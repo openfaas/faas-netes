@@ -24,7 +24,7 @@ spec:
           resources:
             requests:
               memory: 64Mi
-          image: openfaas/faas-idler:0.3.0-armhf
+          image: openfaas/faas-idler:0.4.0-armhf
           imagePullPolicy: Always
           env:
             - name: gateway_url
@@ -40,5 +40,13 @@ spec:
           command:
             - /home/app/faas-idler
             - -dry-run=true
+          volumeMounts:
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets/"
+      volumes:
+        - name: auth
+          secret:
+            secretName: basic-auth
       nodeSelector:
         beta.kubernetes.io/arch: arm

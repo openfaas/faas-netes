@@ -24,7 +24,7 @@ spec:
           resources:
             requests:
               memory: 64Mi
-          image: openfaas/faas-idler:0.3.0-arm64
+          image: openfaas/faas-idler:0.4.0-arm64
           imagePullPolicy: Always
           env:
             - name: gateway_url
@@ -49,4 +49,4 @@ spec:
           secret:
             secretName: basic-auth
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: arm

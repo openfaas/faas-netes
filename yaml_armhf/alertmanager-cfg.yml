@@ -31,3 +31,7 @@ data:
       webhook_configs:
         - url: http://gateway.openfaas:8080/system/alert
           send_resolved: true
+          http_config:
+            basic_auth:
+              username: admin
+              password_file: /var/secrets/basic-auth-password

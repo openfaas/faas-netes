@@ -19,13 +19,17 @@ spec:
       labels:
         app: queue-worker
     spec:
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
       containers:
       - name:  queue-worker
         resources:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: openfaas/queue-worker:0.11.2-armhf
+        image: openfaas/queue-worker:0.11.2
         imagePullPolicy: Always
         env:
         - name: faas_nats_address
@@ -44,5 +48,13 @@ spec:
           value: "1"
         - name: ack_wait    # Max duration of any async task / request
           value: 60s
+        - name: secret_mount_path
+          value: "/var/secrets"
+        - name: basic_auth
+          value: "true"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
       nodeSelector:
         beta.kubernetes.io/arch: arm

@@ -1,4 +1,4 @@
-basic_auth: false
+basic_auth: true
 
 clusterRole: false
 createCRDs: true
@@ -37,7 +37,7 @@ faasIdler:
 
 basicAuthPlugin:
   image: openfaas/basic-auth-plugin:0.20.1-armhf
-  replicas: 0
+  replicas: 1
 
 ingressOperator:
   create: false
