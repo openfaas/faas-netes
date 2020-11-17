@@ -48,13 +48,14 @@ Additional kafka-connector options in `values.yaml`.
 
 | Parameter                | Description                                                                            | Default                        |
 | ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `upstream_timeout`       | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `30s`                          |
-| `rebuild_interval`       | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `3s`                           |
 | `topics`                 | Topics to which the connector will bind, provide as a comma-separated list.            | `faas-request`                 |
-| `gateway_url`            | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
-| `broker_host`            | location of the Kafka brokers.                                                         | `kafka`                        |
-| `print_response`         | Output the response of calling a function in the logs.                                 | `true`                         |
-| `print_response_body`         | Output to the logs the response body when calling a function.                                 | `false`                         |
+| `brokerHost`             | location of the Kafka brokers.                                                         | `kafka`                        |
+| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream |
+| `upstreamTimeout`       | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `30s`                          |
+| `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `3s`                           |
+| `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
+| `printResponse`          | Output the response of calling a function in the logs.                                 | `true`                         |
+| `printResponseBody`      | Output to the logs the response body when calling a function.                                 | `false`                         |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.

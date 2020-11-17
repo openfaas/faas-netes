@@ -44,28 +44,30 @@ spec:
           image: {{ .Values.image }}
           env:
             - name: gateway_url
-              value: {{ .Values.gateway_url | quote }}
+              value: {{ .Values.gatewayURL | quote }}
             - name: topics
               value: {{ .Values.topics | quote }}
             - name: print_response
-              value: {{ .Values.print_response | quote }}
+              value: {{ .Values.printResponse | quote }}
             - name: print_response_body
-              value: {{ .Values.print_response_body | quote }}
-            {{- if .Values.basic_auth }}
+              value: {{ .Values.printResponseBody | quote }}
+            - name: asynchronous_invocation
+              value: {{ .Values.asyncInvocation | quote }}
+            {{- if .Values.basicAuth }}
             - name: basic_auth
               value: "true"
             - name: secret_mount_path
               value: "/var/secrets"
             {{- end }}
             - name: broker_host
-              value: {{ .Values.broker_host | quote }}
-            {{- if .Values.upstream_timeout }}
+              value: {{ .Values.brokerHost | quote }}
+            {{- if .Values.upstreamTimeout }}
             - name: upstream_timeout
-              value: {{ .Values.upstream_timeout | quote }}
+              value: {{ .Values.upstreamTimeout | quote }}
             {{- end }}
-            {{- if .Values.rebuild_interval }}
+            {{- if .Values.rebuildInterval }}
             - name: rebuild_interval
-              value: {{ .Values.rebuild_interval | quote }}
+              value: {{ .Values.rebuildInterval | quote }}
             {{- end }}
           {{- if .Values.basic_auth }}
           volumeMounts:

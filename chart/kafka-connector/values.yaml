@@ -1,11 +1,26 @@
 image: openfaas/kafka-connector:0.4.0
 replicas: 1
-gateway_url: http://gateway.openfaas:8080
+
+# Max timeout for a function
+upstreamTimeout: 2m
+
+# Use with slow consumers or long running functions
+asyncInvocation: false
+
+# Alter to the topics required
 topics: faas-request
-print_response: true
-print_response_body: false
-broker_host: kafka:9092
-basic_auth: true
+
+# Your Kafka broker
+brokerHost: kafka:9092
+
+printResponse: true
+printResponseBody: false
+
+# Internal gateway URL
+gatewayURL: http://gateway.openfaas:8080
+
+# Basic auth for the gateway
+basicAuth: true
 
 nodeSelector: {}
 
