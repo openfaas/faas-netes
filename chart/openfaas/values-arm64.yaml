@@ -4,7 +4,7 @@ clusterRole: false
 createCRDs: true
 
 nodeSelector:
-  beta.kubernetes.io/arch: arm
+  beta.kubernetes.io/arch: arm64
 
 gateway:
   image: openfaas/gateway:0.20.1-arm64

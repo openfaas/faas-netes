@@ -58,4 +58,4 @@ spec:
           containerPort: 8080
           protocol: TCP
       nodeSelector:
-        beta.kubernetes.io/arch: arm
+        beta.kubernetes.io/arch: arm64

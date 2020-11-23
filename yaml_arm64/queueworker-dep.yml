@@ -57,4 +57,4 @@ spec:
           readOnly: true
           mountPath: "/var/secrets"
       nodeSelector:
-        beta.kubernetes.io/arch: arm
+        beta.kubernetes.io/arch: arm64

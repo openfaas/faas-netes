@@ -49,4 +49,4 @@ spec:
           secret:
             secretName: basic-auth
       nodeSelector:
-        beta.kubernetes.io/arch: arm
+        beta.kubernetes.io/arch: arm64

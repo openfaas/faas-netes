@@ -137,4 +137,4 @@ spec:
         - containerPort: 8081
           protocol: TCP
       nodeSelector:
-        beta.kubernetes.io/arch: arm
+        beta.kubernetes.io/arch: arm64
