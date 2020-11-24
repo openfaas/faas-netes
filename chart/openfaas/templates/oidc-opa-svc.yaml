@@ -1,26 +1,21 @@
-{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.oidc.enabled }}
+{{- if .Values.oidc.opa.enabled }}
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: oauth2-plugin
+    component: opa
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: oauth2-plugin
+  name: opa
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
-      targetPort: http
+    - port: 8181
       protocol: TCP
-      name: http
   selector:
-    app: oauth2-plugin
-
+    app: opa
 {{- end }}
