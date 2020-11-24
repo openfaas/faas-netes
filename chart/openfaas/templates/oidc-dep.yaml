@@ -1,4 +1,3 @@
-{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.oidc.enabled }}
 ---
 
@@ -8,25 +7,25 @@ metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: oauth2-plugin
+    component: oidc
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: oauth2-plugin
+  name: oidc
   namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: {{ .Values.oidc.replicas }}
   selector:
     matchLabels:
-      app: oauth2-plugin
+      app: oidc
   template:
     metadata:
       annotations:
         prometheus.io.scrape: "false"
       labels:
-        app: oauth2-plugin
+        app: oidc
     spec:
       volumes:
-      - name: oauth2-plugin-temp-volume
+      - name: oidc-temp-volume
         emptyDir: {}
       {{- if .Values.basic_auth }}
       - name: auth
@@ -34,7 +33,7 @@ spec:
           secretName: basic-auth
       {{- end }}
       containers:
-      - name:  oauth2-plugin
+      - name:  oidc
         resources:
           {{- .Values.oidc.resources | toYaml | nindent 12 }}
         image: {{ .Values.oidc.image }}
@@ -111,7 +110,7 @@ spec:
           value: "/var/secrets"
         {{- end }}
         volumeMounts:
-        - name: oauth2-plugin-temp-volume
+        - name: oidc-temp-volume
           mountPath: /tmp
         {{- if .Values.basic_auth }}
         - name: auth

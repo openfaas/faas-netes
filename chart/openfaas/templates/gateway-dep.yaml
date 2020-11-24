@@ -128,7 +128,7 @@ spec:
           value: "/var/secrets"
         {{- if .Values.oidc.enabled }}
         - name: auth_proxy_url
-          value: "http://oauth2-plugin.{{ .Release.Namespace }}:8080/validate"
+          value: "http://oidc.{{ .Release.Namespace }}:8080/validate"
         - name: auth_pass_body
           value: "false"
         {{- else }}
