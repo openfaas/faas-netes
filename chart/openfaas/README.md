@@ -401,7 +401,7 @@ Additional OpenFaaS options in `values.yaml`.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `default` |
-| `clusterRole` | Set to `true` if you'd like to use multiple namespaces for functions | `false` |
+| `clusterRole` | Use a `ClusterRole` for the Operator or faas-netes. Set to `true` for multiple namespace support | `false` |
 | `createCRDs` | Create the CRDs for OpenFaaS Functions and Profiles | `true` |
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
