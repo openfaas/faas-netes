@@ -15,9 +15,6 @@ COPY --from=license-check /license-check /usr/bin/
 
 WORKDIR /go/src/github.com/openfaas/faas-netes
 COPY . .
-RUN find .
-RUN git log
-RUN git status
 
 RUN license-check -path /go/src/github.com/openfaas/faas-netes/ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*")
