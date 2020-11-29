@@ -37,7 +37,9 @@ data:
             namespaces:
               names:
                 - {{ .Release.Namespace }}
-                - {{  $functionNs }}
+{{- if ne $functionNs (.Release.Namespace | toString) }}
+                - {{ $functionNs }}
+{{- end }}
         relabel_configs:
         - action: labelmap
           regex: __meta_kubernetes_pod_label_(.+)
