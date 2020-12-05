@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas-provider/types"
@@ -102,6 +103,7 @@ func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset)
 			lookupNamespace = namespace
 		}
 
+		s := time.Now()
 		function, err := getService(lookupNamespace, functionName, clientset)
 		if err != nil {
 			log.Printf("Unable to fetch service: %s %s\n", functionName, namespace)
@@ -113,8 +115,8 @@ func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset)
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-
-		log.Printf("Read replicas - %s %s, %d/%d\n", functionName, lookupNamespace, function.AvailableReplicas, function.Replicas)
+		d := time.Since(s)
+		log.Printf("Replicas: %s.%s, (%d/%d)\t%dms\n", functionName, lookupNamespace, function.AvailableReplicas, function.Replicas, d.Milliseconds())
 
 		functionBytes, err := json.Marshal(function)
 		if err != nil {

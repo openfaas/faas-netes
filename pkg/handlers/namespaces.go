@@ -19,26 +19,29 @@ import (
 )
 
 // MakeNamespacesLister builds a list of namespaces with an "openfaas" tag, or the default name
-func MakeNamespacesLister(defaultNamespace string, clientset kubernetes.Interface) http.HandlerFunc {
+func MakeNamespacesLister(defaultNamespace string, clusterRole bool, clientset kubernetes.Interface) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Query namespaces")
+		// log.Println("List namespaces")
 
 		if r.Body != nil {
 			defer r.Body.Close()
 		}
 
-		res := ListNamespaces(defaultNamespace, clientset)
+		namespaces := []string{}
+		if clusterRole {
+			namespaces = ListNamespaces(defaultNamespace, clientset)
+		} else {
+			namespaces = append(namespaces, defaultNamespace)
+		}
 
-		out, err := json.Marshal(res)
+		out, err := json.Marshal(namespaces)
 		if err != nil {
 			glog.Errorf("Failed to list namespaces: %s", err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Failed to list namespaces"))
+			http.Error(w, "Failed to list namespaces", http.StatusInternalServerError)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-
 		w.WriteHeader(http.StatusOK)
 		w.Write(out)
 	}
