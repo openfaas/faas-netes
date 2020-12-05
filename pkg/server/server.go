@@ -34,7 +34,8 @@ const defaultWriteTimeout = 8
 func New(client clientset.Interface,
 	kube kubernetes.Interface,
 	endpointsInformer coreinformer.EndpointsInformer,
-	deploymentsInformer appsinformer.DeploymentInformer) *Server {
+	deploymentsInformer appsinformer.DeploymentInformer,
+	clusterRole bool) *Server {
 
 	functionNamespace := "openfaas-fn"
 	if namespace, exists := os.LookupEnv("function_namespace"); exists {
@@ -92,8 +93,8 @@ func New(client clientset.Interface,
 		HealthHandler:        makeHealthHandler(),
 		InfoHandler:          makeInfoHandler(),
 		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, kube),
-		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, kube),
 		LogHandler:           logs.NewLogHandlerFunc(faasnetesk8s.NewLogRequestor(kube, functionNamespace), bootstrapConfig.WriteTimeout),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clusterRole, kube),
 	}
 
 	if pprof == "true" {

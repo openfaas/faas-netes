@@ -135,7 +135,7 @@ func main() {
 		runController(setup)
 	} else {
 		log.Println("Starting operator")
-		runOperator(setup)
+		runOperator(setup, config)
 	}
 }
 
@@ -178,14 +178,14 @@ func runController(setup serverSetup) {
 		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:        handlers.MakeSecretHandler(config.DefaultFunctionNamespace, kubeClient),
 		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(kubeClient, config.DefaultFunctionNamespace), config.FaaSConfig.WriteTimeout),
-		ListNamespaceHandler: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, kubeClient),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, config.ClusterRole, kubeClient),
 	}
 
 	faasProvider.Serve(&bootstrapHandlers, &config.FaaSConfig)
 }
 
 // runOperator runs the CRD Operator
-func runOperator(setup serverSetup) {
+func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
 	// pull out the required config and clients fromthe setup, this is largely a
 	// leftover from refactoring the setup to a shared step and keeping the function
 	// signature readable
@@ -218,7 +218,7 @@ func runOperator(setup serverSetup) {
 		factory,
 	)
 
-	srv := server.New(faasClient, kubeClient, endpointsInformer, deploymentInformer)
+	srv := server.New(faasClient, kubeClient, endpointsInformer, deploymentInformer, cfg.ClusterRole)
 
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)
