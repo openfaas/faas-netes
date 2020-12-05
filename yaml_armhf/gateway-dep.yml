@@ -33,7 +33,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: openfaas/gateway:0.20.1-armhf
+        image: openfaas/gateway:0.20.2-armhf
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -96,7 +96,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.12.8
+        image: ghcr.io/openfaas/faas-netes:0.12.9
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -130,6 +130,8 @@ spec:
           value: "1"
         - name: liveness_probe_period_seconds
           value: "2"
+        - name: cluster_role
+          value: "false"
         volumeMounts:
         - mountPath: /tmp
           name: faas-netes-temp-volume
