@@ -2,7 +2,7 @@
 TAG?=latest
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
-all: build-local
+all: build-docker
 
 local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes

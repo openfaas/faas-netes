@@ -73,39 +73,51 @@ type BootstrapConfig struct {
 	// HTTPProbe when set to true switches readiness and liveness probe to
 	// access /_/health over HTTP instead of accessing /tmp/.lock.
 	HTTPProbe bool
+
 	// SetNonRootUser determines if the Function is deployed with a overridden
 	// non-root user id.  Currently this is preconfigured to the uid 12000.
 	SetNonRootUser bool
+
 	// ReadinessProbeInitialDelaySeconds controls the value of
 	// ReadinessProbeInitialDelaySeconds in the Function  ReadinessProbe
 	ReadinessProbeInitialDelaySeconds int
+
 	// ReadinessProbeTimeoutSeconds controls the value of
 	// ReadinessProbeTimeoutSeconds in the Function  ReadinessProbe
 	ReadinessProbeTimeoutSeconds int
+
 	// ReadinessProbePeriodSeconds controls the value of
 	// ReadinessProbePeriodSeconds in the Function  ReadinessProbe
 	ReadinessProbePeriodSeconds int
+
 	// LivenessProbeInitialDelaySeconds controls the value of
 	// LivenessProbeInitialDelaySeconds in the Function  LivenessProbe
 	LivenessProbeInitialDelaySeconds int
+
 	// LivenessProbeTimeoutSeconds controls the value of
 	// LivenessProbeTimeoutSeconds in the Function  LivenessProbe
 	LivenessProbeTimeoutSeconds int
+
 	// LivenessProbePeriodSeconds controls the value of
 	// LivenessProbePeriodSeconds in the Function  LivenessProbe
 	LivenessProbePeriodSeconds int
+
 	// ImagePullPolicy controls the ImagePullPolicy set on the Function Deployment.
 	ImagePullPolicy string
+
 	// DefaultFunctionNamespace defines which namespace in which Functions are deployed.
 	// Value is set via the function_namespace environment variable. If the
 	// variable is not set, it is set to "default".
 	DefaultFunctionNamespace string
+
 	// ProfilesNamespace defines which namespace is used to look up available Profiles.
 	// Value is set via the profiles_namespace environment variable. If the
 	// variable is not set, then it falls back to DefaultFunctionNamespace.
 	ProfilesNamespace string
+
 	// FaaSConfig contains the configuration for the FaaSProvider
 	FaaSConfig ftypes.FaaSConfig
+
 	// ClusterRole determines whether the operator should have cluster wide access
 	ClusterRole bool
 }
