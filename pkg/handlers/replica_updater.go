@@ -10,13 +10,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	glog "k8s.io/klog"
 )
 
 // MakeReplicaUpdater updates desired count of replicas
@@ -84,50 +82,5 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 		}
 
 		w.WriteHeader(http.StatusAccepted)
-	}
-}
-
-// MakeReplicaReader reads the amount of replicas for a deployment
-func MakeReplicaReader(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		vars := mux.Vars(r)
-
-		functionName := vars["name"]
-		q := r.URL.Query()
-		namespace := q.Get("namespace")
-
-		lookupNamespace := defaultNamespace
-
-		if len(namespace) > 0 {
-			lookupNamespace = namespace
-		}
-
-		s := time.Now()
-		function, err := getService(lookupNamespace, functionName, clientset)
-		if err != nil {
-			log.Printf("Unable to fetch service: %s %s\n", functionName, namespace)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		if function == nil {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		d := time.Since(s)
-		log.Printf("Replicas: %s.%s, (%d/%d)\t%dms\n", functionName, lookupNamespace, function.AvailableReplicas, function.Replicas, d.Milliseconds())
-
-		functionBytes, err := json.Marshal(function)
-		if err != nil {
-			glog.Errorf("Failed to marshal function: %s", err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Failed to marshal function"))
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(functionBytes)
 	}
 }

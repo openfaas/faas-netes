@@ -5,23 +5,21 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
 	types "github.com/openfaas/faas-provider/types"
-	"k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/selection"
+	v1 "k8s.io/client-go/listers/apps/v1"
 	glog "k8s.io/klog"
 
 	"github.com/openfaas/faas-netes/pkg/k8s"
 )
 
 // MakeFunctionReader handler for reading functions deployed in the cluster as deployments.
-func MakeFunctionReader(defaultNamespace string, clientset *kubernetes.Clientset) http.HandlerFunc {
+func MakeFunctionReader(defaultNamespace string, deploymentLister v1.DeploymentLister) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		q := r.URL.Query()
@@ -38,7 +36,7 @@ func MakeFunctionReader(defaultNamespace string, clientset *kubernetes.Clientset
 			return
 		}
 
-		functions, err := getServiceList(lookupNamespace, clientset)
+		functions, err := getServiceList(lookupNamespace, deploymentLister)
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -60,49 +58,30 @@ func MakeFunctionReader(defaultNamespace string, clientset *kubernetes.Clientset
 	}
 }
 
-func getServiceList(functionNamespace string, clientset *kubernetes.Clientset) ([]types.FunctionStatus, error) {
+func getServiceList(functionNamespace string, deploymentLister v1.DeploymentLister) ([]types.FunctionStatus, error) {
 	functions := []types.FunctionStatus{}
 
-	listOpts := metav1.ListOptions{
-		LabelSelector: "faas_function",
+	sel := labels.NewSelector()
+	req, err := labels.NewRequirement("faas_function", selection.Exists, []string{})
+	if err != nil {
+		return functions, err
 	}
+	sel.Add(*req)
 
-	res, err := clientset.AppsV1().Deployments(functionNamespace).List(context.TODO(), listOpts)
+	res, err := deploymentLister.Deployments(functionNamespace).List(sel)
 
 	if err != nil {
 		return nil, err
 	}
 
-	for _, item := range res.Items {
-		function := k8s.AsFunctionStatus(item)
-		if function != nil {
-			functions = append(functions, *function)
+	for _, item := range res {
+		if item != nil {
+			function := k8s.AsFunctionStatus(*item)
+			if function != nil {
+				functions = append(functions, *function)
+			}
 		}
 	}
+
 	return functions, nil
-}
-
-// getService returns a function/service or nil if not found
-func getService(functionNamespace string, functionName string, clientset *kubernetes.Clientset) (*types.FunctionStatus, error) {
-
-	getOpts := metav1.GetOptions{}
-
-	item, err := clientset.AppsV1().Deployments(functionNamespace).Get(context.TODO(), functionName, getOpts)
-
-	if err != nil {
-		if errors.IsNotFound(err) {
-			return nil, nil
-		}
-
-		return nil, err
-	}
-
-	if item != nil {
-		function := k8s.AsFunctionStatus(*item)
-		if function != nil {
-			return function, nil
-		}
-	}
-
-	return nil, fmt.Errorf("function: %s not found", functionName)
 }

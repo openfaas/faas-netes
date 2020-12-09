@@ -155,6 +155,9 @@ func runController(setup serverSetup) {
 
 	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
 
+	deploymentLister := kubeInformerFactory.Apps().V1().
+		Deployments().Lister()
+
 	log.Println("Waiting for openfaas CRD cache sync")
 	faasInformerFactory.WaitForCacheSync(stopCh)
 	setup.profileInformerFactory.WaitForCacheSync(stopCh)
@@ -170,8 +173,8 @@ func runController(setup serverSetup) {
 		FunctionProxy:        proxy.NewHandlerFunc(config.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(config.DefaultFunctionNamespace, kubeClient),
 		DeployHandler:        handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory),
-		FunctionReader:       handlers.MakeFunctionReader(config.DefaultFunctionNamespace, kubeClient),
-		ReplicaReader:        handlers.MakeReplicaReader(config.DefaultFunctionNamespace, kubeClient),
+		FunctionReader:       handlers.MakeFunctionReader(config.DefaultFunctionNamespace, deploymentLister),
+		ReplicaReader:        handlers.MakeReplicaReader(config.DefaultFunctionNamespace, deploymentLister),
 		ReplicaUpdater:       handlers.MakeReplicaUpdater(config.DefaultFunctionNamespace, kubeClient),
 		UpdateHandler:        handlers.MakeUpdateHandler(config.DefaultFunctionNamespace, factory),
 		HealthHandler:        handlers.MakeHealthHandler(),
