@@ -9,9 +9,25 @@ metadata:
     component: prometheus
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   name: openfaas-prometheus
+  labels:
+    app: openfaas
+    component: prometheus
+rules:
+- apiGroups: [""]
+  resources:
+    - services
+    - endpoints
+    - pods
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: openfaas-prometheus-fn
+  namespace: "openfaas-fn"
   labels:
     app: openfaas
     component: prometheus
@@ -33,7 +49,7 @@ metadata:
     component: prometheus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: openfaas-prometheus
 subjects:
 - kind: ServiceAccount
@@ -43,15 +59,15 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: openfaas-prometheus
+  name: openfaas-prometheus-fn
   namespace: "openfaas-fn"
   labels:
     app: openfaas
     component: prometheus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: openfaas-prometheus
+  kind: Role
+  name: openfaas-prometheus-fn
 subjects:
 - kind: ServiceAccount
   name: openfaas-prometheus
