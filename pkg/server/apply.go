@@ -87,20 +87,24 @@ func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.
 }
 
 func toFunctionSpec(req types.FunctionDeployment) faasv1.FunctionSpec {
-	return faasv1.FunctionSpec{
-
+	spec := faasv1.FunctionSpec{
 		Name:                   req.Service,
 		Image:                  req.Image,
 		Handler:                req.EnvProcess,
 		Labels:                 req.Labels,
 		Annotations:            req.Annotations,
-		Environment:            &req.EnvVars,
 		Constraints:            req.Constraints,
 		Secrets:                req.Secrets,
 		Limits:                 getResources(req.Limits),
 		Requests:               getResources(req.Requests),
 		ReadOnlyRootFilesystem: req.ReadOnlyRootFilesystem,
 	}
+
+	if req.EnvVars != nil {
+		spec.Environment = &req.EnvVars
+	}
+
+	return spec
 }
 
 func getResources(limits *types.FunctionResources) *faasv1.FunctionResources {
