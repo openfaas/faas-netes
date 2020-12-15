@@ -10,13 +10,13 @@ type FunctionDeployment struct {
 	Image string `json:"image"`
 
 	// Network is specific to Docker Swarm - default overlay network is: func_functions
-	Network string `json:"network"`
+	Network string `json:"network,omitempty"`
 
 	// EnvProcess corresponds to the fprocess variable for your container watchdog.
-	EnvProcess string `json:"envProcess"`
+	EnvProcess string `json:"envProcess,omitempty"`
 
 	// EnvVars provides overrides for functions.
-	EnvVars map[string]string `json:"envVars"`
+	EnvVars map[string]string `json:"envVars,omitempty"`
 
 	// RegistryAuth is the registry authentication (optional)
 	// in the same encoded format as Docker native credentials
@@ -24,28 +24,28 @@ type FunctionDeployment struct {
 	RegistryAuth string `json:"registryAuth,omitempty"`
 
 	// Constraints are specific to back-end orchestration platform
-	Constraints []string `json:"constraints"`
+	Constraints []string `json:"constraints,omitempty"`
 
 	// Secrets list of secrets to be made available to function
-	Secrets []string `json:"secrets"`
+	Secrets []string `json:"secrets,omitempty"`
 
 	// Labels are metadata for functions which may be used by the
 	// back-end for making scheduling or routing decisions
-	Labels *map[string]string `json:"labels"`
+	Labels *map[string]string `json:"labels,omitempty"`
 
 	// Annotations are metadata for functions which may be used by the
 	// back-end for management, orchestration, events and build tasks
-	Annotations *map[string]string `json:"annotations"`
+	Annotations *map[string]string `json:"annotations,omitempty"`
 
 	// Limits for function
-	Limits *FunctionResources `json:"limits"`
+	Limits *FunctionResources `json:"limits,omitempty"`
 
 	// Requests of resources requested by function
-	Requests *FunctionResources `json:"requests"`
+	Requests *FunctionResources `json:"requests,omitempty"`
 
 	// ReadOnlyRootFilesystem removes write-access from the root filesystem
 	// mount-point.
-	ReadOnlyRootFilesystem bool `json:"readOnlyRootFilesystem"`
+	ReadOnlyRootFilesystem bool `json:"readOnlyRootFilesystem,omitempty"`
 
 	// Namespace for the function to be deployed into
 	Namespace string `json:"namespace,omitempty"`
@@ -53,8 +53,8 @@ type FunctionDeployment struct {
 
 // FunctionResources Memory and CPU
 type FunctionResources struct {
-	Memory string `json:"memory"`
-	CPU    string `json:"cpu"`
+	Memory string `json:"memory,omitempty"`
+	CPU    string `json:"cpu,omitempty"`
 }
 
 // FunctionStatus exported for system/functions endpoint
@@ -67,25 +67,25 @@ type FunctionStatus struct {
 	Image string `json:"image"`
 
 	// InvocationCount count of invocations
-	InvocationCount float64 `json:"invocationCount"`
+	InvocationCount float64 `json:"invocationCount,omitempty"`
 
 	// Replicas desired within the cluster
-	Replicas uint64 `json:"replicas"`
+	Replicas uint64 `json:"replicas,omitempty"`
 
 	// EnvProcess is the process to pass to the watchdog, if in use
-	EnvProcess string `json:"envProcess"`
+	EnvProcess string `json:"envProcess,omitempty"`
 
 	// AvailableReplicas is the count of replicas ready to receive
 	// invocations as reported by the backend
-	AvailableReplicas uint64 `json:"availableReplicas"`
+	AvailableReplicas uint64 `json:"availableReplicas,omitempty"`
 
 	// Labels are metadata for functions which may be used by the
 	// backend for making scheduling or routing decisions
-	Labels *map[string]string `json:"labels"`
+	Labels *map[string]string `json:"labels,omitempty"`
 
 	// Annotations are metadata for functions which may be used by the
 	// backend for management, orchestration, events and build tasks
-	Annotations *map[string]string `json:"annotations"`
+	Annotations *map[string]string `json:"annotations,omitempty"`
 
 	// Namespace where the function can be accessed
 	Namespace string `json:"namespace,omitempty"`
