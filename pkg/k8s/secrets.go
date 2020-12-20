@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"sort"
 	"strings"
 
 	types "github.com/openfaas/faas-provider/types"
@@ -19,9 +20,10 @@ import (
 )
 
 const (
-	secretsMountPath = "/var/openfaas/secrets"
-	secretLabel      = "app.kubernetes.io/managed-by"
-	secretLabelValue = "openfaas"
+	secretsMountPath             = "/var/openfaas/secrets"
+	secretLabel                  = "app.kubernetes.io/managed-by"
+	secretLabelValue             = "openfaas"
+	secretsProjectVolumeNameTmpl = "%s-projected-secrets"
 )
 
 // SecretsClient exposes the standardized CRUD behaviors for Kubernetes secrets.  These methods
@@ -44,7 +46,7 @@ type SecretsClient interface {
 	GetSecrets(namespace string, secretNames []string) (map[string]*apiv1.Secret, error)
 }
 
-// SecretsInterfacer exposes the SecretInterface getter for the k8s client.
+// SecretInterfacer exposes the SecretInterface getter for the k8s client.
 // This is implemented by the CoreV1Interface() interface in the Kubernetes client.
 // The SecretsClient only needs this one interface, but needs to be able to set the
 // namespaces when the interface is instantiated, meaning, we need the Getter and not the
@@ -219,7 +221,7 @@ func (f *FunctionFactory) ConfigureSecrets(request types.FunctionDeployment, dep
 		}
 	}
 
-	volumeName := fmt.Sprintf("%s-projected-secrets", request.Service)
+	volumeName := fmt.Sprintf(secretsProjectVolumeNameTmpl, request.Service)
 	projectedSecrets := apiv1.Volume{
 		Name: volumeName,
 		VolumeSource: apiv1.VolumeSource{
@@ -258,4 +260,32 @@ func (f *FunctionFactory) ConfigureSecrets(request types.FunctionDeployment, dep
 	deployment.Spec.Template.Spec.Containers = updatedContainers
 
 	return nil
+}
+
+// ReadFunctionSecretsSpec parses the name of the required function secrets. This is the inverse of ConfigureSecrets.
+func ReadFunctionSecretsSpec(item appsv1.Deployment) []string {
+	secrets := []string{}
+
+	for _, s := range item.Spec.Template.Spec.ImagePullSecrets {
+		secrets = append(secrets, s.Name)
+	}
+
+	volumeName := fmt.Sprintf(secretsProjectVolumeNameTmpl, item.Name)
+	var sourceSecrets []apiv1.VolumeProjection
+	for _, v := range item.Spec.Template.Spec.Volumes {
+		if v.Name == volumeName {
+			sourceSecrets = v.Projected.Sources
+			break
+		}
+	}
+
+	for _, s := range sourceSecrets {
+		if s.Secret == nil {
+			continue
+		}
+		secrets = append(secrets, s.Secret.Name)
+	}
+
+	sort.Strings(secrets)
+	return secrets
 }

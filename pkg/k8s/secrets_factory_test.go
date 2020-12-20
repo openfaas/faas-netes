@@ -10,13 +10,99 @@ import (
 	types "github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
+
+func Test_ReadFunctionSecretsSpec(t *testing.T) {
+
+	f := mockFactory()
+	existingSecrets := map[string]*apiv1.Secret{
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+	}
+	functionDep := appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{Name: "testfunc"},
+		Spec: appsv1.DeploymentSpec{
+			Template: apiv1.PodTemplateSpec{
+				Spec: apiv1.PodSpec{
+					Containers: []apiv1.Container{
+						{Name: "testfunc", Image: "alpine:latest"},
+					},
+				},
+			},
+		},
+	}
+
+	cases := []struct {
+		name       string
+		req        types.FunctionDeployment
+		deployment appsv1.Deployment
+		expected   []string
+	}{
+		{
+			name: "empty secrets, returns empty slice",
+			req: types.FunctionDeployment{
+				Service: "testfunc",
+				Secrets: []string{},
+			},
+			deployment: functionDep,
+			expected:   []string{},
+		},
+		{
+			name: "detects and extracts image pull secret",
+			req: types.FunctionDeployment{
+				Service: "testfunc",
+				Secrets: []string{"pullsecret"},
+			},
+			deployment: functionDep,
+			expected:   []string{"pullsecret"},
+		},
+		{
+			name: "detects and extracts projected generic secret",
+			req: types.FunctionDeployment{
+				Service: "testfunc",
+				Secrets: []string{"testsecret"},
+			},
+			deployment: functionDep,
+			expected:   []string{"testsecret"},
+		},
+		{
+			name: "detects and extracts both pull secrets and projected generic secret, result is sorted",
+			req: types.FunctionDeployment{
+				Service: "testfunc",
+				Secrets: []string{"testsecret", "pullsecret"},
+			},
+			deployment: functionDep,
+			expected:   []string{"pullsecret", "testsecret"},
+		},
+	}
+
+	for _, tc := range cases {
+		err := f.ConfigureSecrets(tc.req, &tc.deployment, existingSecrets)
+		if err != nil {
+			t.Fatalf("unexpected error result: got %q", err)
+		}
+
+		parsedSecrets := ReadFunctionSecretsSpec(tc.deployment)
+		if len(tc.expected) != len(parsedSecrets) {
+			t.Fatalf("incorrect secret count, expected: %v, got: %v", tc.expected, parsedSecrets)
+		}
+
+		for idx, expected := range tc.expected {
+			value := parsedSecrets[idx]
+			if expected != value {
+				t.Fatalf("incorrect secret in idx %d, expected: %q, got: %q", idx, expected, value)
+			}
+		}
+	}
+
+}
 
 func Test_FunctionFactory_ConfigureSecrets(t *testing.T) {
 	f := mockFactory()
 	existingSecrets := map[string]*apiv1.Secret{
-		"pullsecret": &apiv1.Secret{Type: apiv1.SecretTypeDockercfg},
-		"testsecret": &apiv1.Secret{Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
+		"pullsecret": {Type: apiv1.SecretTypeDockercfg},
+		"testsecret": {Type: apiv1.SecretTypeOpaque, Data: map[string][]byte{"filename": []byte("contents")}},
 	}
 
 	basicDeployment := appsv1.Deployment{

@@ -31,6 +31,7 @@ func AsFunctionStatus(item appsv1.Deployment) *types.FunctionStatus {
 		Labels:            &labels,
 		Annotations:       &item.Spec.Template.Annotations,
 		Namespace:         item.Namespace,
+		Secrets:           ReadFunctionSecretsSpec(item),
 	}
 
 	for _, v := range functionContainer.Env {
