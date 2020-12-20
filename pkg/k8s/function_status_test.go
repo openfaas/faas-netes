@@ -4,6 +4,7 @@
 package k8s
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -22,6 +23,7 @@ func Test_AsFunctionStatus(t *testing.T) {
 	annotations := map[string]string{"data": "datavalue"}
 	namespace := "func-namespace"
 	envProcess := "process string here"
+	secrets := []string{"0-imagepullsecret", "1-genericsecret", "2-genericsecret"}
 
 	deploy := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -37,6 +39,9 @@ func Test_AsFunctionStatus(t *testing.T) {
 					Labels:      labels,
 				},
 				Spec: corev1.PodSpec{
+					ImagePullSecrets: []corev1.LocalObjectReference{
+						{Name: "0-imagepullsecret"},
+					},
 					Containers: []corev1.Container{
 						{
 							Name:  name,
@@ -44,6 +49,31 @@ func Test_AsFunctionStatus(t *testing.T) {
 							Env: []corev1.EnvVar{
 								{Name: "fprocess", Value: envProcess},
 								{Name: "customEnv", Value: "customValue"},
+							},
+						},
+					},
+					Volumes: []corev1.Volume{
+						{
+							Name: fmt.Sprintf(secretsProjectVolumeNameTmpl, name),
+							VolumeSource: corev1.VolumeSource{
+								Projected: &corev1.ProjectedVolumeSource{
+									Sources: []corev1.VolumeProjection{
+										{
+											Secret: &corev1.SecretProjection{
+												LocalObjectReference: corev1.LocalObjectReference{
+													Name: "2-genericsecret",
+												},
+											},
+										},
+										{
+											Secret: &corev1.SecretProjection{
+												LocalObjectReference: corev1.LocalObjectReference{
+													Name: "1-genericsecret",
+												},
+											},
+										},
+									},
+								},
 							},
 						},
 					},
@@ -86,6 +116,10 @@ func Test_AsFunctionStatus(t *testing.T) {
 
 	if status.EnvProcess != envProcess {
 		t.Errorf("incorrect EnvProcess: expected %s, got %s", envProcess, status.EnvProcess)
+	}
+
+	if !reflect.DeepEqual(status.Secrets, secrets) {
+		t.Errorf("incorrect Secrets: expected %v, got : %v", secrets, status.Secrets)
 	}
 
 }

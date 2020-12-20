@@ -52,16 +52,9 @@ func makeListHandler(defaultNamespace string,
 			if err != nil {
 				glog.Warningf("Function listing getReplicas error: %v", err)
 			}
-
-			function := types.FunctionStatus{
-				Name:              item.Spec.Name,
-				Replicas:          desiredReplicas,
-				AvailableReplicas: availableReplicas,
-				Image:             item.Spec.Image,
-				Labels:            item.Spec.Labels,
-				Annotations:       item.Spec.Annotations,
-				Namespace:         lookupNamespace,
-			}
+			function := toFunctionStatus(item)
+			function.AvailableReplicas = availableReplicas
+			function.Replicas = desiredReplicas
 
 			functions = append(functions, function)
 		}

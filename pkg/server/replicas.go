@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	ofv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	"github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,7 +32,7 @@ func makeReplicaReader(defaultNamespace string, client clientset.Interface, list
 		opts := metav1.GetOptions{}
 		k8sfunc, err := client.OpenfaasV1().Functions(lookupNamespace).
 			Get(r.Context(), functionName, opts)
-		if err != nil {
+		if err != nil || k8sfunc == nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(err.Error()))
 			return
@@ -41,16 +42,9 @@ func makeReplicaReader(defaultNamespace string, client clientset.Interface, list
 			glog.Warningf("Function replica reader error: %v", err)
 		}
 
-		result := &types.FunctionStatus{
-			AvailableReplicas: availableReplicas,
-			Replicas:          desiredReplicas,
-			Labels:            k8sfunc.Spec.Labels,
-			Annotations:       k8sfunc.Spec.Annotations,
-			Name:              k8sfunc.Spec.Name,
-			EnvProcess:        k8sfunc.Spec.Handler,
-			Image:             k8sfunc.Spec.Image,
-			Namespace:         lookupNamespace,
-		}
+		result := toFunctionStatus(*k8sfunc)
+		result.AvailableReplicas = availableReplicas
+		result.Replicas = desiredReplicas
 
 		res, err := json.Marshal(result)
 		if err != nil {
@@ -129,4 +123,35 @@ func makeReplicaHandler(defaultNamespace string, kube kubernetes.Interface) http
 		glog.Infof("Function %v replica updated to %v", functionName, req.Replicas)
 		w.WriteHeader(http.StatusAccepted)
 	}
+}
+
+func toFunctionStatus(item ofv1.Function) types.FunctionStatus {
+
+	status := types.FunctionStatus{
+		// AvailableReplicas: availableReplicas,
+		// Replicas:          desiredReplicas,
+		Labels:                 item.Spec.Labels,
+		Annotations:            item.Spec.Annotations,
+		Name:                   item.Spec.Name,
+		EnvProcess:             item.Spec.Handler,
+		Image:                  item.Spec.Image,
+		Namespace:              item.Namespace,
+		Secrets:                item.Spec.Secrets,
+		Constraints:            item.Spec.Constraints,
+		ReadOnlyRootFilesystem: item.Spec.ReadOnlyRootFilesystem,
+	}
+
+	if item.Spec.Environment != nil {
+		status.EnvVars = *item.Spec.Environment
+	}
+
+	if item.Spec.Limits != nil {
+		status.Limits = (*types.FunctionResources)(item.Spec.Limits)
+	}
+
+	if item.Spec.Requests != nil {
+		status.Requests = (*types.FunctionResources)(item.Spec.Requests)
+	}
+
+	return status
 }
