@@ -74,7 +74,7 @@ oauth2Plugin:
   securityContext: true
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.12.9
+  image: ghcr.io/openfaas/faas-netes:0.12.12
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -95,7 +95,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.12.9
+  image: ghcr.io/openfaas/faas-netes:0.12.12
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only

@@ -14,10 +14,10 @@ oauth2Plugin:
   enabled: false
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.12.9
+  image: ghcr.io/openfaas/faas-netes:0.12.12
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.12.9
+  image: ghcr.io/openfaas/faas-netes:0.12.12
   create: false
 
 queueWorker:
