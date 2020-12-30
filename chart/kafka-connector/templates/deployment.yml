@@ -53,7 +53,7 @@ spec:
               value: {{ .Values.printResponseBody | quote }}
             - name: asynchronous_invocation
               value: {{ .Values.asyncInvocation | quote }}
-            {{- if .Values.basicAuth }}
+            {{- if .Values.basic_auth }}
             - name: basic_auth
               value: "true"
             - name: secret_mount_path

@@ -20,7 +20,7 @@ printResponseBody: false
 gatewayURL: http://gateway.openfaas:8080
 
 # Basic auth for the gateway
-basicAuth: true
+basic_auth: true
 
 nodeSelector: {}
 
