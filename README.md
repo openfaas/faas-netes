@@ -22,11 +22,22 @@ You can deploy OpenFaaS to any Kubernetes service - whether managed or local, in
 * Platform for deploying [serverless-style workloads](https://docs.openfaas.com/reference/workloads/) - microservices and functions
 * Native Kubernetes integrations (API and ecosystem)
 * Built-in UI portal
-* YAML templates & helm chart
-* Over 19k GitHub stars
-* Independent open-source project with over 240 contributors
+* Scale to and from zero
+* Built-in queuing and asynchronous invocations
+* Custom routes and domain support
+* Commercial support available
+
+Additional & ecosystem:
+
+* A range of event-connectors and cron-support
+* helm chart and CLI installer
 * Operator available to use Custom Resource Definitions (CRDs) [openfaas-operator](https://github.com/openfaas-incubator/openfaas-operator/)
-* OAuth2 / OIDC authz available
+* IDp integration with OIDC and commercial add-on
+
+Community:
+
+* Over 25k GitHub stars
+* Independent open-source project with over 300 contributors
 
 ## Get started
 
