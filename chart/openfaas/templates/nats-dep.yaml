@@ -19,6 +19,7 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
+        checksum/nats-config: {{ include (print $.Template.BasePath "/nats-cfg.yaml") . | sha256sum | quote }}
         prometheus.io.scrape: {{ .Values.nats.metrics.enabled | quote }}
         {{- if .Values.nats.metrics.enabled }}
         prometheus.io.port: "7777"
@@ -39,7 +40,11 @@ spec:
         - containerPort: 8222
           protocol: TCP
         {{- end }}
-        command: ["/nats-streaming-server"]
+        command: ["/nats-streaming-server", "--config=/nats-cfg.conf"]
+        volumeMounts:
+        - mountPath: /nats-cfg.conf
+          name: nats-config
+          subPath: nats-cfg.conf
         args:
           - --store
           - memory
@@ -67,6 +72,14 @@ spec:
         - -serverz
         - http://localhost:8222
       {{- end }}
+      volumes:
+        - name: nats-config
+          configMap:
+            name: nats-config
+            items:
+              - key: nats-cfg.conf
+                path: nats-cfg.conf
+                mode: 0644
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

@@ -147,6 +147,7 @@ nats:
     port: ""
   image: nats-streaming:0.17.0
   enableMonitoring: false
+  maxPayload: "1Mb"
   metrics:
     enabled: false
     image: synadia/prometheus-nats-exporter:0.6.2 

@@ -1,0 +1,18 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if and .Values.async (not .Values.nats.external.enabled) }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: nats-config
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nats-config
+  namespace: {{ .Release.Namespace | quote }}
+data:
+  nats-cfg.conf: |
+    {max_payload: {{ .Values.nats.maxPayload }}}
+{{- end }}
