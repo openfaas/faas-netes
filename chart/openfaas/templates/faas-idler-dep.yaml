@@ -34,9 +34,8 @@ spec:
           imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
           command:
            - "/usr/bin/faas-idler"
-           - -dry-run={{ .Values.faasIdler.dryRun }}
+           - -read-only={{ .Values.faasIdler.readOnly }}
            - "-license-file=/var/secrets/license/license"
-
           env:
             - name: gateway_url
               value: "http://gateway.{{ .Release.Namespace }}:8080/"
@@ -52,7 +51,6 @@ spec:
             - name: write_debug
               value: {{ .Values.faasIdler.writeDebug }}
 {{- end }}
-
           volumeMounts:
 {{- if .Values.basic_auth }}
             - name: auth

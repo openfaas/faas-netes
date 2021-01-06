@@ -52,14 +52,14 @@ oidcAuthPlugin:
   securityContext: true
 
 # Requires openfaasPRO=true
-# faas-idler configuration
+# scale-to-zero feature
 faasIdler:
-  image: ghcr.io/openfaas/faas-idler-pro:0.4.1
+  image: ghcr.io/openfaas/faas-idler-pro:0.4.2
   replicas: 1
   create: true
   inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
   reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
-  dryRun: true                          # Set to false to enable the idler to apply changes and scale to zero
+  readOnly: true                        # When set to true, no functions are scaled to zero
   resources:
     requests:
       memory: "64Mi"
