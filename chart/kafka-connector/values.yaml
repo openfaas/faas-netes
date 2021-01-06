@@ -1,4 +1,8 @@
-image: ghcr.io/openfaas/kafka-connector:0.4.1
+# You will need to create a license named "openfaas-license" - see the 
+# chart README for more.
+
+image: ghcr.io/openfaas/kafka-connector-pro:0.5.0
+
 replicas: 1
 
 # Max timeout for a function

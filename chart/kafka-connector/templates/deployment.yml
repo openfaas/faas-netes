@@ -2,13 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    # Original Helm labels v
     app: {{ template "connector.name" . }}
     component: kafka-connector
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    # Helm/k8s recommended label names v
     app.kubernetes.io/name: {{ template "connector.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.Version }}
@@ -38,10 +36,16 @@ spec:
         - name: auth
           secret:
             secretName: basic-auth
+        - name: openfaas-license
+          secret:
+            secretName: openfaas-license
       {{- end }}
       containers:
         - name: kafka
           image: {{ .Values.image }}
+          command:
+           - "/usr/bin/kafka-connector"
+           - "-license-file=/var/secrets/license/license"
           env:
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
@@ -74,6 +78,9 @@ spec:
             - name: auth
               readOnly: true
               mountPath: "/var/secrets"
+            - name: openfaas-license
+              readOnly: true
+              mountPath: "/var/secrets/license"
           {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:

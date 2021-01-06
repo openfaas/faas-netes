@@ -1,4 +1,4 @@
-# OpenFaaS Kafka Connector
+# OpenFaaS PRO Kafka Connector
 
 The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) brings Kafka to OpenFaaS by invoking functions based on Kafka topic annotations.
 
@@ -6,17 +6,23 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
 ## Prerequisites
 
+- Obtain a license or trial
+
+  You will need an OpenFaaS Premium subscription to access PRO features.
+
+  Contact us to find out more and to start a free trial at: [openfaas.com/support](https://www.openfaas.com/support)
+
 - Install OpenFaaS
 
   You must have a working OpenFaaS installation. You can find [instructions in the docs](https://docs.openfaas.com/deployment/kubernetes/#pick-helm-or-yaml-files-for-deployment-a-or-b), including instructions to also install OpenFaaS via Helm.
 
 - Install Kafka (dev/testing)
 
-  You can install [Apache Kafka](https://kafka.apache.org/) with the [wurstmeister Docker images](https://github.com/wurstmeister/kafka-docker) from the [kafka-connector repo](https://github.com/openfaas-incubator/kafka-connector).
+  You can install [Apache Kafka](https://kafka.apache.org/) with the [wurstmeister Docker images](https://github.com/wurstmeister/kafka-docker) which will allow you to test the connector with a version of Kafka that is easy to set up, and suitable for development.
 
   ```sh
-  $ git clone https://github.com/openfaas-incubator/kafka-connector
-  $ cd kafka-connector/yaml/kubernetes
+  $ git clone https://github.com/openfaas/faas-netes
+  $ cd contrib/kafka-testing/
   $ kubectl apply -f \
    kafka-broker-dep.yml,kafka-broker-svc.yml,zookeeper-dep.yaml,zookeeper-svc.yaml
   ```
@@ -27,7 +33,16 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
 ## Install the Chart
 
-- Add the OpenFaaS chart repo and deploy the `kafka-connector` chart. We recommend installing it in the same namespace as the rest of OpenFaaS
+- Create the required secret with your OpenFaaS PRO license code:
+
+```bash
+$ kubectl create secret generic \
+    -n openfaas \
+    openfaas-license \
+    --from-file license=$HOME/OPENFAAS_LICENSE
+```
+
+- Add the OpenFaaS chart repo and deploy the `kafka-connector` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
@@ -38,9 +53,13 @@ $ helm upgrade kafka-connector openfaas/kafka-connector \
 
 > The above command will also update your helm repo to pull in any new releases.
 
-### Verify the installation
+## Install a development version
 
-TBD
+```sh
+$ helm upgrade kafka-connector ./chart/kafka-connector \
+    --install \
+    --namespace openfaas
+```
 
 ## Configuration
 
