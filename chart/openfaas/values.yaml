@@ -1,12 +1,20 @@
 functionNamespace: openfaas-fn  # Default namespace for functions
 
-async: true
+# See https://www.openfaas.com/support for more
+openfaasPRO: false
 
 exposeServices: true
+
+async: true
+
 serviceType: NodePort
+
 httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5)
+
 rbac: true
+
 clusterRole: false            # Set to true to have OpenFaaS administrate multiple namespaces
+
 createCRDs: true
 
 # create pod security policies for OpenFaaS control plane
@@ -19,8 +27,44 @@ generateBasicAuth: false
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"
 
-gatewayExternal:
-  annotations: {}
+# openfaasPRO components, which require openfaasPRO=true
+oidcAuthPlugin:
+  enabled: false
+  provider: "" # Leave blank, or put "azure"
+  license: "example"
+  insecureTLS: false
+  scopes: "openid profile email"
+  jwksURL: https://example.eu.auth0.com/.well-known/jwks.json
+  tokenURL: https://example.eu.auth0.com/oauth/token
+  audience: https://example.eu.auth0.com/api/v2/
+  authorizeURL: https://example.eu.auth0.com/authorize
+  welcomePageURL: https://gw.oauth.example.com
+  cookieDomain: ".oauth.example.com"
+  baseHost: "http://auth.oauth.example.com"
+  clientSecret: SECRET
+  clientID: ID
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
+  replicas: 1
+  image: openfaas/openfaas-oidc-plugin:0.3.7
+  securityContext: true
+
+# Requires openfaasPRO=true
+# faas-idler configuration
+faasIdler:
+  image: ghcr.io/openfaas/faas-idler-pro:0.4.1
+  replicas: 1
+  create: true
+  inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
+  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
+  dryRun: true                          # Set to false to enable the idler to apply changes and scale to zero
+  resources:
+    requests:
+      memory: "64Mi"
+
+## OSS components
 
 gateway:
   image: openfaas/gateway:0.20.2
@@ -50,28 +94,6 @@ basicAuthPlugin:
       memory: "50Mi"
       cpu: "20m"
 
-oauth2Plugin:
-  enabled: false
-  provider: "" # Leave blank, or put "azure"
-  license: "example"
-  insecureTLS: false
-  scopes: "openid profile email"
-  jwksURL: https://example.eu.auth0.com/.well-known/jwks.json
-  tokenURL: https://example.eu.auth0.com/oauth/token
-  audience: https://example.eu.auth0.com/api/v2/
-  authorizeURL: https://example.eu.auth0.com/authorize
-  welcomePageURL: https://gw.oauth.example.com
-  cookieDomain: ".oauth.example.com"
-  baseHost: "http://auth.oauth.example.com"
-  clientSecret: SECRET
-  clientID: ID
-  resources:
-    requests:
-      memory: "120Mi"
-      cpu: "50m"
-  replicas: 1
-  image: openfaas/openfaas-oidc-plugin:0.3.7
-  securityContext: true
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.12.12
@@ -178,18 +200,6 @@ ingressOperator:
     requests:
       memory: "25Mi"
 
-# faas-idler configuration
-faasIdler:
-  image: openfaas/faas-idler:0.4.0
-  replicas: 1
-  create: true
-  inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
-  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
-  dryRun: true                          # Set to false to enable the idler to apply changes and scale to zero
-  resources:
-    requests:
-      memory: "64Mi"
-
 nodeSelector:
   beta.kubernetes.io/arch: amd64
 
@@ -201,3 +211,6 @@ kubernetesDNSDomain: cluster.local
 
 istio:
   mtls: false
+
+gatewayExternal:
+  annotations: {}

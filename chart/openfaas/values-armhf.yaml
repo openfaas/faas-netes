@@ -3,6 +3,9 @@ basic_auth: true
 clusterRole: false
 createCRDs: true
 
+# See https://www.openfaas.com/support for more
+openfaasPRO: false
+
 nodeSelector:
   beta.kubernetes.io/arch: arm
 
@@ -10,7 +13,7 @@ gateway:
   image: openfaas/gateway:0.20.2-armhf
   directFunctions: true
 
-oauth2Plugin:
+oidcAuthPlugin:
   enabled: false
 
 faasnetes:
@@ -33,7 +36,8 @@ alertmanager:
   image: prom/alertmanager:v0.18.0
 
 faasIdler:
-  image: openfaas/faas-idler:0.4.0-armhf
+  replicas: 1
+  image: ghcr.io/openfaas/faas-idler-pro:0.5.0
 
 basicAuthPlugin:
   image: openfaas/basic-auth-plugin:0.20.1-armhf

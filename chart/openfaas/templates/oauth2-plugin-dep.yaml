@@ -1,5 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.oauth2Plugin.enabled }}
+{{- if .Values.oidcAuthPlugin.enabled }}
 ---
 
 apiVersion: apps/v1
@@ -14,7 +14,7 @@ metadata:
   name: oauth2-plugin
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  replicas: {{ .Values.oauth2Plugin.replicas }}
+  replicas: {{ .Values.oidcAuthPlugin.replicas }}
   selector:
     matchLabels:
       app: oauth2-plugin
@@ -36,8 +36,8 @@ spec:
       containers:
       - name:  oauth2-plugin
         resources:
-          {{- .Values.oauth2Plugin.resources | toYaml | nindent 12 }}
-        image: {{ .Values.oauth2Plugin.image }}
+          {{- .Values.oidcAuthPlugin.resources | toYaml | nindent 12 }}
+        image: {{ .Values.oidcAuthPlugin.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
         securityContext:
@@ -77,35 +77,35 @@ spec:
           {{- end }}
           timeoutSeconds: 5
         args:
-        - "-license={{- .Values.oauth2Plugin.license}}"
-        - "-provider={{- .Values.oauth2Plugin.provider}}"
+        - "-license={{- .Values.oidcAuthPlugin.license}}"
+        - "-provider={{- .Values.oidcAuthPlugin.provider}}"
         env:
         - name: client_id
-          value: "{{- .Values.oauth2Plugin.clientID}}"
+          value: "{{- .Values.oidcAuthPlugin.clientID}}"
         - name: client_secret
-          value: "{{- .Values.oauth2Plugin.clientSecret}}"
+          value: "{{- .Values.oidcAuthPlugin.clientSecret}}"
         - name: cookie_domain
-          value: "{{- .Values.oauth2Plugin.cookieDomain}}"
+          value: "{{- .Values.oidcAuthPlugin.cookieDomain}}"
         - name: base_host
-          value: "{{- .Values.oauth2Plugin.baseHost}}"
+          value: "{{- .Values.oidcAuthPlugin.baseHost}}"
         - name: port
           value: "8080"
         - name: authorize_url
-          value: "{{- .Values.oauth2Plugin.authorizeURL}}"
+          value: "{{- .Values.oidcAuthPlugin.authorizeURL}}"
         - name: welcome_page_url
-          value: "{{- .Values.oauth2Plugin.welcomePageURL}}"
+          value: "{{- .Values.oidcAuthPlugin.welcomePageURL}}"
         - name: public_key_path
           value: ""  # leave blank if using jwks
         - name: audience
-          value: "{{- .Values.oauth2Plugin.audience}}"
+          value: "{{- .Values.oidcAuthPlugin.audience}}"
         - name: token_url
-          value: "{{- .Values.oauth2Plugin.tokenURL}}"
+          value: "{{- .Values.oidcAuthPlugin.tokenURL}}"
         - name: scopes
-          value: "{{- .Values.oauth2Plugin.scopes}}"
+          value: "{{- .Values.oidcAuthPlugin.scopes}}"
         - name: jwks_url
-          value: "{{- .Values.oauth2Plugin.jwksURL}}"
+          value: "{{- .Values.oidcAuthPlugin.jwksURL}}"
         - name: insecure_tls
-          value: "{{- .Values.oauth2Plugin.insecureTLS}}"
+          value: "{{- .Values.oidcAuthPlugin.insecureTLS}}"
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets"

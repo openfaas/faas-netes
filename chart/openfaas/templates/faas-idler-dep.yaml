@@ -1,4 +1,6 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.openfaasPRO }}
+
 {{- if .Values.faasIdler.create }}
 ---
 apiVersion: apps/v1
@@ -30,6 +32,11 @@ spec:
             {{- .Values.faasIdler.resources | toYaml | nindent 12 }}
           image: {{ .Values.faasIdler.image }}
           imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+          command:
+           - "/usr/bin/faas-idler"
+           - -dry-run={{ .Values.faasIdler.dryRun }}
+           - "-license-file=/var/secrets/license/license"
+
           env:
             - name: gateway_url
               value: "http://gateway.{{ .Release.Namespace }}:8080/"
@@ -45,21 +52,25 @@ spec:
             - name: write_debug
               value: {{ .Values.faasIdler.writeDebug }}
 {{- end }}
-          command:
-            - /home/app/faas-idler
-            - -dry-run={{ .Values.faasIdler.dryRun }}
 
-{{- if .Values.basic_auth }}
           volumeMounts:
+{{- if .Values.basic_auth }}
             - name: auth
               readOnly: true
               mountPath: "/var/secrets/"
+{{- end }}
+            - name: openfaas-license
+              readOnly: true
+              mountPath: "/var/secrets/license"
       volumes:
+{{- if .Values.basic_auth }}
         - name: auth
           secret:
             secretName: basic-auth
-
 {{- end }}
+        - name: openfaas-license
+          secret:
+            secretName: openfaas-license
 {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -72,4 +83,6 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
 {{- end }}
+{{- end }}
+
 {{- end }}
