@@ -443,6 +443,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
 | `nats.external.host` | The host at which the externally-managed NATS Streaming server can be reached | `""` |
 | `nats.external.port` | The port at which the externally-managed NATS Streaming server can be reached | `""` |
+| `nats.maxPayload` | Setup the max payload size for NATS Streaming deployments managed by this chart | `1Mb` |
 | `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
 | `nats.metrics.enabled` | Export Prometheus metrics for NATS, no multi-arch support  | `false` |
 | `nats.metrics.image` | Container image used for the NATS Prometheus exporter, not multi-arch | `synadia/prometheus-nats-exporter:0.6.2` |
