@@ -66,9 +66,9 @@ func getServiceList(functionNamespace string, deploymentLister v1.DeploymentList
 	if err != nil {
 		return functions, err
 	}
-	sel.Add(*req)
+	onlyFunctions := sel.Add(*req)
 
-	res, err := deploymentLister.Deployments(functionNamespace).List(sel)
+	res, err := deploymentLister.Deployments(functionNamespace).List(onlyFunctions)
 
 	if err != nil {
 		return nil, err
