@@ -17,10 +17,10 @@ oidcAuthPlugin:
   enabled: false
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.12.12
+  image: ghcr.io/openfaas/faas-netes:0.12.13
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.12.12
+  image: ghcr.io/openfaas/faas-netes:0.12.13
   create: false
 
 queueWorker:
