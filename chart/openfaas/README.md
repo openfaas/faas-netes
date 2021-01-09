@@ -363,17 +363,17 @@ Scaling up from zero replicas is enabled by default, to turn it off set `scaleFr
 
 ### Scale-down to zero (off by default)
 
-Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the [faas-idler](https://github.com/openfaas-incubator/faas-idler) component.
-
-By default the faas-idler is set to only do a dryRun and to not scale any functions down.
-
-```sh
---set faasIdler.dryRun=true/false
-```
+Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the faas-idler component. This is an OpenFaaS PRO feature and an effective way to save costs on your infrastructure costs.
 
 The faas-idler will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
 
-See also: [faas-idler README](https://docs.openfaas.com/architecture/autoscaling/#zero-scale).
+See also: [faas-idler docs](https://docs.openfaas.com/architecture/autoscaling/#zero-scale).
+
+Check the logs with:
+
+```bash
+kubectl logs -n openfaas deploy/faas-idler
+```
 
 ## Removing the OpenFaaS
 
