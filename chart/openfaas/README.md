@@ -76,9 +76,9 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 
 > Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
 
-### Deploy
+## Deploy Open Source only
 
-Note that the commands will differ slightly between versions, if not specified, the instructions are for helm 2.
+> OpenFaaS PRO customers should read on to the next section.
 
 Now deploy OpenFaaS from the helm chart repo:
 
@@ -87,7 +87,8 @@ helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true
+    --set generateBasicAuth=true \
+    --set openfaasPRO=false
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -98,6 +99,30 @@ Retrieve the OpenFaaS credentials with:
 PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode) && \
 echo "OpenFaaS admin password: $PASSWORD"
 ```
+
+## Deploy as an OpenFaaS PRO customer
+
+* Create the required secret with your [OpenFaaS PRO license code](https://www.openfaas.com/support/):
+
+```bash
+kubectl create secret generic \
+    -n openfaas \
+    openfaas-license \
+    --from-file license=$HOME/OPENFAAS_LICENSE
+```
+
+Now deploy OpenFaaS from the helm chart repo:
+
+```sh
+helm repo update \
+ && helm upgrade openfaas --install openfaas/openfaas \
+    --namespace openfaas  \
+    --set functionNamespace=openfaas-fn \
+    --set generateBasicAuth=true \
+    --set openfaasPRO=true
+```
+
+The main change here is to add: `--set openfaasPRO=true`
 
 #### Generate basic-auth credentials
 
