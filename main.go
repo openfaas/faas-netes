@@ -221,7 +221,7 @@ func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
 		factory,
 	)
 
-	srv := server.New(faasClient, kubeClient, endpointsInformer, deploymentInformer, cfg.ClusterRole)
+	srv := server.New(faasClient, kubeClient, endpointsInformer, deploymentInformer, cfg.ClusterRole, cfg)
 
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)

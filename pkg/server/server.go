@@ -4,8 +4,8 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"os"
-	"strconv"
-	"time"
+
+	"github.com/openfaas/faas-netes/pkg/config"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	"github.com/openfaas/faas-netes/pkg/handlers"
@@ -35,35 +35,12 @@ func New(client clientset.Interface,
 	kube kubernetes.Interface,
 	endpointsInformer coreinformer.EndpointsInformer,
 	deploymentsInformer appsinformer.DeploymentInformer,
-	clusterRole bool) *Server {
+	clusterRole bool,
+	cfg config.BootstrapConfig) *Server {
 
 	functionNamespace := "openfaas-fn"
 	if namespace, exists := os.LookupEnv("function_namespace"); exists {
 		functionNamespace = namespace
-	}
-
-	port := defaultHTTPPort
-	if portVal, exists := os.LookupEnv("port"); exists {
-		parsedVal, parseErr := strconv.Atoi(portVal)
-		if parseErr == nil && parsedVal > 0 {
-			port = parsedVal
-		}
-	}
-
-	readTimeout := defaultReadTimeout
-	if val, exists := os.LookupEnv("read_timeout"); exists {
-		parsedVal, parseErr := strconv.Atoi(val)
-		if parseErr == nil && parsedVal > 0 {
-			readTimeout = parsedVal
-		}
-	}
-
-	writeTimeout := defaultWriteTimeout
-	if val, exists := os.LookupEnv("write_timeout"); exists {
-		parsedVal, parseErr := strconv.Atoi(val)
-		if parseErr == nil && parsedVal > 0 {
-			writeTimeout = parsedVal
-		}
 	}
 
 	pprof := "false"
@@ -76,9 +53,9 @@ func New(client clientset.Interface,
 
 	deploymentLister := deploymentsInformer.Lister()
 	bootstrapConfig := types.FaaSConfig{
-		ReadTimeout:  time.Duration(readTimeout) * time.Second,
-		WriteTimeout: time.Duration(writeTimeout) * time.Second,
-		TCPPort:      &port,
+		ReadTimeout:  cfg.FaaSConfig.ReadTimeout,
+		WriteTimeout: cfg.FaaSConfig.WriteTimeout,
+		TCPPort:      cfg.FaaSConfig.TCPPort,
 		EnableHealth: true,
 	}
 
