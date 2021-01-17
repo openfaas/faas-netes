@@ -29,9 +29,6 @@ rules:
 - apiGroups: ["openfaas.com"]
   resources: ["functions"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-- apiGroups: ["openfaas.com"]
-  resources: ["profiles"]
-  verbs: ["get", "list", "watch"]
 - apiGroups: [""]
   resources: ["events"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
@@ -67,6 +64,42 @@ subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-operator
   namespace: {{ .Release.Namespace | quote }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-profiles
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: openfaas-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+rules:
+- apiGroups: ["openfaas.com"]
+  resources: ["profiles"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: openfaas-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-profiles
+  namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-profiles
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-operator
+    namespace: {{ .Release.Namespace | quote }}
 {{- if .Values.clusterRole}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
