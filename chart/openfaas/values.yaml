@@ -149,6 +149,7 @@ prometheus:
   resources:
     requests:
       memory: "512Mi"
+  annotations: {}
 
 alertmanager:
   image: prom/alertmanager:v0.18.0

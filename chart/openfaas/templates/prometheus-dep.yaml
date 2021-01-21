@@ -24,6 +24,9 @@ spec:
       annotations:
         sidecar.istio.io/inject: "true"
         checksum/prometheus-config: {{ include (print $.Template.BasePath "/prometheus-cfg.yaml") . | sha256sum | quote }}
+        {{- if .Values.prometheus.annotations }}
+          {{- toYaml .Values.prometheus.annotations | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ .Release.Name }}-prometheus
       containers:
