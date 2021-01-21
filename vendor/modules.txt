@@ -46,7 +46,7 @@ github.com/modern-go/concurrent
 github.com/modern-go/reflect2
 # github.com/openfaas/faas v0.0.0-20191125105239-365f459b3f3a
 github.com/openfaas/faas/gateway/requests
-# github.com/openfaas/faas-provider v0.15.4
+# github.com/openfaas/faas-provider v0.16.2
 github.com/openfaas/faas-provider
 github.com/openfaas/faas-provider/auth
 github.com/openfaas/faas-provider/httputil
