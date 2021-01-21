@@ -17,10 +17,10 @@ func makeInfoHandler() http.HandlerFunc {
 		}
 
 		sha, release := version.GetReleaseInfo()
-		info := types.InfoResponse{
+		info := types.ProviderInfo{
 			Orchestration: "kubernetes",
-			Provider:      "openfaas-operator",
-			Version: types.ProviderVersion{
+			Name:          "openfaas-operator",
+			Version: &types.VersionInfo{
 				SHA:     sha,
 				Release: release,
 			},
