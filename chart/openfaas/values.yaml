@@ -67,7 +67,7 @@ faasIdler:
 ## OSS components
 
 gateway:
-  image: openfaas/gateway:0.20.2
+  image: ghcr.io/openfaas/gateway:0.20.5
   readTimeout : "65s"
   writeTimeout : "65s"
   upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
@@ -96,7 +96,7 @@ basicAuthPlugin:
 
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.12.13
+  image: ghcr.io/openfaas/faas-netes:0.12.15
   readTimeout : "60s"
   writeTimeout : "60s"
   imagePullPolicy : "Always"    # Image pull policy for deployed functions
@@ -117,7 +117,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.12.13
+  image: ghcr.io/openfaas/faas-netes:0.12.15
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
