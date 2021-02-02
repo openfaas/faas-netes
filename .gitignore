@@ -22,3 +22,5 @@ faas-netes
 of_kind_portforward.pid
 /kind*
 /kubectl
+/yaml_armhf
+/yaml_arm64

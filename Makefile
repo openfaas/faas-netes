@@ -1,4 +1,4 @@
-.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx
+.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts
 TAG?=latest
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
@@ -42,6 +42,9 @@ charts:
 	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
+	./contrib/create-static-manifest.sh
+
+render-charts:
 	./contrib/create-static-manifest.sh
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_arm64 ./chart/openfaas/values-arm64.yaml
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_armhf ./chart/openfaas/values-armhf.yaml
