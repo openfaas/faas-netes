@@ -24,6 +24,7 @@ import (
 	providertypes "github.com/openfaas/faas-provider/types"
 	kubeinformers "k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	glog "k8s.io/klog"
 
@@ -158,13 +159,21 @@ func runController(setup serverSetup) {
 	deploymentLister := kubeInformerFactory.Apps().V1().
 		Deployments().Lister()
 
-	log.Println("Waiting for openfaas CRD cache sync")
-	faasInformerFactory.WaitForCacheSync(stopCh)
-	setup.profileInformerFactory.WaitForCacheSync(stopCh)
-	log.Println("Cache sync complete")
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)
 	go setup.profileInformerFactory.Start(stopCh)
+
+	// Any "Wait" calls need to be made, after the informers have been started
+	start := time.Now()
+	glog.Infof("Waiting for cache sync in main")
+	kubeInformerFactory.WaitForCacheSync(stopCh)
+	setup.profileInformerFactory.WaitForCacheSync(stopCh)
+
+	// Block and wait for the endpoints to become synchronised
+	cache.WaitForCacheSync(stopCh, endpointsInformer.Informer().HasSynced)
+
+	glog.Infof("Cache sync done in: %fs", time.Since(start).Seconds())
+	glog.Infof("Endpoints synced? %v", endpointsInformer.Informer().HasSynced())
 
 	lister := endpointsInformer.Lister()
 	functionLookup := k8s.NewFunctionLookup(config.DefaultFunctionNamespace, lister)
@@ -208,11 +217,6 @@ func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
 	endpointsInformer := kubeInformerFactory.Core().V1().Endpoints()
 	deploymentInformer := kubeInformerFactory.Apps().V1().Deployments()
 
-	glog.Infof("Waiting for cache sync in main")
-	kubeInformerFactory.WaitForCacheSync(stopCh)
-	setup.profileInformerFactory.WaitForCacheSync(stopCh)
-	glog.Infof("Cache sync done")
-
 	ctrl := controller.NewController(
 		kubeClient,
 		faasClient,
@@ -226,6 +230,18 @@ func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
 	go faasInformerFactory.Start(stopCh)
 	go kubeInformerFactory.Start(stopCh)
 	go setup.profileInformerFactory.Start(stopCh)
+
+	// Any "Wait" calls need to be made, after the informers have been started
+	start := time.Now()
+	glog.Infof("Waiting for cache sync in main")
+	kubeInformerFactory.WaitForCacheSync(stopCh)
+	setup.profileInformerFactory.WaitForCacheSync(stopCh)
+
+	// Block and wait for the endpoints to become synchronised
+	cache.WaitForCacheSync(stopCh, endpointsInformer.Informer().HasSynced)
+
+	glog.Infof("Cache sync done in: %fs", time.Since(start).Seconds())
+	glog.Infof("Endpoints synced? %v", endpointsInformer.Informer().HasSynced())
 
 	go srv.Start()
 	if err := ctrl.Run(1, stopCh); err != nil {
