@@ -40,7 +40,7 @@ If you wish to continue without using arkade, read on for instructions.
 
 These instructions are for Intel (normal computers), jump to the end of the document for ARM and Raspberry Pi.
 
-To use the chart, you will need Helm, we recommend helm 3:
+To use the chart, you will need to use Helm 3:
 
 Get it from arkade:
 
@@ -140,7 +140,7 @@ kubectl -n openfaas create secret generic basic-auth \
 echo "OpenFaaS admin password: $PASSWORD"
 ```
 
-#### Tuning cold-start
+#### Tuning function cold-starts
 
 The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to scale to zero. Otherwise there is not a cold-start, because at least one replica of your function remains available.
 
@@ -236,23 +236,12 @@ This option is good for those that have issues with or concerns about installing
 
 2. Render the chart to a Kubernetes manifest called `openfaas.yaml`
 
-    Helm 3:
     ```sh
     helm template \
       openfaas chart/openfaas/ \
       --namespace openfaas \
       --set basic_auth=true \
       --set functionNamespace=openfaas-fn > openfaas.yaml
-    ```
-
-    Helm 2:
-
-    ```sh
-    helm template chart/openfaas \
-        --name openfaas \
-        --namespace openfaas  \
-        --set basic_auth=true \
-        --set functionNamespace=openfaas-fn > openfaas.yaml
     ```
 
     You can set the values and overrides just as you would in the install/upgrade commands above.
@@ -271,10 +260,13 @@ You can run the following command from within the `faas-netes/chart` folder in t
 
 ```sh
 helm upgrade openfaas --install chart/openfaas \
-    --namespace openfaas  \
+    --namespace openfaas \
     --set basic_auth=true \
-    --set functionNamespace=openfaas-fn
+    --set functionNamespace=openfaas-fn \
+    --set generateBasicAuth=true
 ```
+
+You can override specific images by adding `--set gateway.image=` for instance.
 
 ## Exposing services
 
@@ -379,16 +371,8 @@ kubectl logs -n openfaas deploy/faas-idler
 
 All control plane components can be cleaned up with helm:
 
-Helm 3:
-
 ```sh
 helm delete openfaas --namespace openfaas
-```
-
-Helm 2:
-
-```sh
-helm delete --purge openfaas
 ```
 
 Follow this by the following to remove all other associated objects:
