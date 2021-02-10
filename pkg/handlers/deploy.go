@@ -173,6 +173,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 	}
 
 	enableServiceLinks := false
+	allowPrivilegeEscalation := false
 
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -228,7 +229,8 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 							LivenessProbe:   probes.Liveness,
 							ReadinessProbe:  probes.Readiness,
 							SecurityContext: &corev1.SecurityContext{
-								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
+								ReadOnlyRootFilesystem:   &request.ReadOnlyRootFilesystem,
+								AllowPrivilegeEscalation: &allowPrivilegeEscalation,
 							},
 						},
 					},

@@ -56,6 +56,8 @@ func newDeployment(
 		}
 	}
 
+	allowPrivilegeEscalation := false
+
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        function.Spec.Name,
@@ -110,6 +112,9 @@ func newDeployment(
 							Resources:       *resources,
 							LivenessProbe:   probes.Liveness,
 							ReadinessProbe:  probes.Readiness,
+							SecurityContext: &corev1.SecurityContext{
+								AllowPrivilegeEscalation: &allowPrivilegeEscalation,
+							},
 						},
 					},
 				},
