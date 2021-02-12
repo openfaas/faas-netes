@@ -1,6 +1,6 @@
 Please follow the instructions below to get you started.
 
-https://github.com/zeerorg/cron-connector/blob/master/README.md
+https://github.com/openfaas/cron-connector/blob/master/README.md
 
 You can watch the Connector logs to see it invoke your functions:
 
