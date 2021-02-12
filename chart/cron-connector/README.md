@@ -34,11 +34,11 @@ helm upgrade --namespace openfaas \
 
 cron-connector options in values.yaml
 
-| Parameter     | Description                                      | Default                          |
-|---------------|--------------------------------------------------|----------------------------------|
-| `image`       | The cron-connector image that should be deployed | `zeerorg/cron-connector:v0.2.2`  |
-| `gateway_url` | The URL for the API gateway.                     | `"http://gateway.openfaas:8080"` |
-| `basic_auth`  | Enable or disable basic auth                     | `true`                           |
+| Parameter     | Description                                      | Default                                  |
+|---------------|--------------------------------------------------|------------------------------------------|
+| `image`       | The cron-connector image that should be deployed | `ghcr.io/openfaas/cron-connector:0.3.2`  |
+| `gateway_url` | The URL for the API gateway.                     | `"http://gateway.openfaas:8080"`         |
+| `basic_auth`  | Enable or disable basic auth                     | `true`                                   |
 
 ## Removing the cron-connector
 
