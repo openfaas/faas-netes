@@ -18,7 +18,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "837446cff77c6d133033978e0bc906716f6296d4984a549aff18aecdcc71a9e7"
+        checksum/prometheus-config: "74e034b3d80077bf218d4ed268f2549a9c47914cd28c51737fbbe42465a643d5"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
