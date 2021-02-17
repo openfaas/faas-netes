@@ -12,13 +12,13 @@ import (
 	"github.com/openfaas/faas-netes/pkg/k8s"
 	faasnetesk8s "github.com/openfaas/faas-netes/pkg/k8s"
 	bootstrap "github.com/openfaas/faas-provider"
+	v1apps "k8s.io/client-go/listers/apps/v1"
 
 	"github.com/openfaas/faas-provider/logs"
 	"github.com/openfaas/faas-provider/proxy"
 	"github.com/openfaas/faas-provider/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	appsinformer "k8s.io/client-go/informers/apps/v1"
 	coreinformer "k8s.io/client-go/informers/core/v1"
 	"k8s.io/client-go/kubernetes"
 	glog "k8s.io/klog"
@@ -34,7 +34,7 @@ const defaultWriteTimeout = 8
 func New(client clientset.Interface,
 	kube kubernetes.Interface,
 	endpointsInformer coreinformer.EndpointsInformer,
-	deploymentsInformer appsinformer.DeploymentInformer,
+	deploymentLister v1apps.DeploymentLister,
 	clusterRole bool,
 	cfg config.BootstrapConfig) *Server {
 
@@ -51,7 +51,6 @@ func New(client clientset.Interface,
 	lister := endpointsInformer.Lister()
 	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
 
-	deploymentLister := deploymentsInformer.Lister()
 	bootstrapConfig := types.FaaSConfig{
 		ReadTimeout:  cfg.FaaSConfig.ReadTimeout,
 		WriteTimeout: cfg.FaaSConfig.WriteTimeout,
