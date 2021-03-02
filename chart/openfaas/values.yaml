@@ -27,7 +27,7 @@ generateBasicAuth: false
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"
 
-# openfaasPRO components, which require openfaasPRO=true
+# openfaasPRO components, which requires openfaasPRO=true
 oidcAuthPlugin:
   enabled: false
   provider: "" # Leave blank, or put "azure"

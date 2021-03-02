@@ -76,7 +76,7 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 
 > Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
 
-## Deploy Open Source only
+## Deploy OpenFaaS Community components
 
 > OpenFaaS PRO customers should read on to the next section.
 
@@ -87,8 +87,7 @@ helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true \
-    --set openfaasPRO=false
+    --set generateBasicAuth=true
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -123,6 +122,11 @@ helm repo update \
 ```
 
 The main change here is to add: `--set openfaasPRO=true`
+
+See also:
+* Scale-down to zero (in this document)
+* [OpenFaaS PRO SSO/OIDC](https://docs.openfaas.com/reference/authentication/#oidc-and-oauth2-for-the-openfaas-api)
+* [OpenFaaS PRO Kafka Event Connector](https://github.com/openfaas/faas-netes/tree/master/chart/kafka-connector)
 
 #### Generate basic-auth credentials
 
@@ -167,7 +171,6 @@ faasnetes:
 # redacted
   imagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
 ```
-
 
 In addition:
 
