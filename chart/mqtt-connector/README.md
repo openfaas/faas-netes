@@ -1,18 +1,22 @@
 # OpenFaaS MQTT Connector chart
 
+See also [mqtt-connector README](https://github.com/openfaas/mqtt-connector)
+
 ## Installation
 
-```sh
-git clone https://github.com/openfaas-incubator/mqtt-connector
-cd mqtt-connector/chart
+```bash
+git clone https://github.com/faas-netes/
+
+cd faas-netes/chart
 
 # Template and apply:
+
 helm template -n openfaas --namespace openfaas mqtt-connector/ | kubectl apply -f -
 ```
 
 You can watch the Connector logs to see it invoke your functions:
 
-```
+```bash
 kubectl logs deployment.apps/openfaas-mqtt-connector -n openfaas -f
 ```
 
@@ -30,4 +34,3 @@ Configure via `values.yaml`.
 | `authPassword`       | Password for broker authentication| `""`                                       |
 | `asyncInvoke`       | Invoke using function's asynchronous route | `false`                                       |
 | `basic_auth`       | Basic authentication for gateway enabled | `true`                                       |
-

@@ -1,4 +1,4 @@
-image: openfaas/mqtt-connector:0.3.1
+image: ghcr.io/openfaas/mqtt-connector:0.4.0
 replicas: 1
 
 # # Emitter.io example
