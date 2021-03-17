@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        go-version: [1.13.x]
+        go-version: [1.15.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -44,7 +44,7 @@ jobs:
           tags: |
             ghcr.io/openfaas/faas-netes:${{ github.sha }}
  # Todo - load the image into Kind before running tests
- # otherwise, this just tests the chart with images that 
+ # otherwise, this just tests the chart with images that
  # have already been built and pushed in an earlier job
       - name: get tools
         run: ./contrib/get_tools.sh
