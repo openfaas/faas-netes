@@ -139,6 +139,7 @@ func toFunctionStatus(item ofv1.Function) types.FunctionStatus {
 		Secrets:                item.Spec.Secrets,
 		Constraints:            item.Spec.Constraints,
 		ReadOnlyRootFilesystem: item.Spec.ReadOnlyRootFilesystem,
+		CreatedAt:              item.CreationTimestamp.Time,
 	}
 
 	if item.Spec.Environment != nil {

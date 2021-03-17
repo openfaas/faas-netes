@@ -14,7 +14,7 @@ You can deploy OpenFaaS to any Kubernetes service - whether managed or local, in
 
 [OpenFaaS (Functions as a Service)](https://github.com/openfaas/faas) is a framework for building serverless functions with Docker and Kubernetes which has first class support for metrics. Any process can be packaged as a function enabling you to consume a range of web events without repetitive boiler-plate coding.
 
-<img alt="OpenFaaS workflow" src="https://raw.githubusercontent.com/openfaas/faas/master/docs/of-workflow.png"></img>                                       
+<img alt="OpenFaaS workflow" src="https://raw.githubusercontent.com/openfaas/faas/master/docs/of-workflow.png"></img>
 > Pictured: [OpenFaaS conceptual architecture](https://docs.openfaas.com/architecture/stack/)
 
 ## Highlights
