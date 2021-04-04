@@ -54,7 +54,7 @@ oidcAuthPlugin:
 # Requires openfaasPRO=true
 # scale-to-zero feature
 faasIdler:
-  image: ghcr.io/openfaas/faas-idler-pro:0.4.2
+  image: ghcr.io/openfaas/faas-idler-pro:0.5.0
   replicas: 1
   create: true
   inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
@@ -171,6 +171,7 @@ nats:
   image: nats-streaming:0.17.0
   enableMonitoring: false
   metrics:
+    # Should stay off by default because the exporter is not multi-arch (yet)
     enabled: false
     image: synadia/prometheus-nats-exporter:0.6.2
   resources:

@@ -1,46 +1,11 @@
-basic_auth: true
-
-clusterRole: false
-createCRDs: true
-
-# See https://www.openfaas.com/support for more
-openfaasPRO: false
-
-nodeSelector: {}
 
 gateway:
   directFunctions: true
 
-oidcAuthPlugin:
-  enabled: false
-
-operator:
-  create: false
-
-queueWorker:
-  image: openfaas/queue-worker:0.11.2
-
 prometheus:
-  image: prom/prometheus:v2.11.0
   resources:
     requests:
       memory: "100Mi"
 
-alertmanager:
-  image: prom/alertmanager:v0.18.0
-
-faasIdler:
-  replicas: 1
-  image: ghcr.io/openfaas/faas-idler-pro:0.5.0
-
 basicAuthPlugin:
   image: openfaas/basic-auth-plugin:0.20.1-armhf
-  replicas: 1
-
-ingressOperator:
-  create: false
-
-# Unfortunately the exporter is not multi-arch (yet)
-nats:
-  metrics:
-    enabled: false
