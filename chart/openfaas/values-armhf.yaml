@@ -6,8 +6,7 @@ createCRDs: true
 # See https://www.openfaas.com/support for more
 openfaasPRO: false
 
-nodeSelector:
-  beta.kubernetes.io/arch: arm
+nodeSelector: {}
 
 gateway:
   directFunctions: true

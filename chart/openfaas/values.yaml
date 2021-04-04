@@ -172,7 +172,7 @@ nats:
   enableMonitoring: false
   metrics:
     enabled: false
-    image: synadia/prometheus-nats-exporter:0.6.2 
+    image: synadia/prometheus-nats-exporter:0.6.2
   resources:
     requests:
       memory: "120Mi"
@@ -201,8 +201,7 @@ ingressOperator:
     requests:
       memory: "25Mi"
 
-nodeSelector:
-  beta.kubernetes.io/arch: amd64
+nodeSelector: {}
 
 tolerations: []
 
