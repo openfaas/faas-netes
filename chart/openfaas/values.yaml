@@ -87,13 +87,12 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.20.1
+  image: ghcr.io/openfaas/basic-auth:0.20.12
   replicas: 1
   resources:
     requests:
       memory: "50Mi"
       cpu: "20m"
-
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.13.2

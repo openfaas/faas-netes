@@ -1,11 +1,10 @@
-
-gateway:
-  directFunctions: true
-
 prometheus:
   resources:
     requests:
       memory: "100Mi"
 
-basicAuthPlugin:
-  image: openfaas/basic-auth-plugin:0.20.1-arm64
+nats:
+  enableMonitoring: false
+  metrics:
+    # Should stay off by default because the exporter is not multi-arch (yet)
+    enabled: false
