@@ -56,5 +56,3 @@ spec:
         - name: auth
           readOnly: true
           mountPath: "/var/secrets"
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64

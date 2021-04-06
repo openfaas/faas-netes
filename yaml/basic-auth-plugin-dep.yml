@@ -29,7 +29,7 @@ spec:
             requests:
               cpu: 20m
               memory: 50Mi
-        image: openfaas/basic-auth-plugin:0.20.1
+        image: ghcr.io/openfaas/basic-auth:0.20.12
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -57,5 +57,3 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64

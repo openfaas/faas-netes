@@ -36,5 +36,3 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
