@@ -127,7 +127,7 @@ operator:
       cpu: "50m"
 
 queueWorker:
-  image: openfaas/queue-worker:0.11.2
+  image: ghcr.io/openfaas/queue-worker:0.11.4
   # Control HA of queue-worker
   replicas: 1
   # Control the concurrent invocations
