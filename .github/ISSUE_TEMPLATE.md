@@ -9,6 +9,7 @@
 <!--- If suggesting a change/improvement, explain the difference from current behavior -->
 
 ## Are you a GitHub Sponsor (Yes/No?)
+<!--- Given this request for help, how are you supporting the project? -->
 
 Check at: https://github.com/sponsors/openfaas
 - [ ] Yes
