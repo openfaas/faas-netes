@@ -12,6 +12,12 @@
 <!--- Not obligatory, but suggest a fix/reason for the bug, -->
 <!--- or ideas how to implement the addition or change -->
 
+## Are you a GitHub Sponsor (Yes/No?)
+
+Check at: https://github.com/sponsors/openfaas
+- [ ] Yes
+- [ ] No
+
 ## Steps to Reproduce (for bugs)
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
 <!--- reproduce this bug. Include code to reproduce, if relevant -->
