@@ -27,7 +27,7 @@ spec:
   template:
     metadata:
       annotations:
-        /scrape: "false"
+        prometheus.io/scrape: "false"
       labels:
         app: {{ template "connector.name" . }}
         component: nats-connector
