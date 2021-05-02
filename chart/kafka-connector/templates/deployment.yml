@@ -26,7 +26,7 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io.scrape: "false"
+        prometheus.io/scrape: "false"
       labels:
         app: {{ template "connector.name" . }}
         component: kafka-connector

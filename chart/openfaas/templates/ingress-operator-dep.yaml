@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io.scrape: "true"
+        prometheus.io/scrape: "true"
       labels:
         app: ingress-operator
     spec:

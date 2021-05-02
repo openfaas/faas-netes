@@ -19,10 +19,10 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
-        prometheus.io.scrape: {{ .Values.nats.metrics.enabled | quote }}
+        prometheus.io/scrape: {{ .Values.nats.metrics.enabled | quote }}
         {{- if .Values.nats.metrics.enabled }}
-        prometheus.io.port: "7777"
-        {{- end }} 
+        prometheus.io/port: "7777"
+        {{- end }}
       labels:
         app: nats
     spec:

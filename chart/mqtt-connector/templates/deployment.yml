@@ -28,7 +28,7 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io.scrape: "false"
+        prometheus.io/scrape: "false"
       labels:
         app: {{ template "connector.fullname" . }}
         component: mqtt-connector
