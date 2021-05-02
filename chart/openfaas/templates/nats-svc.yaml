@@ -16,7 +16,7 @@ spec:
   ports:
     - port: 4222
       protocol: TCP
-      name: clients
+      name: tcp
     {{- if .Values.nats.enableMonitoring }}
     - port: 8222
       protocol: TCP
