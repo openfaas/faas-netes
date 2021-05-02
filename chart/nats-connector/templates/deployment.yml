@@ -23,11 +23,11 @@ spec:
     matchLabels:
       app: {{ template "connector.name" . }}
       component: nats-connector
-  
+
   template:
     metadata:
       annotations:
-        prometheus.io.scrape: "false"
+        /scrape: "false"
       labels:
         app: {{ template "connector.name" . }}
         component: nats-connector
