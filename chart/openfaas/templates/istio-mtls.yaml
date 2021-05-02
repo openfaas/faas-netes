@@ -1,5 +1,23 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.istio.mtls -}}
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: {{ .Release.Namespace }}
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace:  {{ $functionNs }}
+spec:
+  mtls:
+    mode: STRICT
+---
 # enforce mTLS to openfaas control plane
 apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
