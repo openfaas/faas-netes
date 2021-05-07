@@ -125,8 +125,8 @@ The main change here is to add: `--set openfaasPRO=true`
 
 See also:
 * Scale-down to zero (in this document)
-* [OpenFaaS PRO SSO/OIDC](https://docs.openfaas.com/reference/authentication/#oidc-and-oauth2-for-the-openfaas-api)
-* [OpenFaaS PRO Kafka Event Connector](https://github.com/openfaas/faas-netes/tree/master/chart/kafka-connector)
+* [OpenFaaS PRO SSO/OIDC](https://docs.openfaas.com/openfaas-pro/sso/)
+* [OpenFaaS PRO Kafka Event Connector](https://docs.openfaas.com/openfaas-pro/kafka-events/)
 
 #### Generate basic-auth credentials
 
@@ -146,7 +146,7 @@ echo "OpenFaaS admin password: $PASSWORD"
 
 #### Tuning function cold-starts
 
-The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to scale to zero. Otherwise there is not a cold-start, because at least one replica of your function remains available.
+The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to [scale to zero](https://docs.openfaas.com/openfaas-pro/scale-to-zero/). Otherwise there is not a cold-start, because at least one replica of your function remains available.
 
 There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, which is around 1-2 seconds.
 
@@ -360,9 +360,9 @@ Scaling up from zero replicas is enabled by default, to turn it off set `scaleFr
 
 Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the faas-idler component. This is an OpenFaaS PRO feature and an effective way to save costs on your infrastructure costs.
 
-The faas-idler will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
+OpenFaaS PRO will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
 
-See also: [faas-idler docs](https://docs.openfaas.com/architecture/autoscaling/#zero-scale).
+See also: [Scale to Zero docs](https://docs.openfaas.com/openfaas-pro/scale-to-zero/).
 
 Check the logs with:
 
@@ -386,18 +386,14 @@ kubectl delete namespace openfaas openfaas-fn
 
 In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
 
-## ARM
+## ARM and Raspberry Pi
 
-If you would like to deploy OpenFaaS to ARM i.e. Raspberry Pi, ARM64 machines provided by Packet.net, Scaleway or to AWS Graviton, then you should use the appropriate values.yaml file.
-
-* `values-armhf.yml` - for Raspberry Pi and other ARMv7 boards (run `uname -a` to find out which you have)
-* `values-arm64.yml` - for everything else (`arm64` or `aarch64`)
-
-It is recommended that you install OpenFaaS to ARM machines [using k3sup](https://k3sup.dev/) instead of helm directly since it will determine the correct values to be used.
+OpenFaaS container images are currently published as multi-arch for ARM64, armhf and `x64_64`. It's recommended that you use [arkade](https://get-arkade.dev) to install, or use the appropriate values.yaml file.
 
 See also: [Kubernetes and Raspberry Pi in the docs](https://docs.openfaas.com/deployment/kubernetes)
 
 ## Kubernetes versioning
+
 This Helm chart currently supports version 1.16+
 
 Note that OpenFaaS itself may support a wider range of versions, [see here](../../README.md#kubernetes-versions)
