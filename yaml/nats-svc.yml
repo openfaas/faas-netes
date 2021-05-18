@@ -12,6 +12,6 @@ spec:
   ports:
     - port: 4222
       protocol: TCP
-      name: clients
+      name: tcp
   selector:
     app: nats
