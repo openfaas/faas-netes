@@ -48,7 +48,7 @@ oidcAuthPlugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: openfaas/openfaas-oidc-plugin:0.3.7
+  image: openfaas/openfaas-oidc-plugin:0.3.8
   securityContext: true
 
 # Requires openfaasPRO=true
