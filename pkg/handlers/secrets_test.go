@@ -4,6 +4,7 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -41,12 +42,56 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
 		}
 
-		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), "testsecret", metav1.GetOptions{})
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			t.Errorf("error validting secret: %s", err)
 		}
 
-		if actualSecret.Name != "testsecret" {
+		if actualSecret.Name != secretName {
+			t.Errorf("want secret with name: %q, got: %q", secretName, actualSecret.Name)
+		}
+
+		managedBy := actualSecret.Labels[secretLabel]
+		if managedBy != secretLabelValue {
+			t.Errorf("want secret to be managed by '%s', got: '%s'", secretLabelValue, managedBy)
+		}
+
+		actualValue := actualSecret.Data[secretName]
+		if bytes.Equal(actualValue, []byte(secretValue)) == false {
+			t.Errorf("want secret value: '%s', got: '%s'", secretValue, actualValue)
+		}
+
+		// Attempt to re-create the secret and make sure that "409 CONFLICT" is returned.
+		newReq := httptest.NewRequest("POST", "http://example.com/foo", strings.NewReader(payload))
+		newW := httptest.NewRecorder()
+		secretsHandler(newW, newReq)
+		newResp := newW.Result()
+		if newResp.StatusCode != http.StatusConflict {
+			t.Errorf("want status code '%d', got '%d'", http.StatusConflict, newResp.StatusCode)
+		}
+	})
+
+	t.Run("create raw managed secrets", func(t *testing.T) {
+		secretValue := []byte("testsecretvalue")
+		secretName := "raw-secret"
+
+		payload := fmt.Sprintf(`{"name": "%s", "value": "%s"}`, secretName, secretValue)
+		req := httptest.NewRequest("POST", "http://example.com/foo", strings.NewReader(payload))
+		w := httptest.NewRecorder()
+
+		secretsHandler(w, req)
+
+		resp := w.Result()
+		if resp.StatusCode != http.StatusAccepted {
+			t.Errorf("want status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
+		}
+
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
+		if err != nil {
+			t.Errorf("error validting secret: %s", err)
+		}
+
+		if actualSecret.Name != secretName {
 			t.Errorf("want secret with name: 'testsecret', got: '%s'", actualSecret.Name)
 		}
 
@@ -55,8 +100,8 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want secret to be managed by '%s', got: '%s'", secretLabelValue, managedBy)
 		}
 
-		actualValue := actualSecret.StringData[secretName]
-		if actualValue != secretValue {
+		actualValue := actualSecret.Data[secretName]
+		if bytes.Equal(actualValue, secretValue) == false {
 			t.Errorf("want secret value: '%s', got: '%s'", secretValue, actualValue)
 		}
 
@@ -137,7 +182,7 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Error(err)
 		}
 
-		secretWant := 1
+		secretWant := 2
 		if len(secretList) != secretWant {
 			t.Errorf("want %d secret, got %d", secretWant, len(secretList))
 		}
