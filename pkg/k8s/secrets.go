@@ -97,9 +97,16 @@ func (c secretClient) Create(secret types.Secret) error {
 				secretLabel: secretLabelValue,
 			},
 		},
-		StringData: map[string]string{
-			secret.Name: secret.Value,
-		},
+	}
+
+	if len(secret.RawValue) > 0 {
+		req.Data = map[string][]byte{
+			secret.Name: secret.RawValue,
+		}
+	} else {
+		req.Data = map[string][]byte{
+			secret.Name: []byte(secret.Value),
+		}
 	}
 
 	_, err = c.kube.Secrets(secret.Namespace).Create(context.TODO(), req, metav1.CreateOptions{})

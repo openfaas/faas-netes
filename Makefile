@@ -14,9 +14,10 @@ build-docker:
 
 .PHONY: build-buildx
 build-buildx:
-	@docker buildx create --use --name=multiarch --node=multiarch && \
+	@echo ghcr.io/$(OWNER)/faas-netes:$(TAG) && \
+	docker buildx create --use --name=multiarch --node=multiarch && \
 	docker buildx build \
-		--output "type=docker,push=false" \
+		--push \
 		--platform linux/amd64 \
 		--tag ghcr.io/$(OWNER)/faas-netes:$(TAG) \
 		.
