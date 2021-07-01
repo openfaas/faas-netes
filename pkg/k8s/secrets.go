@@ -99,15 +99,7 @@ func (c secretClient) Create(secret types.Secret) error {
 		},
 	}
 
-	if len(secret.RawValue) > 0 {
-		req.Data = map[string][]byte{
-			secret.Name: secret.RawValue,
-		}
-	} else {
-		req.Data = map[string][]byte{
-			secret.Name: []byte(secret.Value),
-		}
-	}
+	req.Data = c.getValidSecretData(secret)
 
 	_, err = c.kube.Secrets(secret.Namespace).Create(context.TODO(), req, metav1.CreateOptions{})
 	if err != nil {
@@ -133,9 +125,8 @@ func (c secretClient) Replace(secret types.Secret) error {
 		return err
 	}
 
-	found.StringData = map[string]string{
-		secret.Name: secret.Value,
-	}
+	found.Data = c.getValidSecretData(secret)
+
 	_, err = kube.Update(context.TODO(), found, metav1.UpdateOptions{})
 	if err != nil {
 		log.Printf("can not update secret %s.%s: %v\n", secret.Name, secret.Namespace, err)
@@ -185,6 +176,20 @@ func (c secretClient) validateSecret(secret types.Secret) error {
 	}
 
 	return nil
+}
+
+func (c secretClient) getValidSecretData(secret types.Secret) map[string][]byte {
+
+	if len(secret.RawValue) > 0 {
+		return map[string][]byte{
+			secret.Name: secret.RawValue,
+		}
+	}
+
+	return map[string][]byte{
+		secret.Name: []byte(secret.Value),
+	}
+
 }
 
 // ConfigureSecrets will update the Deployment spec to include secrets that have been deployed

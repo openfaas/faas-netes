@@ -142,8 +142,42 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want secret to be managed by '%s', got: '%s'", secretLabelValue, managedBy)
 		}
 
-		actualValue := actualSecret.StringData[secretName]
-		if actualValue != newSecretValue {
+		actualValue := actualSecret.Data[secretName]
+		if bytes.Equal(actualValue, []byte(newSecretValue)) == false {
+			t.Errorf("want secret value: '%s', got: '%s'", newSecretValue, actualValue)
+		}
+	})
+
+	t.Run("update raw managed secrets", func(t *testing.T) {
+		newSecretValue := []byte("newtestsecretvalue")
+		secretName := "raw-secret"
+		payload := fmt.Sprintf(`{"name": "%s", "value": "%s"}`, secretName, newSecretValue)
+		req := httptest.NewRequest("PUT", "http://example.com/foo", strings.NewReader(payload))
+		w := httptest.NewRecorder()
+
+		secretsHandler(w, req)
+
+		resp := w.Result()
+		if resp.StatusCode != http.StatusAccepted {
+			t.Errorf("want status code '%d', got '%d'", http.StatusAccepted, resp.StatusCode)
+		}
+
+		actualSecret, err := kube.CoreV1().Secrets(namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
+		if err != nil {
+			t.Errorf("error validting secret: %s", err)
+		}
+
+		if actualSecret.Name != secretName {
+			t.Errorf("want secret with name: 'testsecret', got: '%s'", actualSecret.Name)
+		}
+
+		managedBy := actualSecret.Labels[secretLabel]
+		if managedBy != secretLabelValue {
+			t.Errorf("want secret to be managed by '%s', got: '%s'", secretLabelValue, managedBy)
+		}
+
+		actualValue := actualSecret.Data[secretName]
+		if bytes.Equal(actualValue, newSecretValue) == false {
 			t.Errorf("want secret value: '%s', got: '%s'", newSecretValue, actualValue)
 		}
 	})
