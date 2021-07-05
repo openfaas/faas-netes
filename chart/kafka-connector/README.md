@@ -16,20 +16,15 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
   You must have a working OpenFaaS installation. You can find [instructions in the docs](https://docs.openfaas.com/deployment/kubernetes/#pick-helm-or-yaml-files-for-deployment-a-or-b), including instructions to also install OpenFaaS via Helm.
 
-- Install Kafka (dev/testing)
+- Install Kafka for dev/testing
 
-  You can install [Apache Kafka](https://kafka.apache.org/) with the [wurstmeister Docker images](https://github.com/wurstmeister/kafka-docker) which will allow you to test the connector with a version of Kafka that is easy to set up, and suitable for development.
+  You can install [Apache Kafka](https://kafka.apache.org/) using the [development instructions](development.md) for testing purposes.
 
-  ```sh
-  $ git clone https://github.com/openfaas/faas-netes
-  $ cd contrib/kafka-testing/
-  $ kubectl apply -f \
-   kafka-broker-dep.yml,kafka-broker-svc.yml,zookeeper-dep.yaml,zookeeper-svc.yaml
-  ```
+- Install Kafka for production use
 
-- Install Kafka (production)
-
-  You may already have a working Kafka installation, but if not you can provision it using a production-grade helm chart. Confluent has provided various [Helm charts here](https://github.com/confluentinc/cp-helm-charts). Instructions for installing Apache Kafka via Helm are [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart).
+  You may already have a working Kafka installation, but if not you can provision it using Confluent's [chart](https://github.com/confluentinc/cp-helm-charts).
+  
+  Instructions for installing Apache Kafka via Helm are [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart).
 
 ## Install the Chart
 
@@ -77,8 +72,7 @@ Additional kafka-connector options in `values.yaml`.
 | `printResponseBody`      | Output to the logs the response body when calling a function.                                 | `false`                         |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
-See values.yaml for detailed configuration.
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 
 ## Removing the kafka-connector
 
