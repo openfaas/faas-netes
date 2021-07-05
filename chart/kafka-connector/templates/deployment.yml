@@ -41,7 +41,7 @@ spec:
             secretName: openfaas-license
       {{- end }}
       containers:
-        - name: kafka
+        - name: connector
           image: {{ .Values.image }}
           command:
            - "/usr/bin/kafka-connector"
