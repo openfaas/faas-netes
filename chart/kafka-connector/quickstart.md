@@ -1,4 +1,4 @@
-# Testing the Chart locally
+# Kafka PRO connector quickstart
 
 1.  Install Kafka in a separate namespace
 
@@ -55,36 +55,73 @@
   arkade install openfaas
   ```
 
-  Or
+  Or use helm
+
+3) Create any secrets required
+
+  Secrets are required for SASL or client certificate authentication, see the comments in the values.yaml file
+
+4) Install the connector:
+
+  Create `overrides.yaml` and configure as per comments in values.yaml
+
+  Example for Kafka helm chart:
+
+  ```yaml
+  brokerHost: kf-kafka:9092
+  tls: false
+  saslAuth: false
+
+  caSecret: ""
+  certSecret: ""
+  keySecret: ""
+  ```
+
+  Example for Aiven cloud with client certificates:
+
+  ```yaml
+  brokerHost: kafka-202504b5-openfaas-910b.aivencloud.com:10905
+  tls: true
+  saslAuth: false
+  
+  caSecret: kafka-broker-ca
+  certSecret: kafka-broker-cert
+  keySecret: kafka-broker-key
+  ```
+
+  Example for Confluent Cloud with Let's Encrypt and SASL auth:
+
+  ```yaml
+  brokerHost: pkc-4r297.europe-west1.gcp.confluent.cloud:9092
+  tls: true
+  saslAuth: true
+  
+  caSecret: ""
+  certSecret: ""
+  keySecret: ""
+  ```
+
+  Use the helm chart:
 
    ```sh
-   helm upgrade openfaas --install openfaas/openfaas \
-   --namespace openfaas  \
-   --set basic_auth=true \
-   --set functionNamespace=openfaas-fn
+   cd faas-netes/charts
+   
+   helm upgrade kafka-connector ./kafka-connector \
+       --install \
+       --namespace openfaas \
+       --values ./overrides.yaml
    ```
 
-3) Install the connector using the arkade app:
+  Or install with arkade:
 
    ```sh
    arkade install kafka-connector \
    --broker-host=kf-kafka:9092 \
    --license-file $HOME/.openfaas/LICENSE \
-   --topics faas-request \
-   --set image=alexellis/kafka-connector-pro:0.4.1-5-g551d268-dirty-amd64
-  ```
-
-4) Or install the connector from the faas-netes repo:
-
-   ```sh
-   cd charts
-   helm upgrade kafka-connector . \
-       --install \
-       --namespace openfaas \
-       --set broker_host=kf-kafka.kafka
+   --topics faas-request
    ```
 
-4) Trigger a function from a topic:
+5) Trigger a function from a topic:
 
    a. Deploy figlet
 
@@ -104,7 +141,7 @@
    kubectl -n openfaas logs deploy/kafka-connector -f
    ```
 
-5. If you need to reset your environment:
+6. If you need to reset your environment:
 
    ```sh
    faas remove figlet --gateway $GATEWAY
