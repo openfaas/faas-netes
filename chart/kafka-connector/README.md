@@ -14,17 +14,19 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
 - Install OpenFaaS
 
-  You must have a working OpenFaaS installation. You can find [instructions in the docs](https://docs.openfaas.com/deployment/kubernetes/#pick-helm-or-yaml-files-for-deployment-a-or-b), including instructions to also install OpenFaaS via Helm.
+  You must have a working OpenFaaS installed.
 
-- Install Kafka for dev/testing
+- Self-hosted Kafka with Helm
 
-  You can install [Apache Kafka](https://kafka.apache.org/) using the [development instructions](development.md) for testing purposes.
+  For development and testing, you can install [Apache Kafka](https://kafka.apache.org/) using Confluent's [chart](https://github.com/confluentinc/cp-helm-charts). Find out additional options here: [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart)
 
-- Install Kafka for production use
+- Hosted Kafka
 
-  You may already have a working Kafka installation, but if not you can provision it using Confluent's [chart](https://github.com/confluentinc/cp-helm-charts).
-  
-  Instructions for installing Apache Kafka via Helm are [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart).
+  [Aiven](https://aiven.io/) and [Confluent Cloud](https://confluent.cloud/) have both been tested with the Kafka Connector.
+
+## Complete walk-through guide
+
+  You can continue with this guide, or start the [walk-through](development.md) for testing purposes.
 
 ## Install the Chart
 
@@ -56,6 +58,17 @@ $ helm upgrade kafka-connector ./chart/kafka-connector \
     --namespace openfaas
 ```
 
+## Encryption options
+
+1) TLS off (default)
+2) TLS on
+
+## Authentication options
+
+1) TLS with SASL using CA from the default trust store
+3) TLS with SASL using a custom CA
+4) TLS with client certificates
+
 ## Configuration
 
 Additional kafka-connector options in `values.yaml`.
@@ -64,13 +77,19 @@ Additional kafka-connector options in `values.yaml`.
 | ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
 | `topics`                 | Topics to which the connector will bind, provide as a comma-separated list.            | `faas-request`                 |
 | `brokerHost`             | location of the Kafka brokers.                                                         | `kafka`                        |
-| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream |
-| `upstreamTimeout`       | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `30s`                          |
+| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
+| `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `30s`                          |
 | `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `3s`                           |
 | `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
 | `printResponse`          | Output the response of calling a function in the logs.                                 | `true`                         |
-| `printResponseBody`      | Output to the logs the response body when calling a function.                                 | `false`                         |
+| `printResponseBody`      | Output to the logs the response body when calling a function.                          | `false`                        |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
+| `sasl`                   | Enable auth with a SASL username/password                                              | `false`                        |
+| `brokerPasswordSecret`   | Name of secret for SASL password                                                       | `kafka-broker-password`        |
+| `brokerUsernameSecret`   | Name of secret for SASL username                                                       | `kafka-broker-username`        |
+| `caSecret`               | Name secret for TLS CA - leave empty to disable                                        | `kafka-broker-ca`              |
+| `certSecret`             | Name secret for TLS client certificate cert - leave empty to disable                   | `kafka-broker-cert`            |
+| `keySecret`              | Name secret for TLS client certificate private key - leave empty to disable            | `kafka-broker-key`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

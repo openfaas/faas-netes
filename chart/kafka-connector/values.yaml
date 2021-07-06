@@ -1,7 +1,7 @@
 # You will need to create a license named "openfaas-license" - see the 
-# chart README for more.
+# chart README for detailed instructions.
 
-image: ghcr.io/openfaas/kafka-connector-pro:0.5.0
+image: ghcr.io/openfaas/kafka-pro-connector:0.6.0-rc1
 
 replicas: 1
 
@@ -15,7 +15,7 @@ asyncInvocation: false
 topics: faas-request
 
 # Your Kafka broker
-brokerHost: kafka:9092
+# brokerHost: kf-kafka:9092
 
 printResponse: true
 printResponseBody: false
@@ -31,3 +31,56 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Encryption
+tls: false
+
+# Authentication
+
+## When set to true, create secrets: "kafka-broker-username" and "kafka-broker-password"
+saslAuth: false
+
+# kubectl create secret generic \
+# kafka-broker-username \
+# -n openfaas \
+# --from-file broker-username=./broker-username.txt
+
+# kubectl create secret generic \
+# kafka-broker-password \
+# -n openfaas \
+# --from-file broker-password=./broker-password.txt
+
+brokerPasswordSecret: kafka-broker-password
+brokerUsernameSecret: kafka-broker-username
+
+## When using a custom CA:
+
+# kubectl create secret generic \
+# kafka-broker-ca \
+# -n openfaas \
+# --from-file broker-ca=./broker-ca.pem
+
+# When using client certs
+
+# kubectl create secret generic \
+# kafka-broker-cert \
+# -n openfaas \
+# --from-file broker-cert=./broker-cert.txt
+
+# kubectl create secret generic \
+# kafka-broker-key \
+# -n openfaas \
+# --from-file broker-key=./broker-key.txt
+
+# Set to empty to disable:
+
+caSecret: ""
+certSecret: ""
+keySecret: ""
+
+# Or give a name to each to enable
+
+# caSecret: kafka-broker-ca
+# certSecret: kafka-broker-cert
+# keySecret: kafka-broker-key
+
