@@ -90,6 +90,7 @@ Additional kafka-connector options in `values.yaml`.
 | `caSecret`               | Name secret for TLS CA - leave empty to disable                                        | `kafka-broker-ca`              |
 | `certSecret`             | Name secret for TLS client certificate cert - leave empty to disable                   | `kafka-broker-cert`            |
 | `keySecret`              | Name secret for TLS client certificate private key - leave empty to disable            | `kafka-broker-key`             |
+| `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

@@ -112,6 +112,8 @@ spec:
             - name: rebuild_interval
               value: {{ .Values.rebuildInterval | quote }}
             {{- end }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
           volumeMounts:
             - name: openfaas-license
               readOnly: true
