@@ -31,21 +31,60 @@ spec:
         app: {{ template "connector.name" . }}
         component: kafka-connector
     spec:
-      {{- if .Values.basic_auth }}
       volumes:
-        - name: auth
-          secret:
-            secretName: basic-auth
         - name: openfaas-license
           secret:
             secretName: openfaas-license
+      {{- if .Values.basic_auth }}
+        - name: auth
+          secret:
+            secretName: basic-auth
       {{- end }}
+      {{- if.Values.saslAuth }}
+        - name: broker-username
+          secret:
+            secretName: {{ .Values.brokerUsernameSecret }}
+        - name: broker-password
+          secret:
+            secretName: {{ .Values.brokerPasswordSecret }}
+      {{- end }}
+      {{- if .Values.caSecret }}
+        - name: broker-ca
+          secret:
+            secretName: {{ .Values.caSecret }}
+      {{- end}}
+      {{- if .Values.certSecret }}
+        - name: broker-cert
+          secret:
+            secretName: {{ .Values.certSecret }}
+      {{- end}}
+      {{- if .Values.keySecret }}
+        - name: broker-key
+          secret:
+            secretName: {{ .Values.keySecret }}
+      {{- end}}
       containers:
         - name: connector
           image: {{ .Values.image }}
           command:
            - "/usr/bin/kafka-connector"
            - "-license-file=/var/secrets/license/license"
+           {{- if.Values.saslAuth }}
+           - "-username-file=/var/secrets/broker-username/broker-username"
+           - "-password-file=/var/secrets/broker-password/broker-password"
+           {{- end }}
+           {{- if .Values.tls }}
+           - "-tls"
+           {{- end }}
+           {{- if .Values.caSecret }}
+           - "-ca-file=/var/secrets/broker-ca/broker-ca"
+           {{- end }}
+          {{- if .Values.certSecret }}
+           - "-cert-file=/var/secrets/broker-cert/broker-cert"
+          {{- end }}
+          {{- if .Values.keySecret }}
+           - "-key-file=/var/secrets/broker-key/broker-key"
+          {{- end }}
           env:
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
@@ -73,14 +112,40 @@ spec:
             - name: rebuild_interval
               value: {{ .Values.rebuildInterval | quote }}
             {{- end }}
-          {{- if .Values.basic_auth }}
           volumeMounts:
-            - name: auth
-              readOnly: true
-              mountPath: "/var/secrets"
             - name: openfaas-license
               readOnly: true
               mountPath: "/var/secrets/license"
+          {{- if .Values.basic_auth }}
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+          {{- if.Values.saslAuth }}
+            - name: broker-username
+              readOnly: true
+              mountPath: "/var/secrets/broker-username"
+            - name: broker-password
+              readOnly: true
+              mountPath: "/var/secrets/broker-password"
+          {{- end }}
+
+          {{- if .Values.caSecret }}
+            - name: broker-ca
+              readOnly: true
+              mountPath: "/var/secrets/broker-ca"
+          {{- end}}
+
+          {{- if .Values.certSecret }}
+            - name: broker-cert
+              readOnly: true
+              mountPath: "/var/secrets/broker-cert"
+          {{- end }}
+          {{- if .Values.keySecret }}
+            - name: broker-key
+              readOnly: true
+              mountPath: "/var/secrets/broker-key"
+          {{- end }}
+
           {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
