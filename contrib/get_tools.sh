@@ -2,7 +2,7 @@
 
 set -e
 
-KIND_VERSION="v0.9.0"
+KIND_VERSION="v0.11.1"
 # Causes a validation failure when linting due to CRDs moving to v1
 # HELM_VERSION="v3.4.0"
 HELM_VERSION="v3.0.3"
