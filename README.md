@@ -1,4 +1,4 @@
-faas-netes - Kubernetes controller for OpenFaaS
+faas-netes - Serverless Kubernetes controller for OpenFaaS
 ===========
 
 [![Build Status](https://github.com/openfaas/faas-netes/workflows/build/badge.svg?branch=master)](https://github.com/openfaas/faas-netes/actions)
@@ -8,7 +8,9 @@ faas-netes - Kubernetes controller for OpenFaaS
 
 ## Introduction
 
-`faas-netes` is an OpenFaaS provider which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). The existing REST API, CLI and UI are fully compatible. It also has an optional *operator* mode so that you can manage functions with `kubectl`.
+`faas-netes` is an OpenFaaS provider which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). It's part of a larger stack that brings a cloud-agnostic serverless experience to Kubernetes.
+
+The existing REST API, CLI and UI are fully compatible. It also has an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
 
 You can deploy OpenFaaS to any Kubernetes service - whether managed or local, including to OpenShift. You will find any specific instructions and additional links in the documentation.
 
