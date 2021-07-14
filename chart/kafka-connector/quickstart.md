@@ -3,12 +3,7 @@
 1.  Install Kafka in a separate namespace
 
     ```sh
-    $ helm repo add incubator https://charts.helm.sh/incubator
-    $ helm upgrade kf incubator/kafka \
-      --install \
-      --namespace openfaas \
-      --set imageTag=4.1.3 \
-      --set persistence.enabled=false
+    $ arkade install kafka
 
     $ kubectl -n openfaas apply -f - <<EOF
     apiVersion: v1
@@ -35,18 +30,18 @@
 
     * Verify the topics available:
         ```sh
-        kubectl -n openfaas exec -it client -- kafka-topics --zookeeper kf-zookeeper:2181 --list
+        kubectl -n openfaas exec -it client -- kafka-topics --zookeeper cp-helm-charts-cp-zookeeper.default:2181 --list
         ```
 
     * Create a partition and topic for faas-request
         ```sh
-        kubectl -n openfaas exec -it client -- kafka-topics --zookeeper kf-zookeeper:2181 --topic faas-request --create --partitions 1 --replication-factor 1
+        kubectl -n openfaas exec -it client -- kafka-topics --zookeeper cp-helm-charts-cp-zookeeper.default:2181 --topic faas-request --create --partitions 1 --replication-factor 1
+        ```
 
     * Publish a message and play back the messages after:
         ```sh
-        echo "test msg" | kubectl -n openfaas exec -it client -- kafka-console-producer --broker-list kf-kafka-headless:9092 --topic faas-request
-
-        kubectl -n openfaas exec -it client -- kafka-console-consumer --bootstrap-server kf-kafka:9092 --topic faas-request --from-beginning
+       echo "test msg" | kubectl -n openfaas exec -it client -- kafka-console-producer --broker-list cp-helm-charts-cp-kafka-headless.default:9092 --topic faas-request
+       kubectl -n openfaas exec -it client -- kafka-console-consumer --bootstrap-server cp-helm-charts-cp-kafka.default:9092 --topic faas-request --from-beginning
         ```
 
 2) Install OpenFaaS
@@ -68,7 +63,7 @@
   Example for Kafka helm chart:
 
   ```yaml
-  brokerHost: kf-kafka:9092
+  brokerHost: cp-helm-charts-cp-kafka.default:9092
   tls: false
   saslAuth: false
 
@@ -116,7 +111,7 @@
 
    ```sh
    arkade install kafka-connector \
-   --broker-host=kf-kafka:9092 \
+   --broker-host=cp-helm-charts-cp-kafka.default:9092 \
    --license-file $HOME/.openfaas/LICENSE \
    --topics faas-request
    ```
@@ -132,7 +127,7 @@
    b. Write a msg with the `client` to the topic `faas-request`:
 
    ```sh
-   echo "This is a UNIX system" | kubectl -n openfaas exec -it client -- kafka-console-producer --broker-list kf-kafka-headless:9092 --topic faas-request
+   echo "This is a UNIX system" | kubectl -n openfaas exec -it client -- kafka-console-producer --broker-list cp-helm-charts-cp-kafka-headless.default:9092 --topic faas-request
    ```
 
    c. Check the connector logs:
