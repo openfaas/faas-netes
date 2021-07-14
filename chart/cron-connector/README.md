@@ -1,11 +1,18 @@
 # OpenFaaS Cron Connector
 
+Schedule function invocations using a cron expression.
+
 ## Pre-requisite
 
-- Install OpenFaaS
-You must have a working OpenFaaS installation. You can find [instructions in the docs](https://docs.openfaas.com/deployment/kubernetes/#pick-helm-or-yaml-files-for-deployment-a-or-b), including instructions to also install OpenFaaS via Helm.
+You must have a working OpenFaaS installation.
 
-## Install the Chart
+## Install via arkade
+
+```bash
+arkade install cron-connector
+```
+
+## Install via the published chart
 
 - Add OpenFaaS chart repo to helm and install using the following command.
 
@@ -13,34 +20,36 @@ You must have a working OpenFaaS installation. You can find [instructions in the
 # Add OpenFaaS chart repo
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
 
-$ helm upgrade cron-connector openfaas/cron-connector \
-    --install \
+$ helm upgrade --install \
+cron-connector openfaas/cron-connector \
     --namespace openfaas
 ```
 
-## Deploying using local repository
+## Deploying using local version of the chart
 
 ```bash
 git clone https://github.com/openfaas/faas-netes.git
 
 cd faas-netes
 
-helm upgrade --namespace openfaas \
-  --install cron-connector \
+helm upgrade --install --namespace openfaas \
+  cron-connector \
   ./chart/cron-connector
 ```
 
-## Configuration
+## Configuration options
 
-cron-connector options in values.yaml
+| Parameter          | Description                                      | Default                                  |
+|--------------------|--------------------------------------------------|------------------------------------------|
+| `image`            | The cron-connector image that should be deployed | `ghcr.io/openfaas/cron-connector:0.3.2`  |
+| `gatewayURL`       | The URL for the API gateway.                     | `"http://gateway.openfaas:8080"`         |
+| `basicAuth`        | Enable or disable basic auth                     | `true`                                   |
+| `asyncInvocation`  | Invoke via the asynchronous function endpoint    | `false`                                  |
+| `contentType`      | Set a contentType for all invocations            | `text/plain`                             |
 
-| Parameter     | Description                                      | Default                                  |
-|---------------|--------------------------------------------------|------------------------------------------|
-| `image`       | The cron-connector image that should be deployed | `ghcr.io/openfaas/cron-connector:0.3.2`  |
-| `gateway_url` | The URL for the API gateway.                     | `"http://gateway.openfaas:8080"`         |
-| `basic_auth`  | Enable or disable basic auth                     | `true`                                   |
+See also: values.yaml
 
-## Removing the cron-connector
+## Remove the cron-connector
 
 All components can be cleaned up with helm:
 

@@ -31,20 +31,24 @@ spec:
         image: {{ .Values.image }}
         env:
           - name: gateway_url
-            value: {{ .Values.gateway_url | quote }}
-          {{- if .Values.basic_auth }}
+            value: {{ .Values.gatewayURL | quote }}
+          - name: async_invocation
+            value: {{ .Values.asyncInvocation | quote }}
+          - name: content_type
+            value: {{ .Values.contentType | quote }}
+          {{- if .Values.basicAuth }}
           - name: basic_auth
             value: "true"
           - name: secret_mount_path
             value: "/var/secrets"
           {{- end }}
-        {{- if .Values.basic_auth }}          
+        {{- if .Values.basicAuth }}          
         volumeMounts:
             - name: auth
               readOnly: true
               mountPath: "/var/secrets/"
         {{- end }}
-      {{- if .Values.basic_auth }}
+      {{- if .Values.basicAuth }}
       volumes:
       - name: auth
         secret:
