@@ -26,7 +26,7 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 
 ## Complete walk-through guide
 
-  You can continue with this guide, or start the [walk-through](development.md) for testing purposes.
+  You can continue with this guide, or start the [walk-through](quickstart.md) for testing purposes.
 
 ## Install the Chart
 
@@ -51,7 +51,6 @@ $ helm upgrade kafka-connector openfaas/kafka-connector \
 > The above command will also update your helm repo to pull in any new releases.
 
 ## Install a development version
-
 ```sh
 $ helm upgrade kafka-connector ./chart/kafka-connector \
     --install \
