@@ -17,6 +17,8 @@ clusterRole: false            # Set to true to have OpenFaaS administrate multip
 
 createCRDs: true
 
+k8sVersionOverride: "" #  Allow kubeVersion to be overridden for the ingress creation
+
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 psp: false
@@ -68,9 +70,9 @@ faasIdler:
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.20.12
-  readTimeout : "65s"
-  writeTimeout : "65s"
-  upstreamTimeout : "60s"  # Must be smaller than read/write_timeout
+  readTimeout: "65s"
+  writeTimeout: "65s"
+  upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
   replicas: 1
   scaleFromZero: true
   # change the port when creating multiple releases in the same baremetal cluster
@@ -96,9 +98,9 @@ basicAuthPlugin:
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.13.4
-  readTimeout : "60s"
-  writeTimeout : "60s"
-  imagePullPolicy : "Always"    # Image pull policy for deployed functions
+  readTimeout: "60s"
+  writeTimeout: "60s"
+  imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on Pods (incompatible with Istio < 1.1.5)
   setNonRootUser: false
   readinessProbe:
@@ -134,7 +136,7 @@ queueWorker:
   maxInflight: 1
   gatewayInvoke: true
   queueGroup: "faas"
-  ackWait : "60s"
+  ackWait: "60s"
   resources:
     requests:
       memory: "120Mi"
@@ -180,6 +182,10 @@ nats:
 # ingress configuration
 ingress:
   enabled: false
+  ## For k8s >= 1.18 you need to specify the pathType
+  ## See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#better-path-matching-with-path-types
+  #pathType: ImplementationSpecific
+
   # Used to create Ingress record (should be used with exposeServices: false).
   hosts:
     - host: gateway.openfaas.local  # Replace with gateway.example.com if public-facing
@@ -189,7 +195,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
   tls:
-    # Secrets must be manually created in the namespace.
+  # Secrets must be manually created in the namespace.
 
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
 # https://github.com/openfaas-incubator/ingress-operator

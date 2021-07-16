@@ -1,5 +1,8 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+  {{- $apiIsStable := eq (include "openfaas.ingress.isStable" .) "true" -}}
+  {{- $pathType := .Values.ingress.pathType | default "" -}}
+  {{- $ingressSupportsPathType := eq (include "openfaas.ingress.supportsPathType" .) "true" -}}
+apiVersion: {{ include "openfaas.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "openfaas.name" . }}-ingress
@@ -20,9 +23,19 @@ spec:
       http:
         paths:
           - path: {{ $host.path }}
+            {{- if and $pathType $ingressSupportsPathType }}
+            pathType: {{ $pathType }}
+            {{- end }}
             backend:
+              {{- if $apiIsStable }}
+              service:
+                name: {{ $host.serviceName }}
+                port:
+                  number: {{ $host.servicePort }}
+              {{- else }}
               serviceName: {{ $host.serviceName }}
               servicePort: {{ $host.servicePort }}
+    {{- end }}
     {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:
