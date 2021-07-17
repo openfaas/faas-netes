@@ -70,6 +70,8 @@ spec:
               value: {{ .Values.print_response | quote }}
             - name: print_response_body
               value: {{ .Values.print_response_body | quote }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
             {{- if .Values.basic_auth }}
             - name: basic_auth
               value: "true"

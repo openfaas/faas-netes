@@ -1,4 +1,4 @@
-image: ghcr.io/openfaas/mqtt-connector:0.4.0
+image: ghcr.io/openfaas/mqtt-connector:0.4.1
 replicas: 1
 
 # # Emitter.io example
@@ -9,6 +9,8 @@ topic: sample-topic/
 
 # For use with emitter.io
 trimChannelKey: false
+
+contentType: application/json
 
 broker: tcp://emitter:8080
 clientID: testgoid
