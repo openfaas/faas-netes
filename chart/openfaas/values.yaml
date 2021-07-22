@@ -140,10 +140,10 @@ queueWorker:
       memory: "120Mi"
       cpu: "50m"
 # Requires openfaas PRO subscription
-  maxRetryAttempts: 10
-  maxRetryWait: 120s
-  initialRetryWait: 10s
-  retry_http_codes: 429,502,500,504,408
+  maxRetryAttempts: "10"
+  maxRetryWait: "120s"
+  initialRetryWait: "10s"
+  httpRetryCodes: "429,502,500,504,408"
 
 # monitoring and auto-scaling components
 # both components

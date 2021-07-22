@@ -60,13 +60,15 @@ spec:
         {{- end }}
         - name: max_inflight
           value: "{{ .Values.queueWorker.maxInflight }}"
-# OpenFaaS PRO image required
-        - name: max_retry_attempts
-          value: {{ .Values.queueWorker.maxRetryAttempts }}
-        - name: max_retry_wait
-          value: {{ .Values.queueWorker.maxRetryWait }}
-        - name: initial_retry_wait
-          value: {{ .Values.queueWorker.initialRetryWait }}
+        # OpenFaaS PRO image required
+        - name: "max_retry_attempts"
+          value: "{{ .Values.queueWorker.maxRetryAttempts }}"
+        - name: "max_retry_wait"
+          value: "{{ .Values.queueWorker.maxRetryWait }}"
+        - name: "initial_retry_wait"
+          value: "{{ .Values.queueWorker.initialRetryWait }}"
+        - name: "retry_http_codes"
+          value: "{{ .Values.queueWorker.httpRetryCodes }}"
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets"
