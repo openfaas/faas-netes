@@ -143,6 +143,7 @@ queueWorker:
   maxRetryAttempts: 10
   maxRetryWait: 120s
   initialRetryWait: 10s
+  retry_http_codes: 429,502,500,504,408
 
 # monitoring and auto-scaling components
 # both components
