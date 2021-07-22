@@ -66,8 +66,6 @@ faasIdler:
     requests:
       memory: "64Mi"
 
-## OSS components
-
 gateway:
   image: ghcr.io/openfaas/gateway:0.20.12
   readTimeout: "65s"
@@ -141,6 +139,10 @@ queueWorker:
     requests:
       memory: "120Mi"
       cpu: "50m"
+# Requires openfaas PRO subscription
+  maxRetryAttempts: 10
+  maxRetryWait: 120s
+  initialRetryWait: 10s
 
 # monitoring and auto-scaling components
 # both components

@@ -60,8 +60,13 @@ spec:
         {{- end }}
         - name: max_inflight
           value: "{{ .Values.queueWorker.maxInflight }}"
-        - name: ack_wait    # Max duration of any async task / request
-          value: {{ .Values.queueWorker.ackWait }}
+# OpenFaaS PRO image required
+        - name: max_retry_attempts
+          value: {{ .Values.queueWorker.maxRetryAttempts }}
+        - name: max_retry_wait
+          value: {{ .Values.queueWorker.maxRetryWait }}
+        - name: initial_retry_wait
+          value: {{ .Values.queueWorker.initialRetryWait }}
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets"

@@ -46,8 +46,13 @@ spec:
           value: ".openfaas-fn.svc.cluster.local"
         - name: max_inflight
           value: "1"
-        - name: ack_wait    # Max duration of any async task / request
-          value: 60s
+# OpenFaaS PRO image required
+        - name: max_retry_attempts
+          value: 10
+        - name: max_retry_wait
+          value: 120s
+        - name: initial_retry_wait
+          value: 10s
         - name: secret_mount_path
           value: "/var/secrets"
         - name: basic_auth
