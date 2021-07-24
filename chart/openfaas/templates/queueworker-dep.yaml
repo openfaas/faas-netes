@@ -58,6 +58,8 @@ spec:
         - name: faas_function_suffix
           value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end }}
+        - name: ack_wait
+          value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
           value: "{{ .Values.queueWorker.maxInflight }}"
         # OpenFaaS PRO image required

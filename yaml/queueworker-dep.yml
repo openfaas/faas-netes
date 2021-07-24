@@ -44,6 +44,8 @@ spec:
           value: "true"
         - name: faas_function_suffix
           value: ".openfaas-fn.svc.cluster.local"
+        - name: ack_wait
+          value: "60s"
         - name: max_inflight
           value: "1"
         # OpenFaaS PRO image required
