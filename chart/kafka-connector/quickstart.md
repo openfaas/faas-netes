@@ -54,11 +54,11 @@
 
 3) Create any secrets required
 
-  Secrets are required for SASL or client certificate authentication, see the comments in the values.yaml file
+  Secrets are required for SASL or client certificate authentication, see the comments in the [values.yaml](values.yaml) file
 
 4) Install the connector:
 
-  Create `overrides.yaml` and configure as per comments in values.yaml
+  Create `overrides.yaml` and configure as per comments in [values.yaml](values.yaml)
 
   Example for Kafka helm chart:
 
