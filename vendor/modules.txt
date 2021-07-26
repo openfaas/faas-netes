@@ -9,6 +9,7 @@ github.com/davecgh/go-spew/spew
 # github.com/evanphx/json-patch v4.2.0+incompatible
 github.com/evanphx/json-patch
 # github.com/gogo/protobuf v1.3.2
+## explicit
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
 # github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
@@ -53,7 +54,7 @@ github.com/modern-go/concurrent
 github.com/modern-go/reflect2
 # github.com/onsi/gomega v1.8.1
 ## explicit
-# github.com/openfaas/faas-provider v0.18.5
+# github.com/openfaas/faas-provider v0.18.6
 ## explicit
 github.com/openfaas/faas-provider
 github.com/openfaas/faas-provider/auth
@@ -61,9 +62,6 @@ github.com/openfaas/faas-provider/httputil
 github.com/openfaas/faas-provider/logs
 github.com/openfaas/faas-provider/proxy
 github.com/openfaas/faas-provider/types
-# github.com/openfaas/faas/gateway v0.0.0-20210311210633-a6dbb4cd0285
-## explicit
-github.com/openfaas/faas/gateway/requests
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
@@ -84,7 +82,10 @@ github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
 # github.com/spf13/pflag v1.0.5
 github.com/spf13/pflag
+# go.uber.org/goleak v1.1.10
+## explicit
 # golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
+## explicit
 golang.org/x/crypto/ssh/terminal
 # golang.org/x/mod v0.3.0
 golang.org/x/mod/module
@@ -112,6 +113,7 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 # golang.org/x/time v0.0.0-20191024005414-555d28b269f0
+## explicit
 golang.org/x/time/rate
 # golang.org/x/tools v0.0.0-20210106214847-113979e3529a
 golang.org/x/tools/go/ast/astutil
