@@ -87,7 +87,7 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.13.4
+  image: ghcr.io/openfaas/faas-netes:0.13.5
   readTimeout: "60s"
   writeTimeout: "60s"
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
@@ -108,7 +108,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.13.2
+  image: ghcr.io/openfaas/faas-netes:0.13.5
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
