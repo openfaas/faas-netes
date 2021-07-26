@@ -11,7 +11,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/openfaas/faas/gateway/requests"
+	"github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -39,7 +39,7 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 
 		body, _ := ioutil.ReadAll(r.Body)
 
-		request := requests.DeleteFunctionRequest{}
+		request := types.DeleteFunctionRequest{}
 		err := json.Unmarshal(body, &request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -95,7 +95,7 @@ func isFunction(deployment *appsv1.Deployment) bool {
 	return false
 }
 
-func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, request requests.DeleteFunctionRequest, w http.ResponseWriter) error {
+func deleteFunction(functionNamespace string, clientset *kubernetes.Clientset, request types.DeleteFunctionRequest, w http.ResponseWriter) error {
 	foregroundPolicy := metav1.DeletePropagationForeground
 	opts := &metav1.DeleteOptions{PropagationPolicy: &foregroundPolicy}
 

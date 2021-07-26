@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
-	"github.com/openfaas/faas/gateway/requests"
+	"github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	glog "k8s.io/klog"
 )
@@ -33,7 +33,7 @@ func makeDeleteHandler(defaultNamespace string, client clientset.Interface) http
 		}
 
 		body, _ := ioutil.ReadAll(r.Body)
-		request := requests.DeleteFunctionRequest{}
+		request := types.DeleteFunctionRequest{}
 		err := json.Unmarshal(body, &request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
