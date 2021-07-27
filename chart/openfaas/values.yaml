@@ -168,7 +168,7 @@ nats:
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
     enabled: false
-    image: synadia/prometheus-nats-exporter:0.6.2
+    image: natsio/prometheus-nats-exporter:0.8.0
   resources:
     requests:
       memory: "120Mi"
