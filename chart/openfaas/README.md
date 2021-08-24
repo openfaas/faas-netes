@@ -416,6 +416,7 @@ Additional OpenFaaS options in `values.yaml`.
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `generateBasicAuth` | Generate admin password for basic authentication | `false` |
+| `basicAuthPassword` | Set basic password manually instead of generating it | `` |
 | `rbac` | Enable RBAC | `true` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |

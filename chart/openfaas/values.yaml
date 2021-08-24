@@ -11,6 +11,7 @@ clusterRole: false            # Set to true to have OpenFaaS administrate multip
 createCRDs: true
 basic_auth: true
 generateBasicAuth: false
+basicAuthPassword: ''   # Set password explicated if you set generateBasicAuth to false
 
 securityContext: true
 # create pod security policies for OpenFaaS control plane
