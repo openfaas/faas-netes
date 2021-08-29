@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export controllergen="$GOPATH/bin/controller-gen"
-export PKG=sigs.k8s.io/controller-tools/cmd/controller-gen
+export PKG=sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
 
 if [ ! -e "$gen" ]
 then

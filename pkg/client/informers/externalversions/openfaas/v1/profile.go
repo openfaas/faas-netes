@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2020 OpenFaaS Authors
+Copyright 2019-2021 OpenFaaS Authors
 
 Licensed under the MIT license. See LICENSE file in the project root for full license information.
 */
