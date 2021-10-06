@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
   {{- $apiIsStable := eq (include "openfaas.ingress.isStable" .) "true" -}}
-  {{- $pathType := .Values.ingress.pathType | default "" -}}
+  {{- $pathType := .Values.ingress.pathType | default "Prefix" -}}
   {{- $ingressSupportsPathType := eq (include "openfaas.ingress.supportsPathType" .) "true" -}}
 apiVersion: {{ include "openfaas.ingress.apiVersion" . }}
 kind: Ingress
