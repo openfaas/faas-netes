@@ -86,7 +86,7 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.13.5
+  image: ghcr.io/openfaas/faas-netes:0.13.8
   readTimeout: "60s"
   writeTimeout: "60s"
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
