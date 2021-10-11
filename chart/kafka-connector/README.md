@@ -36,7 +36,7 @@ The [Kafka connector](https://github.com/openfaas-incubator/kafka-connector) bri
 $ kubectl create secret generic \
     -n openfaas \
     openfaas-license \
-    --from-file license=$HOME/OPENFAAS_LICENSE
+    --from-file license=$HOME/.openfaas/LICENSE
 ```
 
 - Add the OpenFaaS chart repo and deploy the `kafka-connector` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
