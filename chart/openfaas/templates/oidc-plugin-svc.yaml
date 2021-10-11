@@ -8,10 +8,10 @@ metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: oauth2-plugin
+    component: oidc-plugin
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: oauth2-plugin
+  name: oidc-plugin
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP
@@ -21,6 +21,6 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: oauth2-plugin
+    app: oidc-plugin
 
 {{- end }}

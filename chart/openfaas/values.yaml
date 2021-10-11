@@ -24,24 +24,22 @@ openfaasImagePullPolicy: "Always"
 oidcAuthPlugin:
   enabled: false
   provider: "" # Leave blank, or put "azure"
-  license: "example"
+  license: ""
   insecureTLS: false
   scopes: "openid profile email"
-  jwksURL: https://example.eu.auth0.com/.well-known/jwks.json
-  tokenURL: https://example.eu.auth0.com/oauth/token
+  openidURL: "https://example.eu.auth0.com/.well-known/openid-configuration"
   audience: https://example.eu.auth0.com/api/v2/
-  authorizeURL: https://example.eu.auth0.com/authorize
-  welcomePageURL: https://gw.oauth.example.com
-  cookieDomain: ".oauth.example.com"
-  baseHost: "http://auth.oauth.example.com"
-  clientSecret: SECRET
-  clientID: ID
+  welcomePageURL: https://gateway.openfaas.example.com
+  cookieDomain: ".openfaas.example.com"
+  baseHost: "https://auth.openfaas.example.com"
+  clientSecret: ""
+  clientID: ""
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: ghcr.io/openfaas/openfaas-oidc-plugin:0.4.1
+  image: ghcr.io/openfaas/openfaas-oidc-plugin:0.5.0
   securityContext: true
 
 # Requires openfaasPRO=true
