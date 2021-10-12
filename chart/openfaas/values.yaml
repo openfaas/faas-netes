@@ -23,8 +23,8 @@ openfaasImagePullPolicy: "Always"
 # openfaasPRO components, which requires openfaasPRO=true
 oidcAuthPlugin:
   enabled: false
+  verbose: false # debug setting
   provider: "" # Leave blank, or put "azure"
-  license: ""
   insecureTLS: false
   scopes: "openid profile email"
   openidURL: "https://example.eu.auth0.com/.well-known/openid-configuration"
@@ -39,7 +39,7 @@ oidcAuthPlugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: ghcr.io/openfaas/openfaas-oidc-plugin:0.5.0
+  image: ghcr.io/openfaas/openfaas-oidc-plugin:0.5.1
   securityContext: true
 
 # Requires openfaasPRO=true

@@ -41,7 +41,7 @@ spec:
         resources:
           {{- .Values.oidcAuthPlugin.resources | toYaml | nindent 12 }}
         image: {{ .Values.oidcAuthPlugin.image }}
-        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        imagePullPolicy: Always
         {{- if .Values.securityContext }}
         securityContext:
           readOnlyRootFilesystem: true
@@ -81,6 +81,9 @@ spec:
           timeoutSeconds: 5
         args:
         - "-license-file=/var/secrets/license/license"
+        {{- if .Values.oidcAuthPlugin.verbose }}
+        - "-verbose=true"
+        {{- end }}
         - "-provider={{- .Values.oidcAuthPlugin.provider}}"
         env:
         - name: client_id
