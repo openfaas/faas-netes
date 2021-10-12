@@ -100,7 +100,7 @@ func Test_makeAnnotationsDoesNotModifyOriginalSpec(t *testing.T) {
 	for name, expectedValue := range expectedAnnotations {
 		actualValue := annotations[name]
 		if actualValue != expectedValue {
-			t.Fatalf("incorrect annotation for '%s': \nexpected %s,\ngot %s", name, expectedValue, actualValue)
+			t.Fatalf("incorrect annotation for '%s': \nwant %q,\ngot %q", name, expectedValue, actualValue)
 		}
 	}
 }

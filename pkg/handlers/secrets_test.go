@@ -221,10 +221,20 @@ func Test_SecretsHandler(t *testing.T) {
 			t.Errorf("want %d secret, got %d", secretWant, len(secretList))
 		}
 
-		actualSecret := secretList[0]
-		if actualSecret.Name != secretName {
-			t.Errorf("want secret name: '%s', got: '%s'", secretName, actualSecret.Name)
+		want := []string{"testsecret", "raw-secret"}
+		got := []string{}
+		for _, s := range secretList {
+			for _, w := range want {
+				if w == s.Name {
+					got = append(got, w)
+				}
+			}
 		}
+
+		if len(want) != len(got) {
+			t.Fatalf("wanted to match %v, but only found %v", want, got)
+		}
+
 	})
 
 	t.Run("delete managed secrets", func(t *testing.T) {
