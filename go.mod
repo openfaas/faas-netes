@@ -1,6 +1,6 @@
 module github.com/openfaas/faas-netes
 
-go 1.16
+go 1.15
 
 require (
 	github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96 // indirect
