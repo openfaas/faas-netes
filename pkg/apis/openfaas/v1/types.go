@@ -21,8 +21,6 @@ type Function struct {
 type FunctionSpec struct {
 	Name string `json:"name"`
 
-	TenantID string `json:"tenantID"`
-
 	Image string `json:"image"`
 	// +optional
 	Handler string `json:"handler,omitempty"`
