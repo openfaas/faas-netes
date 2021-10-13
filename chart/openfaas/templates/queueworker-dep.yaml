@@ -28,7 +28,7 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
-      {{- if .Values.queueWorker.pro }}
+      {{- if .Values.queueWorkerPro.enabled }}
       - name: license
         secret:
           secretName: openfaas-license
@@ -37,15 +37,15 @@ spec:
       - name:  queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
-      {{- if .Values.queueWorker.pro }}
+      {{- if .Values.queueWorkerPro.enabled }}
         image: {{ .Values.queueWorkerPro.image }}
       {{- else }}
         image: {{ .Values.queueWorker.image }}
       {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.queueWorkerPro.enabled }}
         command:
           - "/worker"
-        {{- if .Values.queueWorker.pro }}
           - "-license-file=/var/secrets/license/license"
         {{- end }}
         env:
@@ -76,22 +76,22 @@ spec:
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
           value: "{{ .Values.queueWorker.maxInflight }}"
-        # OpenFaaS PRO image required
+        # OpenFaaS PRO license required
         - name: "max_retry_attempts"
-          value: "{{ .Values.queueWorker.maxRetryAttempts }}"
+          value: "{{ .Values.queueWorkerPro.maxRetryAttempts }}"
         - name: "max_retry_wait"
-          value: "{{ .Values.queueWorker.maxRetryWait }}"
+          value: "{{ .Values.queueWorkerPro.maxRetryWait }}"
         - name: "initial_retry_wait"
-          value: "{{ .Values.queueWorker.initialRetryWait }}"
+          value: "{{ .Values.queueWorkerPro.initialRetryWait }}"
         - name: "retry_http_codes"
-          value: "{{ .Values.queueWorker.httpRetryCodes }}"
+          value: "{{ .Values.queueWorkerPro.httpRetryCodes }}"
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets/gateway"
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
         volumeMounts:
-        {{- if .Values.queueWorker.pro }}
+        {{- if .Values.queueWorkerPro.enabled }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
