@@ -48,7 +48,7 @@ spec:
           value: "60s"
         - name: max_inflight
           value: "1"
-        # OpenFaaS PRO image required
+        # OpenFaaS PRO license required
         - name: "max_retry_attempts"
           value: "10"
         - name: "max_retry_wait"
@@ -58,10 +58,10 @@ spec:
         - name: "retry_http_codes"
           value: "429,502,500,504,408"
         - name: secret_mount_path
-          value: "/var/secrets"
+          value: "/var/secrets/gateway"
         - name: basic_auth
           value: "true"
         volumeMounts:
         - name: auth
           readOnly: true
-          mountPath: "/var/secrets"
+          mountPath: "/var/secrets/gateway"
