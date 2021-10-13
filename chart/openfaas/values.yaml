@@ -115,7 +115,11 @@ operator:
       memory: "120Mi"
       cpu: "50m"
 
+queueWorkerPro:
+  image: ghcr.io/openfaas/queue-worker-pro:0.1.0-rc4
+
 queueWorker:
+  pro: true
   image: ghcr.io/openfaas/queue-worker:0.12.2
   # Control HA of queue-worker
   replicas: 1

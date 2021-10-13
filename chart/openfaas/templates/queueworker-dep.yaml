@@ -22,18 +22,32 @@ spec:
       labels:
         app: queue-worker
     spec:
-      {{- if .Values.basic_auth }}
       volumes:
+      {{- if .Values.basic_auth }}
       - name: auth
         secret:
           secretName: basic-auth
+      {{- end }}
+      {{- if .Values.queueWorker.pro }}
+      - name: license
+        secret:
+          secretName: openfaas-license
       {{- end }}
       containers:
       - name:  queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
+      {{- if .Values.queueWorker.pro }}
+        image: {{ .Values.queueWorkerPro.image }}
+      {{- else }}
         image: {{ .Values.queueWorker.image }}
+      {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        command:
+          - "/worker"
+        {{- if .Values.queueWorker.pro }}
+          - "-license-file=/var/secrets/license/license"
+        {{- end }}
         env:
         {{- if .Values.nats.external.enabled }}
         - name: faas_nats_address
@@ -73,13 +87,18 @@ spec:
           value: "{{ .Values.queueWorker.httpRetryCodes }}"
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
-          value: "/var/secrets"
+          value: "/var/secrets/gateway"
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
         volumeMounts:
+        {{- if .Values.queueWorker.pro }}
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        {{- end }}
         - name: auth
           readOnly: true
-          mountPath: "/var/secrets"
+          mountPath: "/var/secrets/gateway"
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
