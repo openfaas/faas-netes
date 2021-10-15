@@ -147,6 +147,12 @@ prometheus:
     requests:
       memory: "512Mi"
   annotations: {}
+  config:
+    alertRules:
+      # whether or not to include the default alert rules
+      includeDefaults: true
+      # list of rules to add
+      rules: []
 
 alertmanager:
   image: prom/alertmanager:v0.18.0

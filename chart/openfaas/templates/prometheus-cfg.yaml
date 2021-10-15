@@ -73,6 +73,7 @@ data:
     groups:
       - name: openfaas
         rules:
+{{- if .Values.prometheus.config.alertRules.includeDefaults }}
         - alert: service_down
           expr: up == 0
         - alert: APIHighInvocationRate
@@ -84,4 +85,8 @@ data:
           annotations:
             description: High invocation total on "{{ "{{" }}$labels.function_name{{ "}}" }}"
             summary: High invocation total on "{{ "{{" }}$labels.function_name{{ "}}" }}"
+{{- end }}
+{{- if or (gt (len .Values.prometheus.config.alertRules.rules) 0) (eq .Values.prometheus.config.alertRules.includeDefaults false) }}
+        {{- .Values.prometheus.config.alertRules.rules | toYaml | nindent 8 }}
+{{- end }}
 {{- end }}
