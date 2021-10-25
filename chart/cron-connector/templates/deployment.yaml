@@ -32,7 +32,7 @@ spec:
         env:
           - name: gateway_url
             value: {{ .Values.gatewayURL | quote }}
-          - name: async_invocation
+          - name: asynchronous_invocation
             value: {{ .Values.asyncInvocation | quote }}
           - name: content_type
             value: {{ .Values.contentType | quote }}
