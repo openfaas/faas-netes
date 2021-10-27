@@ -65,7 +65,7 @@ install: namespaces
 	kubectl apply -f yaml/
 
 charts:
-	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/
+	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/ && helm package pro-builder/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh

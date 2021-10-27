@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "builder.name" . }}
+    component: pro-builder
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "builder.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
+    app.kubernetes.io/component: pro-builder
+    app.kubernetes.io/part-of: openfaas
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "builder.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "builder.name" . }}
+      component: pro-builder
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: {{ template "builder.name" . }}
+        component: pro-builder
+    spec:
+      volumes:
+        - name: client-certs
+          secret:
+            secretName: buildkit-client-certs
+        - name: daemon-certs
+          secret:
+            secretName: buildkit-daemon-certs
+        - name: registry-secret
+          secret:
+            defaultMode: 420
+            secretName: registry-secret
+        - name: payload-secret
+          secret:
+            defaultMode: 420
+            secretName: payload-secret
+        - name: license
+          secret:
+            defaultMode: 420
+            secretName: openfaas-license
+        - name: build-workspaces
+          emptyDir: {}
+      containers:
+      - name: pro-builder
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        args:
+          - "-license-file=/var/secrets/license/license"
+          - "--tlscert=/var/secrets/certs/client.crt"
+          - "--tlskey=/var/secrets/certs/client.key"
+          - "--tlscacert=/var/secrets/certs/ca.crt"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 2
+        env:
+          - name: buildkit_server_name
+            value: "127.0.0.1"
+          - name: enable_lchown
+            value: {{ .Values.enableLchown  | quote}}
+          - name: insecure
+            value: "false"
+          - name: buildkit_url  
+            value: "tcp://127.0.0.1:1234"
+          - name: "disable_hmac"
+            value: {{ .Values.disableHmac | quote }}
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        - name: registry-secret
+          readOnly: true
+          mountPath: "/home/app/.docker/"
+        - name: payload-secret
+          readOnly: true
+          mountPath: "/var/openfaas/secrets/"
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        - name: build-workspaces
+          mountPath: /tmp/
+          readOnly: false
+        - name: client-certs
+          readOnly: true
+          mountPath: /var/secrets/certs
+      - name: buildkit
+        args:
+          - "--addr=tcp://127.0.0.1:1234"
+          - "--tlscert=/var/secrets/certs/server.crt"
+          - "--tlskey=/var/secrets/certs/server.key"
+          - "--tlscacert=/var/secrets/certs/ca.crt"
+        image: {{ .Values.buildkit.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        ports:
+        - containerPort: 1234
+          protocol: TCP
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: daemon-certs
+          readOnly: true
+          mountPath: /var/secrets/certs
