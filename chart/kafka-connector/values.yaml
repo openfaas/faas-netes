@@ -20,6 +20,9 @@ brokerHost: kf-kafka:9092
 # HTTP content-type for invoking functions
 contentType: text/plain
 
+# Set the consumer group
+group: faas-group-1
+
 printResponse: true
 printResponseBody: false
 

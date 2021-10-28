@@ -112,6 +112,10 @@ spec:
             - name: rebuild_interval
               value: {{ .Values.rebuildInterval | quote }}
             {{- end }}
+            {{- if .Values.group }}
+            - name: group
+              value: {{ .Values.group | quote }}
+            {{- end }}
             - name: content_type
               value: {{ .Values.contentType | quote }}
           volumeMounts:
