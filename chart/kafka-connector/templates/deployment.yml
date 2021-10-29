@@ -126,7 +126,7 @@ spec:
             {{- end }}
             {{- if .Values.maxBytes }}
             - name: max_bytes
-              value: {{ .Values.maxBytes | quote }}
+              value: {{ .Values.maxBytes }}
             {{- end }}
             {{- if .Values.initialOffset }}
             - name: initial_offset

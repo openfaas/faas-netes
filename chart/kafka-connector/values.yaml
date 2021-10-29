@@ -11,6 +11,9 @@ replicas: 1
 # Max timeout for a function
 upstreamTimeout: 2m
 
+# interval for rebuilding the map of functions and topics
+rebuildInterval: 30s
+
 # Use with slow consumers or long running functions
 asyncInvocation: false
 

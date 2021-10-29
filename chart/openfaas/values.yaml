@@ -118,7 +118,7 @@ operator:
 # Requires openfaas PRO subscription
 queueWorkerPro:
   image: ghcr.io/openfaas/queue-worker-pro:0.1.0-rc5
-  enabled: false
+  enabled: true
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"

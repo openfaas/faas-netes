@@ -77,8 +77,8 @@ Additional kafka-connector options in `values.yaml`.
 | `topics`                 | Topics to which the connector will bind, provide as a comma-separated list.            | `faas-request`                 |
 | `brokerHost`             | location of the Kafka brokers.                                                         | `kafka`                        |
 | `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
-| `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `30s`                          |
-| `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `3s`                           |
+| `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `2m`                          |
+| `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `30s`                           |
 | `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
 | `printResponse`          | Output the response of calling a function in the logs.                                 | `true`                         |
 | `printResponseBody`      | Output to the logs the response body when calling a function.                          | `false`                        |

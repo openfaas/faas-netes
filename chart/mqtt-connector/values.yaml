@@ -16,8 +16,8 @@ broker: tcp://emitter:8080
 clientID: testgoid
 authPassword: ""
 
-upstream_timeout: 15s # Maximum duration for an invocation
-rebuild_interval: 10s
+upstream_timeout: 30s # Maximum duration for an invocation
+rebuild_interval: 15s
 asyncInvoke: false # Invoke via NATS using the function's asynchronous route
 basic_auth: true
 gateway_url: http://gateway.openfaas:8080
