@@ -23,20 +23,14 @@ spec:
       - name: auth
         secret:
           secretName: basic-auth
-      - name: license
-        secret:
-          secretName: openfaas-license
       containers:
       - name:  queue-worker
         resources:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker-pro:0.1.0-rc5
+        image: ghcr.io/openfaas/queue-worker:0.12.2
         imagePullPolicy: Always
-        command:
-          - "/worker"
-          - "-license-file=/var/secrets/license/license"
         env:
         - name: faas_nats_address
           value: "nats.openfaas.svc.cluster.local"
@@ -72,9 +66,6 @@ spec:
         - name: basic_auth
           value: "true"
         volumeMounts:
-        - name: license
-          readOnly: true
-          mountPath: "/var/secrets/license"
         - name: auth
           readOnly: true
           mountPath: "/var/secrets/gateway"
