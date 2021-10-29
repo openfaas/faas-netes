@@ -140,6 +140,7 @@ spec:
             - name: auth
               readOnly: true
               mountPath: "/var/secrets"
+          {{- end }}
           {{- if.Values.saslAuth }}
             - name: broker-username
               readOnly: true
@@ -166,7 +167,6 @@ spec:
               mountPath: "/var/secrets/broker-key"
           {{- end }}
 
-          {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
