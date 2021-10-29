@@ -94,6 +94,8 @@ spec:
               value: {{ .Values.printResponse | quote }}
             - name: print_response_body
               value: {{ .Values.printResponseBody | quote }}
+            - name: print_request_body
+              value: {{ .Values.printRequestBody | quote }}
             - name: asynchronous_invocation
               value: {{ .Values.asyncInvocation | quote }}
             {{- if .Values.basic_auth }}
@@ -112,12 +114,24 @@ spec:
             - name: rebuild_interval
               value: {{ .Values.rebuildInterval | quote }}
             {{- end }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
             {{- if .Values.group }}
             - name: group
               value: {{ .Values.group | quote }}
             {{- end }}
-            - name: content_type
-              value: {{ .Values.contentType | quote }}
+            {{- if .Values.sessionLogging }}
+            - name: log_sessions
+              value: {{ .Values.sessionLogging | quote }}
+            {{- end }}
+            {{- if .Values.maxBytes }}
+            - name: max_bytes
+              value: {{ .Values.maxBytes | quote }}
+            {{- end }}
+            {{- if .Values.initialOffset }}
+            - name: initial_offset
+              value: {{ .Values.initialOffset | quote }}
+            {{- end }}
           volumeMounts:
             - name: openfaas-license
               readOnly: true

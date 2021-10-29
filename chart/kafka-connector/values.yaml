@@ -1,7 +1,10 @@
 # You will need to create a license named "openfaas-license" - see the 
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaas/kafka-connector-pro:0.6.0-rc2
+image: ghcr.io/openfaas/kafka-connector-pro:0.6.0-rc3
+
+# Output detailed logs from the consumer group's lifecycle
+sessionLogging: true
 
 replicas: 1
 
@@ -17,16 +20,38 @@ topics: faas-request
 # Your Kafka broker
 brokerHost: kf-kafka:9092
 
+# 1MB = 1024 bytes * 1024
+maxBytes: 1048576
+
 # HTTP content-type for invoking functions
 contentType: text/plain
 
 # Set the consumer group
 group: faas-group-1
 
+# Print the data read from the Kafka topic before invoking functions
+printRequestBody: false
+
+# Print the HTTP status of invoked functions
 printResponse: true
+
+# Print the data received from invoked functions
 printResponseBody: false
 
-# Internal gateway URL
+# intialOffset for Kafka consumer
+#
+# "newest" stands for the log head offset, i.e. the offset that will be
+# assigned to the next message that will be produced to the partition. You
+# can send this to a client's GetOffset method to get this offset, or when
+# calling ConsumePartition to start consuming new messages.
+#
+# "oldest" stands for the oldest offset available on the broker for a
+# partition. You can send this to a client's GetOffset method to get this
+# offset, or when calling ConsumePartition to start consuming from the
+# oldest offset that is still available on the broker.
+initialOffset: oldest
+
+# Gateway URL to access API and for invocations
 gatewayURL: http://gateway.openfaas:8080
 
 # Basic auth for the gateway

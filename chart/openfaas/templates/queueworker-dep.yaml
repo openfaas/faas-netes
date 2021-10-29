@@ -76,6 +76,7 @@ spec:
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
           value: "{{ .Values.queueWorker.maxInflight }}"
+
         # OpenFaaS PRO license required
         - name: "max_retry_attempts"
           value: "{{ .Values.queueWorkerPro.maxRetryAttempts }}"
@@ -85,6 +86,11 @@ spec:
           value: "{{ .Values.queueWorkerPro.initialRetryWait }}"
         - name: "retry_http_codes"
           value: "{{ .Values.queueWorkerPro.httpRetryCodes }}"
+        - name: print_request_body
+          value: "{{ .Values.queueWorkerPro.printRequestBody }}"
+        - name: print_response_body
+          value: "{{ .Values.queueWorkerPro.printResponseBody }}"
+
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets/gateway"

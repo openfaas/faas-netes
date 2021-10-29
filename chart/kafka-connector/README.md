@@ -82,6 +82,7 @@ Additional kafka-connector options in `values.yaml`.
 | `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
 | `printResponse`          | Output the response of calling a function in the logs.                                 | `true`                         |
 | `printResponseBody`      | Output to the logs the response body when calling a function.                          | `false`                        |
+| `printRequestBody`       | Output to the logs the request body when calling a function.                           | `false`                        |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 | `sasl`                   | Enable auth with a SASL username/password                                              | `false`                        |
 | `brokerPasswordSecret`   | Name of secret for SASL password                                                       | `kafka-broker-password`        |
@@ -91,6 +92,9 @@ Additional kafka-connector options in `values.yaml`.
 | `keySecret`              | Name secret for TLS client certificate private key - leave empty to disable            | `kafka-broker-key`             |
 | `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
 | `group`                  | Set the Kafka consumer group name.                                                     | `""`                           |
+| `maxBytes`               | Set the maximum size of messages from the Kafka broker.                                | `1024*1024`                    |
+| `sessionLogging`         | Enable detailed logging from the consumer group.                                       | `"false"`                      |
+| `initialOffset`          | Either newest or oldest.                                                               | `"oldest"`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

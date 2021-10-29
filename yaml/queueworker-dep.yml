@@ -57,6 +57,10 @@ spec:
           value: "10s"
         - name: "retry_http_codes"
           value: "429,502,500,504,408"
+        - name: print_request_body
+          value: "false"
+        - name: print_response_body
+          value: "false"
         - name: secret_mount_path
           value: "/var/secrets/gateway"
         - name: basic_auth
