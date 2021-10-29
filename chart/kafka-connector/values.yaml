@@ -24,7 +24,7 @@ topics: faas-request
 brokerHost: kf-kafka:9092
 
 # 1MB = 1024 bytes * 1024
-maxBytes: 1048576
+maxBytes: "1048576"
 
 # HTTP content-type for invoking functions
 contentType: text/plain
