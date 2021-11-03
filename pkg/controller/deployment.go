@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"strings"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
@@ -56,6 +57,21 @@ func newDeployment(
 		}
 	}
 
+	terminationGracePeriod := time.Second * 30
+
+	if function.Spec.Environment != nil {
+		e := *function.Spec.Environment
+		if v, ok := e["write_timeout"]; ok && len(v) > 0 {
+			period, err := time.ParseDuration(v)
+			if err != nil {
+				glog.Warningf("Function %s failed to parse write_timeout: %s",
+					function.Spec.Name, err.Error())
+			}
+			terminationGracePeriod = period
+		}
+	}
+	terminationGracePeriodSeconds := int64(terminationGracePeriod.Seconds())
+
 	allowPrivilegeEscalation := false
 
 	deploymentSpec := &appsv1.Deployment{
@@ -99,7 +115,8 @@ func newDeployment(
 					Annotations: annotations,
 				},
 				Spec: corev1.PodSpec{
-					NodeSelector: nodeSelector,
+					NodeSelector:                  nodeSelector,
+					TerminationGracePeriodSeconds: &terminationGracePeriodSeconds,
 					Containers: []corev1.Container{
 						{
 							Name:  function.Spec.Name,
