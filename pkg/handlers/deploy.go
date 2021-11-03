@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/openfaas/faas-netes/pkg/k8s"
 
@@ -24,6 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	glog "k8s.io/klog"
 )
 
 // initialReplicasCount how many replicas to start of creating for a function
@@ -172,6 +174,21 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		return nil, err
 	}
 
+	terminationGracePeriod := time.Second * 30
+
+	if request.EnvVars != nil {
+		if v, ok := request.EnvVars["write_timeout"]; ok && len(v) > 0 {
+			period, err := time.ParseDuration(v)
+			if err != nil {
+				glog.Warningf("Function %s failed to parse write_timeout: %s",
+					request.Service, err.Error())
+			}
+			terminationGracePeriod = period
+		}
+	}
+
+	terminationGracePeriodSeconds := int64(terminationGracePeriod.Seconds())
+
 	enableServiceLinks := false
 	allowPrivilegeEscalation := false
 
@@ -211,7 +228,9 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 					Annotations: annotations,
 				},
 				Spec: apiv1.PodSpec{
-					NodeSelector: nodeSelector,
+					NodeSelector:                  nodeSelector,
+					TerminationGracePeriodSeconds: &terminationGracePeriodSeconds,
+
 					Containers: []apiv1.Container{
 						{
 							Name:  request.Service,

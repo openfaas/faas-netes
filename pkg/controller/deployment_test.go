@@ -10,6 +10,67 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 )
 
+func Test_GracePeriodFromWriteTimeout(t *testing.T) {
+
+	scenarios := []struct {
+		name    string
+		seconds int64
+		envs    map[string]string
+	}{
+		{"grace period is the default", 30, map[string]string{}},
+		{"grace period is set from write_timeout", 60, map[string]string{"write_timeout": "60s"}},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+
+			want := int64(s.seconds)
+			function := &faasv1.Function{
+				ObjectMeta: metav1.ObjectMeta{
+					Name: "alpine",
+				},
+				Spec: faasv1.FunctionSpec{
+					Name:                   "alpine",
+					Image:                  "ghcr.io/openfaas/alpine:latest",
+					Annotations:            &map[string]string{},
+					ReadOnlyRootFilesystem: true,
+					Environment:            &s.envs},
+			}
+
+			factory := NewFunctionFactory(fake.NewSimpleClientset(),
+				k8s.DeploymentConfig{
+					HTTPProbe:      false,
+					SetNonRootUser: true,
+					LivenessProbe: &k8s.ProbeConfig{
+						PeriodSeconds:       1,
+						TimeoutSeconds:      3,
+						InitialDelaySeconds: 0,
+					},
+					ReadinessProbe: &k8s.ProbeConfig{
+						PeriodSeconds:       1,
+						TimeoutSeconds:      3,
+						InitialDelaySeconds: 0,
+					},
+				})
+
+			secrets := map[string]*corev1.Secret{}
+
+			deployment := newDeployment(function, nil, secrets, factory)
+			got := deployment.Spec.Template.Spec.TerminationGracePeriodSeconds
+			if got == nil {
+				t.Errorf("TerminationGracePeriodSeconds not set, but want %d", want)
+				t.Fail()
+				return
+			}
+
+			if want != *got {
+				t.Errorf("TerminationGracePeriodSeconds want %d, but got %d", want, got)
+				t.Fail()
+			}
+		})
+	}
+}
+
 func Test_newDeployment(t *testing.T) {
 	function := &faasv1.Function{
 		ObjectMeta: metav1.ObjectMeta{
