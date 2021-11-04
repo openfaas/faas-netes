@@ -13,18 +13,18 @@ import (
 func Test_GracePeriodFromWriteTimeout(t *testing.T) {
 
 	scenarios := []struct {
-		name    string
-		seconds int64
-		envs    map[string]string
+		name        string
+		wantSeconds int64
+		envs        map[string]string
 	}{
-		{"grace period is the default", 30, map[string]string{}},
-		{"grace period is set from write_timeout", 60, map[string]string{"write_timeout": "60s"}},
+		{"grace period is the default", 32, map[string]string{}},
+		{"grace period is set from write_timeout", 62, map[string]string{"write_timeout": "60s"}},
 	}
 
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
 
-			want := int64(s.seconds)
+			want := int64(s.wantSeconds)
 			function := &faasv1.Function{
 				ObjectMeta: metav1.ObjectMeta{
 					Name: "alpine",

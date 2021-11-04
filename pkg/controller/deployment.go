@@ -57,7 +57,9 @@ func newDeployment(
 		}
 	}
 
-	terminationGracePeriod := time.Second * 30
+	// add 2s jitter to avoid a race condition between write_timeout and grace period
+	jitter := time.Second * 2
+	terminationGracePeriod := time.Second*30 + jitter
 
 	if function.Spec.Environment != nil {
 		e := *function.Spec.Environment
@@ -67,9 +69,11 @@ func newDeployment(
 				glog.Warningf("Function %s failed to parse write_timeout: %s",
 					function.Spec.Name, err.Error())
 			}
-			terminationGracePeriod = period
+
+			terminationGracePeriod = period + jitter
 		}
 	}
+
 	terminationGracePeriodSeconds := int64(terminationGracePeriod.Seconds())
 
 	allowPrivilegeEscalation := false
