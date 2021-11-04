@@ -174,7 +174,9 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		return nil, err
 	}
 
-	terminationGracePeriod := time.Second * 30
+	// add 2s jitter to avoid a race condition between write_timeout and grace period
+	jitter := time.Second * 2
+	terminationGracePeriod := time.Second*30 + jitter
 
 	if request.EnvVars != nil {
 		if v, ok := request.EnvVars["write_timeout"]; ok && len(v) > 0 {
@@ -183,7 +185,8 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 				glog.Warningf("Function %s failed to parse write_timeout: %s",
 					request.Service, err.Error())
 			}
-			terminationGracePeriod = period
+
+			terminationGracePeriod = period + jitter
 		}
 	}
 
