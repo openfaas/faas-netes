@@ -1,6 +1,7 @@
 .PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts
 TAG?=latest
 OWNER?=openfaas
+SERVER?=ghcr.io
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 TOOLS_DIR := .tools
@@ -24,16 +25,16 @@ local:
 
 build-docker:
 	docker build \
-	-t ghcr.io/$(OWNER)/faas-netes:$(TAG) .
+	-t $(SERVER)/$(OWNER)/faas-netes:$(TAG) .
 
 .PHONY: build-buildx
 build-buildx:
-	@echo ghcr.io/$(OWNER)/faas-netes:$(TAG) && \
+	@echo $(SERVER)/$(OWNER)/faas-netes:$(TAG) && \
 	docker buildx create --use --name=multiarch --node=multiarch && \
 	docker buildx build \
 		--push \
 		--platform linux/amd64 \
-		--tag ghcr.io/$(OWNER)/faas-netes:$(TAG) \
+		--tag $(SERVER)/$(OWNER)/faas-netes:$(TAG) \
 		.
 
 .PHONY: build-buildx-all
@@ -42,21 +43,21 @@ build-buildx-all:
 	docker buildx build \
 		--platform linux/amd64,linux/arm/v7,linux/arm64 \
 		--output "type=image,push=false" \
-		--tag ghcr.io/$(OWNER)/faas-netes:$(TAG) \
+		--tag $(SERVER)/$(OWNER)/faas-netes:$(TAG) \
 		.
 
 .PHONY: publish-buildx-all
 publish-buildx-all:
-	@echo  ghcr.io/$(OWNER)/faas-netes:$(TAG) && \
+	@echo  $(SERVER)/$(OWNER)/faas-netes:$(TAG) && \
 	docker buildx create --use --name=multiarch --node=multiarch && \
 	docker buildx build \
 		--platform linux/amd64,linux/arm/v7,linux/arm64 \
 		--push=true \
-		--tag ghcr.io/$(OWNER)/faas-netes:$(TAG) \
+		--tag $(SERVER)/$(OWNER)/faas-netes:$(TAG) \
 		.
 
 push:
-	docker push ghcr.io/$(OWNER)/faas-netes:$(TAG)
+	docker push $(SERVER)/$(OWNER)/faas-netes:$(TAG)
 
 charts:
 	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/ && helm package pro-builder/
