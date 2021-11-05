@@ -174,23 +174,8 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		return nil, err
 	}
 
-	// add 2s jitter to avoid a race condition between write_timeout and grace period
-	jitter := time.Second * 2
-	terminationGracePeriod := time.Second*30 + jitter
-
-	if request.EnvVars != nil {
-		if v, ok := request.EnvVars["write_timeout"]; ok && len(v) > 0 {
-			period, err := time.ParseDuration(v)
-			if err != nil {
-				glog.Warningf("Function %s failed to parse write_timeout: %s",
-					request.Service, err.Error())
-			}
-
-			terminationGracePeriod = period + jitter
-		}
-	}
-
-	terminationGracePeriodSeconds := int64(terminationGracePeriod.Seconds())
+	terminationGracePeriodSeconds :=
+		getTerminationGracePeriodSeconds(request.EnvVars, request.Service)
 
 	enableServiceLinks := false
 	allowPrivilegeEscalation := false
@@ -275,6 +260,26 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 	}
 
 	return deploymentSpec, nil
+}
+
+func getTerminationGracePeriodSeconds(envVars map[string]string, name string) int64 {
+	// add 2s jitter to avoid a race condition between write_timeout and grace period
+	jitter := time.Second * 2
+	terminationGracePeriod := time.Second*30 + jitter
+
+	if envVars != nil {
+		if v, ok := envVars["write_timeout"]; ok && len(v) > 0 {
+			period, err := time.ParseDuration(v)
+			if err != nil {
+				glog.Warningf("Function %s failed to parse write_timeout: %s",
+					name, err.Error())
+			}
+
+			terminationGracePeriod = period + jitter
+		}
+	}
+
+	return int64(terminationGracePeriod.Seconds())
 }
 
 func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFactory) *corev1.Service {

@@ -168,6 +168,11 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 
+		terminationGracePeriodSeconds :=
+			getTerminationGracePeriodSeconds(request.EnvVars, request.Service)
+
+		deployment.Spec.Template.Spec.TerminationGracePeriodSeconds = &terminationGracePeriodSeconds
+
 		// compare the annotations from args to the cache copy of the deployment annotations
 		// at this point we have already updated the annotations to the new value, if we
 		// compare to that it will produce an empty list
