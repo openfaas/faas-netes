@@ -28,6 +28,7 @@ import (
 	faasscheme "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/scheme"
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
 	listers "github.com/openfaas/faas-netes/pkg/client/listers/openfaas/v1"
+	"github.com/openfaas/faas-netes/pkg/k8s"
 )
 
 const (
@@ -251,6 +252,15 @@ func (c *Controller) syncHandler(key string) error {
 			return err
 		}
 
+		hasProfiles, err := k8s.ProfilesEnabled(c.kubeclientset)
+		if err != nil {
+			return err
+		}
+
+		if !hasProfiles && function.Spec.Annotations != nil && len(k8s.ParseProfileNames(*function.Spec.Annotations)) > 0 {
+			return fmt.Errorf("Profiles CRD is missing, can not safely deploy a function while this is missing")
+		}
+
 		glog.Infof("Creating deployment for '%s'", function.Spec.Name)
 		deployment, err = c.kubeclientset.AppsV1().Deployments(function.Namespace).Create(
 			context.TODO(),
@@ -299,6 +309,15 @@ func (c *Controller) syncHandler(key string) error {
 		existingSecrets, err := c.getSecrets(function.Namespace, function.Spec.Secrets)
 		if err != nil {
 			return err
+		}
+
+		hasProfiles, err := k8s.ProfilesEnabled(c.kubeclientset)
+		if err != nil {
+			return err
+		}
+
+		if !hasProfiles {
+			return fmt.Errorf("Profiles CRD is missing, can not safely update Function while it is missing")
 		}
 
 		deployment, err = c.kubeclientset.AppsV1().Deployments(function.Namespace).Update(

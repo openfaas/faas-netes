@@ -42,10 +42,22 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			defer r.Body.Close()
 		}
 
+		hasProfiles, err := k8s.ProfilesEnabled(factory.Client)
+		if err != nil {
+			wrappedErr := fmt.Errorf("failed to verify the Profile CRD: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if !hasProfiles {
+			http.Error(w, "Profiles CRD is missing", http.StatusInternalServerError)
+			return
+		}
+
 		body, _ := ioutil.ReadAll(r.Body)
 
 		request := types.FunctionDeployment{}
-		err := json.Unmarshal(body, &request)
+		err = json.Unmarshal(body, &request)
 		if err != nil {
 			wrappedErr := fmt.Errorf("failed to unmarshal request: %s", err.Error())
 			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)

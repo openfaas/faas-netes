@@ -90,6 +90,14 @@ func main() {
 		log.Fatalf("Error reading config: %s", err.Error())
 	}
 
+	hasProfiles, err := k8s.ProfilesEnabled(kubeClient)
+	if err != nil {
+		log.Fatalf("Error getting preferred APIs: %s", err.Error())
+	}
+	if !hasProfiles {
+		log.Fatalf("Profiles CRD not found, disabling the Profiles feature. Warning, functions that request a Profile will be unschedulable.")
+	}
+
 	config.Fprint(verbose)
 
 	deployConfig := k8s.DeploymentConfig{
@@ -128,7 +136,6 @@ func main() {
 	// this is where we need to swap to the faasInformerFactory
 	profileInformerOpt := informers.WithNamespace(config.ProfilesNamespace)
 	profileInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, profileInformerOpt)
-
 	profileLister := profileInformerFactory.Openfaas().V1().Profiles().Lister()
 	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, profileLister)
 
@@ -188,8 +195,7 @@ func startInformers(setup serverSetup, stopCh <-chan struct{}, operator bool) cu
 
 	// go setup.profileInformerFactory.Start(stopCh)
 
-	profileInformerFactory := setup.profileInformerFactory
-	profiles := profileInformerFactory.Openfaas().V1().Profiles()
+	profiles := setup.profileInformerFactory.Openfaas().V1().Profiles()
 	go profiles.Informer().Run(stopCh)
 	if ok := cache.WaitForNamedCacheSync("faas-netes:profiles", stopCh, profiles.Informer().HasSynced); !ok {
 		log.Fatalf("failed to wait for cache to sync")

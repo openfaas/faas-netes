@@ -126,6 +126,16 @@ func updateDeploymentSpec(
 		// store the current annotations so that we can diff the annotations
 		// and determine which profiles need to be removed
 		currentAnnotations := deployment.Annotations
+
+		hasProfiles, err := k8s.ProfilesEnabled(factory.Client)
+		if err != nil {
+			return fmt.Errorf("can not verify the Profile CRD exists: %w", err), http.StatusInternalServerError
+		}
+
+		if !hasProfiles && (len(k8s.ParseProfileNames(annotations)) > 0 || len(k8s.ParseProfileNames(currentAnnotations)) > 0) {
+			return fmt.Errorf("Profiles CRD is missing, can not safely deploy a function while this is missing"), http.StatusInternalServerError
+		}
+
 		deployment.Annotations = annotations
 		deployment.Spec.Template.Annotations = annotations
 		deployment.Spec.Template.ObjectMeta.Annotations = annotations
