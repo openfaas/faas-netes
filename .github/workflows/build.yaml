@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ '*' ]
+    branches: ["*"]
   pull_request:
-    branches: [ '*' ]
+    branches: ["*"]
 
 jobs:
   build:
@@ -48,17 +48,19 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
             ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
- # Todo - load the image into Kind before running tests
- # otherwise, this just tests the chart with images that
- # have already been built and pushed in an earlier job
       - name: get tools
         run: ./contrib/get_tools.sh
       - name: lint chart
         run: ./contrib/lint_chart.sh
       - name: create cluster
         run: ./contrib/create_cluster.sh
+      - name: load CI image into kind
+        run: kind load docker-image ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
       - name: deploy function
-        run: OPERATOR=0 ./contrib/deploy.sh
+        run: |
+          export OPERATOR=0
+          export IMAGE=ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
+          ./contrib/deploy.sh
       - name: run function
         run: OPERATOR=0 ./contrib/run_function.sh
       - name: stop dev cluster
@@ -67,12 +69,16 @@ jobs:
         run: sleep 10
       - name: create cluster
         run: ./contrib/create_cluster.sh
+      - name: load CI image into kind
+        run: kind load docker-image ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
       - name: deploy function
-        run: OPERATOR=1 ./contrib/deploy.sh
+        run: |
+          export OPERATOR=1
+          export IMAGE=ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
+          ./contrib/deploy.sh
       - name: run function
         run: OPERATOR=1 ./contrib/run_function.sh
       - name: stop dev cluster
         run: ./contrib/stop_dev.sh
-
 # The certifier should also be run here
 #
