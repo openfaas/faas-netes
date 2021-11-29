@@ -18,4 +18,4 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: pro-builder
+    app: {{ template "builder.name" . }}

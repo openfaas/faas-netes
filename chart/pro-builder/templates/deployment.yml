@@ -108,9 +108,19 @@ spec:
         ports:
         - containerPort: 1234
           protocol: TCP
+        {{- with .Values.securityContext }}
         securityContext:
-          privileged: true
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
         volumeMounts:
         - name: daemon-certs
           readOnly: true
           mountPath: /var/secrets/certs
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
