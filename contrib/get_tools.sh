@@ -19,9 +19,9 @@ if [[ "$1" ]]; then
   KUBE_VERSION=$1
 fi
 
-./arkade get kind --version $KIND_VERSION
-./arkade get helm --version $HELM_VERSION
-./arkade get kubectl --version $KUBE_VERSION
-./arkade get faas-cli
+./arkade get kind@$KIND_VERSION \
+  helm@$HELM_VERSION \
+  kubectl@$KUBE_VERSION \
+  faas-cli
 
 sudo mv $HOME/.arkade/bin/* /usr/local/bin/
