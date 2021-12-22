@@ -14,7 +14,7 @@ The SQS connector can be used to invoke functions from an AWS SQS queue.
 
   You must have a working OpenFaaS installed.
 
-## Install the Chart
+## Configure your secrets
 
 - Create the required secret with your OpenFaaS PRO license code:
 
@@ -24,6 +24,39 @@ $ kubectl create secret generic \
     openfaas-license \
     --from-file license=$HOME/.openfaas/LICENSE
 ```
+
+- If not using AWS ambient credentials, create a secret:
+
+```bash
+$ kubectl create secret generic -n openfaas \
+  aws-sqs-credentials --from-file aws-sqs-credentials=$HOME/sqs-credentials.txt
+```
+
+## Configure values.yaml
+
+```yaml
+replicas: 1
+
+queueURL: "https://"
+
+# Set to empty string if using AWS ambient credentials
+awsCredentialsSecret: aws-sqs-credentials
+
+# Set the region
+awsDefaultRegion: eu-west-1
+
+# Maximum time to keep message hidden from other processors whilst 
+# executing function
+visibilityTimeout: 30s
+
+# Time to wait between polling SQS queue for messages.
+waitTime: 20s
+
+# Maximum messages to fetch at once - between 1-10
+maxMessages: 1
+```
+
+## Install the chart
 
 - Add the OpenFaaS chart repo and deploy the `sqs-connector` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
 
