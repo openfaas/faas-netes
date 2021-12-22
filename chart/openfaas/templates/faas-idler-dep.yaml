@@ -51,6 +51,10 @@ spec:
             - name: write_debug
               value: {{ .Values.faasIdler.writeDebug }}
 {{- end }}
+{{- if .Values.faasIdler.printQueries }}
+            - name: print_queries
+              value: {{ .Values.faasIdler.printQueries }}
+{{- end }}
           volumeMounts:
 {{- if .Values.basic_auth }}
             - name: auth

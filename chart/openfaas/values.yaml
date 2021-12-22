@@ -1,10 +1,11 @@
 functionNamespace: openfaas-fn  # Default namespace for functions
 
 # See https://www.openfaas.com/support for more
-openfaasPRO: false
+openfaasPRO: true
+
+serviceType: NodePort
 exposeServices: true
 async: true
-serviceType: NodePort
 httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5)
 rbac: true
 clusterRole: false            # Set to true to have OpenFaaS administrate multiple namespaces
@@ -48,9 +49,10 @@ faasIdler:
   image: ghcr.io/openfaas/faas-idler-pro:0.4.4
   replicas: 1
   create: true
-  inactivityDuration: 30m               # If a function is inactive for 15 minutes, it may be scaled to zero
+  inactivityDuration: 3m               # If a function is inactive for 15 minutes, it may be scaled to zero
   reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
-  readOnly: true                        # When set to true, no functions are scaled to zero
+  readOnly: false                       # When set to true, no functions are scaled to zero
+  writeDebug: false                     # Write additional debug information
   resources:
     requests:
       memory: "64Mi"

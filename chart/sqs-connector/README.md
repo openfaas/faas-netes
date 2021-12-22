@@ -70,6 +70,7 @@ $ helm upgrade sqs-connector openfaas/sqs-connector \
 > The above command will also update your helm repo to pull in any new releases.
 
 ## Install a development version
+
 ```sh
 $ helm upgrade sqs-connector ./chart/sqs-connector \
     --install \

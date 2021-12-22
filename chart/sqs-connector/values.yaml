@@ -1,7 +1,7 @@
 # You will need to create a license named "openfaas-license" - see the 
 # chart README for detailed instructions.
 
-image: alexellis/sqs-connector:0.0.3-amd64
+image: alexellis/sqs-connector:0.0.4-amd64
 
 replicas: 1
 
@@ -39,13 +39,15 @@ asyncInvocation: false
 # HTTP content-type for invoking functions
 contentType: text/plain
 
-# Print the data read from the Kafka topic before invoking functions
+# Print the data read from the SQS queue before invoking functions
+# Do not use in production
 printRequestBody: false
 
 # Print the HTTP status of invoked functions
-printResponse: false
+printResponse: true
 
 # Print the data received from invoked functions
+# Do not use in production
 printResponseBody: false
 
 # Gateway URL to access API and for invocations
