@@ -77,6 +77,14 @@ $ helm upgrade sqs-connector ./chart/sqs-connector \
     -f ./values.yaml
 ```
 
+## HTTP Headers
+
+Your function will receive these headers:
+
+* `X-SQS-Message-ID` - the ID of the message being processed.
+* `X-SQS-Queue-URL` - the URL of the queue.
+* `Content-Type` - if configured for the controller.
+
 ## Configuration
 
 Additional sqs-connector options in `values.yaml`.
