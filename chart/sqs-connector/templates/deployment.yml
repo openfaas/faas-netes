@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "connector.name" . }}
+    component: sqs-connector
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "connector.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
+    app.kubernetes.io/component: sqs-connector
+    app.kubernetes.io/part-of: openfaas
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "connector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "connector.name" . }}
+      component: sqs-connector
+
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: {{ template "connector.name" . }}
+        component: sqs-connector
+    spec:
+      volumes:
+        - name: openfaas-license
+          secret:
+            secretName: openfaas-license
+      {{- if .Values.basic_auth }}
+        - name: auth
+          secret:
+            secretName: basic-auth
+      {{- end }}
+      {{- if .Values.awsCredentialsSecret }}
+        - name: aws-credentials
+          secret:
+            secretName: {{ .Values.awsCredentialsSecret }}
+      {{- end}}
+      containers:
+        - name: connector
+          image: {{ .Values.image }}
+          command:
+           - "/usr/bin/sqs-connector"
+           - "-license-file=/var/secrets/license/license"
+           - "--queue-url={{ .Values.queueURL }}"
+           - "--visibility-timeout={{.Values.visibilityTimeout }}"
+           - "--wait-time={{.Values.waitTime}}"
+           - "--max-messages={{.Values.maxMessages}}"
+          env:
+            - name: gateway_url
+              value: {{ .Values.gatewayURL | quote }}
+            - name: topics
+              value: {{ .Values.topics | quote }}
+            - name: print_response
+              value: {{ .Values.printResponse | quote }}
+            - name: print_response_body
+              value: {{ .Values.printResponseBody | quote }}
+            - name: print_request_body
+              value: {{ .Values.printRequestBody | quote }}
+            - name: asynchronous_invocation
+              value: {{ .Values.asyncInvocation | quote }}
+            {{- if .Values.basic_auth }}
+            - name: basic_auth
+              value: "true"
+            - name: secret_mount_path
+              value: "/var/secrets"
+            {{- end }}
+            {{- if .Values.upstreamTimeout }}
+            - name: upstream_timeout
+              value: {{ .Values.upstreamTimeout | quote }}
+            {{- end }}
+            {{- if .Values.rebuildInterval }}
+            - name: rebuild_interval
+              value: {{ .Values.rebuildInterval | quote }}
+            {{- end }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
+           {{- if .Values.awsCredentialsSecret }}
+            - name: AWS_SHARED_CREDENTIALS_FILE
+              value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
+           {{- end }}
+           {{- if .Values.awsDefaultRegion }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.awsDefaultRegion }}
+           {{- end }}
+          volumeMounts:
+            - name: openfaas-license
+              readOnly: true
+              mountPath: "/var/secrets/license"
+          {{- if .Values.basic_auth }}
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+          {{- end }}
+          {{- if .Values.awsCredentialsSecret }}
+            - name: aws-credentials
+              readOnly: true
+              mountPath: "/var/secrets/aws-credentials"
+          {{- end }}
+
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

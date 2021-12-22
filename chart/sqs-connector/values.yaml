@@ -1,0 +1,58 @@
+# You will need to create a license named "openfaas-license" - see the 
+# chart README for detailed instructions.
+
+image: alexellis/sqs-connector:0.0.1-4-g30ef18d-amd64
+
+replicas: 1
+
+queueURL: "https://"
+
+# kubectl create secret generic -n openfaas \
+#   aws-sqs-credentials --from-file aws-sqs-credentials=$HOME/sqs-credentials.txt
+awsCredentialsSecret: aws-sqs-credentials
+
+awsDefaultRegion: eu-west-1
+
+# Maximum time to keep message hidden from other processors whilst 
+# executing function
+visibilityTimeout: 30s
+
+# Time to wait between polling SQS queue for messages.
+waitTime: 20s
+
+# Maximum messages to fetch at once - between 1-10
+maxMessages: 1
+
+# Max timeout for a function
+upstreamTimeout: 30s
+
+# interval for rebuilding the map of functions and topics
+rebuildInterval: 30s
+
+# Use with slow consumers or long running functions
+asyncInvocation: false
+
+# HTTP content-type for invoking functions
+contentType: text/plain
+
+# Print the data read from the Kafka topic before invoking functions
+printRequestBody: false
+
+# Print the HTTP status of invoked functions
+printResponse: false
+
+# Print the data received from invoked functions
+printResponseBody: false
+
+# Gateway URL to access API and for invocations
+gatewayURL: http://gateway.openfaas:8080
+
+# Basic auth for the gateway
+basic_auth: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
