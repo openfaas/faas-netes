@@ -264,7 +264,6 @@ You can run the following command from within the `faas-netes/chart` folder in t
 ```sh
 helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas \
-    --set basic_auth=true \
     --set functionNamespace=openfaas-fn \
     --set generateBasicAuth=true
 ```

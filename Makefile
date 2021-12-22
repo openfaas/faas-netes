@@ -60,7 +60,7 @@ push:
 	docker push $(SERVER)/$(OWNER)/faas-netes:$(TAG)
 
 charts:
-	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/ && helm package pro-builder/
+	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/ && helm package pro-builder/  && helm package sqs-connector/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh
