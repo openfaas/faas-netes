@@ -1,7 +1,7 @@
 functionNamespace: openfaas-fn  # Default namespace for functions
 
 # See https://www.openfaas.com/support for more
-openfaasPRO: true
+openfaasPRO: false
 
 serviceType: NodePort
 exposeServices: true
