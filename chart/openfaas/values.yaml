@@ -58,7 +58,7 @@ faasIdler:
       memory: "64Mi"
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.21.1
+  image: ghcr.io/openfaas/gateway:0.21.3
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
