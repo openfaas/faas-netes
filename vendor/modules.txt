@@ -55,7 +55,7 @@ github.com/modern-go/concurrent
 github.com/modern-go/reflect2
 # github.com/onsi/gomega v1.14.0
 ## explicit
-# github.com/openfaas/faas-provider v0.18.6
+# github.com/openfaas/faas-provider v0.18.9
 ## explicit
 github.com/openfaas/faas-provider
 github.com/openfaas/faas-provider/auth
