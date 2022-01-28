@@ -9,7 +9,7 @@ require (
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/onsi/gomega v1.14.0 // indirect
-	github.com/openfaas/faas-provider v0.18.6
+	github.com/openfaas/faas-provider v0.18.9
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.11.0
 	github.com/stretchr/testify v1.7.0 // indirect
