@@ -1,0 +1,91 @@
+{{- if .Values.async }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: scaler
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: scaler
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.proScaler.replicas }}
+  selector:
+    matchLabels:
+      app: scaler
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: scaler
+    spec:
+      volumes:
+      {{- if .Values.basic_auth }}
+      - name: auth
+        secret:
+          secretName: basic-auth
+      {{- end }}
+      {{- if .Values.proScaler.enabled }}
+      - name: license
+        secret:
+          secretName: openfaas-license
+      {{- end }}
+      containers:
+      - name:  scaler
+        resources:
+          {{- .Values.proScaler.resources | toYaml | nindent 12 }}
+      {{- if .Values.proScaler.enabled }}
+        image: {{ .Values.proScaler.image }}
+      {{- else }}
+        image: {{ .Values.proScaler.image }}
+      {{- end }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.proScaler.enabled }}
+        command:
+          - "/usr/bin/scaler"
+          - "-license-file=/var/secrets/license/license"
+        {{- end }}
+        env:
+        - name: gateway_url
+          value: "http://gateway.{{ .Release.Namespace }}:8080/"
+        - name: prometheus_host
+          value: "prometheus.{{ .Release.Namespace }}"
+        - name: prometheus_port
+          value: "9090"
+          
+        {{- if .Values.functionNamespace }}
+        - name: faas_function_suffix
+          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- end }}
+
+        {{- if .Values.basic_auth }}
+        - name: secret_mount_path
+          value: "/var/secrets/scaler"
+        - name: basic_auth
+          value: "{{ .Values.basic_auth }}"
+        volumeMounts:
+        {{- if .Values.proScaler.enabled }}
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        {{- end }}
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets/scaler"
+        {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+{{- end }}
