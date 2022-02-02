@@ -29,7 +29,7 @@ openfaasImagePullPolicy: "Always"
 proScaler:
   image: alexellis2/openfaas-pro-scaler:0.1.1-dirty
   replicas: 1
-  enabled: true
+  enabled: false
   resources:
     requests:
       memory: "128Mi"
