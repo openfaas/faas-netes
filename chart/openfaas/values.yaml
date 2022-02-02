@@ -1,19 +1,20 @@
 functionNamespace: openfaas-fn  # Default namespace for functions
 
 # See https://www.openfaas.com/support for more
-openfaasPRO: false
+openfaasPro: false
 
 serviceType: NodePort
 exposeServices: true
 async: true
 httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5)
 rbac: true
-clusterRole: false            # Set to true to have OpenFaaS administrate multiple namespaces
+clusterRole: false            # Set to true for multiple namespaces
 createCRDs: true
 basic_auth: true
 generateBasicAuth: false
 
 securityContext: true
+
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 psp: false
@@ -21,7 +22,35 @@ psp: false
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"
 
-# openfaasPRO components, which requires openfaasPRO=true
+# openfaasPro components, which require openfaasPro=true
+# clusterRole is also recommended for collecting CPU/RAM metrics for Pro add-ons
+
+# advanced scaling on concurrency and CPU
+proScaler:
+  image: alexellis2/openfaas-pro-scaler:0.1.1-dirty
+  replicas: 1
+  enabled: true
+  resources:
+    requests:
+      memory: "128Mi"
+    limits:
+      memory: "256Mi"
+
+# Not required if using proScaler
+# scale-to-zero feature
+faasIdler:
+  image: ghcr.io/openfaas/faas-idler-pro:0.4.4
+  replicas: 1
+  enabled: false
+  inactivityDuration: 3m               # If a function is inactive for 15 minutes, it may be scaled to zero
+  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
+  readOnly: false                       # When set to true, no functions are scaled to zero
+  writeDebug: false                     # Write additional debug information
+  resources:
+    requests:
+      memory: "64Mi"
+
+# OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
   enabled: false
   verbose: false # debug setting
@@ -42,20 +71,6 @@ oidcAuthPlugin:
   replicas: 1
   image: ghcr.io/openfaas/openfaas-oidc-plugin:0.5.1
   securityContext: true
-
-# Requires openfaasPRO=true
-# scale-to-zero feature
-faasIdler:
-  image: ghcr.io/openfaas/faas-idler-pro:0.4.4
-  replicas: 1
-  create: true
-  inactivityDuration: 3m               # If a function is inactive for 15 minutes, it may be scaled to zero
-  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
-  readOnly: false                       # When set to true, no functions are scaled to zero
-  writeDebug: false                     # Write additional debug information
-  resources:
-    requests:
-      memory: "64Mi"
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.21.3

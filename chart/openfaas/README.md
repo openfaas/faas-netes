@@ -107,7 +107,7 @@ echo "OpenFaaS admin password: $PASSWORD"
 kubectl create secret generic \
     -n openfaas \
     openfaas-license \
-    --from-file license=$HOME/OPENFAAS_LICENSE
+    --from-file license=$HOME/.openfaas/LICENSE
 ```
 
 Now deploy OpenFaaS from the helm chart repo:
@@ -118,10 +118,10 @@ helm repo update \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn \
     --set generateBasicAuth=true \
-    --set openfaasPRO=true
+    --set openfaasPro=true
 ```
 
-The main change here is to add: `--set openfaasPRO=true`
+The main change here is to add: `--set openfaasPro=true`
 
 See also:
 * Scale-down to zero (in this document)

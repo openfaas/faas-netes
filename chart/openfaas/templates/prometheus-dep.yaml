@@ -77,6 +77,11 @@ spec:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config
           subPath: prometheus.yml
+{{- if .Values.openfaasPro }}
+        - mountPath: /etc/prometheus/prometheus-rules.yml
+          name: prometheus-config
+          subPath: prometheus-rules.yml
+{{- end }}
         - mountPath: /etc/prometheus/alert.rules.yml
           name: prometheus-config
           subPath: alert.rules.yml
@@ -93,6 +98,11 @@ spec:
               - key: alert.rules.yml
                 path: alert.rules.yml
                 mode: 0644
+{{- if .Values.openfaasPro }}
+              - key: prometheus-rules.yml
+                path: prometheus-rules.yml
+                mode: 0644
+{{- end }}
         - name: prom-data
           emptyDir: {}
     {{- with .Values.nodeSelector }}

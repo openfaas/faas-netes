@@ -1,7 +1,7 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.openfaasPRO }}
+{{- if .Values.openfaasPro }}
 
-{{- if .Values.faasIdler.create }}
+{{- if .Values.faasIdler.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
