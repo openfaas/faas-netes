@@ -12,8 +12,13 @@ clusterRole: false            # Set to true for multiple namespaces
 createCRDs: true
 basic_auth: true
 generateBasicAuth: false
-
 securityContext: true
+
+# Set to true to use legacy / community-edition auto-scaling
+# when openfaasPro is set to true to use the original 
+# auto-scaling logic
+# Then set proScaler.enabled=false
+ceScaling: false
 
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
