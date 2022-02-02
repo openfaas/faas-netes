@@ -16,9 +16,14 @@ data:
           monitor: 'faas-monitor'
     rule_files:
         - 'alert.rules.yml'
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - alertmanager:9093
     scrape_configs:
       - job_name: 'prometheus'
-        scrape_interval: 5s
+        scrape_interval: 10s
         static_configs:
           - targets: ['localhost:9090']
       - job_name: 'kubernetes-pods'
@@ -52,11 +57,6 @@ data:
           source_labels:
           - __meta_kubernetes_pod_annotation_prometheus_io_path
           target_label: __metrics_path__
-    alerting:
-      alertmanagers:
-      - static_configs:
-        - targets:
-          - alertmanager:9093
   alert.rules.yml: |
     groups:
       - name: openfaas

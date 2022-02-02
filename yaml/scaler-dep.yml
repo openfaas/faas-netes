@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: openfaas
+    component: scaler
+  name: scaler
+  namespace: "openfaas"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scaler
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: scaler
+    spec:
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
+      - name: license
+        secret:
+          secretName: openfaas-license
+      containers:
+      - name:  scaler
+        resources:
+            limits:
+              memory: 256Mi
+            requests:
+              memory: 128Mi
+        image: alexellis2/openfaas-pro-scaler:0.1.1-dirty
+        imagePullPolicy: Always
+        command:
+          - "/usr/bin/scaler"
+          - "-license-file=/var/secrets/license/license"
+        env:
+        - name: gateway_url
+          value: "http://gateway.openfaas:8080/"
+        - name: prometheus_host
+          value: "prometheus.openfaas"
+        - name: prometheus_port
+          value: "9090"
+        - name: faas_function_suffix
+          value: ".openfaas-fn.svc.cluster.local"
+        - name: secret_mount_path
+          value: "/var/secrets/scaler"
+        - name: basic_auth
+          value: "true"
+        volumeMounts:
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets/scaler"
