@@ -32,7 +32,7 @@ openfaasImagePullPolicy: "Always"
 
 # advanced scaling on concurrency and CPU
 proScaler:
-  image: alexellis2/openfaas-pro-scaler:0.1.2
+  image: alexellis2/openfaas-pro-scaler:0.1.3
   replicas: 1
   enabled: false
   resources:
