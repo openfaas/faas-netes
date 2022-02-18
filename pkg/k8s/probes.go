@@ -4,9 +4,7 @@
 package k8s
 
 import (
-	"fmt"
 	"path/filepath"
-	"time"
 
 	types "github.com/openfaas/faas-provider/types"
 	corev1 "k8s.io/api/core/v1"
@@ -14,9 +12,7 @@ import (
 )
 
 const (
-	ProbePath         = "com.openfaas.health.http.path"
-	ProbePathValue    = "/_/health"
-	ProbeInitialDelay = "com.openfaas.health.http.initialDelay"
+	ProbePathValue = "/_/health"
 )
 
 type FunctionProbes struct {
@@ -30,20 +26,6 @@ func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbe
 	var handler corev1.Handler
 	httpPath := ProbePathValue
 	initialDelaySeconds := int32(f.Config.LivenessProbe.InitialDelaySeconds)
-
-	if r.Annotations != nil {
-		annotations := *r.Annotations
-		if path, ok := annotations[ProbePath]; ok {
-			httpPath = path
-		}
-		if delay, ok := annotations[ProbeInitialDelay]; ok {
-			d, err := time.ParseDuration(delay)
-			if err != nil {
-				return nil, fmt.Errorf("invalid %s duration format: %v", ProbeInitialDelay, err)
-			}
-			initialDelaySeconds = int32(d.Seconds())
-		}
-	}
 
 	if f.Config.HTTPProbe || httpPath != ProbePathValue {
 		handler = corev1.Handler{
