@@ -30,7 +30,9 @@ openfaasImagePullPolicy: "Always"
 # openfaasPro components, which require openfaasPro=true
 # clusterRole is also recommended for collecting CPU/RAM metrics for Pro add-ons
 
-# advanced scaling on concurrency and CPU
+# OpenFaaS Pro
+# Advanced auto-scaling on RPS, CPU and in-flight requests
+# Includes: scale to zero
 proScaler:
   image: alexellis2/openfaas-pro-scaler:0.1.3
   replicas: 1
@@ -41,13 +43,14 @@ proScaler:
     limits:
       memory: "256Mi"
 
-# Not required if using proScaler
-# scale-to-zero feature
+# OpenFaaS Pro
+# Original scale to zero feature
+# set "enabled=false" when using proScaler
 faasIdler:
   image: ghcr.io/openfaas/faas-idler-pro:0.4.4
   replicas: 1
   enabled: false
-  inactivityDuration: 3m               # If a function is inactive for 15 minutes, it may be scaled to zero
+  inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
   reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
   readOnly: false                       # When set to true, no functions are scaled to zero
   writeDebug: false                     # Write additional debug information
@@ -55,6 +58,7 @@ faasIdler:
     requests:
       memory: "64Mi"
 
+# OpenFaaS Pro
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
   enabled: false
@@ -105,6 +109,11 @@ basicAuthPlugin:
       memory: "50Mi"
       cpu: "20m"
 
+faasnetesPro:
+  image: ghcr.io/openfaasltd/faas-netes:0.1.0-rc3
+operatorPro:
+  image: ghcr.io/openfaasltd/faas-netes:0.1.0-rc3
+
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.14.1
   readTimeout: "60s"
@@ -137,10 +146,11 @@ operator:
       memory: "120Mi"
       cpu: "50m"
 
-# Requires openfaas PRO subscription
+# OpenFaaS Pro
+# The values for queueWorkerPro are merged with those under
+# the "queueWorker" section
 queueWorkerPro:
   image: ghcr.io/openfaas/queue-worker-pro:0.1.0-rc5
-  enabled: false
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
