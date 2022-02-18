@@ -9,7 +9,7 @@ jobs:
   publish:
     strategy:
       matrix:
-        go-version: [1.16.x]
+        go-version: [1.17.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     permissions:
@@ -43,6 +43,12 @@ jobs:
       - name: Get Repo Owner
         id: get_repo_owner
         run: echo ::set-output name=repo_owner::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+      - name: Get git commit
+        id: get_git_commit
+        run: echo "GIT_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
+      - name: Get version
+        id: get_version
+        run: echo "VERSION=$(git describe --tags --dirty)" >> $GITHUB_ENV
 
       - name: Push containers
         uses: docker/build-push-action@v2
@@ -51,6 +57,9 @@ jobs:
           file: ./Dockerfile
           outputs: "type=registry,push=true"
           platforms: linux/amd64,linux/arm/v7,linux/arm64
+          build-args: |
+            GIT_COMMIT=${{env.GIT_COMMIT}}
+            VERSION=${{env.VERSION}}
           tags: |
             ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
             ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ steps.get_tag.outputs.TAG }}
