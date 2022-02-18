@@ -28,7 +28,8 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
-      {{- if .Values.queueWorkerPro.enabled }}
+
+      {{- if .Values.openfaasPro }}
       - name: license
         secret:
           secretName: openfaas-license
@@ -37,13 +38,13 @@ spec:
       - name:  queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
-      {{- if .Values.queueWorkerPro.enabled }}
+        {{- if .Values.openfaasPro }}
         image: {{ .Values.queueWorkerPro.image }}
       {{- else }}
         image: {{ .Values.queueWorker.image }}
       {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.queueWorkerPro.enabled }}
+        {{- if .Values.openfaasPro }}
         command:
           - "/worker"
           - "-license-file=/var/secrets/license/license"
@@ -97,7 +98,7 @@ spec:
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
         volumeMounts:
-        {{- if .Values.queueWorkerPro.enabled }}
+        {{- if .Values.openfaasPro }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"

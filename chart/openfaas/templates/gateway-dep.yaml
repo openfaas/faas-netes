@@ -36,6 +36,11 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
+      {{- if .Values.openfaasPro }}
+      - name: license
+        secret:
+          secretName: openfaas-license
+      {{- end }}
       containers:
       - name: gateway
         resources:
@@ -144,11 +149,16 @@ spec:
           value: "{{ .Values.gateway.maxIdleConns }}"
         - name: max_idle_conns_per_host
           value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
-        {{- if .Values.basic_auth }}
         volumeMounts:
+        {{- if .Values.basic_auth }}
         - name: auth
           readOnly: true
           mountPath: "/var/secrets"
+        {{- end }}
+        {{- if .Values.openfaasPro }}
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
         {{- end }}
         ports:
         - name: http
@@ -158,11 +168,18 @@ spec:
       - name: operator
         resources:
           {{- .Values.operator.resources | toYaml | nindent 12 }}
+      {{- if .Values.openfaasPro }}
+        image: {{ .Values.operatorPro.image }}
+      {{- else }}
         image: {{ .Values.operator.image }}
+      {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - ./faas-netes
           - -operator=true
+        {{- if .Values.openfaasPro }}
+          - "-license-file=/var/secrets/license/license"
+        {{- end }}
         env:
           - name: port
             value: "8081"
@@ -197,16 +214,33 @@ spec:
         ports:
         - containerPort: 8081
           protocol: TCP
+        {{- if .Values.openfaasPro }}
+        volumeMounts:
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        {{- end }}
+
       {{- else }}
       - name: faas-netes
         resources:
           {{- .Values.faasnetes.resources | toYaml | nindent 12 }}
+      {{- if .Values.openfaasPro }}
+        image: {{ .Values.faasnetesPro.image }}
+      {{- else }}
         image: {{ .Values.faasnetes.image }}
+      {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+        {{- end }}
+        command:
+          - ./faas-netes
+          - -operator=false
+        {{- if .Values.openfaasPro }}
+          - "-license-file=/var/secrets/license/license"
         {{- end }}
         env:
         - name: port
@@ -240,6 +274,11 @@ spec:
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
         volumeMounts:
+        {{- if .Values.openfaasPro }}
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        {{- end }}
         - mountPath: /tmp
           name: faas-netes-temp-volume
         ports:
