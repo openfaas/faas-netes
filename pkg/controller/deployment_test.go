@@ -22,22 +22,21 @@ func Test_newDeployment(t *testing.T) {
 			ReadOnlyRootFilesystem: true,
 		},
 	}
-
-	factory := NewFunctionFactory(fake.NewSimpleClientset(),
-		k8s.DeploymentConfig{
-			HTTPProbe:      true,
-			SetNonRootUser: true,
-			LivenessProbe: &k8s.ProbeConfig{
-				PeriodSeconds:       1,
-				TimeoutSeconds:      3,
-				InitialDelaySeconds: 0,
-			},
-			ReadinessProbe: &k8s.ProbeConfig{
-				PeriodSeconds:       1,
-				TimeoutSeconds:      3,
-				InitialDelaySeconds: 0,
-			},
-		})
+	k8sConfig := k8s.DeploymentConfig{
+		HTTPProbe:      true,
+		SetNonRootUser: true,
+		LivenessProbe: &k8s.ProbeConfig{
+			PeriodSeconds:       1,
+			TimeoutSeconds:      3,
+			InitialDelaySeconds: 0,
+		},
+		ReadinessProbe: &k8s.ProbeConfig{
+			PeriodSeconds:       1,
+			TimeoutSeconds:      3,
+			InitialDelaySeconds: 0,
+		},
+	}
+	factory := NewFunctionFactory(fake.NewSimpleClientset(), k8sConfig)
 
 	secrets := map[string]*corev1.Secret{}
 
