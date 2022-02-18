@@ -1,14 +1,20 @@
 .PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts
+IMG_NAME?=faas-netes
+
 TAG?=latest
 OWNER?=openfaas
 SERVER?=ghcr.io
 export DOCKER_CLI_EXPERIMENTAL=enabled
+export DOCKER_BUILDKIT=1
 
 TOOLS_DIR := .tools
 
 GOPATH := $(shell go env GOPATH)
 CODEGEN_VERSION := $(shell hack/print-codegen-version.sh)
 CODEGEN_PKG := $(GOPATH)/pkg/mod/k8s.io/code-generator@${CODEGEN_VERSION}
+
+VERSION := $(shell git describe --tags --dirty)
+GIT_COMMIT := $(shell git rev-parse HEAD)
 
 all: build-docker
 
@@ -25,16 +31,20 @@ local:
 
 build-docker:
 	docker build \
-	-t $(SERVER)/$(OWNER)/faas-netes:$(TAG) .
+	--build-arg GIT_COMMIT=$(GIT_COMMIT) \
+	--build-arg VERSION=$(VERSION) \
+	-t $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) .
 
 .PHONY: build-buildx
 build-buildx:
-	@echo $(SERVER)/$(OWNER)/faas-netes:$(TAG) && \
+	@echo $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) && \
 	docker buildx create --use --name=multiarch --node=multiarch && \
 	docker buildx build \
 		--push \
 		--platform linux/amd64 \
-		--tag $(SERVER)/$(OWNER)/faas-netes:$(TAG) \
+        --build-arg GIT_COMMIT=$(GIT_COMMIT) \
+        --build-arg VERSION=$(VERSION) \
+		--tag $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) \
 		.
 
 .PHONY: build-buildx-all
@@ -43,21 +53,25 @@ build-buildx-all:
 	docker buildx build \
 		--platform linux/amd64,linux/arm/v7,linux/arm64 \
 		--output "type=image,push=false" \
-		--tag $(SERVER)/$(OWNER)/faas-netes:$(TAG) \
+        --build-arg GIT_COMMIT=$(GIT_COMMIT) \
+        --build-arg VERSION=$(VERSION) \
+		--tag $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) \
 		.
 
 .PHONY: publish-buildx-all
 publish-buildx-all:
-	@echo  $(SERVER)/$(OWNER)/faas-netes:$(TAG) && \
+	@echo  $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) && \
 	docker buildx create --use --name=multiarch --node=multiarch && \
 	docker buildx build \
 		--platform linux/amd64,linux/arm/v7,linux/arm64 \
 		--push=true \
-		--tag $(SERVER)/$(OWNER)/faas-netes:$(TAG) \
+        --build-arg GIT_COMMIT=$(GIT_COMMIT) \
+        --build-arg VERSION=$(VERSION) \
+		--tag $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) \
 		.
 
 push:
-	docker push $(SERVER)/$(OWNER)/faas-netes:$(TAG)
+	docker push $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG)
 
 charts:
 	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/ && helm package pro-builder/  && helm package sqs-connector/
