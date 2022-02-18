@@ -11,10 +11,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
-const (
-	ProbePathValue = "/_/health"
-)
-
 type FunctionProbes struct {
 	Liveness  *corev1.Probe
 	Readiness *corev1.Probe
@@ -24,13 +20,11 @@ type FunctionProbes struct {
 // by default the health check runs `cat /tmp/.lock` every ten seconds
 func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbes, error) {
 	var handler corev1.Handler
-	httpPath := ProbePathValue
-	initialDelaySeconds := int32(f.Config.LivenessProbe.InitialDelaySeconds)
 
-	if f.Config.HTTPProbe || httpPath != ProbePathValue {
+	if f.Config.HTTPProbe {
 		handler = corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
-				Path: httpPath,
+				Path: "/_/health",
 				Port: intstr.IntOrString{
 					Type:   intstr.Int,
 					IntVal: int32(f.Config.RuntimeHTTPPort),
@@ -49,7 +43,7 @@ func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbe
 	probes := FunctionProbes{}
 	probes.Readiness = &corev1.Probe{
 		Handler:             handler,
-		InitialDelaySeconds: initialDelaySeconds,
+		InitialDelaySeconds: f.Config.ReadinessProbe.InitialDelaySeconds,
 		TimeoutSeconds:      int32(f.Config.ReadinessProbe.TimeoutSeconds),
 		PeriodSeconds:       int32(f.Config.ReadinessProbe.PeriodSeconds),
 		SuccessThreshold:    1,
@@ -58,7 +52,7 @@ func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbe
 
 	probes.Liveness = &corev1.Probe{
 		Handler:             handler,
-		InitialDelaySeconds: initialDelaySeconds,
+		InitialDelaySeconds: f.Config.LivenessProbe.InitialDelaySeconds,
 		TimeoutSeconds:      int32(f.Config.LivenessProbe.TimeoutSeconds),
 		PeriodSeconds:       int32(f.Config.LivenessProbe.PeriodSeconds),
 		SuccessThreshold:    1,

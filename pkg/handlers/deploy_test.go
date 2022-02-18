@@ -13,46 +13,6 @@ import (
 	apiv1 "k8s.io/api/core/v1"
 )
 
-func Test_GracePeriodFromWriteTimeout(t *testing.T) {
-
-	scenarios := []struct {
-		name        string
-		wantSeconds int64
-		envs        map[string]string
-	}{
-		{"grace period is the default", 32, map[string]string{}},
-		{"grace period is set from write_timeout", 62, map[string]string{"write_timeout": "60s"}},
-	}
-
-	for _, s := range scenarios {
-		t.Run(s.name, func(t *testing.T) {
-			request := types.FunctionDeployment{Service: "testfunc", Image: "ghcr.io/openfaas/alpine:latest"}
-			factory := k8s.NewFunctionFactory(fake.NewSimpleClientset(), k8s.DeploymentConfig{
-				LivenessProbe:  &k8s.ProbeConfig{},
-				ReadinessProbe: &k8s.ProbeConfig{},
-				SetNonRootUser: false,
-			}, nil)
-
-			request.EnvVars = s.envs
-			deployment, err := makeDeploymentSpec(request, map[string]*apiv1.Secret{}, factory)
-			if err != nil {
-				t.Errorf("unexpected makeDeploymentSpec error: %s", err.Error())
-			}
-			want := s.wantSeconds
-			got := deployment.Spec.Template.Spec.TerminationGracePeriodSeconds
-
-			if got == nil {
-				t.Fatalf("want: %d, got: nil", want)
-			}
-
-			if *got != want {
-				t.Errorf("TerminationGracePeriodSeconds want: %d, got: %d", want, *got)
-			}
-
-		})
-	}
-}
-
 func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
 	request := types.FunctionDeployment{}
 

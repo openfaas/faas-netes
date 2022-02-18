@@ -157,10 +157,6 @@ func (f FunctionFactory) ApplyProfile(profile Profile, deployment *appsv1.Deploy
 		deployment.Spec.Template.Spec.Tolerations = append(deployment.Spec.Template.Spec.Tolerations, profile.Tolerations...)
 	}
 
-	if profile.RuntimeClassName != nil {
-		deployment.Spec.Template.Spec.RuntimeClassName = profile.RuntimeClassName
-	}
-
 	if profile.Affinity != nil {
 		// use a replacement strategy because it is not clear that merging affinities will
 		// actually produce a meaning Affinity definition, it would likely result in
@@ -190,12 +186,6 @@ func (f FunctionFactory) RemoveProfile(profile Profile, deployment *appsv1.Deplo
 			}
 		}
 		deployment.Spec.Template.Spec.Tolerations = newTolerations
-	}
-
-	if profile.RuntimeClassName != nil {
-		if equalStrings(deployment.Spec.Template.Spec.RuntimeClassName, profile.RuntimeClassName) {
-			deployment.Spec.Template.Spec.RuntimeClassName = nil
-		}
 	}
 
 	if profile.Affinity != nil && reflect.DeepEqual(profile.Affinity, deployment.Spec.Template.Spec.Affinity) {

@@ -12,7 +12,6 @@ import (
 )
 
 const testProfile = `
-runtimeClassName: "gVisor"
 podSecurityContext:
     runAsUser: 1000
     runAsGroup: 3000
@@ -171,8 +170,10 @@ func Test_TolerationsProfile_Apply(t *testing.T) {
 }
 
 func Test_RunTimeClassProfile_Apply(t *testing.T) {
-	expectedClass := "fastRunTime"
-	p := Profile{RuntimeClassName: &expectedClass}
+	expectedRoot := true
+	truev := true
+
+	p := Profile{PodSecurityContext: &corev1.PodSecurityContext{RunAsNonRoot: &truev}}
 
 	basicDeployment := &appsv1.Deployment{
 		Spec: appsv1.DeploymentSpec{
@@ -181,6 +182,9 @@ func Test_RunTimeClassProfile_Apply(t *testing.T) {
 					Containers: []apiv1.Container{
 						{Name: "testfunc", Image: "alpine:latest"},
 					},
+					SecurityContext: &apiv1.PodSecurityContext{
+						RunAsNonRoot: &truev,
+					},
 				},
 			},
 		},
@@ -188,66 +192,13 @@ func Test_RunTimeClassProfile_Apply(t *testing.T) {
 
 	factory := mockFactory()
 	factory.ApplyProfile(p, basicDeployment)
-	result := basicDeployment.Spec.Template.Spec.RuntimeClassName
+	result := basicDeployment.Spec.Template.Spec.SecurityContext.RunAsNonRoot
 	if result == nil {
-		t.Fatalf("expected %s, got nil", expectedClass)
+		t.Fatalf("expected %v, got nil", expectedRoot)
 	}
-	if expectedClass != *result {
-		t.Fatalf("expected %s, got %v", expectedClass, *result)
+	if expectedRoot != *result {
+		t.Fatalf("expected %v, got %v", expectedRoot, *result)
 	}
-}
-
-func Test_RunTimeClassProfile_Remove(t *testing.T) {
-	t.Run("remove matching runtime class ", func(t *testing.T) {
-		expectedClass := "fastRunTime"
-		p := Profile{RuntimeClassName: &expectedClass}
-
-		basicDeployment := &appsv1.Deployment{
-			Spec: appsv1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						RuntimeClassName: &expectedClass,
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
-					},
-				},
-			},
-		}
-
-		factory := mockFactory()
-		factory.RemoveProfile(p, basicDeployment)
-		result := basicDeployment.Spec.Template.Spec.RuntimeClassName
-		if result != nil {
-			t.Fatalf("expected nil, got %s", *result)
-		}
-	})
-
-	t.Run("leaves runtime class that does not match", func(t *testing.T) {
-		expectedClass := "fastRunTime"
-		profileClass := "slowRunTime"
-		p := Profile{RuntimeClassName: &profileClass}
-
-		basicDeployment := &appsv1.Deployment{
-			Spec: appsv1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						RuntimeClassName: &expectedClass,
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
-					},
-				},
-			},
-		}
-
-		factory := mockFactory()
-		factory.RemoveProfile(p, basicDeployment)
-		result := basicDeployment.Spec.Template.Spec.RuntimeClassName
-		if !equalStrings(result, &expectedClass) {
-			t.Fatalf("expected %s, got %v", expectedClass, result)
-		}
-	})
 }
 
 func Test_TolerationsProfile_Remove(t *testing.T) {
@@ -495,9 +446,7 @@ func Test_ConfigMapProfileParsing(t *testing.T) {
 	validConfig.Namespace = "functions"
 	validConfig.Data = map[string]string{"profile": testProfile}
 
-	runtime := "gVisor"
 	allowSpot := Profile{
-		RuntimeClassName: &runtime,
 		Tolerations: []apiv1.Toleration{
 			{
 				Key:               "key1",

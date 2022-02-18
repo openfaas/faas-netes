@@ -14,7 +14,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/openfaas/faas-netes/pkg/k8s"
 
@@ -25,7 +24,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	glog "k8s.io/klog"
 )
 
 // initialReplicasCount how many replicas to start of creating for a function
@@ -160,22 +158,10 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 
 	annotations := buildAnnotations(request)
 
-	var serviceAccount string
-
-	if request.Annotations != nil {
-		annotations := *request.Annotations
-		if val, ok := annotations["com.openfaas.serviceaccount"]; ok && len(val) > 0 {
-			serviceAccount = val
-		}
-	}
-
 	probes, err := factory.MakeProbes(request)
 	if err != nil {
 		return nil, err
 	}
-
-	terminationGracePeriodSeconds :=
-		getTerminationGracePeriodSeconds(request.EnvVars, request.Service)
 
 	enableServiceLinks := false
 	allowPrivilegeEscalation := false
@@ -216,9 +202,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 					Annotations: annotations,
 				},
 				Spec: apiv1.PodSpec{
-					NodeSelector:                  nodeSelector,
-					TerminationGracePeriodSeconds: &terminationGracePeriodSeconds,
-
+					NodeSelector: nodeSelector,
 					Containers: []apiv1.Container{
 						{
 							Name:  request.Service,
@@ -241,9 +225,8 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 							},
 						},
 					},
-					ServiceAccountName: serviceAccount,
-					RestartPolicy:      corev1.RestartPolicyAlways,
-					DNSPolicy:          corev1.DNSClusterFirst,
+					RestartPolicy: corev1.RestartPolicyAlways,
+					DNSPolicy:     corev1.DNSClusterFirst,
 					// EnableServiceLinks injects ENV vars about every other service within
 					// the namespace.
 					EnableServiceLinks: &enableServiceLinks,
@@ -260,26 +243,6 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 	}
 
 	return deploymentSpec, nil
-}
-
-func getTerminationGracePeriodSeconds(envVars map[string]string, name string) int64 {
-	// add 2s jitter to avoid a race condition between write_timeout and grace period
-	jitter := time.Second * 2
-	terminationGracePeriod := time.Second*30 + jitter
-
-	if envVars != nil {
-		if v, ok := envVars["write_timeout"]; ok && len(v) > 0 {
-			period, err := time.ParseDuration(v)
-			if err != nil {
-				glog.Warningf("Function %s failed to parse write_timeout: %s",
-					name, err.Error())
-			}
-
-			terminationGracePeriod = period + jitter
-		}
-	}
-
-	return int64(terminationGracePeriod.Seconds())
 }
 
 func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFactory) *corev1.Service {

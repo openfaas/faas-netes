@@ -137,17 +137,6 @@ func updateDeploymentSpec(
 
 		deployment.Spec.Template.Spec.Containers[0].Resources = *resources
 
-		var serviceAccount string
-
-		if request.Annotations != nil {
-			annotations := *request.Annotations
-			if val, ok := annotations["com.openfaas.serviceaccount"]; ok && len(val) > 0 {
-				serviceAccount = val
-			}
-		}
-
-		deployment.Spec.Template.Spec.ServiceAccountName = serviceAccount
-
 		secrets := k8s.NewSecretsClient(factory.Client)
 		existingSecrets, err := secrets.GetSecrets(functionNamespace, request.Secrets)
 		if err != nil {
@@ -167,11 +156,6 @@ func updateDeploymentSpec(
 
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
-
-		terminationGracePeriodSeconds :=
-			getTerminationGracePeriodSeconds(request.EnvVars, request.Service)
-
-		deployment.Spec.Template.Spec.TerminationGracePeriodSeconds = &terminationGracePeriodSeconds
 
 		// compare the annotations from args to the cache copy of the deployment annotations
 		// at this point we have already updated the annotations to the new value, if we
