@@ -150,7 +150,8 @@ operator:
 # The values for queueWorkerPro are merged with those under
 # the "queueWorker" section
 queueWorkerPro:
-  image: ghcr.io/openfaas/queue-worker-pro:0.1.0
+  image: ghcr.io/openfaasltd/queue-worker:0.1.2
+  enabled: false
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
