@@ -101,6 +101,9 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+        command:
+          - ./faas-netes
+          - -operator=false
         env:
         - name: port
           value: "8081"
