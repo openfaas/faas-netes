@@ -76,9 +76,11 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 
 > Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
 
-## Deploy OpenFaaS Community components
+## Deploy OpenFaaS Community Edition
 
-> OpenFaaS PRO customers should read on to the next section.
+> The Community Edition is meant for open source developers
+
+> OpenFaaS Pro customers should read on to the next section for production deployments.
 
 Now deploy OpenFaaS from the helm chart repo:
 
@@ -118,7 +120,8 @@ helm repo update \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn \
     --set generateBasicAuth=true \
-    --set openfaasPro=true
+    --set openfaasPro=true \
+    --set autoscaler.enabled=true
 ```
 
 The main change here is to add: `--set openfaasPro=true`
