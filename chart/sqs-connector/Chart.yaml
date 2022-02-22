@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Connect OpenFaaS functions to SQS topics
 name: sqs-connector
-version: 0.0.4
+version: 0.1.0
 sources:
 - https://github.com/openfaas/faas-netes
 home: https://www.openfaas.com
