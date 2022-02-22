@@ -1,7 +1,11 @@
+# The Kafka connector is an OpenFaaS Pro feature
+#
+# Purchase a license at https://openfaas.com/support/
+
 # You will need to create a license named "openfaas-license" - see the 
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaas/kafka-connector-pro:0.6.0
+image: ghcr.io/openfaasltd/kafka-connector:0.6.1
 
 # Output detailed logs from the consumer group's lifecycle
 sessionLogging: true

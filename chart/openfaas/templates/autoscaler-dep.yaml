@@ -1,26 +1,26 @@
-{{- if  .Values.proScaler.enabled }}
+{{- if  .Values.autoscaler.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: scaler
+    component: autoscaler
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: scaler
+  name: autoscaler
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  replicas: {{ .Values.proScaler.replicas }}
+  replicas: {{ .Values.autoscaler.replicas }}
   selector:
     matchLabels:
-      app: scaler
+      app: autoscaler
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "false"
       labels:
-        app: scaler
+        app: autoscaler
     spec:
       volumes:
       {{- if .Values.basic_auth }}
@@ -28,24 +28,24 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
-      {{- if .Values.proScaler.enabled }}
+      {{- if .Values.autoscaler.enabled }}
       - name: license
         secret:
           secretName: openfaas-license
       {{- end }}
       containers:
-      - name:  scaler
+      - name:  autoscaler
         resources:
-          {{- .Values.proScaler.resources | toYaml | nindent 12 }}
-      {{- if .Values.proScaler.enabled }}
-        image: {{ .Values.proScaler.image }}
+          {{- .Values.autoscaler.resources | toYaml | nindent 12 }}
+      {{- if .Values.autoscaler.enabled }}
+        image: {{ .Values.autoscaler.image }}
       {{- else }}
-        image: {{ .Values.proScaler.image }}
+        image: {{ .Values.autoscaler.image }}
       {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.proScaler.enabled }}
+        {{- if .Values.autoscaler.enabled }}
         command:
-          - "/usr/bin/scaler"
+          - "/usr/bin/autoscaler"
           - "-license-file=/var/secrets/license/license"
         {{- end }}
         env:
@@ -63,18 +63,18 @@ spec:
 
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
-          value: "/var/secrets/scaler"
+          value: "/var/secrets/autoscaler"
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
         volumeMounts:
-        {{- if .Values.proScaler.enabled }}
+        {{- if .Values.autoscaler.enabled }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
         {{- end }}
         - name: auth
           readOnly: true
-          mountPath: "/var/secrets/scaler"
+          mountPath: "/var/secrets/autoscaler"
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:

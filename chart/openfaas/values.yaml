@@ -1,18 +1,20 @@
 functionNamespace: openfaas-fn  # Default namespace for functions
 
-# See https://www.openfaas.com/support for more
+# Contact us via https://www.openfaas.com/support to purchase a license
 openfaasPro: false
 
-serviceType: NodePort
-exposeServices: true
-async: true
-httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (incompatible with Istio < 1.1.5)
-rbac: true
-clusterRole: false            # Set to true for multiple namespaces
-createCRDs: true
-basic_auth: true
-generateBasicAuth: false
+httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS core components
+clusterRole: false            # Set to true for multiple namespaces, pro scaler and CPU/RAM metrics in OpenFaaS REST API
+createCRDs: true              # Set to false if applying CRDs in another way
+
+basic_auth: true              # Authentication for core components, no good reason to disable this
+rbac: true                    # Kubernetes RBAC, no good reason to disable this
+generateBasicAuth: false      # Set to false if applying credentials separately from the chart, otherwise set to true
 securityContext: true
+
+exposeServices: true
+serviceType: NodePort        # serviceType for OpenFaaS gateway
+async: true                  # No known reason to disable this, kept for legacy reasons 
 
 # Set to true to use legacy / community-edition auto-scaling
 # when openfaasPro is set to true to use the original 
@@ -31,10 +33,10 @@ openfaasImagePullPolicy: "Always"
 # clusterRole is also recommended for collecting CPU/RAM metrics for Pro add-ons
 
 # OpenFaaS Pro
-# Advanced auto-scaling on RPS, CPU and in-flight requests
+# Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 # Includes: scale to zero
-proScaler:
-  image: alexellis2/openfaas-pro-scaler:0.1.3
+autoscaler:
+  image: ghcr.io/openfaasltd/autoscaler:0.2.0
   replicas: 1
   enabled: false
   resources:
@@ -46,6 +48,7 @@ proScaler:
 # OpenFaaS Pro
 # Original scale to zero feature
 # set "enabled=false" when using proScaler
+# since the proScaler handles scaling to zero now.
 faasIdler:
   image: ghcr.io/openfaas/faas-idler-pro:0.4.4
   replicas: 1
@@ -119,8 +122,8 @@ faasnetes:
   readTimeout: "60s"
   writeTimeout: "60s"
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
-  httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on Pods (incompatible with Istio < 1.1.5)
-  setNonRootUser: false
+  httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
+  setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
   readinessProbe:
     initialDelaySeconds: 2
     timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
