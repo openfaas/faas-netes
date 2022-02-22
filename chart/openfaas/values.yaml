@@ -102,7 +102,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.21.1
+  image: ghcr.io/openfaas/basic-auth:0.21.3
   replicas: 1
   resources:
     requests:
@@ -115,7 +115,7 @@ operatorPro:
   image: ghcr.io/openfaasltd/faas-netes:0.1.1
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.14.1
+  image: ghcr.io/openfaas/faas-netes:0.14.2
   readTimeout: "60s"
   writeTimeout: "60s"
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
@@ -136,7 +136,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.14.1
+  image: ghcr.io/openfaas/faas-netes:0.14.2
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
@@ -149,9 +149,10 @@ operator:
 # OpenFaaS Pro
 # The values for queueWorkerPro are merged with those under
 # the "queueWorker" section
+#
+# Enabled automatically when openfaasPro is set to true
 queueWorkerPro:
   image: ghcr.io/openfaasltd/queue-worker:0.1.2
-  enabled: false
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
@@ -192,7 +193,7 @@ alertmanager:
     limits:
       memory: "50Mi"
 
-# async provider
+# NATS is required for async
 nats:
   channel: "faas-request"
   external:
@@ -231,7 +232,7 @@ ingress:
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
 # https://github.com/openfaas-incubator/ingress-operator
 ingressOperator:
-  image: ghcr.io/openfaas/ingress-operator:0.6.7
+  image: ghcr.io/openfaas/ingress-operator:0.7.1
   replicas: 1
   create: false
   resources:
