@@ -23,16 +23,19 @@ func AsFunctionStatus(item appsv1.Deployment) *types.FunctionStatus {
 
 	labels := item.Spec.Template.Labels
 	function := types.FunctionStatus{
-		Name:              item.Name,
-		Replicas:          replicas,
-		Image:             functionContainer.Image,
-		AvailableReplicas: uint64(item.Status.AvailableReplicas),
-		InvocationCount:   0,
-		Labels:            &labels,
-		Annotations:       &item.Spec.Template.Annotations,
-		Namespace:         item.Namespace,
-		Secrets:           ReadFunctionSecretsSpec(item),
-		CreatedAt:         item.CreationTimestamp.Time,
+		Name:                   item.Name,
+		Replicas:               replicas,
+		Image:                  functionContainer.Image,
+		AvailableReplicas:      uint64(item.Status.AvailableReplicas),
+		InvocationCount:        0,
+		Labels:                 &labels,
+		Annotations:            &item.Spec.Template.Annotations,
+		Namespace:              item.Namespace,
+		Secrets:                ReadFunctionSecretsSpec(item),
+		CreatedAt:              item.CreationTimestamp.Time,
+		Constraints:            nodeSelectorToConstraint(item),
+		ReadOnlyRootFilesystem: hasReadOnlyRootFilesystem(item),
+		EnvVars:                map[string]string{},
 	}
 
 	req := &types.FunctionResources{Memory: functionContainer.Resources.Requests.Memory().String(), CPU: functionContainer.Resources.Requests.Cpu().String()}
@@ -48,8 +51,32 @@ func AsFunctionStatus(item appsv1.Deployment) *types.FunctionStatus {
 	for _, v := range functionContainer.Env {
 		if EnvProcessName == v.Name {
 			function.EnvProcess = v.Value
+			continue
 		}
+		function.EnvVars[v.Name] = v.Value
 	}
 
 	return &function
+}
+
+func nodeSelectorToConstraint(deploy appsv1.Deployment) []string {
+	nodeSelector := deploy.Spec.Template.Spec.NodeSelector
+	constraints := []string{}
+	for k, v := range nodeSelector {
+		constraints = append(constraints, k+"="+v)
+	}
+	return constraints
+}
+
+func hasReadOnlyRootFilesystem(function appsv1.Deployment) bool {
+	securityContext := function.Spec.Template.Spec.Containers[0].SecurityContext
+	if securityContext == nil {
+		return false
+	}
+
+	if securityContext.ReadOnlyRootFilesystem == nil {
+		return false
+	}
+
+	return *securityContext.ReadOnlyRootFilesystem
 }
