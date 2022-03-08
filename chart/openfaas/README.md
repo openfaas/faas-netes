@@ -101,9 +101,9 @@ PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-a
 echo "OpenFaaS admin password: $PASSWORD"
 ```
 
-## Deploy as an OpenFaaS PRO customer
+## Deploy as an OpenFaaS Pro customer
 
-* Create the required secret with your [OpenFaaS PRO license code](https://www.openfaas.com/support/):
+* Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/support/):
 
 ```bash
 kubectl create secret generic \
@@ -126,10 +126,31 @@ helm repo update \
 
 The main change here is to add: `--set openfaasPro=true`
 
+You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
+
 See also:
 * Scale-down to zero (in this document)
 * [OpenFaaS PRO SSO/OIDC](https://docs.openfaas.com/openfaas-pro/sso/)
 * [OpenFaaS PRO Kafka Event Connector](https://docs.openfaas.com/openfaas-pro/kafka-events/)
+
+## Test changes for the helm chart
+
+If you are working on a patch for the helm chart, you can deploy it directly from a local folder.
+
+You can run the following command from within the `faas-netes` folder, not the chart's folder.
+
+```sh
+helm upgrade openfaas --install chart/openfaas \
+    --namespace openfaas \
+    --set functionNamespace=openfaas-fn \
+    --set generateBasicAuth=true \
+    -f ./chart/openfaas/values.yaml \
+    -f ./chart/openfaas/values-ae.yaml
+```
+
+In the example above, I'm overlaying two additional YAML files for settings for the chart.
+
+You can override specific images by adding `--set gateway.image=` for instance.
 
 #### Generate basic-auth credentials
 
@@ -259,19 +280,6 @@ This option is good for those that have issues with or concerns about installing
     ```
 
 Now [verify your installation](#verify-the-installation).
-
-## Test a local helm chart
-
-You can run the following command from within the `faas-netes/chart` folder in the `faas-netes` repo.
-
-```sh
-helm upgrade openfaas --install chart/openfaas \
-    --namespace openfaas \
-    --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true
-```
-
-You can override specific images by adding `--set gateway.image=` for instance.
 
 ## Exposing services
 

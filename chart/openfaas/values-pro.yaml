@@ -1,0 +1,32 @@
+# Suggested additional overrides for OpenFaaS Pro users, 
+# in addition to (not instead of) values.yaml
+
+# Initial configuration to set Pro configurations on
+openfaasPro: true
+
+# Do not turn off, enables authentication on all core components
+generateBasicAuth: true
+
+# https://docs.openfaas.com/architecture/autoscaling/
+# The autoscaler is not enabled by default, but should be enabled here
+autoscaler:
+  enabled: true
+
+# A cluster role is required for OpenFaaS Pro due to:
+# 1) Autoscaling and metrics for functions - CPU / RAM
+# 2) Multiple namespace support
+# https://docs.openfaas.com/reference/namespaces/
+clusterRole: true
+
+# HPA CPU? 3 <=> 6
+# If you have purchased licenses for 6 gateway replicas for this environment
+# you can create a HPA rule to scale on CPU, but you must not scale beyond
+# what's been purchased.
+gateway:
+  replicas: 3
+
+# replicas x maxInflight = max concurrent messages processed.
+# 75 concurrent requests will be processed, 25 per queueWorker
+queueWorker:
+  replicas: 3
+  maxInflight: 25
