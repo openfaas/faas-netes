@@ -4,6 +4,11 @@
 # Initial configuration to set Pro configurations on
 openfaasPro: true
 
+# The operator mode supports the Function CustomResource
+# which enables tooling like ArgoCD / Flux v2 
+operator:
+  create: true
+
 # Do not turn off, enables authentication on all core components
 generateBasicAuth: true
 
