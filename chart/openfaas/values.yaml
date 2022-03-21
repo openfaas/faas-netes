@@ -257,6 +257,9 @@ ingress:
   tls:
   # Secrets must be manually created in the namespace.
 
+  ## You can specify the ingress controller by using the ingressClassName
+  #ingressClassName: nginx
+
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
 # https://github.com/openfaas-incubator/ingress-operator
 ingressOperator:
