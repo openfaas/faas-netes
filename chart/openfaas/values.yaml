@@ -36,7 +36,7 @@ openfaasImagePullPolicy: "Always"
 # Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 # Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.2.0
+  image: ghcr.io/openfaasltd/autoscaler:0.2.3
   replicas: 1
   enabled: false
   resources:
@@ -44,13 +44,17 @@ autoscaler:
       memory: "128Mi"
     limits:
       memory: "256Mi"
+  # When disableHorizontalScaling is set to true, then the autoscaler will 
+  # only scale to zero, without scaling replicas between the defined Min and Max
+  # count for the function
+  disableHorizontalScaling: false
 
 # OpenFaaS Pro
 # Original scale to zero feature
 # set "enabled=false" when using proScaler
 # since the proScaler handles scaling to zero now.
 faasIdler:
-  image: ghcr.io/openfaas/faas-idler-pro:0.4.4
+  image: ghcr.io/openfaasltd/faas-idler:0.5.0
   replicas: 1
   enabled: false
   inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
@@ -81,7 +85,7 @@ oidcAuthPlugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: ghcr.io/openfaas/openfaas-oidc-plugin:0.5.1
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.2
   securityContext: true
 
 gateway:

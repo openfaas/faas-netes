@@ -151,7 +151,7 @@ helm upgrade openfaas --install chart/openfaas \
     --set functionNamespace=openfaas-fn \
     --set generateBasicAuth=true \
     -f ./chart/openfaas/values.yaml \
-    -f ./chart/openfaas/values-ae.yaml
+    -f ./chart/openfaas/values-pro.yaml
 ```
 
 In the example above, I'm overlaying two additional YAML files for settings for the chart.

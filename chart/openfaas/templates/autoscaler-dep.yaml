@@ -47,6 +47,9 @@ spec:
         command:
           - "/usr/bin/autoscaler"
           - "-license-file=/var/secrets/license/license"
+      {{- if .Values.autoscaler.disableHorizontalScaling }}
+          - "-horizontal-scaling=false"
+      {{- end }}
         {{- end }}
         env:
         - name: gateway_url
