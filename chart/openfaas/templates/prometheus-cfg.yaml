@@ -128,7 +128,7 @@ data:
         rules:
         - alert: service_down
           expr: up == 0
-{{- if or (eq .Values.openfaasPro false) (eq .Values.ceScaling true) }}
+{{- if or (eq .Values.openfaasPro false) (eq (or .Values.ceScaling false) true) }}
         - alert: APIHighInvocationRate
           expr: sum(rate(gateway_function_invocation_total{code="200"}[10s])) BY (function_name) > 5
           for: 5s

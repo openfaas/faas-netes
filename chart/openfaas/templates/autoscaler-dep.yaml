@@ -47,7 +47,7 @@ spec:
         command:
           - "/usr/bin/autoscaler"
           - "-license-file=/var/secrets/license/license"
-      {{- if .Values.autoscaler.disableHorizontalScaling }}
+      {{- if eq (or .Values.autoscaler.disableHorizontalScaling false) true }}
           - "-horizontal-scaling=false"
       {{- end }}
         {{- end }}
