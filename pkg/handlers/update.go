@@ -91,14 +91,19 @@ func updateDeploymentSpec(
 	}
 
 	if len(deployment.Spec.Template.Spec.Containers) > 0 {
-		deployment.Spec.Template.Spec.Containers[0].Image = request.Image
+		idx, _ := k8s.FunctionContainer(*deployment)
+		if idx < 0 {
+			return fmt.Errorf("deployment is not a valid function spec"), http.StatusBadRequest
+		}
+
+		deployment.Spec.Template.Spec.Containers[idx].Image = request.Image
 
 		// Disabling update support to prevent unexpected mutations of deployed functions,
 		// since imagePullPolicy is now configurable. This could be reconsidered later depending
 		// on desired behavior, but will need to be updated to take config.
-		//deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
+		//deployment.Spec.Template.Spec.Containers[idx].ImagePullPolicy = v1.PullAlways
 
-		deployment.Spec.Template.Spec.Containers[0].Env = buildEnvVars(&request)
+		deployment.Spec.Template.Spec.Containers[idx].Env = buildEnvVars(&request)
 
 		factory.ConfigureReadOnlyRootFilesystem(request, deployment)
 		factory.ConfigureContainerUserID(deployment)
@@ -135,7 +140,7 @@ func updateDeploymentSpec(
 			return resourceErr, http.StatusBadRequest
 		}
 
-		deployment.Spec.Template.Spec.Containers[0].Resources = *resources
+		deployment.Spec.Template.Spec.Containers[idx].Resources = *resources
 
 		secrets := k8s.NewSecretsClient(factory.Client)
 		existingSecrets, err := secrets.GetSecrets(functionNamespace, request.Secrets)
@@ -154,8 +159,8 @@ func updateDeploymentSpec(
 			return err, http.StatusBadRequest
 		}
 
-		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
-		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
+		deployment.Spec.Template.Spec.Containers[idx].LivenessProbe = probes.Liveness
+		deployment.Spec.Template.Spec.Containers[idx].ReadinessProbe = probes.Readiness
 
 		// compare the annotations from args to the cache copy of the deployment annotations
 		// at this point we have already updated the annotations to the new value, if we

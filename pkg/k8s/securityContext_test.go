@@ -10,6 +10,7 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func readOnlyRootDisabled(t *testing.T, deployment *appsv1.Deployment) {
@@ -68,6 +69,9 @@ func readOnlyRootEnabled(t *testing.T, deployment *appsv1.Deployment) {
 func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
 	f := mockFactory()
 	deployment := &appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "testfunc",
+		},
 		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
@@ -91,6 +95,9 @@ func Test_configureReadOnlyRootFilesystem_Disabled_To_Disabled(t *testing.T) {
 func Test_configureReadOnlyRootFilesystem_Disabled_To_Enabled(t *testing.T) {
 	f := mockFactory()
 	deployment := &appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "testfunc",
+		},
 		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
@@ -115,6 +122,9 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Disabled(t *testing.T) {
 	f := mockFactory()
 	trueValue := true
 	deployment := &appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "testfunc",
+		},
 		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{
@@ -155,6 +165,9 @@ func Test_configureReadOnlyRootFilesystem_Enabled_To_Enabled(t *testing.T) {
 	f := mockFactory()
 	trueValue := true
 	deployment := &appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "testfunc",
+		},
 		Spec: appsv1.DeploymentSpec{
 			Template: apiv1.PodTemplateSpec{
 				Spec: apiv1.PodSpec{

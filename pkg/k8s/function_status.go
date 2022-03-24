@@ -6,6 +6,7 @@ package k8s
 import (
 	types "github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 )
 
 // EnvProcessName is the name of the env variable containing the function process
@@ -19,7 +20,7 @@ func AsFunctionStatus(item appsv1.Deployment) *types.FunctionStatus {
 		replicas = uint64(*item.Spec.Replicas)
 	}
 
-	functionContainer := item.Spec.Template.Spec.Containers[0]
+	_, functionContainer := FunctionContainer(item)
 
 	labels := item.Spec.Template.Labels
 	function := types.FunctionStatus{
@@ -69,7 +70,8 @@ func nodeSelectorToConstraint(deploy appsv1.Deployment) []string {
 }
 
 func hasReadOnlyRootFilesystem(function appsv1.Deployment) bool {
-	securityContext := function.Spec.Template.Spec.Containers[0].SecurityContext
+	_, c := FunctionContainer(function)
+	securityContext := c.SecurityContext
 	if securityContext == nil {
 		return false
 	}
@@ -79,4 +81,19 @@ func hasReadOnlyRootFilesystem(function appsv1.Deployment) bool {
 	}
 
 	return *securityContext.ReadOnlyRootFilesystem
+}
+
+// FunctionContainer returns the index and spec of the OpenFaaS function container
+// in the deployment. Use this method to safely retrieve the container spec, it protects
+// the controller from potential changes in the deployment spec by other Operators and
+// Admission webhooks in the cluster.
+//
+// idx will be -1 if the function container is not found.
+func FunctionContainer(function appsv1.Deployment) (idx int, c corev1.Container) {
+	for idx, container := range function.Spec.Template.Spec.Containers {
+		if container.Name == function.Name {
+			return idx, container
+		}
+	}
+	return -1, c
 }
