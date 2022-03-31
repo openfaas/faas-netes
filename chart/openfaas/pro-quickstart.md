@@ -25,6 +25,21 @@ helm upgrade openfaas --install chart/openfaas \
     --set queueWorker.replicas=1
 ```
 
+Or install with dashboard:
+
+```bash
+helm upgrade openfaas --install chart/openfaas \
+    --namespace openfaas \
+    --set functionNamespace=openfaas-fn \
+    --set generateBasicAuth=true \
+    -f ./chart/openfaas/values.yaml \
+    -f ./chart/openfaas/values-pro.yaml \
+    --set gateway.replicas=1 \
+    --set queueWorker.replicas=1 \
+    --set dashboard.enabled=true \
+    --set dashboard.publicURL=https://portal.exit.o6s.io
+```
+
 Confirm faas-netes and queue-worker versions are from ghcr.io/openfaasltd
 
 Confirm that autoscaler is deployed.
