@@ -50,6 +50,18 @@ autoscaler:
   disableHorizontalScaling: false
 
 # OpenFaaS Pro
+dashboard:
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.0.2-rc2
+  publicURL: https://dashboard.exit.o6s.io
+  replicas: 1
+  enabled: false
+  resources:
+    requests:
+      memory: "128Mi"
+    limits:
+      memory: "256Mi"
+
+# OpenFaaS Pro
 # Original scale to zero feature
 # set "enabled=false" when using proScaler
 # since the proScaler handles scaling to zero now.

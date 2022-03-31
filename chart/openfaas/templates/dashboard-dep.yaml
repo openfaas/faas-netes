@@ -1,26 +1,26 @@
-{{- if  .Values.autoscaler.enabled }}
+{{- if  .Values.dashboard.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: {{ template "openfaas.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: autoscaler
+    component: dashboard
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: autoscaler
+  name: dashboard
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  replicas: {{ .Values.autoscaler.replicas }}
+  replicas: {{ .Values.dashboard.replicas }}
   selector:
     matchLabels:
-      app: autoscaler
+      app: dashboard
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "false"
       labels:
-        app: autoscaler
+        app: dashboard
     spec:
       volumes:
       {{- if .Values.basic_auth }}
@@ -28,57 +28,65 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
-      {{- if .Values.autoscaler.enabled }}
+
       - name: license
         secret:
           secretName: openfaas-license
-      {{- end }}
+      - name: dashboard-jwt
+        secret:
+          secretName: dashboard-jwt
       containers:
-      - name:  autoscaler
+      - name:  dashboard
         resources:
-          {{- .Values.autoscaler.resources | toYaml | nindent 12 }}
-      {{- if .Values.autoscaler.enabled }}
-        image: {{ .Values.autoscaler.image }}
-      {{- else }}
-        image: {{ .Values.autoscaler.image }}
-      {{- end }}
+          {{- .Values.dashboard.resources | toYaml | nindent 12 }}
+        image: {{ .Values.dashboard.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.autoscaler.enabled }}
+
         command:
-          - "/usr/bin/autoscaler"
+          - "./server"
+        args:
           - "-license-file=/var/secrets/license/license"
-      {{- if eq (or .Values.autoscaler.disableHorizontalScaling false) true }}
-          - "-horizontal-scaling=false"
-      {{- end }}
-        {{- end }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
         env:
+
+        - name: base_href
+          value: /function/dashboard/
+      {{- if .Values.basic_auth }}
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: /var/secrets/gateway
+      {{- end }}
         - name: gateway_url
           value: "http://gateway.{{ .Release.Namespace }}:8080/"
+        - name: metrics_window
+          value: 60m
         - name: prometheus_host
           value: "prometheus.{{ .Release.Namespace }}"
         - name: prometheus_port
           value: "9090"
+        - name: public_url
+          value: {{ .Values.dashboard.publicURL }}
+        - name: jwt_mount_path
+          value: /var/secrets/dashboard-jwt
 
-        {{- if .Values.functionNamespace }}
-        - name: faas_function_suffix
-          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        volumeMounts:
+        {{- if .Values.basic_auth }}
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets/gateway"
         {{- end }}
 
-        {{- if .Values.basic_auth }}
-        - name: secret_mount_path
-          value: "/var/secrets/autoscaler"
-        - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
-        volumeMounts:
-        {{- if .Values.autoscaler.enabled }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
-        {{- end }}
-        - name: auth
+        - name: dashboard-jwt
           readOnly: true
-          mountPath: "/var/secrets/autoscaler"
-        {{- end }}
+          mountPath: "/var/secrets/dashboard-jwt"
+
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
