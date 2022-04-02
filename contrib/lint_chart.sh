@@ -1,9 +1,21 @@
 #!/bin/bash
+ROOT=$(git rev-parse --show-toplevel)
 
-for chart in `ls ./chart`; do
-  helm lint ./chart/${chart}
+status=0
+msg=''
+
+for chart in $ROOT/chart/*; do
+  name=$(basename $chart)
+  echo -e "\n\nLinting $name"
+  helm lint "$chart"
   if [ $? != 0 ]; then
-    exit 1
+    status=1
+    msg="$msg\n$name"
   fi
 done
 
+if [ $status != 0 ]; then
+  echo -e "Failures:\n$msg"
+fi
+
+exit $status
