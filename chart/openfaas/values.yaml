@@ -62,9 +62,9 @@ dashboard:
       memory: "256Mi"
 
 # OpenFaaS Pro
-# Original scale to zero feature
-# set "enabled=false" when using proScaler
-# since the proScaler handles scaling to zero now.
+# faasIdler is the original scale to zero feature, but must
+# now be set "enabled=false" when using the new autoscaler
+# since it handles scaling to zero
 faasIdler:
   image: ghcr.io/openfaasltd/faas-idler:0.5.0
   replicas: 1
