@@ -32,5 +32,4 @@ jobs:
         env:
           KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
           KUBERNETES_VERSION: v1.16.8 v1.17.4 v1.17.17 v1.18.6 v1.18.9 v1.20.4 v1.21.1
-        working-directory: chart
         run: ./contrib/lint_chart.sh
