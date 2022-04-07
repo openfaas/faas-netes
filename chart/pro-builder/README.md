@@ -1,14 +1,14 @@
-# OpenFaaS Pro Builder Chart
+# OpenFaaS Pro Function Builder Chart
 
-The [pro-builder](https://docs.openfaas.com/openfaas-pro/introduction) allows you to build functions from within your cluster using a REST API.
+Build OpenFaaS functions via a REST API
+
+The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) allows you to build functions from within your cluster using a REST API.
 
 ## Prerequisites
 
 - Obtain a license or trial
 
-  You will need an OpenFaaS Premium subscription to access PRO features.
-
-  Contact us to find out more and to start a free trial at: [openfaas.com/support](https://www.openfaas.com/support)
+  You will need a license for OpenFaaS Pro, contact us at: [openfaas.com/support](https://www.openfaas.com/support)
 
 - Install OpenFaaS
 
@@ -61,7 +61,7 @@ kubectl create secret generic -n openfaas \
 
 ## Install the Chart
 
-- Create the required secret with your OpenFaaS PRO license code:
+- Create the required secret with your OpenFaaS Pro license code:
 
 ```bash
 $ kubectl create secret generic \
@@ -70,7 +70,7 @@ $ kubectl create secret generic \
     --from-file license=$HOME/.openfaas/LICENSE
 ```
 
-- Add the OpenFaaS chart repo and deploy the `pro-builder` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
+- Add the OpenFaaS chart repo and deploy the `pro-builder` Pro chart. We recommend installing it in the same namespace as the rest of OpenFaaS
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
