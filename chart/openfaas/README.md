@@ -481,3 +481,4 @@ Additional OpenFaaS options in `values.yaml`.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
+
