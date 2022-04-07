@@ -3,10 +3,16 @@ name: Validate Chart
 on:
   push:
     paths:
-      - "chart/**"
+      - chart/**
+      - contrib/validate_chart.sh
+      - contrib/lint_chart.sh
+      - .github/workflows/helm.yaml
   pull_request:
     paths:
-      - "chart/**"
+      - chart/**
+      - contrib/validate_chart.sh
+      - contrib/lint_chart.sh
+      - .github/workflows/helm.yaml
 
 jobs:
   lint-chart:
