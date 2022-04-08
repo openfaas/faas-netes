@@ -1,6 +1,6 @@
-# OpenFaaS Nats Connector
+# Trigger OpenFaaS Functions from NATS Pub/Sub
 
-The [Nats connector](https://github.com/openfaas-incubator/nats-connector) invokes functions based on Nats topic annotations.
+The OpenFaaS [nats-connector](https://github.com/openfaas/nats-connector) invokes functions in response to events published on a NATS pub/sub subject.
 
 ## Prerequisites
 
@@ -46,14 +46,6 @@ See values.yaml for detailed configuration.
 ## Removing the nats-connector
 
 All control plane components can be cleaned up with helm:
-
-For Helm 2
-
-```sh
-$ helm delete --purge nats-connector
-```
-
-For Helm 3
 
 ```sh
 $ helm uninstall nats-connector
