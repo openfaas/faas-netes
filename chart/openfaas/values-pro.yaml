@@ -12,6 +12,12 @@ operator:
 # Do not turn off, enables authentication on all core components
 generateBasicAuth: true
 
+# Follow docs at: https://docs.openfaas.com/openfaas-pro/dashboard/
+# for setting up the new dashboard
+dashboard:
+  publicURL: https://dashboard.example.com
+  enabled: false
+
 # https://docs.openfaas.com/architecture/autoscaling/
 # The autoscaler is not enabled by default, but should be enabled here
 autoscaler:
