@@ -51,7 +51,7 @@ autoscaler:
 
 # OpenFaaS Pro
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.0.6
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.0.7
   publicURL: https://dashboard.example.com
   replicas: 1
   enabled: false
