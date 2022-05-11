@@ -101,7 +101,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.21.3
+  image: ghcr.io/openfaas/gateway:0.21.4
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -121,7 +121,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.21.3
+  image: ghcr.io/openfaas/basic-auth:0.21.4
   replicas: 1
   resources:
     requests:
