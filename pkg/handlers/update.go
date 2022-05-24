@@ -36,6 +36,12 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 			return
 		}
 
+		if err := ValidateDeployRequest(&request); err != nil {
+			wrappedErr := fmt.Errorf("validation failed: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
+			return
+		}
+
 		lookupNamespace := defaultNamespace
 		if len(request.Namespace) > 0 {
 			lookupNamespace = request.Namespace
