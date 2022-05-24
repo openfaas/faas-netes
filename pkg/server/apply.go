@@ -8,6 +8,7 @@ import (
 
 	faasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
+	"github.com/openfaas/faas-netes/pkg/handlers"
 	"github.com/openfaas/faas-provider/types"
 
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -30,6 +31,13 @@ func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.
 			w.Write([]byte(err.Error()))
 			return
 		}
+
+		if err := handlers.ValidateDeployRequest(&req); err != nil {
+			wrappedErr := fmt.Errorf("validation failed: %s", err.Error())
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
+			return
+		}
+
 		klog.Infof("Deployment request for: %s\n", req.Service)
 
 		namespace := defaultNamespace

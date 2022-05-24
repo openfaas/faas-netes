@@ -15,12 +15,31 @@ import (
 // 	k8s.io/kubernetes/pkg/util/validation/validation.go
 var validDNS = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
 
-// ValidateDeployRequest validates that the service name is valid for Kubernetes
-func ValidateDeployRequest(request *types.FunctionDeployment) error {
-	matched := validDNS.MatchString(request.Service)
+// validates that the service name is valid for Kubernetes
+func validateService(service string) error {
+	matched := validDNS.MatchString(service)
 	if matched {
 		return nil
 	}
 
-	return fmt.Errorf("(%s) must be a valid DNS entry for service name", request.Service)
+	return fmt.Errorf("service: (%s) is invalid, must be a valid DNS entry", service)
+}
+
+// ValidateDeployRequest validates that the service name is valid for Kubernetes
+func ValidateDeployRequest(request *types.FunctionDeployment) error {
+
+	if request.Service == "" {
+		return fmt.Errorf("service: is required")
+	}
+
+	err := validateService(request.Service)
+	if err != nil {
+		return err
+	}
+
+	if request.Image == "" {
+		return fmt.Errorf("image: is required")
+	}
+
+	return nil
 }
