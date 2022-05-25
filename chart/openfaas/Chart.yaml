@@ -2,7 +2,7 @@ apiVersion: v2
 type: application
 description: OpenFaaS - Serverless Functions Made Simple
 name: openfaas
-version: 10.0.23
+version: 10.0.24
 sources:
 - https://github.com/openfaas/faas
 - https://github.com/openfaas/faas-netes
@@ -16,5 +16,7 @@ keywords:
 maintainers:
 - name: alexellis
   email: alex@openfaas.com
+- name: welteki
+  email: han@openfaas.com
 - name: lucasroesler
   email: roesler.lucas@gmail.com
