@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3.1.0
         with:
           go-version: ${{ matrix.go-version }}
       - name: Set up QEMU
@@ -33,7 +33,7 @@ jobs:
         run: echo "GIT_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build x86_64 container into library
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
@@ -46,7 +46,7 @@ jobs:
             ghcr.io/${{ steps.get_repo_owner.outputs.repo_owner }}/faas-netes:${{ github.sha }}
 
       - name: Build multi-arch containers for validation only
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile

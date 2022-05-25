@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3.1.0
         with:
           go-version: ${{ matrix.go-version }}
       - name: Set up QEMU
@@ -51,7 +51,7 @@ jobs:
         run: echo "VERSION=$(git describe --tags --dirty)" >> $GITHUB_ENV
 
       - name: Push containers
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
