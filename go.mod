@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.81.0 // indirect
 	github.com/google/go-cmp v0.5.8
 	github.com/gorilla/mux v1.8.0
-	github.com/openfaas/faas-provider v0.18.9
+	github.com/openfaas/faas-provider v0.18.10
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.12.2
 	k8s.io/api v0.21.3
@@ -40,8 +40,6 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
-	go.uber.org/goleak v1.1.10 // indirect
-	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210525063256-abc453219eb5 // indirect
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c // indirect
