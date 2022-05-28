@@ -29,7 +29,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker:0.12.2
+        image: ghcr.io/openfaas/queue-worker:0.13.0
         imagePullPolicy: Always
         env:
         - name: faas_nats_address
@@ -56,7 +56,7 @@ spec:
         - name: "initial_retry_wait"
           value: "10s"
         - name: "retry_http_codes"
-          value: "429,502,500,504,408"
+          value: "408,429,500,502,503,504"
         - name: print_request_body
           value: "false"
         - name: print_response_body

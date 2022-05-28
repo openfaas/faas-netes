@@ -176,7 +176,13 @@ queueWorkerPro:
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
-  httpRetryCodes: "429,502,500,504,408"
+  # 408 Request Timeout message
+  # 429 Too Many Requests
+  # 500 Internal Server Error
+  # 502 Bad Gateway
+  # 503 Service Unavailable
+  # 504 Gateway Timeout
+  httpRetryCodes: "408,429,500,502,503,504"
   printRequestBody: false
   printResponseBody: false
 
