@@ -45,11 +45,16 @@ func AsFunctionStatus(item appsv1.Deployment) *types.FunctionStatus {
 		function.Limits = lim
 	}
 
+	envVars := make(map[string]string)
+
 	for _, v := range functionContainer.Env {
 		if EnvProcessName == v.Name {
 			function.EnvProcess = v.Value
 		}
+		envVars[v.Name] = v.Value
 	}
+
+	function.EnvVars = envVars
 
 	return &function
 }
