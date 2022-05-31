@@ -2,12 +2,30 @@
 # chart README for detailed instructions.
 
 # image is for the pro-builder API
-image: ghcr.io/openfaasltd/pro-builder:0.2.0
+proBuilder:
+  image: ghcr.io/openfaasltd/pro-builder:0.2.0
+  securityContext: {}
 
 # buildkit.image is for the buildkit daemon
 # Check for the latest release on GitHub: https://github.com/moby/buildkit/releases
 buildkit:
-  image: docker.io/moby/buildkit:v0.10.3
+  # image: moby/buildkit:v0.10.3
+  # rootless: false
+  # securityContext:
+  #   runAsUser: 0
+  #   runAsGroup: 0
+  #   privileged: true
+
+  # For a rootless configuration
+  image: moby/buildkit:master-rootless
+  rootless: true
+  securityContext:
+    # Needs Kubernetes >= 1.19
+    seccompProfile:
+      type: Unconfined
+    runAsUser: 1000
+    runAsGroup: 1000
+    privileged: false
 
 # disableHmac is used to authenticate requests and should be set to false
 disableHmac: false
@@ -15,7 +33,7 @@ disableHmac: false
 # enableLchown is usually set to false
 enableLchown: false
 
-imagePullPolicy: Always
+imagePullPolicy: IfNotPresent
 
 fullnameOverride: "pro-builder"
 
@@ -26,7 +44,4 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-buildkitSecurityContext:
-  privileged: true
 

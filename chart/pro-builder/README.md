@@ -116,7 +116,7 @@ kubectl logs -n openfaas \
 kubectl get events -n openfaas
 ```
 
-To test the builder head over to the [OpenFaaS Documentation](https://docs.openfaas.com/openfaas-pro/builder/)
+To test the builder head over to the [Function Builder API Documentation](https://docs.openfaas.com/openfaas-pro/builder/)
 
 ## Troubleshooting
 
@@ -128,9 +128,14 @@ See also: [rootless mode](https://github.com/moby/buildkit/blob/master/docs/root
 
 Additional pro-builder options in `values.yaml`.
 
-| Parameter                | Description                                                                            | Default                        |
-| ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `image`                  | Container image to use for the pro-builder            | See values.yaml                 |
+| Parameter                 | Description                                                                            | Default                        |
+| ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------ |
+| `image`                   | Container image to use for the pro-builder                                             | See values.yaml                |
+| `buildkit.image`          | Image version for the buildkit daemon                                                  | See values.yaml                |
+| `imagePullPolicy`         | The policy for pulling either of the containers deployed by this chart                 | `IfNotPresent`                       |
+| `replicas`                | How many replicas of buildkit and the pro-builder API to create                        | `1`                            |
+| `disableHmac`             | Used to authenticate requests and should be set to false                               | `false`                        |
+| `buildkitSecurityContext` | Used to set security policy for buildkit within your cluster                           | See values.yaml                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

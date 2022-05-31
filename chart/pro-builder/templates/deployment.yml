@@ -1,6 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+{{- if .Values.buildkit.rootless }}
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
+{{- end }}
   labels:
     app: {{ template "builder.name" . }}
     component: pro-builder
@@ -55,7 +59,7 @@ spec:
           emptyDir: {}
       containers:
       - name: pro-builder
-        image: {{ .Values.image }}
+        image: {{ .Values.proBuilder.image }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         args:
           - "-license-file=/var/secrets/license/license"
@@ -83,6 +87,10 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        {{- with .Values.proBuilder.securityContext }}
+        securityContext:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
         volumeMounts:
         - name: registry-secret
           readOnly: true
@@ -105,12 +113,15 @@ spec:
           - "--tlscert=/var/secrets/certs/server.crt"
           - "--tlskey=/var/secrets/certs/server.key"
           - "--tlscacert=/var/secrets/certs/ca.crt"
+{{- if .Values.buildkit.rootless }}
+          - "--oci-worker-no-process-sandbox"
+{{- end }}
         image: {{ .Values.buildkit.image }}
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         ports:
         - containerPort: 1234
           protocol: TCP
-        {{- with .Values.buildkitSecurityContext }}
+        {{- with .Values.buildkit.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
         {{- end }}
