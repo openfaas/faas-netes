@@ -2,10 +2,10 @@ Thanks for installing the pro-builder. Please follow the instructions below to g
 
 Check for errors for missing secrets/volumes:
 
-$ kubectl get events -n {{ .Release.Namespace }} -w
+$ kubectl get events -n {{ .Release.Namespace }} -w \
+    --sort-by=.metadata.creationTimestamp
 
 View the logs:
 
-$ kubectl logs -n {{ .Release.Namespace }} deploy/pro-builder
-$ kubectl logs -n {{ .Release.Namespace }} deploy/buildkit
-
+$ kubectl logs -n {{ .Release.Namespace }} deploy/pro-builder -c pro-builder
+$ kubectl logs -n {{ .Release.Namespace }} deploy/pro-builder -c buildkit

@@ -391,7 +391,7 @@ kubectl logs -n openfaas deploy/faas-idler
 All control plane components can be cleaned up with helm:
 
 ```sh
-helm delete openfaas --namespace openfaas
+helm uninstall -n openfaas openfaas
 ```
 
 Follow this by the following to remove all other associated objects:

@@ -142,11 +142,11 @@
    faas remove figlet --gateway $GATEWAY
    kubectl -n openfaas delete pod/client
 
-   helm delete --purge kafka-connector
-   helm delete --purge kf
+   helm uninstall -n openfaas kafka-connector
+   helm uninstall -n openfaas kf
    ```
 
    Optionally, also remove OpenFaaS:
    ```sh
-   helm delete --purge openfaas
+   helm uninstall -n openfaas openfaas
    ```

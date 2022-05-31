@@ -2,7 +2,7 @@
 
 Build OpenFaaS functions via a REST API
 
-The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) allows you to build functions from within your cluster using a REST API.
+The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) is used to build functions from within your cluster using a REST API.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) allows you to
 
   You must have a working OpenFaaS installed.
 
-## Pre-reqs
+## Installation
 
 Create a registry push secret for the Pro Builder to use to push images to your registry. This can be generated through `docker login`.
 
@@ -25,13 +25,18 @@ kubectl create secret generic registry-secret \
 
 Create a HMAC signing secret for use between the Pro Builder and your client:
 
-```
+```bash
 PAYLOAD=$(head -c 32 /dev/urandom |shasum | cut -d ' ' -f 1)
-kubectl create secret generic payload-secret \
-  --from-file payload-secret=payload.txt -n openfaas
 
 # Save a copy for later use
 echo $PAYLOAD > payload.txt
+```
+
+Create a secret with the contents of the signing secret:
+
+```bash
+kubectl create secret generic payload-secret \
+  --from-file payload-secret=payload.txt -n openfaas
 ```
 
 Generate mTLS certificates for BuildKit and the Pro Builder which are used to encrypt messages between the builder component and buildkit.
@@ -74,24 +79,50 @@ $ kubectl create secret generic \
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
+$ helm repo update
 $ helm upgrade pro-builder openfaas/pro-builder \
     --install \
     --namespace openfaas
 ```
 
+When installing from the faas-netes repository on your local computer:
+
+```sh
+$ helm upgrade pro-builder ./chart/pro-builder \
+    --install \
+    --namespace openfaas \
+    --values ./chart/pro-builder/values.yaml
+```
+
 > The above command will also update your helm repo to pull in any new releases.
 
-Check the status of the Pro Builder with:
+The Pod for the builder contains two containers:
+
+* pro-builder - the REST API for building functions
+* buildkit - the daemon for Buildkit
+
+Pass either to the logs command:
 
 ```
+# Check the logs of the pro-builder API
 kubectl logs -n openfaas \
-    deploy/pro-builder pro-builder
+  deploy/pro-builder -c pro-builder
 
-# Check events
+# Check the logs of the buildkit daemon
+kubectl logs -n openfaas \
+  deploy/pro-builder -c buildkit
+
+# Check the events for any missing secrets or volumes
 kubectl get events -n openfaas
 ```
 
-For end to end testing instructions, see: [Docs: Function Builder](https://docs.openfaas.com/openfaas-pro/builder/)
+To test the builder head over to the [OpenFaaS Documentation](https://docs.openfaas.com/openfaas-pro/builder/)
+
+## Troubleshooting
+
+If you see errors about permissions, then you may need to review the options for the securityContext.
+
+See also: [rootless mode](https://github.com/moby/buildkit/blob/master/docs/rootless.md)
 
 ## Configuration
 
@@ -108,5 +139,5 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 All control plane components can be cleaned up with helm:
 
 ```sh
-$ helm delete --purge pro-builder
+$ helm uninstall pro-builder --namespace openfaas
 ```

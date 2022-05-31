@@ -1,18 +1,21 @@
 # You will need to create a license named "openfaas-license" - see the 
 # chart README for detailed instructions.
 
+# image is for the pro-builder API
 image: ghcr.io/openfaasltd/pro-builder:0.2.0
 
-# Only set to true for testing
+# buildkit.image is for the buildkit daemon
+# Check for the latest release on GitHub: https://github.com/moby/buildkit/releases
+buildkit:
+  image: docker.io/moby/buildkit:v0.10.3
+
+# disableHmac is used to authenticate requests and should be set to false
 disableHmac: false
 
-# Usually set to false
+# enableLchown is usually set to false
 enableLchown: false
 
 imagePullPolicy: Always
-
-buildkit:
-  image: docker.io/moby/buildkit:v0.10.0
 
 fullnameOverride: "pro-builder"
 
@@ -24,4 +27,6 @@ tolerations: []
 
 affinity: {}
 
-securityContext: {}
+buildkitSecurityContext:
+  privileged: true
+

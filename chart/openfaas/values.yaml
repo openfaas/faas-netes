@@ -33,8 +33,8 @@ openfaasImagePullPolicy: "Always"
 # clusterRole is also recommended for collecting CPU/RAM metrics for Pro add-ons
 
 # OpenFaaS Pro
-# Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
-# Includes: scale to zero
+## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
+## Includes: scale to zero
 autoscaler:
   image: ghcr.io/openfaasltd/autoscaler:0.2.3
   replicas: 1
@@ -50,8 +50,10 @@ autoscaler:
   disableHorizontalScaling: false
 
 # OpenFaaS Pro
+## To use with port-forwarding, set publicURL to 
+## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.0.7
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.0.8
   publicURL: https://dashboard.example.com
   replicas: 1
   enabled: false
@@ -62,9 +64,9 @@ dashboard:
       memory: "256Mi"
 
 # OpenFaaS Pro
-# faasIdler is the original scale to zero feature, but must
-# now be set "enabled=false" when using the new autoscaler
-# since it handles scaling to zero
+## faasIdler is the original scale to zero feature, but must
+## now be set "enabled=false" when using the new autoscaler
+## since it handles scaling to zero
 faasIdler:
   image: ghcr.io/openfaasltd/faas-idler:0.5.0
   replicas: 1
@@ -78,7 +80,7 @@ faasIdler:
       memory: "64Mi"
 
 # OpenFaaS Pro
-# OIDC plugin for authentication on the OpenFaaS REST API
+## OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
   enabled: false
   verbose: false # debug setting

@@ -49,7 +49,9 @@ spec:
           secret:
             defaultMode: 420
             secretName: openfaas-license
-        - name: build-workspaces
+        - name: builder-workspace
+          emptyDir: {}
+        - name: buildkit-workspace
           emptyDir: {}
       containers:
       - name: pro-builder
@@ -91,7 +93,7 @@ spec:
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
-        - name: build-workspaces
+        - name: builder-workspace
           mountPath: /tmp/
           readOnly: false
         - name: client-certs
@@ -108,7 +110,7 @@ spec:
         ports:
         - containerPort: 1234
           protocol: TCP
-        {{- with .Values.securityContext }}
+        {{- with .Values.buildkitSecurityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
         {{- end }}
@@ -116,6 +118,9 @@ spec:
         - name: daemon-certs
           readOnly: true
           mountPath: /var/secrets/certs
+        - name: buildkit-workspace
+          mountPath: /tmp/
+          readOnly: false
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

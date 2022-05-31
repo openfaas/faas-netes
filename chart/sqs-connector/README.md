@@ -109,5 +109,5 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 All control plane components can be cleaned up with helm:
 
 ```sh
-$ helm delete --purge sqs-connector
+$ helm uninstall -n openfaas sqs-connector
 ```

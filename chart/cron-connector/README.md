@@ -54,5 +54,5 @@ See also: values.yaml
 All components can be cleaned up with helm:
 
 ```bash
-helm delete --purge cron-connector
+helm uninstall -n openfaas cron-connector
 ```

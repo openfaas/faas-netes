@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Build OpenFaaS functions via a REST API
-name: probuilder
-version: 0.2.0
+name: pro-builder
+version: 0.3.0
 sources:
 - https://github.com/openfaas/faas-netes
 home: https://www.openfaas.com
