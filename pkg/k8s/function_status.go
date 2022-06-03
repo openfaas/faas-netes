@@ -50,8 +50,9 @@ func AsFunctionStatus(item appsv1.Deployment) *types.FunctionStatus {
 	for _, v := range functionContainer.Env {
 		if EnvProcessName == v.Name {
 			function.EnvProcess = v.Value
+		} else {
+			envVars[v.Name] = v.Value
 		}
-		envVars[v.Name] = v.Value
 	}
 
 	function.EnvVars = envVars
