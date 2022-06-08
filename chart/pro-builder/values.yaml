@@ -3,7 +3,7 @@
 
 # image is for the pro-builder API
 proBuilder:
-  image: ghcr.io/openfaasltd/pro-builder:0.2.0
+  image: ghcr.io/openfaasltd/pro-builder:0.3.0
   securityContext: {}
 
 # buildkit.image is for the buildkit daemon
