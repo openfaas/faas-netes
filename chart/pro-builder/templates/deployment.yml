@@ -29,7 +29,8 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io/scrape: "false"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
       labels:
         app: {{ template "builder.name" . }}
         component: pro-builder
