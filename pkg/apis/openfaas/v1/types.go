@@ -8,6 +8,7 @@ import (
 // +genclient
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +kubebuilder:printcolumn:name="Image",type=string,JSONPath=`.spec.image`
 
 // Function describes an OpenFaaS function
 type Function struct {
