@@ -16,8 +16,10 @@ import (
 )
 
 // ProfileLister helps list Profiles.
+// All objects returned here must be treated as read-only.
 type ProfileLister interface {
 	// List lists all Profiles in the indexer.
+	// Objects returned here must be treated as read-only.
 	List(selector labels.Selector) (ret []*v1.Profile, err error)
 	// Profiles returns an object that can list and get Profiles.
 	Profiles(namespace string) ProfileNamespaceLister
@@ -48,10 +50,13 @@ func (s *profileLister) Profiles(namespace string) ProfileNamespaceLister {
 }
 
 // ProfileNamespaceLister helps list and get Profiles.
+// All objects returned here must be treated as read-only.
 type ProfileNamespaceLister interface {
 	// List lists all Profiles in the indexer for a given namespace.
+	// Objects returned here must be treated as read-only.
 	List(selector labels.Selector) (ret []*v1.Profile, err error)
 	// Get retrieves the Profile from the indexer for a given namespace and name.
+	// Objects returned here must be treated as read-only.
 	Get(name string) (*v1.Profile, error)
 	ProfileNamespaceListerExpansion
 }

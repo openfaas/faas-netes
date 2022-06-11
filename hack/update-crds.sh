@@ -1,12 +1,11 @@
 #!/bin/bash
 
-export controllergen="$GOPATH/bin/controller-gen"
+export controllergen="$GOBIN/controller-gen"
 export PKG=sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
 
-if [ ! -e "$gen" ]
-then
-echo "Getting $PKG"
-    go get $PKG
+if [ ! -e "$controllergen" ]; then
+  echo "Getting $PKG"
+  go install $PKG
 fi
 
 "$controllergen" \
