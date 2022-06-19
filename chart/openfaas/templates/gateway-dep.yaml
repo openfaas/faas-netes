@@ -137,6 +137,12 @@ spec:
           value: "{{ .Values.nats.channel }}"
         {{- end }}
         {{- end }}
+        {{- if or .Values.nats.external.enabled (eq .Values.nats.queueMode "jetstream") }}
+        {{- if eq .Values.nats.queueMode "jetstream" }}
+        - name: faas_nats_jetstream
+          value: "true"
+        {{- end }}
+        {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
           value: "true"
