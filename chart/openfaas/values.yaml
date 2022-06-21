@@ -205,7 +205,7 @@ queueWorker:
 # monitoring and auto-scaling components
 # both components
 prometheus:
-  image: prom/prometheus:v2.11.0
+  image: prom/prometheus:v2.36.2
   create: true
   resources:
     requests:
