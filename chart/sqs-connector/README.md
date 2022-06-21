@@ -1,4 +1,4 @@
-# OpenFaaS PRO SQS Connector
+# OpenFaaS Pro SQS Connector
 
 The SQS connector can be used to invoke functions from an AWS SQS queue.
 
