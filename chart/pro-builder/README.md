@@ -160,9 +160,17 @@ To test the builder head over to the [Function Builder API Documentation](https:
 
 ## Troubleshooting
 
+### Errors due to permissions
+
 If you see errors about permissions, then you may need to review the options for the securityContext.
 
 See also: [rootless mode](https://github.com/moby/buildkit/blob/master/docs/rootless.md)
+
+### Errors due to authentication
+
+If you're having issues getting your registry authentication to work, then why not try out ttl.sh, a free, ephemeral container registry. [ttl.sh](https://ttl.sh) is a public service run by Replicated, which allows you to push and pull images without authentication.
+
+Once you've seen the building work end to end, get in touch with us and we'll try to help you with your authentication.
 
 ## Configuration
 
