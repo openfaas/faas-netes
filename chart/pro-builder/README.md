@@ -10,7 +10,13 @@ The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) is used to bu
 
   You will need a license for OpenFaaS Pro, contact us at: [openfaas.com/support](https://www.openfaas.com/support)
 
-You do not need OpenFaaS to be installed to use the builder, however you will need the openfaas namespace to have been created.
+- A container image registry that is accessible from your cluster
+
+  You can generate a valid container registry login file by running `faas-cli registry-login`, or by disabling the keychain in Docker, running `docker login` and then using your own `$HOME/.docker/config.json` file.
+
+- OpenFaaS pre-installed
+
+  You do not need OpenFaaS to be installed to use the builder, however you will need the openfaas namespace to have been created.
 
 ## Installation
 
