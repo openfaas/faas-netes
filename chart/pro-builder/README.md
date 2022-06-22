@@ -6,13 +6,11 @@ The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) is used to bu
 
 ## Prerequisites
 
-- Obtain a license or trial
+- Obtain a license key
 
   You will need a license for OpenFaaS Pro, contact us at: [openfaas.com/support](https://www.openfaas.com/support)
 
-- Install OpenFaaS
-
-  You must have a working OpenFaaS installed.
+You do not need OpenFaaS to be installed to use the builder, however you will need the openfaas namespace to have been created.
 
 ## Installation
 
@@ -80,12 +78,50 @@ $ kubectl create secret generic \
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
 $ helm repo update
-$ helm upgrade pro-builder openfaas/pro-builder \
-    --install \
-    --namespace openfaas
 ```
 
-When installing from the faas-netes repository on your local computer:
+Next, you need to decide whether you're going to run the builder as root, or in a rootless, restricted mode for production.
+
+Create a `custom-values.yaml` file accordingly.
+
+Root mode, for development, or where rootless for some reason isn't working:
+
+```yaml
+buildkit:
+  image: moby/buildkit:v0.10.3
+  rootless: false
+  securityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    privileged: true
+```
+
+Rootless mode (preferred, if possible):
+
+```yaml
+buildkit:
+  # For a rootless configuration
+  image: moby/buildkit:master-rootless
+  rootless: true
+  securityContext:
+    # Needs Kubernetes >= 1.19
+    seccompProfile:
+      type: Unconfined
+    runAsUser: 1000
+    runAsGroup: 1000
+    privileged: false
+```
+
+Then install the chart using its official path and the custom YAML file:
+
+```sh
+$ helm upgrade pro-builder openfaas/pro-builder \
+    --install \
+    --namespace openfaas \
+    -f custom-values.yaml
+```
+
+When installing from the faas-netes repository on your local computer, whilst making changes or customising the chart, you can run this command instead from the faas-netes folder:
 
 ```sh
 $ helm upgrade pro-builder ./chart/pro-builder \
@@ -93,8 +129,6 @@ $ helm upgrade pro-builder ./chart/pro-builder \
     --namespace openfaas \
     --values ./chart/pro-builder/values.yaml
 ```
-
-> The above command will also update your helm repo to pull in any new releases.
 
 The Pod for the builder contains two containers:
 
