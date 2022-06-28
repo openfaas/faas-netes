@@ -172,6 +172,14 @@ operator:
     requests:
       memory: "120Mi"
       cpu: "50m"
+     
+# The values for jetstreamQueueWorker are merged with those under
+# the "queueWorkerPro" and "queueWorker" section
+#  
+# Enable automatically when nats.queueMode is set to "jetstream"
+jetstreamQueueWorker:
+  image: docker.io/welteki2/jetstream-queue-worker:dev-amd64
+  durableName: "faas-workers"
 
 # OpenFaaS Pro
 # The values for queueWorkerPro are merged with those under
