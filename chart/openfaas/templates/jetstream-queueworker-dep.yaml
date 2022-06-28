@@ -1,4 +1,4 @@
-{{- if and .Values.async (not (eq .Values.nats.queueMode "jetstream")) }}
+{{- if and .Values.async (eq .Values.nats.queueMode "jetstream") }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,17 +18,12 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io/scrape: "false"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
       labels:
         app: queue-worker
     spec:
       volumes:
-      {{- if .Values.basic_auth }}
-      - name: auth
-        secret:
-          secretName: basic-auth
-      {{- end }}
-
       {{- if .Values.openfaasPro }}
       - name: license
         secret:
@@ -38,39 +33,29 @@ spec:
       - name:  queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
-        {{- if .Values.openfaasPro }}
-        image: {{ .Values.queueWorkerPro.image }}
-      {{- else }}
-        image: {{ .Values.queueWorker.image }}
-      {{- end }}
+        image: {{ .Values.jetstreamQueueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.openfaasPro }}
         command:
-          - "/worker"
+          - "jetstream-queue-worker"
+          {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
-        {{- end }}
+          {{- end }}
         env:
         {{- if .Values.nats.external.enabled }}
-        - name: faas_nats_address
+        - name: nats_host
           value: "{{ .Values.nats.external.host }}"
-        - name: faas_nats_port
+        - name: nats_port
           value: "{{ .Values.nats.external.port }}"
-        - name: faas_nats_cluster_name
-          value: "{{ .Values.nats.external.clusterName }}"
         {{- else }}
-        - name: faas_nats_address
+        - name: nats_host
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end}}
-        - name: faas_nats_channel
+        - name: nats_stream
           value: "{{ .Values.nats.channel }}"
-        - name: faas_nats_queue_group
-          value: "{{ .Values.queueWorker.queueGroup }}"
-        - name: faas_gateway_address
-          value: "gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
-        {{- if .Values.functionNamespace }}
-        - name: faas_function_suffix
-          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
-        {{- end }}
+        - name: nats_durable
+          value: "{{ .Values.jetstreamQueueWorker.durableName }}"
+        - name: gateway_address
+          value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: ack_wait
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
@@ -89,25 +74,12 @@ spec:
           value: "{{ .Values.queueWorkerPro.printRequestBody }}"
         - name: print_response_body
           value: "{{ .Values.queueWorkerPro.printResponseBody }}"
-        {{- if .Values.openfaasPro }}
-        - name: tls_insecure
-          value: "{{ .Values.queueWorkerPro.insecureTLS }}"
-        {{- end }}
 
-        {{- if .Values.basic_auth }}
-        - name: secret_mount_path
-          value: "/var/secrets/gateway"
-        - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
         volumeMounts:
         {{- if .Values.openfaasPro }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
-        {{- end }}
-        - name: auth
-          readOnly: true
-          mountPath: "/var/secrets/gateway"
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
