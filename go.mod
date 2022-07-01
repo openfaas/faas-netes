@@ -1,6 +1,6 @@
 module github.com/openfaas/faas-netes
 
-go 1.17
+go 1.18
 
 require (
 	cloud.google.com/go v0.81.0 // indirect

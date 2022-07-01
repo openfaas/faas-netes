@@ -231,6 +231,7 @@ func runController(setup serverSetup) {
 	}
 
 	faasProvider.Serve(&bootstrapHandlers, &config.FaaSConfig)
+
 }
 
 // runOperator runs the CRD Operator
