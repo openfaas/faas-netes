@@ -54,6 +54,8 @@ spec:
           value: "{{ .Values.nats.channel }}"
         - name: nats_durable
           value: "{{ .Values.jetstreamQueueWorker.durableName }}"
+        - name: nats_stream_replication
+          value: "{{ .Values.nats.streamReplication }}"
         - name: gateway_address
           value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: ack_wait

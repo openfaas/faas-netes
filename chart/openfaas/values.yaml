@@ -241,6 +241,7 @@ stan:
 nats:
   channel: "faas-request"
   queueMode: ""
+  streamReplication: 1
   external:
     clusterName: ""
     enabled: false
