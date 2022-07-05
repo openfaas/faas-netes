@@ -126,6 +126,12 @@ spec:
           value: "{{ .Values.nats.channel }}"
         {{- end }}
         {{- end }}
+        {{- if .Values.gateway.extraEnv }}
+        {{- range $k, $v := .Values.gateway.extraEnv }}
+        - name: {{ $v.name }}
+          value: {{ $v.value }}
+        {{- end }}
+        {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
           value: "true"

@@ -109,6 +109,12 @@ gateway:
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
   replicas: 1
   scaleFromZero: true
+  # You can pass extra environment variables to gateway application e.g
+  # extraEnv:
+  #   - name: faas_prometheus_host
+  #     value: "prometheus.monitoring.svc.cluster.local"
+  #   - name: faas_prometheus_port
+  #     value: "9090"
   # change the port when creating multiple releases in the same baremetal cluster
   nodePort: 31112
   maxIdleConns: 1024
