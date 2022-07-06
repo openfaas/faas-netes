@@ -26,6 +26,35 @@ data:
         scrape_interval: 10s
         static_configs:
           - targets: ['localhost:9090']
+      # Capture endpoints in the openfaas namespace with a scrape annotation
+      # such as the gateway-provider service.
+      - job_name: 'openfaas-endpoints'
+        kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openfaas
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_service_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          action: replace
+          target_label: kubernetes_name
+        - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+          separator: ;
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          target_label: __address__
+          replacement: $1:$2
+          action: replace
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        # - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_port]
+        #   action: keep
+        #   regex: true
       - job_name: 'kubernetes-pods'
         scrape_interval: 5s
         honor_labels: false
