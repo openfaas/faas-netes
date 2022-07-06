@@ -129,7 +129,7 @@ spec:
         {{- if .Values.gateway.extraEnv }}
         {{- range $k, $v := .Values.gateway.extraEnv }}
         - name: {{ $v.name }}
-          value: {{ $v.value }}
+          value: "{{ $v.value }}"
         {{- end }}
         {{- end }}
         {{- if .Values.basic_auth }}
