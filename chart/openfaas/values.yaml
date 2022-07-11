@@ -36,7 +36,7 @@ openfaasImagePullPolicy: "Always"
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.2.3
+  image: ghcr.io/openfaasltd/autoscaler:0.2.4
   replicas: 1
   enabled: false
   resources:
@@ -103,7 +103,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.22.0
+  image: ghcr.io/openfaas/gateway:0.23.0
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -123,7 +123,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.21.4
+  image: ghcr.io/openfaas/basic-auth:0.23.0
   replicas: 1
   resources:
     requests:
@@ -131,13 +131,13 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.4
+  image: ghcr.io/openfaasltd/faas-netes:0.1.5
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.4
+  image: ghcr.io/openfaasltd/faas-netes:0.1.5
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.15.0
+  image: ghcr.io/openfaas/faas-netes:0.15.1
   readTimeout: "60s"
   writeTimeout: "60s"
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
@@ -158,7 +158,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.15.0
+  image: ghcr.io/openfaas/faas-netes:0.15.1
   create: false
   # set this to false when creating multiple releases in the same cluster
   # must be true for the first one only
