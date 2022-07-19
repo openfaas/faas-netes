@@ -117,6 +117,13 @@ gateway:
   # Custom logs provider url. For example openfaas-loki would be
   # "http://ofloki-openfaas-loki.openfaas:9191/"
   logsProviderURL: ""
+
+  # Set to true for Istio users as a workaround for:
+  # https://github.com/openfaas/faas/issues/1721
+  probeFunctions: false
+
+  # See the HPA rule from the Customer Community
+  # https://github.com/openfaas/openfaas-pro/blob/master/gateway-hpa.yaml
   resources:
     requests:
       memory: "120Mi"

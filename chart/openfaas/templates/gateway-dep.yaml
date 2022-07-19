@@ -211,6 +211,8 @@ spec:
             value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
+          - name: probe_functions
+            value: "{{ .Values.gateway.probeFunctions }}"
         ports:
         - containerPort: 8081
           protocol: TCP
