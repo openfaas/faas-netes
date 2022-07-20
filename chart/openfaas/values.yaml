@@ -178,7 +178,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: docker.io/welteki2/jetstream-queue-worker:dev-4
+  image: docker.io/welteki2/jetstream-queue-worker:dev-5
   durableName: "faas-workers"
 
 # OpenFaaS Pro
