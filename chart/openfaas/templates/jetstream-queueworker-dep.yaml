@@ -54,10 +54,10 @@ spec:
           value: "{{ .Values.nats.channel }}"
         - name: nats_durable
           value: "{{ .Values.jetstreamQueueWorker.durableName }}"
-        - name: nats_stream_replication
+        - name: nats_stream_replicas
           value: "{{ .Values.nats.streamReplication }}"
-        - name: gateway_address
-          value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        - name: gateway_url
+          value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}:8080"
         - name: ack_wait
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
