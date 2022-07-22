@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "queue-worker.name" . }}
+    component: queue-worker
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "queue-worker.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+        app: {{ template "queue-worker.name" . }}
+        component: queue-worker
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+      labels:
+        app: {{ template "queue-worker.name" . }}
+        component: queue-worker
+    spec:
+      volumes:
+      - name: license
+        secret:
+          secretName: openfaas-license
+      containers:
+      - name:  queue-worker
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        command:
+          - "jetstream-queue-worker"
+          - "-license-file=/var/secrets/license/license"
+        env:
+            - name: "nats_host"
+              value: "{{ .Values.nats.host }}"
+            - name: "nats_port"
+              value: "{{ .Values.nats.port }}"
+            - name: "nats_stream"
+              value: "{{ .Values.nats.stream.name }}"
+            - name: "nats_durable"
+              value: "{{ .Values.nats.consumer.durableName }}"
+            - name: "nats_stream_replicas"
+              value: "{{ .Values.nats.stream.replicas }}"
+            - name:  "max_reconnect"
+              value: "{{ .Values.nats.reconnect.attempts }}"
+            - name: "reconnect_delay"
+              value: "{{ .Values.nats.reconnect.delay }}"
+            - name: "gateway_url"
+              value: "{{ .Values.gateway.host }}:{{ .Values.gateway.port }}"
+            - name: "max_inflight"
+              value: "{{ .Values.maxInflight }}"
+
+            - name: "max_retry_attempts"
+              value: "{{ .Values.maxRetryAttempts }}"
+            - name: "max_retry_wait"
+              value: "{{ .Values.maxRetryWait }}"
+            - name: "initial_retry_wait"
+              value: "{{ .Values.initialRetryWait }}"
+            - name: "retry_http_codes"
+              value: "{{ .Values.httpRetryCodes }}"
+
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
+
+        volumeMounts:
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
