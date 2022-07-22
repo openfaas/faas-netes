@@ -1,0 +1,44 @@
+image: ghcr.io/openfaasltd/jetstream-queue-worker:0.1.0-rc2
+
+replicas: 1
+
+maxInflight: 1
+
+maxRetryAttempts: "10"
+maxRetryWait: "120s"
+initialRetryWait: "10s"
+# 408 Request Timeout message
+# 429 Too Many Requests
+# 500 Internal Server Error
+# 502 Bad Gateway
+# 503 Service Unavailable
+# 504 Gateway Timeout
+httpRetryCodes: "408,429,500,502,503,504"
+
+gateway:
+  host: "http://gateway.openfaas"
+  port: "8080"
+
+nats:
+  host: "nats.openfaas"
+  port: "4222"
+  reconnect:
+    attempts: 120
+    delay: "2s"
+  stream:
+    name: "faas-request"
+    replicas: 1
+  consumer:
+    durableName: "faas-workers"
+
+logs:
+  debug: false
+  format: "console"
+
+imagePullPolicy: IfNotPresent
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
