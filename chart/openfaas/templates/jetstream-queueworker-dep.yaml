@@ -62,6 +62,10 @@ spec:
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
           value: "{{ .Values.queueWorker.maxInflight }}"
+        - name: "debug"
+          value: "{{ .Values.jetstreamQueueWorker.logs.debug }}"
+        - name: "log_encoding"
+          value: "{{ .Values.jetstreamQueueWorker.logs.format }}"
 
         # OpenFaaS PRO license required
         - name: "max_retry_attempts"

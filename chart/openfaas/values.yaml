@@ -180,6 +180,9 @@ operator:
 jetstreamQueueWorker:
   image: ghcr.io/openfaasltd/jetstream-queue-worker:0.1.0-rc2
   durableName: "faas-workers"
+  logs:
+    debug: false
+    format: "console"
 
 # OpenFaaS Pro
 # The values for queueWorkerPro are merged with those under
