@@ -66,6 +66,8 @@ spec:
           value: "{{ .Values.jetstreamQueueWorker.logs.debug }}"
         - name: "log_encoding"
           value: "{{ .Values.jetstreamQueueWorker.logs.format }}"
+        - name: upstream_timeout
+          value: "{{ .Values.gateway.upstreamTimeout }}"
 
         # OpenFaaS PRO license required
         - name: "max_retry_attempts"
