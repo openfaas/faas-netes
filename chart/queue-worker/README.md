@@ -10,5 +10,6 @@ helm upgrade slow-queue --install chart/queue-worker \
   --namespace openfaas \
   --set maxInflight=5 \
   --set nats.stream.name=slow-queue \
-  --set nats.consumer.durableName=slow-queue-workers
+  --set nats.consumer.durableName=slow-queue-workers \
+  --set upstreamTimeout=15m
 ```
