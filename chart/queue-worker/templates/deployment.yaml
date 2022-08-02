@@ -55,6 +55,8 @@ spec:
               value: "{{ .Values.gateway.host }}:{{ .Values.gateway.port }}"
             - name: "max_inflight"
               value: "{{ .Values.maxInflight }}"
+            - name: "upstream_timeout"
+              value: "{{ .Values.upstreamTimeout }}"
 
             - name: "max_retry_attempts"
               value: "{{ .Values.maxRetryAttempts }}"
