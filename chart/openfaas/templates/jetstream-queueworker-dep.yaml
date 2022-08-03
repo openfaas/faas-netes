@@ -82,6 +82,10 @@ spec:
           value: "{{ .Values.queueWorkerPro.printRequestBody }}"
         - name: print_response_body
           value: "{{ .Values.queueWorkerPro.printResponseBody }}"
+        {{- if .Values.openfaasPro }}
+        - name: "tls_insecure"
+          value: "{{ .Values.queueWorkerPro.insecureTLS }}"
+        {{- end }}
 
         volumeMounts:
         {{- if .Values.openfaasPro }}
