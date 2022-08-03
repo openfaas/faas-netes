@@ -202,7 +202,6 @@ queueWorker:
   replicas: 1
   # Control the concurrent invocations
   maxInflight: 1
-  gatewayInvoke: true
   queueGroup: "faas"
   ackWait: "60s"
   resources:
