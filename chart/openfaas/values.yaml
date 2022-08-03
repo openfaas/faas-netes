@@ -192,6 +192,7 @@ queueWorkerPro:
   # 503 Service Unavailable
   # 504 Gateway Timeout
   httpRetryCodes: "408,429,500,502,503,504"
+  insecureTLS: false
   printRequestBody: false
   printResponseBody: false
 
