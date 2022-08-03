@@ -67,8 +67,6 @@ spec:
           value: "{{ .Values.queueWorker.queueGroup }}"
         - name: faas_gateway_address
           value: "gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
-        - name: "gateway_invoke"
-          value: "{{ .Values.queueWorker.gatewayInvoke }}"
         {{- if .Values.functionNamespace }}
         - name: faas_function_suffix
           value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
