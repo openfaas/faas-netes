@@ -196,7 +196,7 @@ queueWorkerPro:
   printResponseBody: false
 
 queueWorker:
-  image: ghcr.io/openfaas/queue-worker:0.13.0
+  image: ghcr.io/openfaas/queue-worker:0.13.1
   # Control HA of queue-worker
   replicas: 1
   # Control the concurrent invocations
