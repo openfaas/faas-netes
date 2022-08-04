@@ -17,6 +17,8 @@ initialRetryWait: "10s"
 # 504 Gateway Timeout
 httpRetryCodes: "408,429,500,502,503,504"
 
+insecureTLS: false
+
 gateway:
   host: "http://gateway.openfaas"
   port: "8080"
