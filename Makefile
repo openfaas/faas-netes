@@ -85,7 +85,8 @@ verify-charts:
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/nats-connector/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/mqtt-connector/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/pro-builder/values.yaml && \
-	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sqs-connector/values.yaml
+	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sqs-connector/values.yaml && \
+	arkade chart verify --verbose=$(VERBOSE) -f ./chart/queue-worker/values.yaml
 
 charts-only:
 	@cd chart && \
@@ -95,11 +96,11 @@ charts-only:
 		helm package nats-connector/ && \
 		helm package mqtt-connector/ && \
 		helm package pro-builder/ && \
-		helm package sqs-connector/
+		helm package sqs-connector/ && \
+		helm package queue-worker/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh
-
 
 render-charts:
 	./contrib/create-static-manifest.sh
