@@ -445,14 +445,14 @@ Additional OpenFaaS options in `values.yaml`.
 | `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
 | `ingressOperator.image` | Container image used in ingress-operator| `openfaas/ingress-operator:0.6.2` |
 | `ingressOperator.resources` | Limits and requests for memory and CPU usage | Memory Requests: 25Mi |
-| `faasnetes.readTimeout` | Queue worker read timeout | `60s` |
-| `faasnetes.writeTimeout` | Queue worker write timeout | `60s` |
+| `faasnetes.readTimeout` | Read timeout for the faas-netes API | `60s` |
+| `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `60s` |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
 | `gateway.directFunctions` | Invoke functions directly using `Service` without delegating to the provider | `false` |
 | `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
-| `gateway.readTimeout` | Queue worker read timeout | `65s` |
-| `gateway.writeTimeout` | Queue worker write timeout | `65s` |
+| `gateway.readTimeout` | Read timeout for the gateway API | `65s` |
+| `gateway.writeTimeout` | Write timeout for the gateway API | `65s` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `gateway.maxIdleConns` | Set max idle connections from gateway to functions | `1024` |
