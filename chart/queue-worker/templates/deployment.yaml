@@ -57,6 +57,8 @@ spec:
               value: "{{ .Values.maxInflight }}"
             - name: "upstream_timeout"
               value: "{{ .Values.upstreamTimeout }}"
+            - name: "tls_insecure"
+              value: "{{ .Values.insecureTLS }}"
 
             - name: "max_retry_attempts"
               value: "{{ .Values.maxRetryAttempts }}"

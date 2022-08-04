@@ -36,6 +36,7 @@ helm upgrade slow-queue chart/queue-worker \
 | `initialRetryWait` | The amount of time to wait for the first retry | `10s` |
 | `httpRetryCodes` | A comma-separated list of HTTP status codes which the queue worker will retry when received from a function | `408,429,500,502,503,504` |
 | `gateway.host` | The host at which the OpenFaaS gateway can be reached | `http://gateway.openfaas` |
+| `insecureTLS` | Enable insecure tls for callbacks | `false` |
 | `gateway.port` | The port at which the OpenFaaS gateway can be reached | `8080` |
 | `nats.host` | The host at which the NATS JetStream serber can be reached | `nats.openfaas` |
 | `nats.port` | The part at which the NATS JetStream server can be reached | `4222` |
