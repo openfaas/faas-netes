@@ -167,9 +167,6 @@ faasnetes:
 operator:
   image: ghcr.io/openfaas/faas-netes:0.15.1
   create: false
-  # set this to false when creating multiple releases in the same cluster
-  # must be true for the first one only
-  createCRD: true
   resources:
     requests:
       memory: "120Mi"
