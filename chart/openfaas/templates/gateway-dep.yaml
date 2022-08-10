@@ -1,4 +1,6 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- $providerReadTimeout :=  default .Values.gateway.readTimeout .Values.faasnetes.readTimeout }}
+{{- $providerWriteTimeout :=  default .Values.gateway.writeTimeout .Values.faasnetes.writeTimeout }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -188,9 +190,9 @@ spec:
           - name: profiles_namespace
             value: {{ .Release.Namespace | quote }}
           - name: read_timeout
-            value: "{{ .Values.faasnetes.readTimeout }}"
+            value: "{{ $providerReadTimeout }}"
           - name: write_timeout
-            value: "{{ .Values.faasnetes.writeTimeout }}"
+            value: "{{ $providerWriteTimeout }}"
           - name: image_pull_policy
             value: {{ .Values.faasnetes.imagePullPolicy | quote }}
           - name: http_probe
@@ -250,11 +252,11 @@ spec:
         - name: function_namespace
           value: {{ $functionNs | quote }}
         - name: read_timeout
-          value: "{{ .Values.faasnetes.readTimeout }}"
+          value: "{{ $providerReadTimeout }}"
         - name: profiles_namespace
           value: {{ .Release.Namespace | quote }}
         - name: write_timeout
-          value: "{{ .Values.faasnetes.writeTimeout }}"
+          value: "{{ $providerWriteTimeout }}"
         - name: image_pull_policy
           value: {{ .Values.faasnetes.imagePullPolicy | quote }}
         - name: http_probe

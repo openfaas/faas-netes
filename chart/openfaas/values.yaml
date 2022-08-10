@@ -145,8 +145,6 @@ operatorPro:
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.15.1
-  readTimeout: "60s"
-  writeTimeout: "60s"
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
