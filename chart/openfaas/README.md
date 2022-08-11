@@ -420,65 +420,169 @@ Feel free to seek out help using the [OpenFaaS Slack workspace](https://slack.op
 
 ## Configuration
 
-Additional OpenFaaS options in `values.yaml`.
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
+See [values.yaml](./values.yaml) for detailed configuration.
+
+### General parameters
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `default` |
-| `clusterRole` | Use a `ClusterRole` for the Operator or faas-netes. Set to `true` for multiple namespace support | `false` |
-| `createCRDs` | Create the CRDs for OpenFaaS Functions and Profiles | `true` |
-| `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
+| `affinity`| Global [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) rules assigned to deployments | `{}` |
+| `alertmanager.create` | Create the AlertManager component | `true` |
+| `alertmanager.image` | Container image used for alertmanager | See [values.yaml](./values.yaml) |
+| `alertmanager.resources` | Resource limits and requests for alertmanager pods | See [values.yaml](./values.yaml) |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
+| `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
+| `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
+| `basicAuthPlugin.replicas` | Replicas of the basic-auth-plugin | `1` |
+| `basicAuthPlugin.resources` | Resource limits and requests for basic-auth-plugin containers | See [values.yaml](./values.yaml) |
+| `clusterRole` | Use a `ClusterRole` for the Operator or faas-netes. Set to `true` for multiple namespace, pro scaler and CPU/RAM metrics in OpenFaaS REST API | `false` |
+| `createCRDs` | Create the CRDs for OpenFaaS Functions and Profiles | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
-| `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
+| `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `openfaas-fn` |
+| `gatewayExternal.annotations` | Annotation for getaway-external service | `{}` |
 | `generateBasicAuth` | Generate admin password for basic authentication | `false` |
-| `rbac` | Enable RBAC | `true` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
-| `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
-| `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
-| `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
-| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
-| `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `ingress.enabled` | Create ingress resources | `false` |
-| `faasnetes.httpProbe` | Use a httpProbe instead of exec | `false` |
 | `ingressOperator.create` | Create the ingress-operator component | `false` |
-| `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
 | `ingressOperator.image` | Container image used in ingress-operator| `openfaas/ingress-operator:0.6.2` |
+| `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
 | `ingressOperator.resources` | Limits and requests for memory and CPU usage | Memory Requests: 25Mi |
-| `faasnetes.readTimeout` | Read timeout for the faas-netes API | `60s` |
-| `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `60s` |
+| `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |
+| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
+| `k8sVersionOverride` | Override kubeVersion for the ingress creation | `""` |
+| `nodeSelector` | Global [NodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
+| `openfaasPro` | Deploy OpenFaaS Pro | `false` |
+| `prometheus.create` | Create the Prometheus component | `true` |
+| `prometheus.image` | Container image used for prometheus | See [values.yaml](./values.yaml) |
+| `prometheus.resources` | Resource limits and requests for prometheus containers | See [values.yaml](./values.yaml) |
+| `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
+| `rbac` | Enable RBAC | `true` |
+| `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
+| `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
+| `tolerations` | Global [Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+
+### Controller
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `faasnetes.httpProbe` | Use a httpProbe instead of exec | `false` |
+| `faasnetes.image` | Container image used for provider API | See [values.yaml](./values.yaml) |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
+| `faasnetes.livenessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated  | `2` |
+| `faasnetes.livenessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
+| `faasnetes.livenessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
+| `faasnetes.readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated | `2` |
+| `faasnetes.readinessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
+| `faasnetes.readinessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
+| `faasnetes.readTimeout` | Read timeout for the faas-netes API | `60s` |
+| `faasnetes.resources` | Resource limits and requests for faas-netes container | See [values.yaml](./values.yaml) |
 | `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
+| `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `60s` |
+| `faasnetesPro.image` | Container image used for faas-netes when `openfaasPro=true` | See [values.yaml](./values.yaml) |
+| `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
+| `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
+| `operator.resources` | Resource limits and requests for openfaas-operator containers | See [values.yaml](./values.yaml) |
+| `operatorPro.image` | Container image used for the openfaas-operator when `openfaasPro=true` | See [values.yaml](./values.yaml) |
+
+### Gateway
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `gateway.directFunctions` | Invoke functions directly using `Service` without delegating to the provider | `false` |
-| `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
-| `gateway.readTimeout` | Read timeout for the gateway API | `65s` |
-| `gateway.writeTimeout` | Write timeout for the gateway API | `65s` |
-| `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
-| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
+| `gateway.image` | Container image used for the gateway | See [values.yaml](./values.yaml) |
+| `gateway.logsProviderURL` | Set a custom logs provider url | `""` |
 | `gateway.maxIdleConns` | Set max idle connections from gateway to functions | `1024` |
 | `gateway.maxIdleConnsPerHost` | Set max idle connections from gateway to functions per host | `1024` |
-| `gateway.logsProviderURL` | Set a custom logs provider url | `""` |
-| `queueWorker.durableQueueSubscriptions` | Whether to use a durable queue subscription | `false` |
-| `queueWorker.queueGroup` | The name of the queue group used to process asynchronous function invocations | `faas` |
-| `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
-| `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
+| `gateway.nodePort` | Change the port when creating multiple releases in the same baremetal cluster | `31112` |
+| `gateway.probeFunctions` | Set to true for Istio users as a workaround for: https://github.com/openfaas/faas/issues/1721 | `false` |
+| `gateway.readTimeout` | Read timeout for the gateway API | `65s` |
+| `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
+| `gateway.resources` | Resource limits and requests for the gateway containers | See [values.yaml](./values.yaml) |
+| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
+| `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
+| `gateway.writeTimeout` | Write timeout for the gateway API | `65s` |
+
+### Autoscaler
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `autoscaler.disableHorizontalScaling` | Set to true, to only scale to zero, without scaling replicas between the defined Min and Max count for the function | `false` |
+| `autoscaler.enabled ` | Enable the autoscaler | `false` |
+| `autoscaler.image` | Container image used for the autoscaler | See [values.yaml](./values.yaml) |
+| `autoscaler.replicas` | Replicas of the autoscaler | `1` |
+| `autoscaler.resources` | Resource limits and requests for the autoscaler pods | See [values.yaml](./values.yaml) |
+
+### Queue system
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `nats.channel` | The name of the NATS Streaming channel to use for asynchronous function invocations | `faas-request` |
-| `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `` |
+| `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
+| `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `""` |
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
 | `nats.external.host` | The host at which the externally-managed NATS Streaming server can be reached | `""` |
 | `nats.external.port` | The port at which the externally-managed NATS Streaming server can be reached | `""` |
-| `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
+| `nats.image` | Container image used for NATS | See [values.yaml](./values.yaml) |
 | `nats.metrics.enabled` | Export Prometheus metrics for NATS, no multi-arch support  | `false` |
-| `nats.metrics.image` | Container image used for the NATS Prometheus exporter, not multi-arch | `synadia/prometheus-nats-exporter:0.6.2` |
-| `faasIdler.create` | Create the faasIdler component | `true` |
-| `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `15m` |
-| `faasIdler.reconcileInterval` | The time between each of reconciliation | `1m` |
-| `faasIdler.dryRun` | When set to false the OpenFaaS API will be called to scale down idle functions, by default this is set to only print in the logs. | `true` |
-| `prometheus.create` | Create the Prometheus component | `true` |
-| `alertmanager.create` | Create the AlertManager component | `true` |
-| `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |
+| `nats.metrics.image` | Container image used for the NATS Prometheus exporter | See [values.yaml](./values.yaml) |
+| `nats.resources` | Resource limits and requests for the nats pods | See [values.yaml](./values.yaml) |
+| `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
+| `queueWorker.image` | Container image used for the CE edition of the queue-worker| See [values.yaml](./values.yaml) |
+| `queueWorker.maxInflight` | Control the concurrent invocations | `1` |
+| `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
+| `queueWorker.resources` | Resource limits and requests for the queue-worker pods | See [values.yaml](./values.yaml) |
+| `queueWorker.queueGroup` | The name of the queue group used to process asynchronous function invocations | `faas` |
+| `queueWorkerPro.httpRetryCodes` | Comma-separated list of HTTP status codes the queue-worker should retry | `408,429,500,502,503,504` |
+| `queueWorkerPro.image` | Container image used for the Pro version of the queue-worker | See [values.yaml](./values.yaml) |
+| `queueWorkerPro.initialRetryWait` | Time to wait for the first retry | `10s` |
+| `queueWorkerPro.insecureTLS` | Enable insecure TLS for callback invocations | `false` |
+| `queueWorkerPro.maxRetryAttempts` | Amount of times to try sending a message to a function before discarding it | `10` |
+| `queueWorkerPro.maxRetryWait` | Maximum amount of time to wait between retries | `120s` |
+| `queueWorkerPro.printResponseBody` | Print the function response body | `false` |
+| `queueWorkerPro.printRequestBody` | Print the request body| `false` |
 
+### Dashboard
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
-See values.yaml for detailed configuration.
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `dashboard.enabled` | Enable the dashboard | `false` |
+| `dashboard.image` | Container image used for the dashboard | See [values.yaml](./values.yaml) |
+| `dashboard.publicURL` | URL used to expose the dashboard. Needs to be a fully qualified domain name (FQDN) | `https://dashboard.example.com` |
+| `dashboard.replicas` | Replicas of the dashboard | `1` |
+| `dashboard.resources` | Resource limits and requests for the dashboard pods | See [values.yaml](./values.yaml) |
+
+### OIDC plugin
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `oidcAuthPlugin.audience` | Audience URL | `https://example.eu.auth0.com/api/v2/` |
+| `oidcAuthPlugin.baseHost` | Base host | `https://auth.openfaas.example.com` |
+| `oidcAuthPlugin.clientID` | Client ID | `""` |
+| `oidcAuthPlugin.clientSecret` | Client secret | `""` |
+| `oidcAuthPlugin.cookieDomain` | Cookie domain | `.openfaas.example.com` |
+| `oidcAuthPlugin.enabled` | Enable the oidc-auth-plugin | `false` |
+| `oidcAuthPlugin.image` | Container image used for the oidc-auth-plugin | See [values.yaml](./values.yaml) |
+| `oidcAuthPlugin.insecureTLS` | Enable insecure TLS | `false` |
+| `oidcAuthPlugin.openidURL` | OpenID Connect metadata URL| `https://example.eu.auth0.com/.well-known/openid-configuration` |
+| `oidcAuthPlugin.provider` | Name of the auth provider. Leave blank, or set to "azure" if using Azure AD | `""`|
+| `oidcAuthPlugin.replicas` | Replicas of the oidc-auth-plugin | `1` |
+| `oidcAuthPlugin.resources` | Resource limits and requests for the oidc-auth-plugin containers | See [values.yaml](./values.yaml) |
+| `oidcAuthPlugin.scopes` | OpenID Connect (OIDC) scopes | `openid profile email` |
+| `oidcAuthPlugin.verbose` | Enable verbose logging | `false` |
+| `oidcAuthPlugin.welcomePageURL` | Welcome page URL | `https://gateway.openfaas.example.com` |
+
+### Faas-idler
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `faasIdler.enabled` | Create the faasIdler component | `false` |
+| `faasIdler.image` | Container image used for the faas-idler | See [values.yaml](./values.yaml) |
+| `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `3m` |
+| `faasIdler.readOnly` | When set to true, no functions are scaled to zero | `false` |
+| `faasIdler.reconcileInterval` | The interval between each attempt to scale functions to zero | `2m` |
+| `faasIdler.replicas` | Replicas of the faas-idler | `1` |
+| `faasIdler.resources` | Resource limits and requests for the faas-idler pods | See [values.yaml](./values.yaml) |
+| `faasIdler.writeDebug` | Write additional debug information | `false` |
+
 
