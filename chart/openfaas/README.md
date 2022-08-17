@@ -428,9 +428,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `affinity`| Global [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) rules assigned to deployments | `{}` |
-| `alertmanager.create` | Create the AlertManager component | `true` |
-| `alertmanager.image` | Container image used for alertmanager | See [values.yaml](./values.yaml) |
-| `alertmanager.resources` | Resource limits and requests for alertmanager pods | See [values.yaml](./values.yaml) |
+yaml) |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
 | `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
@@ -444,26 +442,37 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `generateBasicAuth` | Generate admin password for basic authentication | `false` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
 | `ingress.enabled` | Create ingress resources | `false` |
-| `ingressOperator.create` | Create the ingress-operator component | `false` |
-| `ingressOperator.image` | Container image used in ingress-operator| `openfaas/ingress-operator:0.6.2` |
-| `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
-| `ingressOperator.resources` | Limits and requests for memory and CPU usage | Memory Requests: 25Mi |
 | `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `k8sVersionOverride` | Override kubeVersion for the ingress creation | `""` |
 | `nodeSelector` | Global [NodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `openfaasPro` | Deploy OpenFaaS Pro | `false` |
-| `prometheus.create` | Create the Prometheus component | `true` |
-| `prometheus.image` | Container image used for prometheus | See [values.yaml](./values.yaml) |
-| `prometheus.resources` | Resource limits and requests for prometheus containers | See [values.yaml](./values.yaml) |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `tolerations` | Global [Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
 
-### Controller
+### Gateway
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `gateway.directFunctions` | Invoke functions directly using `Service` without delegating to the provider | `false` |
+| `gateway.image` | Container image used for the gateway | See [values.yaml](./values.yaml) |
+| `gateway.logsProviderURL` | Set a custom logs provider url | `""` |
+| `gateway.maxIdleConns` | Set max idle connections from gateway to functions | `1024` |
+| `gateway.maxIdleConnsPerHost` | Set max idle connections from gateway to functions per host | `1024` |
+| `gateway.nodePort` | Change the port when creating multiple releases in the same baremetal cluster | `31112` |
+| `gateway.probeFunctions` | Set to true for Istio users as a workaround for: https://github.com/openfaas/faas/issues/1721 | `false` |
+| `gateway.readTimeout` | Read timeout for the gateway API | `65s` |
+| `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
+| `gateway.resources` | Resource limits and requests for the gateway containers | See [values.yaml](./values.yaml) |
+| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
+| `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
+| `gateway.writeTimeout` | Write timeout for the gateway API | `65s` |
+
+### faas-netes / operator
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -486,25 +495,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `operator.resources` | Resource limits and requests for openfaas-operator containers | See [values.yaml](./values.yaml) |
 | `operatorPro.image` | Container image used for the openfaas-operator when `openfaasPro=true` | See [values.yaml](./values.yaml) |
 
-### Gateway
-
-| Parameter               | Description                           | Default                                                    |
-| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `gateway.directFunctions` | Invoke functions directly using `Service` without delegating to the provider | `false` |
-| `gateway.image` | Container image used for the gateway | See [values.yaml](./values.yaml) |
-| `gateway.logsProviderURL` | Set a custom logs provider url | `""` |
-| `gateway.maxIdleConns` | Set max idle connections from gateway to functions | `1024` |
-| `gateway.maxIdleConnsPerHost` | Set max idle connections from gateway to functions per host | `1024` |
-| `gateway.nodePort` | Change the port when creating multiple releases in the same baremetal cluster | `31112` |
-| `gateway.probeFunctions` | Set to true for Istio users as a workaround for: https://github.com/openfaas/faas/issues/1721 | `false` |
-| `gateway.readTimeout` | Read timeout for the gateway API | `65s` |
-| `gateway.replicas` | Replicas of the gateway, pick more than `1` for HA | `1` |
-| `gateway.resources` | Resource limits and requests for the gateway containers | See [values.yaml](./values.yaml) |
-| `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
-| `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
-| `gateway.writeTimeout` | Write timeout for the gateway API | `65s` |
-
-### Autoscaler
+### Autoscaler (OpenFaaS Pro)
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -514,7 +505,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `autoscaler.replicas` | Replicas of the autoscaler | `1` |
 | `autoscaler.resources` | Resource limits and requests for the autoscaler pods | See [values.yaml](./values.yaml) |
 
-### Queue system
+### Async and NATS
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -543,7 +534,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `queueWorkerPro.printResponseBody` | Print the function response body | `false` |
 | `queueWorkerPro.printRequestBody` | Print the request body| `false` |
 
-### Dashboard
+### Dashboard (OpenFaaS Pro)
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -553,7 +544,8 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `dashboard.replicas` | Replicas of the dashboard | `1` |
 | `dashboard.resources` | Resource limits and requests for the dashboard pods | See [values.yaml](./values.yaml) |
 
-### OIDC plugin
+### OIDC / SSO (OpenFaaS Pro)
+
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `oidcAuthPlugin.audience` | Audience URL | `https://example.eu.auth0.com/api/v2/` |
@@ -572,7 +564,9 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `oidcAuthPlugin.verbose` | Enable verbose logging | `false` |
 | `oidcAuthPlugin.welcomePageURL` | Welcome page URL | `https://gateway.openfaas.example.com` |
 
-### Faas-idler
+### faas-idler (OpenFaaS Pro)
+
+Deprecated and replaced by the new autoscaler, which supports scale to zero.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -586,3 +580,30 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `faasIdler.writeDebug` | Write additional debug information | `false` |
 
 
+### ingressOperator
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `ingressOperator.create` | Create the ingress-operator component | `false` |
+| `ingressOperator.image` | Container image used in ingress-operator| `openfaas/ingress-operator:0.6.2` |
+| `ingressOperator.replicas` | Replicas of the ingress-operator| `1` |
+| `ingressOperator.resources` | Limits and requests for memory and CPU usage | Memory Requests: 25Mi |
+
+### alertmanager
+
+For legacy scaling in OpenFaaS Community Edition.
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `alertmanager.create` | Create the AlertManager component | `true` |
+| `alertmanager.image` | Container image used for alertmanager | See [values.yaml](./values.yaml) |
+| `alertmanager.resources` | Resource limits and requests for alertmanager pods | See [values.yaml](./values.
+
+
+### Prometheus (built-in, for autoscaling and metrics)
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `prometheus.create` | Create the Prometheus component | `true` |
+| `prometheus.image` | Container image used for prometheus | See [values.yaml](./values.yaml) |
+| `prometheus.resources` | Resource limits and requests for prometheus containers | See [values.yaml](./values.yaml) |
