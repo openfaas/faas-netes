@@ -41,3 +41,6 @@ gateway:
 queueWorker:
   replicas: 3
   maxInflight: 25
+ 
+ # For timeouts longer than 60 seconds see:
+ # https://docs.openfaas.com/tutorials/expanded-timeouts/
