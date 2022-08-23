@@ -1,6 +1,6 @@
 replicas: 1
 
-image: ghcr.io/openfaas/nats-connector:0.3.0-rc2
+image: ghcr.io/openfaas/nats-connector:0.3.0
 
 basic_auth: true
 

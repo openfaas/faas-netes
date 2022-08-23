@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Trigger OpenFaaS Functions from NATS Pub/Sub
 name: nats-connector
-version: 0.3.0
+version: 0.3.1
 sources:
   - https://github.com/openfaas-incubator/nats-connector
 home: https://www.openfaas.com
@@ -13,5 +13,3 @@ keywords:
 maintainers:
   - name: alexellis
     email: alex@openfaas.com
-  - name: viveksyngh
-    email: vivekkmr45@yahoo.in

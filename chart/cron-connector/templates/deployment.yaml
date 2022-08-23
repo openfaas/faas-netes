@@ -41,6 +41,10 @@ spec:
             value: "true"
           - name: secret_mount_path
             value: "/var/secrets"
+          {{- if .Values.rebuildInterval }}
+          - name: rebuild_interval
+            value: {{ .Values.rebuildInterval | quote }}
+          {{- end }}
           {{- end }}
         {{- if .Values.basicAuth }}          
         volumeMounts:

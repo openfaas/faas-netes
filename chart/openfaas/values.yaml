@@ -53,7 +53,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.0.8
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.1.0
   publicURL: https://dashboard.example.com
   replicas: 1
   enabled: false
@@ -103,7 +103,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.23.0
+  image: ghcr.io/openfaas/gateway:0.23.1
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -130,7 +130,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.23.0
+  image: ghcr.io/openfaas/basic-auth:0.23.1
   replicas: 1
   resources:
     requests:
@@ -138,13 +138,13 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.5
+  image: ghcr.io/openfaasltd/faas-netes:0.1.6
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.5
+  image: ghcr.io/openfaasltd/faas-netes:0.1.6
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.15.1
+  image: ghcr.io/openfaas/faas-netes:0.15.2
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -163,7 +163,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.15.1
+  image: ghcr.io/openfaas/faas-netes:0.15.2
   create: false
   resources:
     requests:
@@ -207,7 +207,7 @@ queueWorker:
 # monitoring and auto-scaling components
 # both components
 prometheus:
-  image: prom/prometheus:v2.36.2
+  image: prom/prometheus:v2.38.0
   create: true
   resources:
     requests:

@@ -1,4 +1,4 @@
-image: ghcr.io/openfaas/cron-connector:0.5.0
+image: ghcr.io/openfaas/cron-connector:0.6.1
 
 gatewayURL: http://gateway.openfaas:8080
 
@@ -7,6 +7,9 @@ asyncInvocation: false
 
 # Set a contentType for all invocations
 contentType: text/plain
+
+# Time between querying the gateway for cron schedules
+rebuildInterval: 30s
 
 nodeSelector: {}
 
