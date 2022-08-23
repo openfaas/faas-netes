@@ -40,8 +40,6 @@ spec:
           value: "faas"
         - name: faas_gateway_address
           value: "gateway.openfaas.svc.cluster.local"
-        - name: "gateway_invoke"
-          value: "true"
         - name: faas_function_suffix
           value: ".openfaas-fn.svc.cluster.local"
         - name: ack_wait
