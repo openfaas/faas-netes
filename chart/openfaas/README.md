@@ -485,10 +485,10 @@ yaml) |
 | `faasnetes.readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated | `2` |
 | `faasnetes.readinessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
 | `faasnetes.readinessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
-| `faasnetes.readTimeout` | Read timeout for the faas-netes API | `60s` |
+| `faasnetes.readTimeout` | Read timeout for the faas-netes API | `""` (defaults to gateway.readTimeout)|
 | `faasnetes.resources` | Resource limits and requests for faas-netes container | See [values.yaml](./values.yaml) |
 | `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
-| `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `60s` |
+| `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `""` (defaults to gateway.writeTimeout) |
 | `faasnetesPro.image` | Container image used for faas-netes when `openfaasPro=true` | See [values.yaml](./values.yaml) |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
