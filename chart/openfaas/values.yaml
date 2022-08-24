@@ -215,7 +215,7 @@ prometheus:
   annotations: {}
 
 alertmanager:
-  image: prom/alertmanager:v0.18.0
+  image: prom/alertmanager:v0.24.0
   create: true
   resources:
     requests:
