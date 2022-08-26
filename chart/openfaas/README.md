@@ -428,7 +428,6 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `affinity`| Global [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) rules assigned to deployments | `{}` |
-yaml) |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
 | `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
