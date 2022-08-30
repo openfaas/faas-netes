@@ -102,6 +102,9 @@ oidcAuthPlugin:
   image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.2
   securityContext: true
 
+gatewayPro:
+  image: ghcr.io/openfaasltd/gateway:0.1.0
+
 gateway:
   image: ghcr.io/openfaas/gateway:0.23.2
   readTimeout: "65s"

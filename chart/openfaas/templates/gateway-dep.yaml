@@ -47,8 +47,17 @@ spec:
       - name: gateway
         resources:
           {{- .Values.gateway.resources | toYaml | nindent 12 }}
+        {{- if .Values.openfaasPro }}
+        image: {{ .Values.gatewayPro.image }}
+        {{- else }}
         image: {{ .Values.gateway.image }}
+        {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        command:
+          - ./gateway
+        {{- if .Values.openfaasPro }}
+          - "-license-file=/var/secrets/license/license"
+        {{- end }}
         {{- if .Values.securityContext }}
         securityContext:
           readOnlyRootFilesystem: true
