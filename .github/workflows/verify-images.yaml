@@ -22,4 +22,4 @@ jobs:
       - name: Verify chart images
         id: verify_images
         run: |
-          make verify-charts
+          VERBOSE=true make verify-charts
