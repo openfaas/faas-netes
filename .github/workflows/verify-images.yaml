@@ -1,0 +1,25 @@
+name: build
+
+on:
+  push:
+    paths:
+      - 'chart/**'
+
+jobs:
+  verifyImages:
+    strategy:
+      matrix:
+        go-version: [1.18.x]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Get arkade
+        id: get_arkade
+        run: |
+          curl -sLS https://get.arkade.dev | sudo sh
+      - name: Verify chart images
+        id: verify_images
+        run: |
+          make verify-charts

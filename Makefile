@@ -1,4 +1,4 @@
-.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts
+.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts verify-charts charts-only
 IMG_NAME?=faas-netes
 
 TAG?=latest
@@ -73,11 +73,30 @@ publish-buildx-all:
 push:
 	docker push $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG)
 
-charts:
-	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/ && helm package nats-connector/ && helm package mqtt-connector/ && helm package pro-builder/  && helm package sqs-connector/
+charts: verify-charts charts-only
+
+verify-charts:
+	@arkade chart verify -f ./chart/openfaas/values.yaml && \
+	arkade chart verify -f ./chart/kafka-connector/values.yaml && \
+	arkade chart verify -f ./chart/cron-connector/values.yaml && \
+	arkade chart verify -f ./chart/nats-connector/values.yaml && \
+	arkade chart verify -f ./chart/mqtt-connector/values.yaml && \
+	arkade chart verify -f ./chart/pro-builder/values.yaml && \
+	arkade chart verify -f ./chart/sqs-connector/values.yaml
+
+charts-only:
+	@cd chart && \
+		helm package openfaas/ && \
+		helm package kafka-connector/ && \
+		helm package cron-connector/ && \
+		helm package nats-connector/ && \
+		helm package mqtt-connector/ && \
+		helm package pro-builder/ && \
+		helm package sqs-connector/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh
+
 
 render-charts:
 	./contrib/create-static-manifest.sh
