@@ -103,7 +103,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.1.0
+  image: ghcr.io/openfaasltd/gateway:0.1.1
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.23.2
