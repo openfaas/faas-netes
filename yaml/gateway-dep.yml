@@ -35,6 +35,8 @@ spec:
               memory: 120Mi
         image: ghcr.io/openfaas/gateway:0.23.2
         imagePullPolicy: Always
+        command:
+          - ./gateway
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
