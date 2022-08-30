@@ -470,6 +470,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `gateway.scaleFromZero` | Enables an intercepting proxy which will scale any function from 0 replicas to the desired amount | `true` |
 | `gateway.upstreamTimeout` | Maximum duration of upstream function call, should be lower than `readTimeout`/`writeTimeout` | `60s` |
 | `gateway.writeTimeout` | Write timeout for the gateway API | `65s` |
+| `gatewayPro.image` | Container image used for the gateway when `openfaasPro=true` | See [values.yaml](./values.yaml) |
 
 ### faas-netes / operator
 
