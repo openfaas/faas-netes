@@ -13,7 +13,7 @@ GOPATH := $(shell go env GOPATH)
 CODEGEN_VERSION := $(shell hack/print-codegen-version.sh)
 CODEGEN_PKG := $(GOPATH)/pkg/mod/k8s.io/code-generator@${CODEGEN_VERSION}
 
-VERSION := $(shell git describe --tags --dirty)
+VERSION := $(shell git describe --tags --dirty --always)
 GIT_COMMIT := $(shell git rev-parse HEAD)
 
 all: build-docker
