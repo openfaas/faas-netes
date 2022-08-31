@@ -184,7 +184,7 @@ data:
           scaling_type: rps
 
       - record: job:function_current_load:sum
-        expr: sum by(function_name) (gateway_function_invocation_started) - sum by(function_name) (gateway_function_invocation_total) and avg by(function_name) (gateway_service_target_load{scaling_type="capacity"}) > bool 1
+        expr: sum by (function_name) ( max_over_time( gateway_function_invocation_inflight[45s:5s])) and on (function_name) avg by(function_name) (gateway_service_target_load{scaling_type="capacity"}) > bool 1
         labels:
           scaling_type: capacity
 
