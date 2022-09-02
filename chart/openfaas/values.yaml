@@ -134,6 +134,20 @@ gateway:
       memory: "120Mi"
       cpu: "50m"
 
+  readinessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
+  livenessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
 basicAuthPlugin:
   image: ghcr.io/openfaas/basic-auth:0.25.2
   replicas: 1

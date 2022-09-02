@@ -64,6 +64,13 @@ spec:
           runAsUser: 10001
         {{- end }}
         livenessProbe:
+          {{- if $.Values.gateway.livenessProbe }}
+          initialDelaySeconds: {{ $.Values.gateway.livenessProbe.initialDelaySeconds | default 0 }}
+          periodSeconds: {{ $.Values.gateway.livenessProbe.periodSeconds | default 10 }}
+          timeoutSeconds: {{ $.Values.gateway.livenessProbe.timeoutSeconds | default 5 }}
+          failureThreshold: {{ $.Values.gateway.livenessProbe.failureThreshold | default 3 }}
+          successThreshold: {{ $.Values.gateway.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
           {{- if .Values.httpProbe }}
           httpGet:
             path: /healthz
@@ -78,8 +85,14 @@ spec:
             - --spider
             - http://localhost:8080/healthz
           {{- end }}
-          timeoutSeconds: 5
         readinessProbe:
+          {{- if $.Values.gateway.readinessProbe }}
+          initialDelaySeconds: {{ $.Values.gateway.readinessProbe.initialDelaySeconds | default 0 }}
+          periodSeconds: {{ $.Values.gateway.readinessProbe.periodSeconds | default 10 }}
+          timeoutSeconds: {{ $.Values.gateway.readinessProbe.timeoutSeconds | default 5 }}
+          failureThreshold: {{ $.Values.gateway.readinessProbe.failureThreshold | default 3 }}
+          successThreshold: {{ $.Values.gateway.readinessProbe.successThreshold | default 1 }}
+          {{- end }}
           {{- if .Values.httpProbe }}
           httpGet:
             path: /healthz
@@ -94,7 +107,6 @@ spec:
             - --spider
             - http://localhost:8080/healthz
           {{- end }}
-          timeoutSeconds: 5
         env:
         {{- if .Values.gateway.logsProviderURL }}
         - name: logs_provider_url
