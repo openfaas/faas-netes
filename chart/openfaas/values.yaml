@@ -180,7 +180,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.1.0-rc3
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.1.1
   durableName: "faas-workers"
   logs:
     debug: false
