@@ -3,7 +3,7 @@ module github.com/openfaas/faas-netes
 go 1.18
 
 require (
-	github.com/google/go-cmp v0.5.8
+	github.com/google/go-cmp v0.5.9
 	github.com/gorilla/mux v1.8.0
 	github.com/openfaas/faas-provider v0.19.1
 	github.com/pkg/errors v0.9.1
