@@ -179,7 +179,7 @@ operator:
 #
 # Enabled automatically when openfaasPro is set to true
 queueWorkerPro:
-  image: ghcr.io/openfaasltd/queue-worker:0.1.7
+  image: ghcr.io/openfaasltd/queue-worker:0.2.0
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
