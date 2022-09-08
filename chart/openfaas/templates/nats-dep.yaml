@@ -29,7 +29,7 @@ spec:
       - name:  nats
         resources:
           {{- .Values.nats.resources | toYaml | nindent 12 }}
-        {{- if eq .Values.nats.queueMode "jetstream" }}
+        {{- if eq .Values.queueMode "jetstream" }}
         image: {{ .Values.nats.image }}
         {{- else }}
         image: {{ .Values.stan.image }}
@@ -42,11 +42,11 @@ spec:
         - containerPort: 8222
           protocol: TCP
         {{- end }}
-        {{- if not (eq .Values.nats.queueMode "jetstream") }}
+        {{- if not (eq .Values.queueMode "jetstream") }}
         command: ["/nats-streaming-server"]
         {{- end }}
         args:
-          {{- if eq .Values.nats.queueMode "jetstream" }}
+          {{- if eq .Values.queueMode "jetstream" }}
           - --js
           {{- else}}
           - --store
@@ -72,7 +72,7 @@ spec:
         - -routez
         - -subz
         - -varz
-        {{- if eq .Values.nats.queueMode "jetstream" }}
+        {{- if eq .Values.queueMode "jetstream" }}
         - -jsz=all
         {{- else }}
         - -channelz

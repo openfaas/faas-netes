@@ -16,6 +16,8 @@ exposeServices: true
 serviceType: NodePort        # serviceType for OpenFaaS gateway
 async: true                  # No known reason to disable this, kept for legacy reasons 
 
+queueMode: ""                # Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming 
+
 # Set to true to use legacy / community-edition auto-scaling
 # when openfaasPro is set to true to use the original 
 # auto-scaling logic
@@ -244,7 +246,6 @@ stan:
 # NATS is required for async
 nats:
   channel: "faas-request"
-  queueMode: ""
   # Stream replication is set to 1 by default. This is only recommended for development.
   # For production a value of at least 3 is recommended for NATS JetStream to be resilient.
   # See https://github.com/openfaas/openfaas-pro/blob/master/jetstream.md
