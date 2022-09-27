@@ -132,6 +132,8 @@ spec:
             - name: initial_offset
               value: {{ .Values.initialOffset | quote }}
             {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
           volumeMounts:
             - name: openfaas-license
               readOnly: true
