@@ -2,7 +2,7 @@
 #
 # Purchase a license at https://openfaas.com/support/
 
-# You will need to create a license named "openfaas-license" - see the 
+# You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
 image: ghcr.io/openfaasltd/kafka-connector:0.6.2
@@ -70,6 +70,13 @@ tolerations: []
 
 affinity: {}
 
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+
 # Encryption
 tls: false
 
@@ -115,10 +122,8 @@ brokerUsernameSecret: kafka-broker-username
 caSecret: ""
 certSecret: ""
 keySecret: ""
-
 # Or give a name to each to enable
 
 # caSecret: kafka-broker-ca
 # certSecret: kafka-broker-cert
 # keySecret: kafka-broker-key
-
