@@ -11,6 +11,12 @@ proBuilder:
   # queue-worker supports retrying failed requests. 
   maxInflight: 0
   securityContext: {}
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "100m"
+    # limits:
+    #   memory: "256Mi"
 
 # buildkit.image is for the buildkit daemon
 # Check for the latest release on GitHub: https://github.com/moby/buildkit/releases
@@ -44,6 +50,13 @@ buildkit:
     runAsUser: 1000
     runAsGroup: 1000
     privileged: false
+
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "2000m"
+    # limits:
+    #   memory: "4Gi"
 
 # disableHmac is used to authenticate requests and should be set to false
 disableHmac: false

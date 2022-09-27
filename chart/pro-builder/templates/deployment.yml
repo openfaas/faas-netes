@@ -104,6 +104,8 @@ spec:
           initialDelaySeconds: 2
           periodSeconds: 5
           failureThreshold: 1
+        resources:
+          {{- .Values.proBuilder.resources | toYaml | nindent 12 }}
         {{- with .Values.proBuilder.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
@@ -138,6 +140,8 @@ spec:
         ports:
         - containerPort: 1234
           protocol: TCP
+        resources:
+          {{- .Values.buildkit.resources | toYaml | nindent 12 }}
         {{- with .Values.buildkit.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
