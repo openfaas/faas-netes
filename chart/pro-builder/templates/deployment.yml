@@ -85,9 +85,25 @@ spec:
             value: "tcp://127.0.0.1:1234"
           - name: "disable_hmac"
             value: {{ .Values.disableHmac | quote }}
+          - name: "max_inflight"
+            value: {{ or .Values.proBuilder.maxInflight 0  | quote }}
         ports:
         - containerPort: 8080
           protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          failureThreshold: 2
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 5
+          failureThreshold: 1
         {{- with .Values.proBuilder.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
