@@ -3,14 +3,13 @@
 
 # image is for the pro-builder API
 proBuilder:
-  image: ghcr.io/openfaasltd/pro-builder:0.3.2
+  image: ghcr.io/openfaasltd/pro-builder:0.3.3
 
   # Set to 0 for unlimited, or some non-zero value for a hard limit
   # the builder will return a HTTP 429 status code, then the client 
   # must retry the request. If it's helpful to you, the OpenFaaS Pro 
   # queue-worker supports retrying failed requests. 
   maxInflight: 0
-
   securityContext: {}
 
 # buildkit.image is for the buildkit daemon
@@ -18,8 +17,6 @@ proBuilder:
 #
 # Both configurations are "rootless", however the rootless: true mode does not
 # require Buildkit to run as a privileged container and is preferred.
-
- 
 buildkit:
   # A configuration which uses a privileged container for when 
   # your nodes have issues running in rootless mode
@@ -28,7 +25,7 @@ buildkit:
   # nodepool for the function builder pods, which is recycled often
   # through the use of spot instances or preemptive VMs.
   #
-  # image: moby/buildkit:v0.10.3
+  # image: moby/buildkit:v0.10.4
   # rootless: false
   # securityContext:
   #   runAsUser: 0
@@ -38,7 +35,7 @@ buildkit:
   # For a rootless configuration, preferred, if the configuration
   # and Kernel version of your Kubernetes nodes supports it
   # 
-  image: moby/buildkit:master-rootless
+  image: moby/buildkit:v0.10.4-rootless
   rootless: true
   securityContext:
     # Needs Kubernetes >= 1.19

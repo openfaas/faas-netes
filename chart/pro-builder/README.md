@@ -43,10 +43,10 @@ kubectl create secret generic payload-secret \
   --from-file payload-secret=payload.txt -n openfaas
 ```
 
-Generate mTLS certificates for BuildKit and the Pro Builder which are used to encrypt messages between the builder component and buildkit.
+Generate mTLS certificates for BuildKit and the Pro Builder which are used to encrypt messages between the builder component and BuildKit.
 
 ```bash
-docker run -v `pwd`/out:/tmp/ -ti ghcr.io/openfaas/certgen:0.1.0-rc2
+docker run -v `pwd`/out:/tmp/ -ti ghcr.io/openfaas/certgen:latest
 
 # Reset the permissions of the files to your own user:
 sudo chown -R $USER:$USER out
@@ -178,12 +178,15 @@ Additional pro-builder options in `values.yaml`.
 
 | Parameter                 | Description                                                                            | Default                        |
 | ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `image`                   | Container image to use for the pro-builder                                             | See values.yaml                |
-| `buildkit.image`          | Image version for the buildkit daemon                                                  | See values.yaml                |
-| `imagePullPolicy`         | The policy for pulling either of the containers deployed by this chart                 | `IfNotPresent`                       |
 | `replicas`                | How many replicas of buildkit and the pro-builder API to create                        | `1`                            |
-| `disableHmac`             | Used to authenticate requests and should be set to false                               | `false`                        |
-| `buildkitSecurityContext` | Used to set security policy for buildkit within your cluster                           | See values.yaml                |
+| `proBuilder.image`        | Container image to use for the pro-builder                                             | See values.yaml                |
+| `proBuilder.maxInflight`  | Limit the total amount of concurrent builds for the  pro-builder replica               | See values.yaml                |
+| `buildkit.image`          | Image version for the buildkit daemon                                                  | See values.yaml                |
+| `buildkit.rootless`       | When set to true, uses user-namespaces to avoid a privileged container                 | See notes in values.yaml       |
+| `buildkit.securityContext` | Used to set security policy for buildkit                                              | See values.yaml                |
+| `imagePullPolicy`         | The policy for pulling either of the containers deployed by this chart                 | `IfNotPresent`                 |
+| `disableHmac`             | This setting disable request verification, so should never to set to `true`            | `false`                        |
+| `enableLchown`            | Toggle whether Lchown is used by buildkit, toggle if you run into errors               | `false`                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 
@@ -191,6 +194,19 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 All control plane components can be cleaned up with helm:
 
-```sh
-$ helm uninstall pro-builder --namespace openfaas
+```bash
+$ helm uninstall pro-builder \
+  --namespace openfaas
+
+$ kubectl delete -n openfaas \
+    secret/registry-secret
+
+$ kubectl delete -n openfaas \
+    secret/payload-secret
+
+$ kubectl delete -n openfaas \
+  secret/buildkit-daemon-certs
+
+$ kubectl delete -n openfaas \
+  secret/buildkit-client-certs
 ```
