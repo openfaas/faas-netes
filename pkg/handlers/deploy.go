@@ -163,9 +163,6 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		return nil, err
 	}
 
-	enableServiceLinks := false
-	allowPrivilegeEscalation := false
-
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        request.Service,
@@ -220,16 +217,12 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 							LivenessProbe:   probes.Liveness,
 							ReadinessProbe:  probes.Readiness,
 							SecurityContext: &corev1.SecurityContext{
-								ReadOnlyRootFilesystem:   &request.ReadOnlyRootFilesystem,
-								AllowPrivilegeEscalation: &allowPrivilegeEscalation,
+								ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 							},
 						},
 					},
 					RestartPolicy: corev1.RestartPolicyAlways,
 					DNSPolicy:     corev1.DNSClusterFirst,
-					// EnableServiceLinks injects ENV vars about every other service within
-					// the namespace.
-					EnableServiceLinks: &enableServiceLinks,
 				},
 			},
 		},
