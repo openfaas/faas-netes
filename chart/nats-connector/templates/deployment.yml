@@ -64,6 +64,8 @@ spec:
             - name: rebuild_interval
               value: {{ .Values.rebuild_interval | quote }}
             {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
           {{- if .Values.basic_auth }}
           volumeMounts:
             - name: auth

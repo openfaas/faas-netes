@@ -45,7 +45,7 @@ awsCredentialsSecret: aws-sqs-credentials
 # Set the region
 awsDefaultRegion: eu-west-1
 
-# Maximum time to keep message hidden from other processors whilst 
+# Maximum time to keep message hidden from other processors whilst
 # executing function
 visibilityTimeout: 30s
 
@@ -101,6 +101,7 @@ Additional sqs-connector options in `values.yaml`.
 | `printRequestBody`       | Output to the logs the request body when calling a function.                           | `false`                        |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 | `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
+| `resources`              | Resources requests and limits configuration                               | `requests.memory: "128Mi"`                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 
