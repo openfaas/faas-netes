@@ -49,12 +49,12 @@ spec:
         - name: connector
           image: {{ .Values.image }}
           command:
-           - "/usr/bin/sqs-connector"
-           - "-license-file=/var/secrets/license/license"
-           - "--queue-url={{ .Values.queueURL }}"
-           - "--visibility-timeout={{.Values.visibilityTimeout }}"
-           - "--wait-time={{.Values.waitTime}}"
-           - "--max-messages={{.Values.maxMessages}}"
+            - "/usr/bin/sqs-connector"
+            - "-license-file=/var/secrets/license/license"
+            - "--queue-url={{ .Values.queueURL }}"
+            - "--visibility-timeout={{.Values.visibilityTimeout }}"
+            - "--wait-time={{.Values.waitTime}}"
+            - "--max-messages={{.Values.maxMessages}}"
           env:
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
@@ -84,14 +84,16 @@ spec:
             {{- end }}
             - name: content_type
               value: {{ .Values.contentType | quote }}
-           {{- if .Values.awsCredentialsSecret }}
-            - name: AWS_SHARED_CREDENTIALS_FILE
-              value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
-           {{- end }}
-           {{- if .Values.awsDefaultRegion }}
-            - name: AWS_DEFAULT_REGION
-              value: {{ .Values.awsDefaultRegion }}
-           {{- end }}
+            {{- if .Values.awsCredentialsSecret }}
+              - name: AWS_SHARED_CREDENTIALS_FILE
+                value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
+            {{- end }}
+            {{- if .Values.awsDefaultRegion }}
+              - name: AWS_DEFAULT_REGION
+                value: {{ .Values.awsDefaultRegion }}
+            {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
           volumeMounts:
             - name: openfaas-license
               readOnly: true

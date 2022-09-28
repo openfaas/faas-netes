@@ -46,22 +46,22 @@ spec:
           - "/usr/bin/mqtt-connector"
           args:
           {{- if .Values.broker }}
-           - "-broker={{.Values.broker}}"
+          - "-broker={{.Values.broker}}"
           {{- end }}
           {{- if .Values.topic }}
-           - "-topic={{.Values.topic}}"
+          - "-topic={{.Values.topic}}"
           {{- end }}
           {{- if .Values.clientID }}
-           - "-id={{.Values.clientID}}"
+          - "-id={{.Values.clientID}}"
           {{- end }}
           {{- if .Values.authPassword }}
-           - "-password={{.Values.authPassword}}"
+          - "-password={{.Values.authPassword}}"
           {{- end }}
           {{- if .Values.trimChannelKey }}
-           - "-trim-channel-key={{.Values.trimChannelKey}}"
+          - "-trim-channel-key={{.Values.trimChannelKey}}"
           {{- end }}
           {{- if .Values.asyncInvoke }}
-           - "-async-invoke={{.Values.asyncInvoke}}"
+          - "-async-invoke={{.Values.asyncInvoke}}"
           {{- end }}
           env:
             - name: gateway_url
@@ -86,6 +86,8 @@ spec:
             - name: rebuild_interval
               value: {{ .Values.rebuild_interval | quote }}
             {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
           {{- if .Values.basic_auth }}
           volumeMounts:
             - name: auth

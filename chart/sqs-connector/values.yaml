@@ -2,7 +2,7 @@
 #
 # Purchase a license at https://openfaas.com/support/
 
-# You will need to create a license named "openfaas-license" - see the 
+# You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
 image: ghcr.io/openfaasltd/sqs-connector:0.2.0
@@ -14,14 +14,14 @@ queueURL: "https://"
 # Set to empty string if using AWS ambient credentials
 # Or if using a shared credentials file run:
 # The format is the standard ini-type AWS file format.
-# 
+#
 # kubectl create secret generic -n openfaas \
 #   aws-sqs-credentials --from-file aws-sqs-credentials=$HOME/sqs-credentials.txt
 awsCredentialsSecret: aws-sqs-credentials
 
 awsDefaultRegion: eu-west-1
 
-# Maximum time to keep message hidden from other processors whilst 
+# Maximum time to keep message hidden from other processors whilst
 # executing function
 visibilityTimeout: 30s
 
@@ -60,9 +60,16 @@ gatewayURL: http://gateway.openfaas:8080
 # Basic auth for the gateway
 basic_auth: true
 
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+  #   cpu: "100m"
+
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
-

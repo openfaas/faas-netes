@@ -27,3 +27,11 @@ broker_host: nats
 
 # timeout for upstream calls
 upstream_timeout: 30s
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+  #   cpu: "100m"
