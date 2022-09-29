@@ -141,10 +141,10 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.6
+  image: ghcr.io/openfaasltd/faas-netes:0.1.7
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.6
+  image: ghcr.io/openfaasltd/faas-netes:0.1.7
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.15.2

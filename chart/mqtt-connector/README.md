@@ -34,4 +34,4 @@ Configure via `values.yaml`.
 | `authPassword`       | Password for broker authentication| `""`                                       |
 | `asyncInvoke`       | Invoke using function's asynchronous route | `false`                                       |
 | `basic_auth`       | Basic authentication for gateway enabled | `true`                                       |
-| `resources`              | Resources requests and limits configuration                               | `requests.memory: "128Mi"`                  |
+| `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |

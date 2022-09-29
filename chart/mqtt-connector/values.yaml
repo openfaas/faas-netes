@@ -24,7 +24,7 @@ gateway_url: http://gateway.openfaas:8080
 
 resources:
   requests:
-    memory: "128Mi"
+    memory: "64Mi"
     cpu: "100m"
   # limits:
   #   memory: "256Mi"

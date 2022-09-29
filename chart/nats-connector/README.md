@@ -39,7 +39,7 @@ Additional nats-connector options in `values.yaml`.
 | `print_response`         | Output the response of calling a function in the logs.                                 | `true`                         |
 | `print_response_body`         | Output to the logs the response body when calling a function.                                 | `false`                         |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
-| `resources`              | Resources requests and limits configuration                               | `requests.memory: "128Mi"`                  |
+| `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 See values.yaml for detailed configuration.
