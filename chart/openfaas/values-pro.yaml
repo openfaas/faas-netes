@@ -46,5 +46,11 @@ queueWorker:
 # https://www.openfaas.com/blog/jetstream-for-openfaas/
 queueMode: jetstream
 
+# Set stream replication factor.
+# For production a value of at least 3 is recommended for NATS JetStream to be resilient.
+# See https://github.com/openfaas/openfaas-pro/blob/master/jetstream.md
+nats:
+  streamReplication: 3
+
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
