@@ -428,7 +428,9 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `affinity`| Global [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) rules assigned to deployments | `{}` |
-| `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS Streaming | `true` |
+yaml) |
+| `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS | `true` |
+| `queueMode` | Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming|
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
 | `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
 | `basicAuthPlugin.replicas` | Replicas of the basic-auth-plugin | `1` |
@@ -509,7 +511,11 @@ See [values.yaml](./values.yaml) for detailed configuration.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `nats.channel` | The name of the NATS Streaming channel to use for asynchronous function invocations | `faas-request` |
+| `jetstreamQueueWorker.durableName` | Durable name used by JetStream consumers | `faas-workers` |
+| `jetstreamQueueWorker.image` | Container image used for the queue-worker when the `queueMode` is `jetstream` | See [values.yaml](./values.yaml) |
+| `jetstreamQueueWorker.logs.debug` | Log debug messages | `false` |
+| `jetstreamQueueWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
+| `nats.channel` | The name of the NATS Streaming channel or NATS JetStream stream to use for asynchronous function invocations | `faas-request` |
 | `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
 | `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `""` |
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
@@ -519,6 +525,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `nats.metrics.enabled` | Export Prometheus metrics for NATS, no multi-arch support  | `false` |
 | `nats.metrics.image` | Container image used for the NATS Prometheus exporter | See [values.yaml](./values.yaml) |
 | `nats.resources` | Resource limits and requests for the nats pods | See [values.yaml](./values.yaml) |
+| `nats.streamReplication` | JetStream stream replication factor. For production a value of at least 3 is recommended. | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |
 | `queueWorker.image` | Container image used for the CE edition of the queue-worker| See [values.yaml](./values.yaml) |
 | `queueWorker.maxInflight` | Control the concurrent invocations | `1` |
@@ -533,6 +540,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `queueWorkerPro.maxRetryWait` | Maximum amount of time to wait between retries | `120s` |
 | `queueWorkerPro.printResponseBody` | Print the function response body | `false` |
 | `queueWorkerPro.printRequestBody` | Print the request body| `false` |
+| `stan.image` | Container image used for NATS streaming server | See [values.yaml](./values.yaml) | 
 
 ### Dashboard (OpenFaaS Pro)
 
