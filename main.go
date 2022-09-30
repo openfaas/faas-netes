@@ -6,6 +6,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"time"
 
@@ -58,8 +59,13 @@ func main() {
 	flag.BoolVar(&operator, "operator", false, "Use the operator mode instead of faas-netes")
 	flag.Parse()
 
+	mode := "controller"
+	if operator {
+		mode = "operator"
+	}
 	sha, release := version.GetReleaseInfo()
-	log.Printf("Version: %s\tcommit: %s\n", release, sha)
+	fmt.Printf("faas-netes - Community Edition (CE)\n"+
+		"\nVersion: %s Commit: %s Mode: %s\n", release, sha, mode)
 
 	clientCmdConfig, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
 	if err != nil {
