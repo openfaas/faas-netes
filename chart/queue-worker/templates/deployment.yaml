@@ -31,6 +31,8 @@ spec:
           secretName: openfaas-license
       containers:
       - name:  queue-worker
+        resources:
+          {{- .Values.resources | toYaml | nindent 10 }}
         image: {{ .Values.image }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         command:
