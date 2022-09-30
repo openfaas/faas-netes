@@ -41,6 +41,10 @@ gateway:
 queueWorker:
   replicas: 3
   maxInflight: 25
- 
+
+# Enable JetStream for OpenFaaS, learn more at:
+# https://www.openfaas.com/blog/jetstream-for-openfaas/
+queueMode: jetstream
+
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
