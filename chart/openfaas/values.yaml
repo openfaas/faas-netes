@@ -241,7 +241,7 @@ alertmanager:
 
 stan:
   # Image used for nats deployment when using async with NATS-Streaming.
-  image: nats-streaming:0.22.0
+  image: nats-streaming:0.24.6
 
 # NATS is required for async
 nats:
