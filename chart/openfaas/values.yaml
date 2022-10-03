@@ -105,10 +105,10 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.2
+  image: ghcr.io/openfaasltd/gateway:0.2.4
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.25.1
+  image: ghcr.io/openfaas/gateway:0.25.2
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -135,7 +135,7 @@ gateway:
       cpu: "50m"
 
 basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.25.1
+  image: ghcr.io/openfaas/basic-auth:0.25.2
   replicas: 1
   resources:
     requests:
@@ -143,10 +143,10 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.7
+  image: ghcr.io/openfaasltd/faas-netes:0.1.9
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.1.7
+  image: ghcr.io/openfaasltd/faas-netes:0.1.9
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.15.2
