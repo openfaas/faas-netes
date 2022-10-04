@@ -55,7 +55,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.1.0
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.1.1
   publicURL: https://dashboard.example.com
   replicas: 1
   enabled: false
@@ -101,7 +101,7 @@ oidcAuthPlugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.2
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.3
   securityContext: true
 
 gatewayPro:
