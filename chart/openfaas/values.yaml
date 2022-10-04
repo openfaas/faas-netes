@@ -255,7 +255,7 @@ nats:
     enabled: false
     host: ""
     port: ""
-  image: nats:2.8.4
+  image: nats:2.9.2
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)

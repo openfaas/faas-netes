@@ -15,8 +15,8 @@ generateBasicAuth: true
 # Follow docs at: https://docs.openfaas.com/openfaas-pro/dashboard/
 # for setting up the new dashboard
 dashboard:
-  publicURL: https://dashboard.example.com
-  enabled: false
+  publicURL: localhost
+  enabled: true
 
 # https://docs.openfaas.com/architecture/autoscaling/
 # The autoscaler is not enabled by default, but should be enabled here
@@ -40,7 +40,7 @@ gateway:
 # 75 concurrent requests will be processed, 25 per queueWorker
 queueWorker:
   replicas: 3
-  maxInflight: 25
+  maxInflight: 50
 
 # Enable JetStream for OpenFaaS, learn more at:
 # https://www.openfaas.com/blog/jetstream-for-openfaas/
@@ -50,7 +50,7 @@ queueMode: jetstream
 # For production a value of at least 3 is recommended for NATS JetStream to be resilient.
 # See https://github.com/openfaas/openfaas-pro/blob/master/jetstream.md
 nats:
-  streamReplication: 3
+  streamReplication: 1
 
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
