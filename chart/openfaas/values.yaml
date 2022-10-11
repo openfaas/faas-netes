@@ -143,13 +143,13 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.0
+  image: ghcr.io/openfaasltd/faas-netes:0.2.1
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.0
+  image: ghcr.io/openfaasltd/faas-netes:0.2.1
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.15.2
+  image: ghcr.io/openfaas/faas-netes:0.15.3
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -168,19 +168,19 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.15.2
+  image: ghcr.io/openfaas/faas-netes:0.15.3
   create: false
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
-     
+
 # The values for jetstreamQueueWorker are merged with those under
 # the "queueWorkerPro" and "queueWorker" section
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.1
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.3
   durableName: "faas-workers"
   logs:
     debug: false
