@@ -9,9 +9,6 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/yaml"
-	typedCorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 )
 
 const ProfileAnnotationKey = "com.openfaas.profile"
@@ -25,31 +22,6 @@ type ProfileClient interface {
 // Profile is and openfaas api extensions that can be predefined and applied
 // to functions by annotating them with `com.openfaas.profile: name1,name2`
 type Profile v1.ProfileSpec
-
-type profileConfigMapClient struct {
-	kube typedCorev1.ConfigMapsGetter
-}
-
-// Get returns the named profiles, if found, from the namespace
-func (c profileConfigMapClient) Get(ctx context.Context, namespace string, names ...string) ([]Profile, error) {
-	var resp []Profile
-	for _, name := range names {
-		cm, err := c.kube.ConfigMaps(namespace).Get(ctx, name, metav1.GetOptions{})
-		if err != nil {
-			return nil, err
-		}
-		profile := Profile{}
-
-		data := strings.NewReader(cm.Data["profile"])
-		// uses first 100 bytes to determine yaml or json parsing
-		err = yaml.NewYAMLOrJSONDecoder(data, 100).Decode(&profile)
-		if err != nil {
-			return nil, err
-		}
-		resp = append(resp, profile)
-	}
-	return resp, nil
-}
 
 // profileCRDClient implements PolicyClient using the openfaas CRD Profile
 type profileCRDClient struct {
@@ -76,12 +48,6 @@ func (c profileCRDClient) Get(ctx context.Context, namespace string, names ...st
 func (f FunctionFactory) NewProfileClient() ProfileClient {
 	// this is where we can replace with an informer/listener in the future
 	return &profileCRDClient{client: f.Profiler}
-}
-
-// NewProfileClient returns the ProfilerClient powered by ConfigMaps
-func (f FunctionFactory) NewConfigMapProfileClient() ProfileClient {
-	return &profileConfigMapClient{kube: f.Client.CoreV1()}
-
 }
 
 // GetProfiles retrieves in the names string, names is the raw csv value in the
@@ -220,21 +186,4 @@ func (f FunctionFactory) RemoveProfile(profile Profile, deployment *appsv1.Deplo
 			deployment.Spec.Template.Spec.SecurityContext.Sysctls = nil
 		}
 	}
-}
-
-func equalStrings(a, b *string) bool {
-	if a == nil && b == nil {
-		return true
-	}
-
-	if a != nil && b == nil {
-		return false
-	}
-
-	if a == nil && b != nil {
-		return false
-	}
-
-	// now we know both values are non-nil
-	return *a == *b
 }

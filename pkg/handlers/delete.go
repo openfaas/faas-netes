@@ -82,7 +82,6 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 		}
 
 		w.WriteHeader(http.StatusAccepted)
-		return
 	}
 }
 

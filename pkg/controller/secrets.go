@@ -38,8 +38,6 @@ func UpdateSecrets(function *faasv1.Function, deployment *appsv1.Deployment, exi
 				},
 			)
 
-			break
-
 		default:
 
 			projectedPaths := []corev1.KeyToPath{}
@@ -53,8 +51,6 @@ func UpdateSecrets(function *faasv1.Function, deployment *appsv1.Deployment, exi
 				Secret: projection,
 			}
 			secretVolumeProjections = append(secretVolumeProjections, secretProjection)
-
-			break
 		}
 	}
 

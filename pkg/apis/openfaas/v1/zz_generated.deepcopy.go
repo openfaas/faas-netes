@@ -236,15 +236,22 @@ func (in *ProfileSpec) DeepCopyInto(out *ProfileSpec) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.PodSecurityContext != nil {
+		in, out := &in.PodSecurityContext, &out.PodSecurityContext
+		*out = new(corev1.PodSecurityContext)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Affinity != nil {
 		in, out := &in.Affinity, &out.Affinity
 		*out = new(corev1.Affinity)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.PodSecurityContext != nil {
-		in, out := &in.PodSecurityContext, &out.PodSecurityContext
-		*out = new(corev1.PodSecurityContext)
-		(*in).DeepCopyInto(*out)
+	if in.TopologySpreadConstraints != nil {
+		in, out := &in.TopologySpreadConstraints, &out.TopologySpreadConstraints
+		*out = make([]corev1.TopologySpreadConstraint, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
 	}
 	return
 }
