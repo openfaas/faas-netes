@@ -14,16 +14,6 @@ podSecurityContext:
     runAsUser: 1000
     runAsGroup: 3000
     fsGroup: 2000
-affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/e2e-az-name
-            operator: In
-            values:
-            - e2e-az1
-            - e2e-az2
 tolerations:
 - key: "key1"
   operator: "Equal"
@@ -167,7 +157,7 @@ func Test_TolerationsProfile_Apply(t *testing.T) {
 	}
 }
 
-func Test_RunTimeClassProfile_Apply(t *testing.T) {
+func Test_RunAsNonRootProfile_Apply(t *testing.T) {
 	expectedRoot := true
 	truev := true
 
@@ -236,145 +226,6 @@ func Test_TolerationsProfile_Remove(t *testing.T) {
 	if !reflect.DeepEqual(got, expected) {
 		t.Fatalf("expected %v, got %v", expected, got)
 	}
-}
-
-func Test_AffinityProfile_Apply(t *testing.T) {
-	expectedAffinity := corev1.Affinity{
-		NodeAffinity: &corev1.NodeAffinity{
-			RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-				NodeSelectorTerms: []corev1.NodeSelectorTerm{
-					{
-						MatchFields: []corev1.NodeSelectorRequirement{
-							{
-								Key:      "gpu",
-								Operator: apiv1.NodeSelectorOpExists,
-							},
-						},
-					},
-				},
-			},
-		},
-	}
-	p := Profile{Affinity: &expectedAffinity}
-
-	basicDeployment := &appsv1.Deployment{
-		Spec: appsv1.DeploymentSpec{
-			Template: apiv1.PodTemplateSpec{
-				Spec: apiv1.PodSpec{
-					Containers: []apiv1.Container{
-						{Name: "testfunc", Image: "alpine:latest"},
-					},
-				},
-			},
-		},
-	}
-
-	factory := mockFactory()
-	factory.ApplyProfile(p, basicDeployment)
-	result := basicDeployment.Spec.Template.Spec.Affinity
-	if !reflect.DeepEqual(&expectedAffinity, result) {
-		t.Fatalf("expected %+v\n got %+v", &expectedAffinity, result)
-	}
-}
-
-func Test_AffinityProfile_Remove(t *testing.T) {
-	t.Run("removes matching affinity definition", func(t *testing.T) {
-		affinity := corev1.Affinity{
-			NodeAffinity: &corev1.NodeAffinity{
-				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-					NodeSelectorTerms: []corev1.NodeSelectorTerm{
-						{
-							MatchFields: []corev1.NodeSelectorRequirement{
-								{
-									Key:      "gpu",
-									Operator: apiv1.NodeSelectorOpExists,
-								},
-							},
-						},
-					},
-				},
-			},
-		}
-		p := Profile{Affinity: &affinity}
-
-		basicDeployment := &appsv1.Deployment{
-			Spec: appsv1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Affinity: &affinity,
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
-					},
-				},
-			},
-		}
-
-		factory := mockFactory()
-		factory.RemoveProfile(p, basicDeployment)
-		result := basicDeployment.Spec.Template.Spec.Affinity
-		if result != nil {
-			t.Fatalf("expected nil\n got %+v", result)
-		}
-	})
-
-	t.Run("does not remove non-matching affinity definition", func(t *testing.T) {
-		profileAffinity := corev1.Affinity{
-			NodeAffinity: &corev1.NodeAffinity{
-				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-					NodeSelectorTerms: []corev1.NodeSelectorTerm{
-						{
-							MatchFields: []corev1.NodeSelectorRequirement{
-								{
-									Key:      "gpu",
-									Operator: apiv1.NodeSelectorOpExists,
-								},
-							},
-						},
-					},
-				},
-			},
-		}
-		p := Profile{Affinity: &profileAffinity}
-
-		expectedAffinity := corev1.Affinity{
-			NodeAffinity: &corev1.NodeAffinity{
-				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-					NodeSelectorTerms: []corev1.NodeSelectorTerm{
-						{
-							MatchFields: []corev1.NodeSelectorRequirement{
-								{
-									Key:      "bigcpu",
-									Operator: apiv1.NodeSelectorOpExists,
-								},
-							},
-						},
-					},
-				},
-			},
-		}
-		basicDeployment := &appsv1.Deployment{
-			Spec: appsv1.DeploymentSpec{
-				Template: apiv1.PodTemplateSpec{
-					Spec: apiv1.PodSpec{
-						Affinity: &expectedAffinity,
-						Containers: []apiv1.Container{
-							{Name: "testfunc", Image: "alpine:latest"},
-						},
-					},
-				},
-			},
-		}
-
-		factory := mockFactory()
-		factory.RemoveProfile(p, basicDeployment)
-		result := basicDeployment.Spec.Template.Spec.Affinity
-
-		// the GPU affinity profile _should not_ remove the bigcpu affinity
-		if !reflect.DeepEqual(&expectedAffinity, result) {
-			t.Fatalf("expected %+v\n got %+v", &expectedAffinity, result)
-		}
-	})
 }
 
 func Test_PodSecurityProfile_Apply(t *testing.T) {

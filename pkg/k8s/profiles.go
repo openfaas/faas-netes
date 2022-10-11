@@ -123,13 +123,6 @@ func (f FunctionFactory) ApplyProfile(profile Profile, deployment *appsv1.Deploy
 		deployment.Spec.Template.Spec.Tolerations = append(deployment.Spec.Template.Spec.Tolerations, profile.Tolerations...)
 	}
 
-	if profile.Affinity != nil {
-		// use a replacement strategy because it is not clear that merging affinities will
-		// actually produce a meaning Affinity definition, it would likely result in
-		// an impossible to satisfy constraint
-		deployment.Spec.Template.Spec.Affinity = profile.Affinity
-	}
-
 	if profile.PodSecurityContext != nil {
 		if deployment.Spec.Template.Spec.SecurityContext == nil {
 			deployment.Spec.Template.Spec.SecurityContext = &corev1.PodSecurityContext{}
@@ -151,11 +144,8 @@ func (f FunctionFactory) RemoveProfile(profile Profile, deployment *appsv1.Deplo
 				newTolerations = append(newTolerations, toleration)
 			}
 		}
-		deployment.Spec.Template.Spec.Tolerations = newTolerations
-	}
 
-	if profile.Affinity != nil && reflect.DeepEqual(profile.Affinity, deployment.Spec.Template.Spec.Affinity) {
-		deployment.Spec.Template.Spec.Affinity = nil
+		deployment.Spec.Template.Spec.Tolerations = newTolerations
 	}
 
 	if profile.PodSecurityContext != nil {

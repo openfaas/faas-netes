@@ -131,21 +131,15 @@ func main() {
 	faasInformerOpt := informers.WithNamespace(namespaceScope)
 	faasInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, faasInformerOpt)
 
-	// this is where we need to swap to the faasInformerFactory
-	profileInformerOpt := informers.WithNamespace(config.ProfilesNamespace)
-	profileInformerFactory := informers.NewSharedInformerFactoryWithOptions(faasClient, defaultResync, profileInformerOpt)
-
-	profileLister := profileInformerFactory.Openfaas().V1().Profiles().Lister()
-	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, profileLister)
+	factory := k8s.NewFunctionFactory(kubeClient, deployConfig, faasClient.OpenfaasV1())
 
 	setup := serverSetup{
-		config:                 config,
-		functionFactory:        factory,
-		kubeInformerFactory:    kubeInformerFactory,
-		faasInformerFactory:    faasInformerFactory,
-		profileInformerFactory: profileInformerFactory,
-		kubeClient:             kubeClient,
-		faasClient:             faasClient,
+		config:              config,
+		functionFactory:     factory,
+		kubeInformerFactory: kubeInformerFactory,
+		faasInformerFactory: faasInformerFactory,
+		kubeClient:          kubeClient,
+		faasClient:          faasClient,
 	}
 
 	if operator {
@@ -167,16 +161,12 @@ func startInformers(setup serverSetup, stopCh <-chan struct{}, operator bool) cu
 
 	var functions v1.FunctionInformer
 	if operator {
-		// go faasInformerFactory.Start(stopCh)
-
 		functions = faasInformerFactory.Openfaas().V1().Functions()
 		go functions.Informer().Run(stopCh)
 		if ok := cache.WaitForNamedCacheSync("faas-netes:functions", stopCh, functions.Informer().HasSynced); !ok {
 			log.Fatalf("failed to wait for cache to sync")
 		}
 	}
-
-	// go kubeInformerFactory.Start(stopCh)
 
 	deployments := kubeInformerFactory.Apps().V1().Deployments()
 	go deployments.Informer().Run(stopCh)
@@ -187,15 +177,6 @@ func startInformers(setup serverSetup, stopCh <-chan struct{}, operator bool) cu
 	endpoints := kubeInformerFactory.Core().V1().Endpoints()
 	go endpoints.Informer().Run(stopCh)
 	if ok := cache.WaitForNamedCacheSync("faas-netes:endpoints", stopCh, endpoints.Informer().HasSynced); !ok {
-		log.Fatalf("failed to wait for cache to sync")
-	}
-
-	// go setup.profileInformerFactory.Start(stopCh)
-
-	profileInformerFactory := setup.profileInformerFactory
-	profiles := profileInformerFactory.Openfaas().V1().Profiles()
-	go profiles.Informer().Run(stopCh)
-	if ok := cache.WaitForNamedCacheSync("faas-netes:profiles", stopCh, profiles.Informer().HasSynced); !ok {
 		log.Fatalf("failed to wait for cache to sync")
 	}
 
@@ -277,13 +258,12 @@ func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
 // serverSetup is a container for the config and clients needed to start the
 // faas-netes controller or operator
 type serverSetup struct {
-	config                 config.BootstrapConfig
-	kubeClient             *kubernetes.Clientset
-	faasClient             *clientset.Clientset
-	functionFactory        k8s.FunctionFactory
-	kubeInformerFactory    kubeinformers.SharedInformerFactory
-	faasInformerFactory    informers.SharedInformerFactory
-	profileInformerFactory informers.SharedInformerFactory
+	config              config.BootstrapConfig
+	kubeClient          *kubernetes.Clientset
+	faasClient          *clientset.Clientset
+	functionFactory     k8s.FunctionFactory
+	kubeInformerFactory kubeinformers.SharedInformerFactory
+	faasInformerFactory informers.SharedInformerFactory
 }
 
 func setupLogging() {
