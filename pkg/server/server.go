@@ -24,12 +24,6 @@ import (
 	glog "k8s.io/klog"
 )
 
-// TODO: Move to config pattern used else-where across project
-
-const defaultHTTPPort = 8081
-const defaultReadTimeout = 8
-const defaultWriteTimeout = 8
-
 // New creates HTTP server struct
 func New(client clientset.Interface,
 	kube kubernetes.Interface,

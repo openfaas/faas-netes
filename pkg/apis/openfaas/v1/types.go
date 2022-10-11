@@ -72,7 +72,7 @@ type Profile struct {
 	Spec ProfileSpec `json:"spec"`
 }
 
-// ProfileSpec is an openfaas api extensions that can be predefined and applied
+// ProfileSpec is an openfaas api extension that can be predefined and applied
 // to functions by annotating them with `com.openfaas/profile: name1,name2`
 type ProfileSpec struct {
 	// If specified, the function's pod tolerations.
@@ -95,6 +95,15 @@ type ProfileSpec struct {
 	// +optional
 	RuntimeClassName *string `json:"runtimeClassName,omitempty"`
 
+	// SecurityContext holds pod-level security attributes and common container settings.
+	// Optional: Defaults to empty.  See type description for default values of each field.
+	//
+	// each non-nil value will be merged into the function's PodSecurityContext, the value will
+	// replace any existing value or previously applied Profile
+	//
+	// +optional
+	PodSecurityContext *corev1.PodSecurityContext `json:"podSecurityContext,omitempty"`
+
 	// If specified, the pod's scheduling constraints
 	//
 	// copied to the Pod Affinity, this will replace any existing value or previously
@@ -105,14 +114,12 @@ type ProfileSpec struct {
 	// +optional
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 
-	// SecurityContext holds pod-level security attributes and common container settings.
-	// Optional: Defaults to empty.  See type description for default values of each field.
+	// TopologySpreadConstraints describes how a group of pods ought to spread across topology
+	// domains. The Kubernetes will schedule pods in a way which abides by the constraints.
 	//
-	// each non-nil value will be merged into the function's PodSecurityContext, the value will
-	// replace any existing value or previously applied Profile
-	//
+	// https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
 	// +optional
-	PodSecurityContext *corev1.PodSecurityContext `json:"podSecurityContext,omitempty"`
+	TopologySpreadConstraints []corev1.TopologySpreadConstraint `json:"topologySpreadConstraints,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

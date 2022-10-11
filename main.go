@@ -149,10 +149,8 @@ func main() {
 	}
 
 	if operator {
-		log.Println("Starting operator")
 		runOperator(setup, config)
 	} else {
-		log.Println("Starting controller")
 		runController(setup)
 	}
 }

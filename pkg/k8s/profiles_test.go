@@ -1,14 +1,12 @@
 package k8s
 
 import (
-	"context"
 	"reflect"
 	"testing"
 
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/client-go/kubernetes/fake"
 )
 
 const testProfile = `
@@ -436,112 +434,6 @@ func Test_PodSecurityProfile_Remove(t *testing.T) {
 	result := basicDeployment.Spec.Template.Spec.SecurityContext
 	if !reflect.DeepEqual(expectedProfile, result) {
 		t.Fatalf("expected %+v\n got %+v", &expectedProfile, result)
-	}
-}
-
-func Test_ConfigMapProfileParsing(t *testing.T) {
-	ctx := context.Background()
-	validConfig := corev1.ConfigMap{}
-	validConfig.Name = "allowSpot"
-	validConfig.Namespace = "functions"
-	validConfig.Data = map[string]string{"profile": testProfile}
-
-	allowSpot := Profile{
-		Tolerations: []apiv1.Toleration{
-			{
-				Key:               "key1",
-				Value:             "value1",
-				Operator:          apiv1.TolerationOpEqual,
-				Effect:            apiv1.TaintEffectNoExecute,
-				TolerationSeconds: nil,
-			},
-		},
-		PodSecurityContext: &apiv1.PodSecurityContext{
-			RunAsUser:  intp(1000),
-			RunAsGroup: intp(3000),
-			FSGroup:    intp(2000),
-		},
-		Affinity: &apiv1.Affinity{
-			NodeAffinity: &apiv1.NodeAffinity{
-				RequiredDuringSchedulingIgnoredDuringExecution: &apiv1.NodeSelector{
-					NodeSelectorTerms: []apiv1.NodeSelectorTerm{
-						{
-							MatchExpressions: []apiv1.NodeSelectorRequirement{
-								{
-									Key:      "kubernetes.io/e2e-az-name",
-									Operator: apiv1.NodeSelectorOpIn,
-									Values:   []string{"e2e-az1", "e2e-az2"},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-	}
-
-	invalidConfig := corev1.ConfigMap{}
-	invalidConfig.Name = "allowSpot"
-	invalidConfig.Namespace = "functions"
-	invalidConfig.Data = map[string]string{"profile": invalidProfileYAML}
-
-	cases := []struct {
-		name        string
-		namespace   string
-		profileName string
-		configmap   corev1.ConfigMap
-		expected    []Profile
-		err         string
-	}{
-		{
-			name:        "unknown profile returns error",
-			namespace:   "functions",
-			profileName: "unknown",
-			err:         `configmaps "unknown" not found`,
-		},
-		{
-			name:        "yaml profile parsed correctly",
-			namespace:   "functions",
-			profileName: "allowSpot",
-			configmap:   validConfig,
-			expected:    []Profile{allowSpot},
-		},
-		{
-			name:        "yaml parsing errors are returned",
-			namespace:   "functions",
-			profileName: "allowSpot",
-			configmap:   invalidConfig,
-			err:         `error converting YAML to JSON: yaml: line 7: could not find expected ':'`,
-		},
-	}
-
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			factory := FunctionFactory{
-				Client: fake.NewSimpleClientset(&tc.configmap),
-			}
-			client := factory.NewConfigMapProfileClient()
-			got, err := client.Get(ctx, tc.namespace, tc.profileName)
-			if tc.err != "" {
-				if err == nil {
-					t.Fatalf("expected error %s, got nil", tc.err)
-				}
-
-				if tc.err != err.Error() {
-					t.Fatalf("expected error %s, got %s", tc.err, err.Error())
-				}
-				return
-			}
-
-			if err != nil {
-				t.Fatalf("unexpected error %s", err.Error())
-			}
-
-			if !reflect.DeepEqual(tc.expected, got) {
-				t.Fatalf("\nwant %#v\n got %#v", tc.expected, got)
-			}
-
-		})
 	}
 }
 
