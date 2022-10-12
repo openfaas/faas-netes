@@ -38,7 +38,7 @@ openfaasImagePullPolicy: "Always"
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.2.5
+  image: ghcr.io/openfaasltd/autoscaler:0.2.6
   replicas: 1
   enabled: false
   resources:
@@ -105,7 +105,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.4
+  image: ghcr.io/openfaasltd/gateway:0.2.5
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.25.2
