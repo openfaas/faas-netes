@@ -41,15 +41,23 @@ spec:
           readOnlyRootFilesystem: true
           runAsUser: 10001
         livenessProbe:
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
           httpGet:
             path: /healthz
             port: 8080
-          timeoutSeconds: 5
         readinessProbe:
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
           httpGet:
             path: /healthz
             port: 8080
-          timeoutSeconds: 5
         env:
         - name: read_timeout
           value: "65s"
