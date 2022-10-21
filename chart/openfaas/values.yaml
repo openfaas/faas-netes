@@ -239,6 +239,8 @@ queueWorker:
 prometheus:
   image: prom/prometheus:v2.38.0
   create: true
+  # Retention period can be configured if the disk space is limited
+  retentionPeriod: 10d
   resources:
     requests:
       memory: "512Mi"
