@@ -15,6 +15,12 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 data:
   prometheus.yml: |
+{{- if .Values.prometheus.retentionPeriod }}
+    storage:
+      tsdb:
+        retention:
+          time: {{ .Values.prometheus.retentionPeriod }}
+{{- end }}
     global:
       scrape_interval:     15s
       evaluation_interval: 15s
