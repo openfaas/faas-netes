@@ -3,11 +3,14 @@
 ## Description
 <!--- Describe your changes in detail -->
 
-## Motivation and Context
+## Why is this needed?
 <!--- Why is this change required? What problem does it solve? -->
 <!--- If it fixes an open issue, please link to the issue here. -->
 - [ ] I have raised an issue to propose this change ([required](https://github.com/openfaas/faas/blob/master/CONTRIBUTING.md))
 
+## Who is this for?
+
+What company is this for? Are you listed in the [ADOPTERS.md](https://github.com/openfaas/faas/blob/master/ADOPTERS.md) file?
 
 ## How Has This Been Tested?
 <!--- Please describe in detail how you tested your changes. -->
