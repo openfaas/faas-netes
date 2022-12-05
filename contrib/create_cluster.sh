@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DEVENV=${OF_DEV_ENV:-kind}
-KUBE_VERSION=v1.18.19
+KUBE_VERSION=v1.21.1
 
 EXISTS=$(kind get clusters | grep "$DEVENV")
 
@@ -15,7 +15,6 @@ if [ "$EXISTS" = "$DEVENV" ]; then
     esac
 done
 fi
-
 
 if [ "$EXISTS" != "$DEVENV" ]; then
     echo ">>> Creating Kubernetes ${KUBE_VERSION} cluster ${DEVENV}"
