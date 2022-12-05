@@ -4,11 +4,11 @@ The SQS connector can be used to invoke functions from an AWS SQS queue.
 
 ## Prerequisites
 
-- Obtain a license or trial
+- Purchase a license
 
-  You will need an OpenFaaS Premium subscription to access PRO features.
+  You will need an OpenFaaS License
 
-  Contact us to find out more and to start a free trial at: [openfaas.com/support](https://www.openfaas.com/support)
+  Contact us to find out more [openfaas.com/pricing](https://www.openfaas.com/pricing)
 
 - Install OpenFaaS
 
@@ -16,7 +16,7 @@ The SQS connector can be used to invoke functions from an AWS SQS queue.
 
 ## Configure your secrets
 
-- Create the required secret with your OpenFaaS PRO license code:
+- Create the required secret with your OpenFaaS Pro license code:
 
 ```bash
 $ kubectl create secret generic \
@@ -58,7 +58,7 @@ maxMessages: 1
 
 ## Install the chart
 
-- Add the OpenFaaS chart repo and deploy the `sqs-connector` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
+- Add the OpenFaaS chart repo and deploy the `sqs-connector` Pro chart. We recommend installing it in the same namespace as the rest of OpenFaaS
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/

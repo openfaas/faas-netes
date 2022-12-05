@@ -1,4 +1,4 @@
-# Kafka PRO connector quickstart
+# Kafka Pro connector quickstart
 
 1.  Install Kafka in a separate namespace
 

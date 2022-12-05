@@ -5,7 +5,7 @@
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaasltd/postgres-connector:0.0.1
+image: ghcr.io/openfaasltd/postgres-connector:0.0.2
 
 replicas: 1
 
@@ -15,27 +15,13 @@ connectionSecret: postgresql-connection
 publication: "ofltd"
 
 # Max timeout for a function
-upstreamTimeout: 30s
+upstreamTimeout: 120s
 
 # interval for rebuilding the map of functions and topics
 rebuildInterval: 30s
 
 # Use with slow consumers or long running functions
 asyncInvocation: false
-
-# HTTP content-type for invoking functions
-contentType: text/plain
-
-# Print the data read from the SQS queue before invoking functions
-# Do not use in production
-printRequestBody: false
-
-# Print the HTTP status of invoked functions
-printResponse: true
-
-# Print the data received from invoked functions
-# Do not use in production
-printResponseBody: false
 
 # Gateway URL to access API and for invocations
 gatewayURL: http://gateway.openfaas:8080

@@ -8,7 +8,7 @@ The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) is used to bu
 
 - Obtain a license key
 
-  You will need a license for OpenFaaS Pro, contact us at: [openfaas.com/support](https://www.openfaas.com/support)
+  You will need a license for OpenFaaS Pro, contact us at: [openfaas.com/pricing](https://www.openfaas.com/pricing)
 
 - A container image registry that is accessible from your cluster
 

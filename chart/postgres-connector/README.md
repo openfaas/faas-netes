@@ -2,21 +2,27 @@
 
 The Postgres connector can be used to invoke functions from PostgreSQL database events.
 
-## Prerequisites
+See also: [Trigger functions from Postgres](https://docs.openfaas.com/openfaas-pro/postgres-events/)
 
-- Obtain a license or trial
+## Pre-requisites
 
-  You will need an OpenFaaS Premium subscription to access PRO features.
+- Purchase a license
 
-  Contact us to find out more and to start a free trial at: [openfaas.com/support](https://www.openfaas.com/support)
+  You will need an OpenFaaS License
+
+  Contact us to find out more [openfaas.com/pricing](https://www.openfaas.com/pricing)
 
 - Install OpenFaaS
 
   You must have a working OpenFaaS installed.
 
+- Configure PostgreSQL
+
+  You must have a working PostgreSQL database installed and configured for logical replication, get the specific settings here: [Trigger functions from Postgres](https://docs.openfaas.com/openfaas-pro/postgres-events/)
+
 ## Configure your secrets
 
-- Create the required secret with your OpenFaaS PRO license code:
+- Create the required secret with your OpenFaaS Pro license code:
 
 ```bash
 $ kubectl create secret generic \
@@ -34,9 +40,9 @@ $ kubectl create secret generic -n openfaas \
 
 ## Configure values.yaml
 
-```yaml
-replicas: 1
+Create a `custom.yaml` file with the following custom contents:
 
+```yaml
 connectionFileSecret: "postgres-connection-file"
 
 publication: "ofltd"
@@ -47,13 +53,14 @@ filters: "customers:insert,customers:update"
 
 ## Install the chart
 
-- Add the OpenFaaS chart repo and deploy the `postgres-connector` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
+- Add the OpenFaaS chart repo and deploy the `postgres-connector` Pro chart. We recommend installing it in the same namespace as the rest of OpenFaaS
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
 $ helm upgrade postgres-connector openfaas/postgres-connector \
     --install \
-    --namespace openfaas
+    --namespace openfaas \
+    -f custom.yaml
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -73,15 +80,16 @@ Additional postgres-connector options in `values.yaml`.
 
 | Parameter                | Description                                                                            | Default                        |
 | ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
+| `connectionFileSecret`  | The name of the secret containing the connection string                                | `postgresql-connection`        |
+| `publication`           | The name of the publication to be created in Postgres, we do not recommend changing this value. | `ofltd`                        |
+| `filters`                | A comma separated list of filters to apply to the stream i.e. `TABLENAME:ACTION`, action can be: `insert`, `delete` or `update`, multiple items can be comma separated such as `T1:insert,T2:delete,T3:insert`  | `""`                           |
 | `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `2m`                          |
 | `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `30s`                           |
+| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
 | `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
-| `printResponse`          | Output the response of calling a function in the logs.                                 | `true`                         |
-| `printResponseBody`      | Output to the logs the response body when calling a function.                          | `false`                        |
-| `printRequestBody`       | Output to the logs the request body when calling a function.                           | `false`                        |
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 | `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
+| `replicas`               | Number of replicas for the Connector Deployment object, we recommend setting this to `1`    | `1`                            |
 | `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.

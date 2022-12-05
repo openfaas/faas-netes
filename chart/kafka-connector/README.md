@@ -1,4 +1,4 @@
-# OpenFaaS PRO Kafka Connector
+# OpenFaaS Pro Kafka Connector
 
 The [Kafka connector](https://docs.openfaas.com/openfaas-pro/introduction) brings Kafka to OpenFaaS by invoking functions based on Kafka topic annotations.
 
@@ -6,11 +6,11 @@ The [Kafka connector](https://docs.openfaas.com/openfaas-pro/introduction) bring
 
 ## Prerequisites
 
-- Obtain a license or trial
+- Purchase a license
 
-  You will need an OpenFaaS Premium subscription to access PRO features.
+  You will need an OpenFaaS License
 
-  Contact us to find out more and to start a free trial at: [openfaas.com/support](https://www.openfaas.com/support)
+  Contact us to find out more [openfaas.com/pricing](https://www.openfaas.com/pricing)
 
 - Install OpenFaaS
 
@@ -30,7 +30,7 @@ The [Kafka connector](https://docs.openfaas.com/openfaas-pro/introduction) bring
 
 ## Install the Chart
 
-- Create the required secret with your OpenFaaS PRO license code:
+- Create the required secret with your OpenFaaS Pro license code:
 
 ```bash
 $ kubectl create secret generic \
@@ -39,7 +39,7 @@ $ kubectl create secret generic \
     --from-file license=$HOME/.openfaas/LICENSE
 ```
 
-- Add the OpenFaaS chart repo and deploy the `kafka-connector` PRO chart. We recommend installing it in the same namespace as the rest of OpenFaaS
+- Add the OpenFaaS chart repo and deploy the `kafka-connector` Pro chart. We recommend installing it in the same namespace as the rest of OpenFaaS
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/

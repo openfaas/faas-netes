@@ -136,8 +136,8 @@ This option is reserved for OpenFaaS Pro customers, see the installation steps h
 
 See also:
 * Scale-down to zero (in this document)
-* [OpenFaaS PRO SSO/OIDC](https://docs.openfaas.com/openfaas-pro/sso/)
-* [OpenFaaS PRO Kafka Event Connector](https://docs.openfaas.com/openfaas-pro/kafka-events/)
+* [OpenFaaS Pro SSO/OIDC](https://docs.openfaas.com/openfaas-pro/sso/)
+* [OpenFaaS Pro Kafka Event Connector](https://docs.openfaas.com/openfaas-pro/kafka-events/)
 
 ## Test changes for the helm chart
 
@@ -374,9 +374,9 @@ Scaling up from zero replicas is enabled by default, to turn it off set `scaleFr
 
 ### Scale-down to zero (off by default)
 
-Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the faas-idler component. This is an OpenFaaS PRO feature and an effective way to save costs on your infrastructure costs.
+Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the faas-idler component. This is an OpenFaaS Pro feature and an effective way to save costs on your infrastructure costs.
 
-OpenFaaS PRO will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
+OpenFaaS Pro will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
 
 See also: [Scale to Zero docs](https://docs.openfaas.com/openfaas-pro/scale-to-zero/).
 
