@@ -40,7 +40,7 @@ $ kubectl create secret generic -n openfaas \
 
 ## Configure values.yaml
 
-Create a `custom.yaml` file with the following custom contents:
+Create a `pgconnector.yaml` file with the following custom contents:
 
 ```yaml
 connectionFileSecret: "postgres-connection-file"
@@ -48,7 +48,7 @@ connectionFileSecret: "postgres-connection-file"
 publication: "ofltd"
 
 # filter which tables and events to be notified about
-filters: "customers:insert,customers:update"
+filters: "customer:insert,customer:update"
 ```
 
 ## Install the chart
@@ -57,10 +57,11 @@ filters: "customers:insert,customers:update"
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
+$ helm repo update
 $ helm upgrade postgres-connector openfaas/postgres-connector \
     --install \
     --namespace openfaas \
-    -f custom.yaml
+    -f pgconnector.yaml
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
