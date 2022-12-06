@@ -49,6 +49,8 @@ publication: "ofltd"
 
 # filter which tables and events to be notified about
 filters: "customer:insert,customer:update"
+
+wal: true
 ```
 
 ## Install the chart
@@ -71,8 +73,8 @@ $ helm upgrade postgres-connector openfaas/postgres-connector \
 ```sh
 $ helm upgrade postgres-connector ./chart/postgres-connector \
     --install \
-    --namespace openfaas
-    -f ./values.yaml
+    --namespace openfaas \
+    -f ./pgconnector.yaml
 ```
 
 ## Configuration

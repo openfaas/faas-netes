@@ -54,6 +54,9 @@ spec:
             {{- if .Values.connectionSecret }}
             - "-connection-file=/var/secrets/postgresql-connection/postgresql-connection"
             {{- end }}
+            {{- if eq .Values.wal false }}
+            - "-wal=false"
+            {{- end }}
           env:
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
@@ -87,7 +90,7 @@ spec:
             - name: publication
               value: {{ .Values.publication | quote }}
             {{- end}}
-            {{- if .Values.publication }}
+            {{- if .Values.filters }}
             - name: filters
               value: {{ .Values.filters | quote }}
             {{- end}}

@@ -5,14 +5,18 @@
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaasltd/postgres-connector:0.0.2
+image: ghcr.io/openfaasltd/postgres-connector:0.0.3-rc1
 
 replicas: 1
 
 # Secret containing connection string to the database
 connectionSecret: postgresql-connection
 
+# the publication name when using wal mode
 publication: "ofltd"
+
+# filters when using wal mode
+filters: "customer:insert,customer:update,customer:delete"
 
 # Max timeout for a function
 upstreamTimeout: 120s
@@ -28,6 +32,9 @@ gatewayURL: http://gateway.openfaas:8080
 
 # Basic auth for the gateway
 basic_auth: true
+
+# Work in WAL mode instead of using triggers
+wal: true
 
 resources:
   requests:
