@@ -105,7 +105,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.5
+  image: ghcr.io/openfaasltd/gateway:0.2.7
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.25.3
@@ -149,7 +149,7 @@ gateway:
     successThreshold: 1
 
 basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.25.2
+  image: ghcr.io/openfaas/basic-auth:0.25.3
   replicas: 1
   resources:
     requests:
@@ -157,13 +157,13 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.1
+  image: ghcr.io/openfaasltd/faas-netes:0.2.2
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.1
+  image: ghcr.io/openfaasltd/faas-netes:0.2.2
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.0
+  image: ghcr.io/openfaas/faas-netes:0.16.1
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -182,7 +182,7 @@ faasnetes:
 
 # replaces faas-netes with openfaas-operator
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.16.0
+  image: ghcr.io/openfaas/faas-netes:0.16.1
   create: false
   resources:
     requests:
@@ -194,7 +194,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.3
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.4
   durableName: "faas-workers"
   logs:
     debug: false
