@@ -60,5 +60,5 @@ jobs:
             VERSION=${{env.VERSION}}
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/faas-netes:${{ github.sha }}
-            ghcr.io/${{ env.REPO_OWNER }}/faas-netes:${{ steps.get_tag.outputs.TAG }}
+            ghcr.io/${{ env.REPO_OWNER }}/faas-netes:${{ env.TAG }}
             ghcr.io/${{ env.REPO_OWNER }}/faas-netes:latest
