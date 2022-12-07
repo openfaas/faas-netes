@@ -37,6 +37,11 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 			return
 		}
 
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
+		}
+
 		body, _ := ioutil.ReadAll(r.Body)
 
 		request := types.DeleteFunctionRequest{}

@@ -64,7 +64,7 @@ func New(client clientset.Interface,
 		InfoHandler:          makeInfoHandler(),
 		SecretHandler:        handlers.MakeSecretHandler(functionNamespace, kube),
 		LogHandler:           logs.NewLogHandlerFunc(faasnetesk8s.NewLogRequestor(kube, functionNamespace), bootstrapConfig.WriteTimeout),
-		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clusterRole, kube),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, kube),
 	}
 
 	if pprof == "true" {

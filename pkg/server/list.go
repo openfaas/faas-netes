@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
@@ -28,6 +29,11 @@ func makeListHandler(defaultNamespace string,
 
 		if len(namespace) > 0 {
 			lookupNamespace = namespace
+		}
+
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
 		}
 
 		if lookupNamespace == "kube-system" {
