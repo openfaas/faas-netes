@@ -2,7 +2,7 @@ package server
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,7 +10,6 @@ import (
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	"github.com/openfaas/faas-provider/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 	v1 "k8s.io/client-go/listers/apps/v1"
 	glog "k8s.io/klog"
 )
@@ -29,6 +28,11 @@ func makeReplicaReader(defaultNamespace string, client clientset.Interface, list
 			lookupNamespace = namespace
 		}
 
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
+		}
+
 		opts := metav1.GetOptions{}
 		k8sfunc, err := client.OpenfaasV1().Functions(lookupNamespace).
 			Get(r.Context(), functionName, opts)
@@ -37,6 +41,7 @@ func makeReplicaReader(defaultNamespace string, client clientset.Interface, list
 			w.Write([]byte(err.Error()))
 			return
 		}
+
 		desiredReplicas, availableReplicas, err := getReplicas(functionName, lookupNamespace, lister)
 		if err != nil {
 			glog.Warningf("Function replica reader error: %v", err)
@@ -65,64 +70,11 @@ func getReplicas(functionName string, namespace string, lister v1.DeploymentList
 	if err != nil {
 		return 0, 0, err
 	}
+
 	desiredReplicas := uint64(dep.Status.Replicas)
 	availableReplicas := uint64(dep.Status.AvailableReplicas)
 
 	return desiredReplicas, availableReplicas, nil
-}
-
-func makeReplicaHandler(defaultNamespace string, kube kubernetes.Interface) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		functionName := vars["name"]
-
-		q := r.URL.Query()
-		namespace := q.Get("namespace")
-
-		lookupNamespace := defaultNamespace
-
-		if len(namespace) > 0 {
-			lookupNamespace = namespace
-		}
-
-		if lookupNamespace == "kube-system" {
-			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
-			return
-		}
-
-		req := types.ScaleServiceRequest{}
-		if r.Body != nil {
-			defer r.Body.Close()
-			bytesIn, _ := ioutil.ReadAll(r.Body)
-			if err := json.Unmarshal(bytesIn, &req); err != nil {
-				glog.Errorf("Function %s replica invalid JSON: %v", functionName, err)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte(err.Error()))
-				return
-			}
-		}
-
-		opts := metav1.GetOptions{}
-		dep, err := kube.AppsV1().Deployments(lookupNamespace).Get(r.Context(), functionName, opts)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-			glog.Errorf("Function %s get error: %v", functionName, err)
-			return
-		}
-
-		dep.Spec.Replicas = int32p(int32(req.Replicas))
-		_, err = kube.AppsV1().Deployments(lookupNamespace).Update(r.Context(), dep, metav1.UpdateOptions{})
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-			glog.Errorf("Function %s update error: %v", functionName, err)
-			return
-		}
-
-		glog.Infof("Function %v replica updated to %v", functionName, req.Replicas)
-		w.WriteHeader(http.StatusAccepted)
-	}
 }
 
 func toFunctionStatus(item ofv1.Function) types.FunctionStatus {

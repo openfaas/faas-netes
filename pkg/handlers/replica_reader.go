@@ -35,6 +35,11 @@ func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http
 			lookupNamespace = namespace
 		}
 
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
+		}
+
 		s := time.Now()
 
 		function, err := getService(lookupNamespace, functionName, lister)

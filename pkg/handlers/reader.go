@@ -6,6 +6,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -29,6 +30,11 @@ func MakeFunctionReader(defaultNamespace string, deploymentLister v1.DeploymentL
 
 		if len(namespace) > 0 {
 			lookupNamespace = namespace
+		}
+
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
 		}
 
 		if lookupNamespace == "kube-system" {

@@ -61,6 +61,11 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 			namespace = request.Namespace
 		}
 
+		if namespace != functionNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", functionNamespace), http.StatusBadRequest)
+			return
+		}
+
 		existingSecrets, err := secrets.GetSecrets(namespace, request.Secrets)
 		if err != nil {
 			wrappedErr := fmt.Errorf("unable to fetch secrets: %s", err.Error())

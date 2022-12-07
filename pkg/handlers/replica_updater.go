@@ -7,6 +7,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -34,6 +35,11 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 			lookupNamespace = namespace
 		}
 
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
+		}
+
 		req := types.ScaleServiceRequest{}
 
 		if r.Body != nil {
@@ -47,6 +53,10 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 				log.Println(msg, marshalErr)
 				return
 			}
+		}
+
+		if req.Replicas == 0 {
+			http.Error(w, fmt.Errorf("for OpenFaaS CE, replicas cannot be set to 0").Error(), http.StatusBadRequest)
 		}
 
 		options := metav1.GetOptions{

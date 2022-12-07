@@ -45,6 +45,11 @@ func makeApplyHandler(defaultNamespace string, client clientset.Interface) http.
 			namespace = req.Namespace
 		}
 
+		if namespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
+		}
+
 		opts := metav1.GetOptions{}
 		got, err := client.OpenfaasV1().Functions(namespace).Get(r.Context(), req.Service, opts)
 		miss := false
