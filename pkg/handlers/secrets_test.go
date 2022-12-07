@@ -15,7 +15,6 @@ import (
 	"testing"
 
 	types "github.com/openfaas/faas-provider/types"
-	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	testclient "k8s.io/client-go/kubernetes/fake"
 )
@@ -193,7 +192,7 @@ func Test_SecretsHandler(t *testing.T) {
 
 		resp := w.Result()
 		if resp.StatusCode != http.StatusNotFound {
-			t.Errorf("expected status code '%d', got '%d'", http.StatusNotFound, resp.StatusCode)
+			t.Errorf("want status code '%d', got '%d'", http.StatusNotFound, resp.StatusCode)
 		}
 	})
 
@@ -266,7 +265,7 @@ func Test_SecretsHandler(t *testing.T) {
 
 		resp := w.Result()
 		if resp.StatusCode != http.StatusNotFound {
-			t.Errorf("expected status code '%d', got '%d'", http.StatusNotFound, resp.StatusCode)
+			t.Errorf("want status code '%d', got '%d'", http.StatusNotFound, resp.StatusCode)
 		}
 	})
 }
@@ -290,86 +289,4 @@ func Test_SecretsHandler_ListEmpty(t *testing.T) {
 	if string(body) == "null" {
 		t.Errorf(`want empty list to be valid json i.e. "[]", but was %q`, string(body))
 	}
-}
-
-func Test_NamespaceResolver(t *testing.T) {
-	defaultNamespace := "openfaas-fn"
-	kube := testclient.NewSimpleClientset()
-	getLookupNamespace := NewNamespaceResolver(defaultNamespace, kube)
-
-	allowedAnnotation := map[string]string{"openfaas": "true"}
-	allowedNamespace := "allowed-ns"
-	ns := &v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: allowedNamespace, Annotations: allowedAnnotation}}
-	kube.CoreV1().Namespaces().Create(context.TODO(), ns, metav1.CreateOptions{})
-
-	t.Run("no custom namespace", func(t *testing.T) {
-		req := httptest.NewRequest("GET", "http://example.com/foo", nil)
-		ns, err := getLookupNamespace(req)
-
-		if ns != defaultNamespace {
-			t.Errorf("expected %s, got %s", defaultNamespace, ns)
-		}
-
-		if err != nil {
-			t.Errorf("expected %v, got %v", nil, err)
-		}
-	})
-
-	t.Run("allowed namespace in GET query parameters", func(t *testing.T) {
-		url := fmt.Sprintf("http://example.com/foo?namespace=%s", allowedNamespace)
-
-		req := httptest.NewRequest("GET", url, nil)
-		ns, err := getLookupNamespace(req)
-
-		if ns != allowedNamespace {
-			t.Errorf("expected %s, got %s", allowedNamespace, ns)
-		}
-
-		if err != nil {
-			t.Errorf("expected %v, got %v", nil, err)
-		}
-	})
-
-	t.Run("forbidden namespace in GET query parameters", func(t *testing.T) {
-		forbiddenNamespace := "forbidden"
-		url := fmt.Sprintf("http://example.com/foo?namespace=%s", forbiddenNamespace)
-
-		req := httptest.NewRequest("GET", url, nil)
-		_, err := getLookupNamespace(req)
-
-		errMsg := "unable to manage secrets within the forbidden namespace"
-		if err.Error() != errMsg {
-			t.Errorf("expected %s, got %s", errMsg, err)
-		}
-	})
-
-	t.Run("allowed namespace in POST body", func(t *testing.T) {
-		url := "http://example.com/foo"
-		payload := fmt.Sprintf(`{"name": "secret", "value": "value", "namespace": "%s"}`, allowedNamespace)
-
-		req := httptest.NewRequest("POST", url, strings.NewReader(payload))
-		ns, err := getLookupNamespace(req)
-
-		if ns != allowedNamespace {
-			t.Errorf("expected %s, got %s", allowedNamespace, ns)
-		}
-
-		if err != nil {
-			t.Errorf("expected %v, got %v", nil, err)
-		}
-	})
-
-	t.Run("forbidden namespace in POST body", func(t *testing.T) {
-		forbiddenNamespace := "forbidden"
-		url := "http://example.com/foo"
-		payload := fmt.Sprintf(`{"name": "secret", "value": "value", "namespace": "%s"}`, forbiddenNamespace)
-
-		req := httptest.NewRequest("POST", url, strings.NewReader(payload))
-		_, err := getLookupNamespace(req)
-
-		errMsg := "unable to manage secrets within the forbidden namespace"
-		if err.Error() != errMsg {
-			t.Errorf("expected %s, got %s", errMsg, err)
-		}
-	})
 }

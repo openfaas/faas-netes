@@ -47,6 +47,11 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 			lookupNamespace = request.Namespace
 		}
 
+		if lookupNamespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
+		}
+
 		if lookupNamespace == "kube-system" {
 			http.Error(w, "unable to list within the kube-system namespace", http.StatusUnauthorized)
 			return

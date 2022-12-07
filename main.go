@@ -31,6 +31,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/klog"
 	glog "k8s.io/klog"
 
 	// required to authenticate against GKE clusters
@@ -121,8 +122,9 @@ func main() {
 	defaultResync := time.Minute * 5
 
 	namespaceScope := config.DefaultFunctionNamespace
-	if config.ClusterRole {
-		namespaceScope = ""
+
+	if namespaceScope == "" {
+		klog.Fatal("DefaultFunctionNamespace must be set")
 	}
 
 	kubeInformerOpt := kubeinformers.WithNamespace(namespaceScope)
@@ -212,7 +214,7 @@ func runController(setup serverSetup) {
 		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
 		SecretHandler:        handlers.MakeSecretHandler(config.DefaultFunctionNamespace, kubeClient),
 		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(kubeClient, config.DefaultFunctionNamespace), config.FaaSConfig.WriteTimeout),
-		ListNamespaceHandler: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, config.ClusterRole, kubeClient),
+		ListNamespaceHandler: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, kubeClient),
 	}
 
 	faasProvider.Serve(&bootstrapHandlers, &config.FaaSConfig)
@@ -247,7 +249,7 @@ func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
 		factory,
 	)
 
-	srv := server.New(faasClient, kubeClient, listers.EndpointsInformer, listers.DeploymentInformer.Lister(), cfg.ClusterRole, cfg)
+	srv := server.New(faasClient, kubeClient, listers.EndpointsInformer, listers.DeploymentInformer.Lister(), false, cfg)
 
 	go srv.Start()
 	if err := ctrl.Run(1, stopCh); err != nil {

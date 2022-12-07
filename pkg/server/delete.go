@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -21,6 +22,11 @@ func makeDeleteHandler(defaultNamespace string, client clientset.Interface) http
 		lookupNamespace := defaultNamespace
 		if len(namespace) > 0 {
 			lookupNamespace = namespace
+		}
+
+		if namespace != defaultNamespace {
+			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			return
 		}
 
 		if namespace == "kube-system" {
