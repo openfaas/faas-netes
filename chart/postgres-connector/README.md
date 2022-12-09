@@ -43,7 +43,7 @@ $ kubectl create secret generic -n openfaas \
 Create a `pgconnector.yaml` file with the following custom contents:
 
 ```yaml
-connectionFileSecret: "postgres-connection-file"
+connectionSecret: "postgresql-connection"
 
 publication: "ofltd"
 
@@ -83,7 +83,7 @@ Additional postgres-connector options in `values.yaml`.
 
 | Parameter                | Description                                                                            | Default                        |
 | ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `connectionFileSecret`  | The name of the secret containing the connection string                                | `postgresql-connection`        |
+| `connectionSecret`       | The name of the secret containing the connection string                                | `postgresql-connection`        |
 | `publication`           | The name of the publication to be created in Postgres, we do not recommend changing this value. | `ofltd`                        |
 | `filters`                | A comma separated list of filters to apply to the stream i.e. `TABLENAME:ACTION`, action can be: `insert`, `delete` or `update`, multiple items can be comma separated such as `T1:insert,T2:delete,T3:insert`  | `""`                           |
 | `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `2m`                          |
