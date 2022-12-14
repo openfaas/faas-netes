@@ -110,10 +110,15 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		log.Printf("Deployment created: %s.%s\n", request.Service, namespace)
 
 		service := factory.Client.CoreV1().Services(namespace)
-		serviceSpec := makeServiceSpec(request, factory)
-		_, err = service.Create(context.TODO(), serviceSpec, metav1.CreateOptions{})
-
+		serviceSpec, err := makeServiceSpec(request, factory)
 		if err != nil {
+			wrappedErr := fmt.Errorf("failed create Service spec: %s", err.Error())
+			log.Println(wrappedErr)
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if _, err = service.Create(context.TODO(), serviceSpec, metav1.CreateOptions{}); err != nil {
 			wrappedErr := fmt.Errorf("failed create Service: %s", err.Error())
 			log.Println(wrappedErr)
 			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
@@ -161,7 +166,10 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		imagePullPolicy = apiv1.PullAlways
 	}
 
-	annotations := buildAnnotations(request)
+	annotations, err := buildAnnotations(request)
+	if err != nil {
+		return nil, err
+	}
 
 	probes, err := factory.MakeProbes(request)
 	if err != nil {
@@ -243,7 +251,11 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 	return deploymentSpec, nil
 }
 
-func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFactory) *corev1.Service {
+func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFactory) (*corev1.Service, error) {
+	annotations, err := buildAnnotations(request)
+	if err != nil {
+		return nil, err
+	}
 
 	serviceSpec := &corev1.Service{
 		TypeMeta: metav1.TypeMeta{
@@ -252,7 +264,7 @@ func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFacto
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        request.Service,
-			Annotations: buildAnnotations(request),
+			Annotations: annotations,
 		},
 		Spec: corev1.ServiceSpec{
 			Type: corev1.ServiceTypeClusterIP,
@@ -273,10 +285,10 @@ func makeServiceSpec(request types.FunctionDeployment, factory k8s.FunctionFacto
 		},
 	}
 
-	return serviceSpec
+	return serviceSpec, nil
 }
 
-func buildAnnotations(request types.FunctionDeployment) map[string]string {
+func buildAnnotations(request types.FunctionDeployment) (map[string]string, error) {
 	var annotations map[string]string
 	if request.Annotations != nil {
 		annotations = *request.Annotations
@@ -284,10 +296,22 @@ func buildAnnotations(request types.FunctionDeployment) map[string]string {
 		annotations = map[string]string{}
 	}
 
+	if v, ok := annotations["topic"]; ok {
+		if strings.Contains(v, ",") {
+			return nil, fmt.Errorf("the topic annotation may only support one value in the Community Edition")
+		}
+	}
+
+	for k, _ := range annotations {
+		if strings.Contains(k, "amazonaws.com") || strings.Contains(k, "gke.io") {
+			return nil, fmt.Errorf("annotation %q is not supported in the Community Edition", k)
+		}
+	}
+
 	if _, ok := annotations["prometheus.io.scrape"]; !ok {
 		annotations["prometheus.io.scrape"] = "false"
 	}
-	return annotations
+	return annotations, nil
 }
 
 func buildEnvVars(request *types.FunctionDeployment) []corev1.EnvVar {

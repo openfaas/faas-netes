@@ -16,7 +16,7 @@ import (
 func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
 	request := types.FunctionDeployment{}
 
-	annotations := buildAnnotations(request)
+	annotations, _ := buildAnnotations(request)
 
 	if len(annotations) != 1 {
 		t.Errorf("want: %d annotations got: %d", 1, len(annotations))
@@ -36,7 +36,7 @@ func Test_buildAnnotations_Empty_In_CreateRequest(t *testing.T) {
 func Test_buildAnnotations_Premetheus_NotOverridden(t *testing.T) {
 	request := types.FunctionDeployment{Annotations: &map[string]string{"prometheus.io.scrape": "true"}}
 
-	annotations := buildAnnotations(request)
+	annotations, _ := buildAnnotations(request)
 
 	if len(annotations) != 1 {
 		t.Errorf("want: %d annotations got: %d", 1, len(annotations))
@@ -60,7 +60,7 @@ func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
 		},
 	}
 
-	annotations := buildAnnotations(request)
+	annotations, _ := buildAnnotations(request)
 
 	if len(annotations) != 3 {
 		t.Errorf("want: %d annotations got: %d", 1, len(annotations))
@@ -73,6 +73,46 @@ func Test_buildAnnotations_From_CreateRequest(t *testing.T) {
 
 	if v != "Wed 25 Jul 21:26:22 BST 2018" {
 		t.Errorf("want: %s for annotation date-created got: %s", "Wed 25 Jul 21:26:22 BST 2018", v)
+	}
+}
+
+func Test_buildAnnotations_CE_Usecase(t *testing.T) {
+	request := types.FunctionDeployment{
+		Annotations: &map[string]string{
+			"amazonaws.com": "iam::user",
+		},
+	}
+
+	_, err := buildAnnotations(request)
+
+	if err == nil {
+		t.Fatalf("expected error for invalid CE annotation")
+		return
+	}
+	want := "annotation \"amazonaws.com\" is not supported in the Community Edition"
+	got := err.Error()
+	if want != got {
+		t.Errorf("want: %q\ngot:\n%q", want, got)
+	}
+}
+
+func Test_buildAnnotations_CE_OneTopic(t *testing.T) {
+	request := types.FunctionDeployment{
+		Annotations: &map[string]string{
+			"topic": "a,b",
+		},
+	}
+
+	_, err := buildAnnotations(request)
+
+	if err == nil {
+		t.Fatalf("expected error for invalid CE annotation")
+		return
+	}
+	want := "the topic annotation may only support one value in the Community Edition"
+	got := err.Error()
+	if want != got {
+		t.Errorf("want: %q\ngot:\n%q", want, got)
 	}
 }
 
