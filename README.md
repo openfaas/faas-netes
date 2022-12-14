@@ -10,7 +10,7 @@ faas-netes - Serverless Functions For Kubernetes with OpenFaaS
 
 `faas-netes` is an [OpenFaaS provider](https://github.com/openfaas/faas-provider) which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). It's part of a larger stack that brings a cloud-agnostic serverless experience to Kubernetes.
 
-The existing REST API, CLI and UI are fully compatible. It also has an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
+The existing REST API, CLI and UI are fully compatible. With OpenFaaS Pro, you have an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
 
 You can deploy OpenFaaS to any Kubernetes service - whether managed or local, including to OpenShift. You will find any specific instructions and additional links in the documentation.
 
@@ -38,8 +38,16 @@ Additional & ecosystem:
 
 Community:
 
-* Over 25k GitHub stars
-* Independent open-source project with over 300 contributors
+* Over 30k GitHub stars
+* Independent open-source project with over 300 contributors, with commercial option available
+
+Commercial options:
+
+* Support from full-time team
+* Commercial add-ons and integrations with events like Kafka, Postgres, AWS SQS and Cron
+* Multiple namespace support
+* gVisor support and runtimeClass for isolation
+* Affinity and advanced scheduling / security constraints
 
 ## Get started
 
