@@ -1,8 +1,11 @@
 # JetStream for OpenFaaS queue-worker
 
-Deploy OpenFaaS queues.
+Deploy additional, named OpenFaaS queues.
+
+Named queues requires OpenFaaS Enterprise. Please reach out to us if you're an existing OpenFaaS Pro customer and need this feature.
 
 ## Install an additional queue
+
 ```bash
 helm upgrade slow-queue openfaas/queue-worker \
   --install \

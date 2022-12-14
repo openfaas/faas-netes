@@ -1,4 +1,4 @@
-image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.0
+image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.5
 
 replicas: 1
 
