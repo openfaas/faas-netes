@@ -8,16 +8,15 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
 	v1 "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/openfaas/v1"
 	"github.com/openfaas/faas-netes/pkg/config"
-	"github.com/openfaas/faas-netes/pkg/controller"
 	"github.com/openfaas/faas-netes/pkg/handlers"
 	"github.com/openfaas/faas-netes/pkg/k8s"
-	"github.com/openfaas/faas-netes/pkg/server"
 	"github.com/openfaas/faas-netes/pkg/signals"
 	version "github.com/openfaas/faas-netes/version"
 	faasProvider "github.com/openfaas/faas-provider"
@@ -32,7 +31,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog"
-	glog "k8s.io/klog"
 
 	// required to authenticate against GKE clusters
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
@@ -60,10 +58,13 @@ func main() {
 	flag.BoolVar(&operator, "operator", false, "Use the operator mode instead of faas-netes")
 	flag.Parse()
 
-	mode := "controller"
 	if operator {
-		mode = "operator"
+		klog.Errorf("The operator mode is deprecated in OpenFaaS Community Edition (CE), upgrade to OpenFaaS Pro to continue using it")
+		os.Exit(1)
 	}
+
+	mode := "controller"
+
 	sha, release := version.GetReleaseInfo()
 	fmt.Printf("faas-netes - Community Edition (CE)\n"+
 		"\nVersion: %s Commit: %s Mode: %s\n", release, sha, mode)
@@ -144,11 +145,8 @@ func main() {
 		faasClient:          faasClient,
 	}
 
-	if operator {
-		runOperator(setup, config)
-	} else {
-		runController(setup)
-	}
+	runController(setup)
+
 }
 
 type customInformers struct {
@@ -221,42 +219,6 @@ func runController(setup serverSetup) {
 
 }
 
-// runOperator runs the CRD Operator
-func runOperator(setup serverSetup, cfg config.BootstrapConfig) {
-	kubeClient := setup.kubeClient
-	faasClient := setup.faasClient
-	kubeInformerFactory := setup.kubeInformerFactory
-	faasInformerFactory := setup.faasInformerFactory
-
-	// the operator wraps the FunctionFactory with its own type
-	factory := controller.FunctionFactory{
-		Factory: setup.functionFactory,
-	}
-
-	setupLogging()
-	// set up signals so we handle the first shutdown signal gracefully
-	stopCh := signals.SetupSignalHandler()
-	// set up signals so we handle the first shutdown signal gracefully
-
-	operator := true
-	listers := startInformers(setup, stopCh, operator)
-
-	ctrl := controller.NewController(
-		kubeClient,
-		faasClient,
-		kubeInformerFactory,
-		faasInformerFactory,
-		factory,
-	)
-
-	srv := server.New(faasClient, kubeClient, listers.EndpointsInformer, listers.DeploymentInformer.Lister(), false, cfg)
-
-	go srv.Start()
-	if err := ctrl.Run(1, stopCh); err != nil {
-		glog.Fatalf("Error running controller: %s", err.Error())
-	}
-}
-
 // serverSetup is a container for the config and clients needed to start the
 // faas-netes controller or operator
 type serverSetup struct {
@@ -266,18 +228,4 @@ type serverSetup struct {
 	functionFactory     k8s.FunctionFactory
 	kubeInformerFactory kubeinformers.SharedInformerFactory
 	faasInformerFactory informers.SharedInformerFactory
-}
-
-func setupLogging() {
-	klogFlags := flag.NewFlagSet("klog", flag.ExitOnError)
-	glog.InitFlags(klogFlags)
-
-	// Sync the glog and klog flags.
-	flag.CommandLine.VisitAll(func(f1 *flag.Flag) {
-		f2 := klogFlags.Lookup(f1.Name)
-		if f2 != nil {
-			value := f1.Value.String()
-			_ = f2.Value.Set(value)
-		}
-	})
 }

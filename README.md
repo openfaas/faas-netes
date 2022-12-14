@@ -33,7 +33,7 @@ Additional & ecosystem:
 
 * A range of event-connectors and cron-support
 * helm chart and CLI installer
-* Operator available to use Custom Resource Definitions (CRDs) [openfaas-operator](https://github.com/openfaas-incubator/openfaas-operator/)
+* Operator available to use Custom Resource Definitions (CRDs) (See also: [OpenFaaS Pro](https://openfaas.com/pricing))
 * IDp integration with OIDC and commercial add-on
 
 Community:
@@ -61,8 +61,8 @@ The rest of this document is dedicated to technical and operational information 
 
 There are two modes available for faas-netes, the classic mode is the default.
 
-* Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD
-* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD and multiple-namespace support
+* Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD - available in Community Edition and OpenFaaS Pro/Enteprise
+* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD and multiple-namespace [OpenFaaS Pro/Enterprise](https://openfaas.com/pricing/)
 
 See also: [README for "The OpenFaaS Operator"](README-OPERATOR.md)
 
