@@ -74,7 +74,7 @@ spec:
         - name: ack_wait
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
-          value: "{{ .Values.queueWorker.maxInflight }}"
+          value: "{{ or (.Values.queueWorkerPro.maxInflight) (.Values.queueWorker.maxInflight ) ("1") }}"
 
         # OpenFaaS PRO license required
         - name: "max_retry_attempts"

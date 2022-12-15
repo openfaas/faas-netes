@@ -40,6 +40,8 @@ gateway:
 # 75 concurrent requests will be processed, 25 per queueWorker
 queueWorker:
   replicas: 3
+
+queueWorkerPro:
   maxInflight: 50
 
 # Enable JetStream for OpenFaaS, learn more at:

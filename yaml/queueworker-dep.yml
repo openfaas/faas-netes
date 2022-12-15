@@ -29,7 +29,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker:0.13.1
+        image: ghcr.io/openfaas/queue-worker:0.13.2
         imagePullPolicy: Always
         env:
         - name: faas_nats_address
@@ -45,7 +45,7 @@ spec:
         - name: ack_wait
           value: "60s"
         - name: max_inflight
-          value: "1"
+          value: "50"
         # OpenFaaS PRO license required
         - name: "max_retry_attempts"
           value: "10"
