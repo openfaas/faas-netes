@@ -28,7 +28,16 @@ spec:
     spec:
       containers:
       - name: cron-connector
+        {{- if .Values.openfaasPro }}
+        image: {{ .Values.pro.image }}
+        {{- else }}
         image: {{ .Values.image }}
+        {{- end }}
+        {{- if .Values.openfaasPro }}
+        command:
+          - "/usr/bin/cron-connector"
+          - "-license-file=/var/secrets/license/license"
+        {{- end }}
         env:
           - name: gateway_url
             value: {{ .Values.gatewayURL | quote }}
@@ -46,12 +55,15 @@ spec:
             value: {{ .Values.rebuildInterval | quote }}
           {{- end }}
           {{- end }}
-        {{- if .Values.basicAuth }}
         volumeMounts:
-            - name: auth
-              readOnly: true
-              mountPath: "/var/secrets/"
+        {{- if .Values.openfaasPro }}
+          - name: license
+            readOnly: true
+            mountPath: "/var/secrets/license"
         {{- end }}
+          - name: auth
+            readOnly: true
+            mountPath: "/var/secrets/"
         resources:
           {{- .Values.resources | toYaml | nindent 10 }}
       {{- if .Values.basicAuth }}
@@ -59,6 +71,12 @@ spec:
       - name: auth
         secret:
           secretName: basic-auth
+      {{- if .Values.openfaasPro }}
+      - name: license
+        secret:
+          secretName: openfaas-license
+      {{- end }}
+
       {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
