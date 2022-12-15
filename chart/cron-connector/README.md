@@ -2,6 +2,8 @@
 
 Schedule function invocations using a cron expression.
 
+OpenFaaS Pro enables compatibility with other connectors at the same time. For the CE version to work, the topic must only contain one value `cron-function`.
+
 ## Pre-requisite
 
 You must have a working OpenFaaS installation.
@@ -10,6 +12,10 @@ You must have a working OpenFaaS installation.
 
 ```bash
 arkade install cron-connector
+
+# Install for Pro
+
+arkade install cron-connector --set openfaasPro=true
 ```
 
 ## Install via the published chart
@@ -41,7 +47,9 @@ helm upgrade --install --namespace openfaas \
 
 | Parameter          | Description                                      | Default                                  |
 |--------------------|--------------------------------------------------|------------------------------------------|
-| `image`            | The cron-connector image that should be deployed | `ghcr.io/openfaas/cron-connector:0.3.2`  |
+| `openfaasPro`      | Enable or disable OpenFaaS Pro features          | `false`                                  |
+| `openfaasPro.image` | The OpenFaaS Pro image that should be deployed | See values.yaml  |
+| `image`            | The cron-connector image that should be deployed | See values.yaml  |
 | `gatewayURL`       | The URL for the API gateway.                     | `"http://gateway.openfaas:8080"`         |
 | `basicAuth`        | Enable or disable basic auth                     | `true`                                   |
 | `asyncInvocation`  | Invoke via the asynchronous function endpoint    | `false`                                  |
