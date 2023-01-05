@@ -38,7 +38,7 @@ openfaasImagePullPolicy: "Always"
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.2.6
+  image: ghcr.io/openfaasltd/autoscaler:0.2.7
   replicas: 1
   enabled: false
   resources:
@@ -70,7 +70,7 @@ dashboard:
 ## now be set "enabled=false" when using the new autoscaler
 ## since it handles scaling to zero
 faasIdler:
-  image: ghcr.io/openfaasltd/faas-idler:0.5.0
+  image: ghcr.io/openfaasltd/faas-idler:0.5.1
   replicas: 1
   enabled: false
   inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
@@ -101,11 +101,11 @@ oidcAuthPlugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.3
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.4
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.7
+  image: ghcr.io/openfaasltd/gateway:0.2.9
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.25.5
@@ -157,10 +157,10 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.2
+  image: ghcr.io/openfaasltd/faas-netes:0.2.3
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.2
+  image: ghcr.io/openfaasltd/faas-netes:0.2.3
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.2
@@ -193,7 +193,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.2.5
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.1
   durableName: "faas-workers"
   logs:
     debug: false
@@ -208,7 +208,7 @@ jetstreamQueueWorker:
 #
 # Enabled automatically when openfaasPro is set to true
 queueWorkerPro:
-  image: ghcr.io/openfaasltd/queue-worker:0.2.0
+  image: ghcr.io/openfaasltd/queue-worker:0.2.1
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
@@ -241,7 +241,7 @@ queueWorker:
 # monitoring and auto-scaling components
 # both components
 prometheus:
-  image: prom/prometheus:v2.38.0
+  image: prom/prometheus:v2.41.0
   create: true
   resources:
     requests:
@@ -249,7 +249,7 @@ prometheus:
   annotations: {}
 
 alertmanager:
-  image: prom/alertmanager:v0.24.0
+  image: prom/alertmanager:v0.25.0
   create: true
   resources:
     requests:
@@ -259,7 +259,7 @@ alertmanager:
 
 stan:
   # Image used for nats deployment when using async with NATS-Streaming.
-  image: nats-streaming:0.24.6
+  image: nats-streaming:0.25.2
 
 # NATS is required for async
 nats:
@@ -273,12 +273,12 @@ nats:
     enabled: false
     host: ""
     port: ""
-  image: nats:2.9.2
+  image: nats:2.9.10
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
     enabled: false
-    image: natsio/prometheus-nats-exporter:0.8.0
+    image: natsio/prometheus-nats-exporter:0.10.1
   resources:
     requests:
       memory: "120Mi"
