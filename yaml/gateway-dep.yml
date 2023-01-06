@@ -93,6 +93,8 @@ spec:
           value: "1024"
         - name: max_idle_conns_per_host
           value: "1024"
+        - name: probe_functions
+          value: "false"
         volumeMounts:
         - name: auth
           readOnly: true

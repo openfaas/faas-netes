@@ -18,7 +18,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "018c44750949713d8cd78344a1fa9b5650022ad327a1f0a266f3ab6ab98e3d5d"
+        checksum/alertmanager-config: "9039a96abb0aa7d086b8324227922d4fd9e5c943eb6a82ce50ad0043faa044c5"
     spec:
       containers:
       - name: alertmanager
