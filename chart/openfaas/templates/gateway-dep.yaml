@@ -176,6 +176,8 @@ spec:
           value: "{{ .Values.gateway.maxIdleConns }}"
         - name: max_idle_conns_per_host
           value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
+        - name: probe_functions
+          value: "{{ .Values.gateway.probeFunctions }}"
         volumeMounts:
         {{- if .Values.basic_auth }}
         - name: auth
@@ -238,8 +240,6 @@ spec:
             value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
-          - name: probe_functions
-            value: "{{ .Values.gateway.probeFunctions }}"
         ports:
         - containerPort: 8081
           protocol: TCP

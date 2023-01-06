@@ -35,6 +35,9 @@ clusterRole: true
 # what's been purchased.
 gateway:
   replicas: 3
+# Required gateway configuration for Istio
+  # directFunctions: true
+  # probeFunctions: true
 
 # replicas x maxInflight = max concurrent messages processed.
 # 75 concurrent requests will be processed, 25 per queueWorker
