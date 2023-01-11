@@ -33,8 +33,8 @@ func MakeInfoHandler(version, sha string) http.HandlerFunc {
 			},
 		}
 
-		jsonOut, marshalErr := json.Marshal(infoResponse)
-		if marshalErr != nil {
+		jsonOut, err := json.Marshal(infoResponse)
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
