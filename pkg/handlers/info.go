@@ -14,10 +14,10 @@ const (
 	//OrchestrationIdentifier identifier string for provider orchestration
 	OrchestrationIdentifier = "kubernetes"
 	//ProviderName name of the provider
-	ProviderName = "faas-netes"
+	ProviderName = "faas-netes-ce"
 )
 
-//MakeInfoHandler creates handler for /system/info endpoint
+// MakeInfoHandler creates handler for /system/info endpoint
 func MakeInfoHandler(version, sha string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Body != nil {
