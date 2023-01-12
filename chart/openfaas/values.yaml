@@ -108,7 +108,7 @@ gatewayPro:
   image: ghcr.io/openfaasltd/gateway:0.2.9
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.25.5
+  image: ghcr.io/openfaas/gateway:0.26.0
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -273,7 +273,7 @@ nats:
     enabled: false
     host: ""
     port: ""
-  image: nats:2.9.10
+  image: nats:2.9.11
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
