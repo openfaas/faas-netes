@@ -58,6 +58,11 @@ spec:
           emptyDir: {}
         - name: buildkit-workspace
           emptyDir: {}
+        {{- if .Values.awsCredentialsSecret }}
+        - name: aws-credentials
+          secret:
+            secretName: {{ .Values.awsCredentialsSecret }}
+        {{- end}}
       containers:
       - name: pro-builder
         image: {{ .Values.proBuilder.image }}
@@ -87,6 +92,10 @@ spec:
             value: {{ .Values.disableHmac | quote }}
           - name: "max_inflight"
             value: {{ or .Values.proBuilder.maxInflight 0  | quote }}
+          {{- if .Values.awsCredentialsSecret }}
+          - name: AWS_SHARED_CREDENTIALS_FILE
+            value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
+          {{- end }}
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -126,6 +135,11 @@ spec:
         - name: client-certs
           readOnly: true
           mountPath: /var/secrets/certs
+        {{- if .Values.awsCredentialsSecret }}
+        - name: aws-credentials
+          readOnly: true
+          mountPath: "/var/secrets/aws-credentials"
+        {{- end }}
       - name: buildkit
         args:
           - "--addr=tcp://127.0.0.1:1234"

@@ -58,6 +58,14 @@ buildkit:
     # limits:
     #   memory: "4Gi"
 
+
+# Use a shared credentials file for ECR credentials:
+# The format is the standard ini-type AWS file format.
+#
+# kubectl create secret generic -n openfaas \
+#   aws-ecr-credentials --from-file aws-ecr-credentials=$HOME/ecr-credentials.txt
+awsCredentialsSecret: ""
+
 # disableHmac is used to authenticate requests and should be set to false
 disableHmac: false
 
