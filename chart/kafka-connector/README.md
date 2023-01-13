@@ -24,6 +24,8 @@ The [Kafka connector](https://docs.openfaas.com/openfaas-pro/introduction) bring
 
   [Aiven](https://aiven.io/) and [Confluent Cloud](https://confluent.cloud/) have both been tested with the Kafka Connector.
 
+Other versions of Kafka like Redpanda should work out of the box.
+
 ## Complete walk-through guide
 
   You can continue with this guide, or start the [walk-through](quickstart.md) for testing purposes.
@@ -51,6 +53,7 @@ $ helm upgrade kafka-connector openfaas/kafka-connector \
 > The above command will also update your helm repo to pull in any new releases.
 
 ## Install a development version
+
 ```sh
 $ helm upgrade kafka-connector ./chart/kafka-connector \
     --install \
@@ -74,7 +77,7 @@ Additional kafka-connector options in `values.yaml`.
 
 | Parameter                | Description                                                                            | Default                        |
 | ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `topics`                 | Topics to which the connector will bind, provide as a comma-separated list.            | `faas-request`                 |
+| `topics`                 | Topics to which the connector will bind, provide as a comma-separated list or a single item.            | `faas-request`                 |
 | `brokerHost`             | location of the Kafka brokers.                                                         | `kafka`                        |
 | `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
 | `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `2m`                          |

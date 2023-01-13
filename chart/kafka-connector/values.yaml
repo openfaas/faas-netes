@@ -21,7 +21,9 @@ rebuildInterval: 30s
 # Use with slow consumers or long running functions
 asyncInvocation: false
 
-# Alter to the topics required
+# Set either a single topic, or multiple with a comma separating each
+# topics: payment.requested
+# topics: payment.requested,customer.created,invoice.generated
 topics: faas-request
 
 # Your Kafka broker
