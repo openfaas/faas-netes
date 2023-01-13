@@ -1,0 +1,17 @@
+apiVersion: v1
+description: Invoke functions from an AWS SNS messages.
+name: sns-connector
+version: 0.0.1
+sources:
+- https://github.com/openfaas/faas-netes
+home: https://www.openfaas.com
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+keywords:
+- openfaaspro
+- faas
+- serverless
+- sns
+- events
+maintainers:
+- name: alexellis
+  email: alex@openfaas.com
