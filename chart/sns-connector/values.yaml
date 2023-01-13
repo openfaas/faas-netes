@@ -1,0 +1,68 @@
+# The Kafka connector is an OpenFaaS Pro feature
+#
+# Purchase a license at https://openfaas.com/support/
+
+# You will need to create a license named "openfaas-license" - see the
+# chart README for detailed instructions.
+
+image: ghcr.io/openfaasltd/sns-connector:0.0.1
+
+replicas: 1
+
+# Public callback URL for subscriptions
+callbackURL: "https://"
+
+# SNS topic ARN
+topicARN: "arn:aws:sns:"
+
+# AWS shared credentials file:
+# The format is the standard ini-type AWS file format.
+#
+# kubectl create secret generic -n openfaas \
+#   aws-sns-credentials --from-file aws-sns-credentials=$HOME/sns-credentials.txt
+awsCredentialsSecret: aws-sns-credentials
+
+awsRegion: eu-west-1
+
+# Max timeout for a function
+upstreamTimeout: 30s
+
+# interval for rebuilding the map of functions and topics
+rebuildInterval: 30s
+
+# Use with slow consumers or long running functions
+asyncInvocation: false
+
+# HTTP content-type for invoking functions
+contentType: text/plain
+
+# Print the data read from the SQS queue before invoking functions
+# Do not use in production
+printRequestBody: false
+
+# Print the HTTP status of invoked functions
+printResponse: true
+
+# Print the data received from invoked functions
+# Do not use in production
+printResponseBody: false
+
+# Gateway URL to access API and for invocations
+gatewayURL: http://gateway.openfaas:8080
+
+# Basic auth for the gateway
+basic_auth: true
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+  #   cpu: "100m"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
