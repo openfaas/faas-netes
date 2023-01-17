@@ -51,9 +51,10 @@ spec:
           command:
             - "/usr/bin/connector"
             - "-license-file=/var/secrets/license/license"
-            - "-callback-url={{ .Values.callbackURL }}/"
+            - "-callback-url={{ .Values.callbackURL }}"
             - "-arn={{.Values.topicARN }}"
             - "-port=8080"
+            - "-confirm-timeout=30s"
           env:
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
