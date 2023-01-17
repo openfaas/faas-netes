@@ -53,7 +53,7 @@ spec:
             - "-license-file=/var/secrets/license/license"
             - "-callback-url={{ .Values.callbackURL }}/"
             - "-arn={{.Values.topicARN }}"
-            - "-port 8080"
+            - "-port=8080"
           env:
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
