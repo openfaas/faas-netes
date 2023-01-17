@@ -108,7 +108,7 @@ gatewayPro:
   image: ghcr.io/openfaasltd/gateway:0.2.9
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.26.0
+  image: ghcr.io/openfaas/gateway:0.26.2
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -163,7 +163,7 @@ operatorPro:
   image: ghcr.io/openfaasltd/faas-netes:0.2.3
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.2
+  image: ghcr.io/openfaas/faas-netes:0.16.3
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -181,7 +181,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.16.2
+  image: ghcr.io/openfaas/faas-netes:0.16.3
   create: false
   resources:
     requests:
@@ -228,7 +228,7 @@ queueWorkerPro:
 # Community Edition, maxInflight is 1
 # Name of shared queue is "faas-request"
 queueWorker:
-  image: ghcr.io/openfaas/queue-worker:0.13.2
+  image: ghcr.io/openfaas/queue-worker:0.13.3
   # Control HA of queue-worker
   replicas: 1
   queueGroup: "faas"
@@ -258,10 +258,11 @@ alertmanager:
       memory: "50Mi"
 
 stan:
-  # Image used for nats deployment when using async with NATS-Streaming.
-  image: nats-streaming:0.25.2
+  # Image used for the NATS Streaming when using the deprecated 
+  # support in the Community Edition (CE)
+  image: nats-streaming:0.25.3
 
-# NATS is required for async
+# NATS (required for async)
 nats:
   channel: "faas-request"
   # Stream replication is set to 1 by default. This is only recommended for development.
@@ -273,6 +274,7 @@ nats:
     enabled: false
     host: ""
     port: ""
+  # The version of NATS Core used with OpenFaaS Pro and JetStream
   image: nats:2.9.11
   enableMonitoring: false
   metrics:
