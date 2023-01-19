@@ -24,6 +24,12 @@ awsCredentialsSecret: aws-sns-credentials
 
 awsRegion: eu-west-1
 
+logs:
+  # Log debug messages
+  debug: false
+  # Set the log format, supports console or json
+  format: "console"
+
 # Max timeout for a function
 upstreamTimeout: 30s
 

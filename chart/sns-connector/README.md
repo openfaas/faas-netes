@@ -128,7 +128,6 @@ kubectl apply -f ingress.yaml
 ## Configure values.yaml
 
 ```yaml
-
 # Public callback URL for subscriptions
 callbackURL: "http://sns.example.com/callback"
 
@@ -167,22 +166,24 @@ $ helm upgrade sns-connector ./chart/sns-connector \
 
 Additional sns-connector options in `values.yaml`.
 
-| Parameter                | Description                                                                            | Default                        |
-| ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `callbackURL` | Public callback URL for subscriptions | `""` |
-| `topicARN` | Amazon SNS topic ARN | `""` |
-| `awsCredentialsSecret` | Kubernetes secret for the AWS shared credentials file | `aws-sns-credentials` |
-| `awsRegion` | The AWS region | `eu-west-1` | 
-| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
-| `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `2m`                          |
-| `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `30s`                           |
-| `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
-| `printResponse`          | Output the response of calling a function in the logs.                                 | `true`                         |
-| `printResponseBody`      | Output to the logs the response body when calling a function.                          | `false`                        |
-| `printRequestBody`       | Output to the logs the request body when calling a function.                           | `false`                        |
-| `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
-| `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
-| `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |
+| Parameter              | Description                                                                                                        | Default                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `callbackURL`          | Public callback URL for subscriptions                                                                              | `""`                           |
+| `topicARN`             | Amazon SNS topic ARN                                                                                               | `""`                           |
+| `awsCredentialsSecret` | Kubernetes secret for the AWS shared credentials file                                                              | `aws-sns-credentials`          |
+| `awsRegion`            | The AWS region                                                                                                     | `eu-west-1`                    |
+| `asyncInvocation`      | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`                        |
+| `upstreamTimeout`      | Maximum timeout for upstream function call, must be a Go formatted duration string.                                | `2m`                           |
+| `rebuildInterval`      | Interval for rebuilding function to topic map, must be a Go formatted duration string.                             | `30s`                          |
+| `gatewayURL`           | The URL for the API gateway.                                                                                       | `http://gateway.openfaas:8080` |
+| `printResponse`        | Output the response of calling a function in the logs.                                                             | `true`                         |
+| `printResponseBody`    | Output to the logs the response body when calling a function.                                                      | `false`                        |
+| `printRequestBody`     | Output to the logs the request body when calling a function.                                                       | `false`                        |
+| `fullnameOverride`     | Override the name value used for the Connector Deployment object.                                                  | ``                             |
+| `contentType`          | Set a HTTP Content Type during function invocation.                                                                | `""`                           |
+| `resources`            | Resources requests and limits configuration                                                                        | `requests.memory: "64Mi"`      |
+| `logs.debug`           | Print debug logs                                                                                                   | `false`                        |
+| `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                     | `console`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

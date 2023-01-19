@@ -94,6 +94,10 @@ spec:
             - name: filters
               value: {{ .Values.filters | quote }}
             {{- end}}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
           resources:
             {{- .Values.resources | toYaml | nindent 12 }}
           volumeMounts:

@@ -102,6 +102,8 @@ Additional sqs-connector options in `values.yaml`.
 | `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
 | `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
 | `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |
+| `logs.debug`           | Print debug logs                                                                                                   | `false`                        |
+| `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                     | `console`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

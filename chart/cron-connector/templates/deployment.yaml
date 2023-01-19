@@ -50,11 +50,15 @@ spec:
             value: "true"
           - name: secret_mount_path
             value: "/var/secrets"
+          {{- end }}
           {{- if .Values.rebuildInterval }}
           - name: rebuild_interval
             value: {{ .Values.rebuildInterval | quote }}
           {{- end }}
-          {{- end }}
+          - name: "debug"
+            value: "{{ .Values.logs.debug }}"
+          - name: "log_encoding"
+            value: "{{ .Values.logs.format }}"
         volumeMounts:
         {{- if .Values.openfaasPro }}
           - name: license
