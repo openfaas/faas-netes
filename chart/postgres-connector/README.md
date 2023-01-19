@@ -94,6 +94,8 @@ Additional postgres-connector options in `values.yaml`.
 | `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
 | `replicas`               | Number of replicas for the Connector Deployment object, we recommend setting this to `1`    | `1`                            |
 | `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |
+| `logs.debug`           | Print debug logs                                                                                                   | `false`                        |
+| `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                     | `console`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

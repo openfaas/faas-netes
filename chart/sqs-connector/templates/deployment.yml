@@ -85,13 +85,17 @@ spec:
             - name: content_type
               value: {{ .Values.contentType | quote }}
             {{- if .Values.awsCredentialsSecret }}
-              - name: AWS_SHARED_CREDENTIALS_FILE
-                value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
+            - name: AWS_SHARED_CREDENTIALS_FILE
+              value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
             {{- end }}
             {{- if .Values.awsDefaultRegion }}
-              - name: AWS_DEFAULT_REGION
-                value: {{ .Values.awsDefaultRegion }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.awsDefaultRegion }}
             {{- end }}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
           resources:
             {{- .Values.resources | toYaml | nindent 12 }}
           volumeMounts:

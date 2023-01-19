@@ -133,6 +133,10 @@ spec:
             - name: initial_offset
               value: {{ .Values.initialOffset | quote }}
             {{- end }}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
           resources:
             {{- .Values.resources | toYaml | nindent 12 }}
           volumeMounts:

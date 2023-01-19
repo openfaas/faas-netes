@@ -45,15 +45,17 @@ helm upgrade --install --namespace openfaas \
 
 ## Configuration options
 
-| Parameter          | Description                                      | Default                                  |
-|--------------------|--------------------------------------------------|------------------------------------------|
-| `openfaasPro`      | Enable or disable OpenFaaS Pro features          | `false`                                  |
-| `openfaasPro.image` | The OpenFaaS Pro image that should be deployed | See values.yaml  |
-| `image`            | The cron-connector image that should be deployed | See values.yaml  |
-| `gatewayURL`       | The URL for the API gateway.                     | `"http://gateway.openfaas:8080"`         |
-| `basicAuth`        | Enable or disable basic auth                     | `true`                                   |
-| `asyncInvocation`  | Invoke via the asynchronous function endpoint    | `false`                                  |
-| `contentType`      | Set a contentType for all invocations            | `text/plain`                             |
+| Parameter           | Description                                                                  | Default                          |
+| ------------------- | ---------------------------------------------------------------------------- | -------------------------------- |
+| `openfaasPro`       | Enable or disable OpenFaaS Pro features                                      | `false`                          |
+| `openfaasPro.image` | The OpenFaaS Pro image that should be deployed                               | See values.yaml                  |
+| `image`             | The cron-connector image that should be deployed                             | See values.yaml                  |
+| `gatewayURL`        | The URL for the API gateway.                                                 | `"http://gateway.openfaas:8080"` |
+| `basicAuth`         | Enable or disable basic auth                                                 | `true`                           |
+| `asyncInvocation`   | Invoke via the asynchronous function endpoint                                | `false`                          |
+| `contentType`       | Set a contentType for all invocations                                        | `text/plain`                     |
+| `logs.debug`        | Print debug logs (pro feature)                                               | `false`                          |
+| `logs.format`       | The log encoding format. Supported values: `json` or `console` (pro feature) | `console`                        |
 
 See also: values.yaml
 
