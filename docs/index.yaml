@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   cron-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.869288742Z"
+    created: "2023-01-23T18:41:59.910014014Z"
     description: Trigger OpenFaaS Functions with cron
-    digest: 50f2335be56f9631a907a67a61b433f95193b36c62f449e86dae527ca932880e
+    digest: 032393dfb8d1d464901c3e076977df17aff99df456f7be119560b9255bf50a49
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -23,7 +23,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.6.3.tgz
     version: 0.6.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.868884009Z"
+    created: "2023-01-23T18:41:59.909680237Z"
     description: Trigger OpenFaaS Functions with cron
     digest: d44542479acd73de32f6e0d46b7c31aa0fb5818f8cb684dbc6250539528a68a5
     home: https://www.openfaas.com
@@ -44,7 +44,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.6.2.tgz
     version: 0.6.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.868471685Z"
+    created: "2023-01-23T18:41:59.909372621Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 95005f07ed3e9d5809f4633df1eb62b9f26be0061471b4274df695dcb6880e90
     home: https://www.openfaas.com
@@ -65,7 +65,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.6.1.tgz
     version: 0.6.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.868089822Z"
+    created: "2023-01-23T18:41:59.909062535Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 055ae8324200f1fbcbfd197143b7202b9dc28ef26c0ed25c1820a290e7d36527
     home: https://www.openfaas.com
@@ -86,7 +86,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.6.0.tgz
     version: 0.6.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.867731561Z"
+    created: "2023-01-23T18:41:59.90879309Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 1215c535abc59f7b64b9985e43a5a927eca2f91437bb175e15d9de93333ffbd2
     home: https://www.openfaas.com
@@ -107,7 +107,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.5.3.tgz
     version: 0.5.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.86741771Z"
+    created: "2023-01-23T18:41:59.908545155Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 6b6bbbf29f4b29587d45fec7b4ae7edc4b35aa7db97e2dfdb46eaef02fc29eb2
     home: https://www.openfaas.com
@@ -128,7 +128,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.5.2.tgz
     version: 0.5.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.867084819Z"
+    created: "2023-01-23T18:41:59.90829489Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 4519834f17b3d735b027cc4852e861e01f6258910bf1d0706d723710d3e0b70b
     home: https://www.openfaas.com
@@ -149,7 +149,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.5.1.tgz
     version: 0.5.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.866767759Z"
+    created: "2023-01-23T18:41:59.908030195Z"
     description: Trigger OpenFaaS Functions with cron
     digest: e049068f4ba06335414b52c66b456b8777831938df255fbd619b171fa4dd951f
     home: https://www.openfaas.com
@@ -170,7 +170,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.5.0.tgz
     version: 0.5.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.866398977Z"
+    created: "2023-01-23T18:41:59.90779498Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 36590b38cccce33bfdb4dd6554c237a8cb97a39053a08fc220363996e829f59f
     home: https://www.openfaas.com
@@ -191,7 +191,7 @@ entries:
     - https://openfaas.github.io/faas-netes/cron-connector-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.866079866Z"
+    created: "2023-01-23T18:41:59.907584856Z"
     description: Trigger OpenFaaS Functions with cron
     digest: 16abbafe3c5d9f0b619c9c4f8e53019f88cdbc09e295925fef7002f2ec1c9b32
     home: https://www.openfaas.com
@@ -213,9 +213,9 @@ entries:
     version: 0.3.1
   kafka-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.877001747Z"
+    created: "2023-01-23T18:41:59.918930782Z"
     description: Connect OpenFaaS functions to Kafka topics
-    digest: 99221cd828f92e5d29d8ab6e6fe06f7b5570dd3328f55a811a9976ceb3b8d26e
+    digest: 16c7f6a68833882924b2600748f7a99bd1eac1588f5f00eaf5680766a562b5e8
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -233,7 +233,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.7.3.tgz
     version: 0.7.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.876698257Z"
+    created: "2023-01-23T18:41:59.918408382Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: af26715a204a92bc28aa6e4a4ce198f55ca2f6b5cc2c9cb7ee26e5c223459fa5
     home: https://www.openfaas.com
@@ -253,7 +253,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.7.2.tgz
     version: 0.7.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.876410528Z"
+    created: "2023-01-23T18:41:59.917879521Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 7bd58059000fe9ad837c4b9b24653bd7bf1d1887b553c572053bc35c78af7059
     home: https://www.openfaas.com
@@ -273,7 +273,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.7.1.tgz
     version: 0.7.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.876115588Z"
+    created: "2023-01-23T18:41:59.917409252Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 2f63695d635e944496ed17f906b43b33b4d0bed5df4f47343485f702b02612a8
     home: https://www.openfaas.com
@@ -293,7 +293,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.7.0.tgz
     version: 0.7.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.875813118Z"
+    created: "2023-01-23T18:41:59.916950253Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 7c1cf7e169d22dec04d7c1458fc663e976ce0b241e16b8269511ff45cb052d0b
     home: https://www.openfaas.com
@@ -313,7 +313,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.9.tgz
     version: 0.6.9
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.875520088Z"
+    created: "2023-01-23T18:41:59.916495733Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: d1897dacf5c5337cf6b6dc04409298176514f9726f01174142d09ec838b23a5b
     home: https://www.openfaas.com
@@ -333,7 +333,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.8.tgz
     version: 0.6.8
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.875232469Z"
+    created: "2023-01-23T18:41:59.916023944Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: d3c45957183c9155593a4b4c9e5ddd7cedbd9baf84481275fdf46abf07668101
     home: https://www.openfaas.com
@@ -353,7 +353,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.7.tgz
     version: 0.6.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.874930839Z"
+    created: "2023-01-23T18:41:59.915536744Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 817b0286fe4c93d3192be68a9073fb27e912884bc5afcbf45dce70ac2194f9dc
     home: https://www.openfaas.com
@@ -373,7 +373,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.6.tgz
     version: 0.6.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.874667Z"
+    created: "2023-01-23T18:41:59.915110916Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 688955bed94ac25cde9a3b2f5d5e696637e1f0d85efe156d646848cfec70bda4
     home: https://www.openfaas.com
@@ -393,7 +393,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.5.tgz
     version: 0.6.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.874396351Z"
+    created: "2023-01-23T18:41:59.914677387Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 518a08a8692fb1552c37b590126d6ab8b8ca0fa87e4b37dd6df2400d0a517635
     home: https://www.openfaas.com
@@ -413,7 +413,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.3.tgz
     version: 0.6.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.874120292Z"
+    created: "2023-01-23T18:41:59.914157117Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 0c9cfd59867c1c7280cac6820d918a1a89057fdaa0eeb94bb2ddd31d5b0255a0
     home: https://www.openfaas.com
@@ -433,7 +433,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.2.tgz
     version: 0.6.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.873818042Z"
+    created: "2023-01-23T18:41:59.913155537Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: cfe5b1af2fec3b4de339432b697170f9e79da37ce11f1c570256f0e907ba501b
     home: https://www.openfaas.com
@@ -453,7 +453,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.6.1.tgz
     version: 0.6.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.872827859Z"
+    created: "2023-01-23T18:41:59.912897851Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: f76fd6b009427b0096b266e8165fd73d5da105436a166a440e4c92f84c33f08c
     home: https://www.openfaas.com
@@ -473,7 +473,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.5.1.tgz
     version: 0.5.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.872614612Z"
+    created: "2023-01-23T18:41:59.912682327Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 833e72c75b76b3ff22aab5bb7c99c9403fe968aad8fde32b86ea1b8cba075366
     home: https://www.openfaas.com
@@ -492,7 +492,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.5.0.tgz
     version: 0.5.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.872393855Z"
+    created: "2023-01-23T18:41:59.912478703Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: d7615f9848baddf4983811e2dbe8a0119e916abd4724e1ed123c15ab33953db0
     home: https://www.openfaas.com
@@ -513,7 +513,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.4.3.tgz
     version: 0.4.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.872165697Z"
+    created: "2023-01-23T18:41:59.912272529Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 0dbe5b6d3f8037d394de633648d0344f4cbdb767718a61cd8f5577f95282fddf
     home: https://www.openfaas.com
@@ -534,7 +534,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.4.2.tgz
     version: 0.4.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.87193852Z"
+    created: "2023-01-23T18:41:59.912059945Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 5d75cf2523d96ce7b1ddf5c57669ac75eb4efda1513c5ca3b283441fe75d6f80
     home: https://www.openfaas.com
@@ -555,7 +555,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.4.1.tgz
     version: 0.4.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.871726103Z"
+    created: "2023-01-23T18:41:59.911858571Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: ea275aecc3d5e3444f9df0d9cb697cb62a7e97a9eb524e983d1e91f654549a1f
     home: https://www.openfaas.com
@@ -576,7 +576,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.4.0.tgz
     version: 0.4.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.871515976Z"
+    created: "2023-01-23T18:41:59.911652577Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 0d323f57fa97ae54fb5061cc97cab1a424966e1bf661b53d6e351cbb7c1e770c
     home: https://www.openfaas.com
@@ -597,7 +597,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.871289728Z"
+    created: "2023-01-23T18:41:59.911454343Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: bfea71c611212db704e971164dbaad4a863852b040d68bbfb3f425c17294911d
     home: https://www.openfaas.com
@@ -618,7 +618,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.2.3.tgz
     version: 0.2.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.870948187Z"
+    created: "2023-01-23T18:41:59.911248279Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 88c657fa02ac7a0dfc1bfd2b01a8ecae2b13582fe4e6e68a4fc0121f3a3f33d0
     home: https://www.openfaas.com
@@ -639,7 +639,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.2.2.tgz
     version: 0.2.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.870584865Z"
+    created: "2023-01-23T18:41:59.911024554Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 369b09a454db9b1f257e0552ee0f4d6648e1548d47a509cf699da371ae556412
     home: https://www.openfaas.com
@@ -660,7 +660,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.1.2.tgz
     version: 0.1.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.870124309Z"
+    created: "2023-01-23T18:41:59.910693857Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: 2a3b78d0a1b0ded8888b425d78a567ceb37d77763fc132bd5918992f43b8592a
     home: https://www.openfaas.com
@@ -681,7 +681,7 @@ entries:
     - https://openfaas.github.io/faas-netes/kafka-connector-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.869690725Z"
+    created: "2023-01-23T18:41:59.910364481Z"
     description: Connect OpenFaaS functions to Kafka topics
     digest: c745084bc749a70fdec7024f86d3d005a443ba802a68c26c937101e7bf5c942d
     home: https://www.openfaas.com
@@ -701,9 +701,9 @@ entries:
     version: 0.1.0
   mqtt-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.878874519Z"
+    created: "2023-01-23T18:41:59.921708038Z"
     description: Connect OpenFaaS functions to MQTT topics
-    digest: baa30df170873c1b57eecab2376bab463452c6d53807c54cc34f495b646148bb
+    digest: 09e066a82998ce95e6e13d1a50016b061a4a0f777150ef85c8dd30234e71b08b
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -721,7 +721,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.7.tgz
     version: 0.4.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.878669962Z"
+    created: "2023-01-23T18:41:59.921392951Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: d51ea1b95387671eee9e0d7ec74890c897c6d0662e5b522695e84c42325301f6
     home: https://www.openfaas.com
@@ -741,7 +741,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.6.tgz
     version: 0.4.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.878476676Z"
+    created: "2023-01-23T18:41:59.921080575Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: 0d36fcd2677d1e22ba9f54e90572047088aaaaf6611622bd8a82d929a0e10015
     home: https://www.openfaas.com
@@ -760,7 +760,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.5.tgz
     version: 0.4.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.878271429Z"
+    created: "2023-01-23T18:41:59.920781769Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: be5789e807567682fa389c5a7e879660da5f281cfea9a3d2f25946be330f168e
     home: https://www.openfaas.com
@@ -779,7 +779,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.4.tgz
     version: 0.4.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.878039691Z"
+    created: "2023-01-23T18:41:59.920475063Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: a469837cda2f697a309b5512c97e0bfa536b7358b6b7b44e312877b66ae77eb2
     home: https://www.openfaas.com
@@ -798,7 +798,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.3.tgz
     version: 0.4.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.877830244Z"
+    created: "2023-01-23T18:41:59.920174727Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: 973e25a74f7e853c8bc1a85805083a17c355fc91d828236f40f48c5a4af7efaa
     home: https://www.openfaas.com
@@ -817,7 +817,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.2.tgz
     version: 0.4.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.877604567Z"
+    created: "2023-01-23T18:41:59.919875201Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: f10f50fec3db6caa4953fb1f969edd3d76f3b4a88ce2e8be6bbca15b61dc67ee
     home: https://www.openfaas.com
@@ -836,7 +836,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.1.tgz
     version: 0.4.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.8774058Z"
+    created: "2023-01-23T18:41:59.919570495Z"
     description: Connect OpenFaaS functions to MQTT topics
     digest: bf6f7ca50bf615474efe9a486f172d1cf5c45f296864d7b88afda4636e20f3ae
     home: https://www.openfaas.com
@@ -855,7 +855,7 @@ entries:
     - https://openfaas.github.io/faas-netes/mqtt-connector-0.4.0.tgz
     version: 0.4.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.877208494Z"
+    created: "2023-01-23T18:41:59.919261419Z"
     description: Connect OpenFaaS functions to MQTT
     digest: 5c72894aef2b14963948c700b5a038f01faab73c430c6d4ce8daf315f72f9dfc
     home: https://www.openfaas.com
@@ -877,9 +877,9 @@ entries:
     version: 0.3.1
   nats-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.880631397Z"
+    created: "2023-01-23T18:41:59.923639696Z"
     description: Trigger OpenFaaS Functions from NATS Pub/Sub
-    digest: 6e80751e7005d89e389af2ef72fbe57aacccec171598ab4c0afd720e9eb8f5e7
+    digest: 986fdacb0b3c9d2b52edf2e43184a3722f428480e4292d5663a59cdd87ab26cd
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -896,7 +896,7 @@ entries:
     - https://openfaas.github.io/faas-netes/nats-connector-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.880389359Z"
+    created: "2023-01-23T18:41:59.922924372Z"
     description: Trigger OpenFaaS Functions from NATS Pub/Sub
     digest: 8e7019430fe29bcc9e3811130893f9745037d496e42c861a58ca0f93919db9c7
     home: https://www.openfaas.com
@@ -915,7 +915,7 @@ entries:
     - https://openfaas.github.io/faas-netes/nats-connector-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.880155541Z"
+    created: "2023-01-23T18:41:59.922642406Z"
     description: Trigger OpenFaaS Functions from NATS Pub/Sub
     digest: 828c05dfde46fcee2a86e1772db16c6d7e59b55d0cee650ba45b68043db77adc
     home: https://www.openfaas.com
@@ -936,7 +936,7 @@ entries:
     - https://openfaas.github.io/faas-netes/nats-connector-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.879702446Z"
+    created: "2023-01-23T18:41:59.9223462Z"
     description: Connect OpenFaaS functions to nats queues
     digest: 47267e87084bf59736a53386ff95e7576d00a82cdc63df2e640a1923cd471ad5
     home: https://www.openfaas.com
@@ -957,7 +957,7 @@ entries:
     - https://openfaas.github.io/faas-netes/nats-connector-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.879067245Z"
+    created: "2023-01-23T18:41:59.922006304Z"
     description: Connect OpenFaaS functions to nats queues
     digest: a0bbe879f171df1f279cb1882175282a15856c418bcb9841bec09a9c7ddce073
     home: https://www.openfaas.com
@@ -979,9 +979,9 @@ entries:
     version: 0.1.0
   openfaas:
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.016132552Z"
+    created: "2023-01-23T18:42:00.078623129Z"
     description: OpenFaaS - Serverless Functions Made Simple
-    digest: 813851f9d21502f256e6616bd5b25c1ffad131da0939a9052f4479fdee58b494
+    digest: 69bc798462ab1dea1d23bdb72a3cdb24a291166c5198a40f2b46c2128025d313
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -1005,7 +1005,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.8.tgz
     version: 11.1.8
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.013439403Z"
+    created: "2023-01-23T18:42:00.076405245Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ece31b993203a5c76a28be2679184ecb61c59dc01c0479f896fc4cc32982e243
     home: https://www.openfaas.com
@@ -1031,7 +1031,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.7.tgz
     version: 11.1.7
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.010284708Z"
+    created: "2023-01-23T18:42:00.075212401Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 1df95350fde8e0525dc56a59278a00fd86cf6df40b183e4eb45091b461cb7f33
     home: https://www.openfaas.com
@@ -1057,7 +1057,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.6.tgz
     version: 11.1.6
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.008384235Z"
+    created: "2023-01-23T18:42:00.073397705Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: bd146f496f2bf985b5354d4c1ea43a9561752d07b8db851f290eb52e1baa303f
     home: https://www.openfaas.com
@@ -1083,7 +1083,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.5.tgz
     version: 11.1.5
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.006495342Z"
+    created: "2023-01-23T18:42:00.071547628Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 0193ce6a6b68b17bf8a63915f53da6a73248401c89a0373e43c92cbd46c3d07b
     home: https://www.openfaas.com
@@ -1109,7 +1109,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.4.tgz
     version: 11.1.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.004795826Z"
+    created: "2023-01-23T18:42:00.069348934Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 3184c6a4a1407567860df213c65d5f318c2b89d202e342666b4da8c57f349ebe
     home: https://www.openfaas.com
@@ -1135,7 +1135,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.3.tgz
     version: 11.1.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.002887123Z"
+    created: "2023-01-23T18:42:00.06814084Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 4a3138c3dd6ec4f1b72693d232552b7072b4e2e5630ec6230d91d9d92fee24b7
     home: https://www.openfaas.com
@@ -1161,7 +1161,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.2.tgz
     version: 11.1.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.001124615Z"
+    created: "2023-01-23T18:42:00.066879035Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 213d2eab67a345646a842296ad2870f5096fa20a8125c7ee57b1570790f9cbe9
     home: https://www.openfaas.com
@@ -1187,7 +1187,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.1.tgz
     version: 11.1.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.999228442Z"
+    created: "2023-01-23T18:42:00.0656451Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 2c66050274c9e7cc2cdb1aabc53ecece83bf451ba44eb964fb2c5e66419ab26b
     home: https://www.openfaas.com
@@ -1213,7 +1213,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.1.0.tgz
     version: 11.1.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.981662161Z"
+    created: "2023-01-23T18:42:00.051218522Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ee34ee874376e6495bcc677a66f081cb637c95d156f2f516bf784116f6a3c3f2
     home: https://www.openfaas.com
@@ -1239,7 +1239,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.11.tgz
     version: 11.0.11
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.979644714Z"
+    created: "2023-01-23T18:42:00.048874295Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: e01fbc73ae8c914b7f8eeec96e3facf91b4ba815c42fc34d92e6ec7005046114
     home: https://www.openfaas.com
@@ -1265,7 +1265,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.10.tgz
     version: 11.0.10
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.997314319Z"
+    created: "2023-01-23T18:42:00.064429956Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: acf5bcd2445619482509fa3ce0770fa4e610c4fcb0da65abed261e6409390374
     home: https://www.openfaas.com
@@ -1291,7 +1291,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.9.tgz
     version: 11.0.9
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.995696495Z"
+    created: "2023-01-23T18:42:00.062525408Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 3919b1033d2027b8de16fbcc5edec6db4c4a587718d3440ec50573d42dcb1776
     home: https://www.openfaas.com
@@ -1317,7 +1317,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.8.tgz
     version: 11.0.8
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.992975065Z"
+    created: "2023-01-23T18:42:00.061251523Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 941730bbe823d5d8434f9fc6905c8538b9b786e3872c842826afc3c680bd79d0
     home: https://www.openfaas.com
@@ -1343,7 +1343,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.7.tgz
     version: 11.0.7
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.990816934Z"
+    created: "2023-01-23T18:42:00.060015798Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: b6591abb8694ce4741d9e3f93625d158dd83845f51211cf24120069557b843cc
     home: https://www.openfaas.com
@@ -1369,7 +1369,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.6.tgz
     version: 11.0.6
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.988985753Z"
+    created: "2023-01-23T18:42:00.058398775Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 5dbebd2eb7d46307d80d3f5f2404bfc2b13c9ff2b810c7f091df3791aec0052b
     home: https://www.openfaas.com
@@ -1395,7 +1395,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.5.tgz
     version: 11.0.5
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.9870974Z"
+    created: "2023-01-23T18:42:00.055899015Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 3755d9c54dc6d95b15a881213b855ef5d699ba66c7c8c1fe7eb4de4287a5fff2
     home: https://www.openfaas.com
@@ -1421,7 +1421,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.4.tgz
     version: 11.0.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.9852873Z"
+    created: "2023-01-23T18:42:00.05364312Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: c64f5c673fa19fb4794c93a11a64005d0b13b01d7b9df0a0ff837da7eb18367d
     home: https://www.openfaas.com
@@ -1447,7 +1447,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.3.tgz
     version: 11.0.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.983265494Z"
+    created: "2023-01-23T18:42:00.052431686Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 015456d5d25caaa4ec4f272fa852f2e8a0255838b8a8f766d1930ee1bfd61029
     home: https://www.openfaas.com
@@ -1473,7 +1473,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.2.tgz
     version: 11.0.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.977674139Z"
+    created: "2023-01-23T18:42:00.046238913Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 1043afa0b824082ebf574438f7abb9dcf6f305c9b0b8fa280302af3682fce6d0
     home: https://www.openfaas.com
@@ -1499,7 +1499,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.1.tgz
     version: 11.0.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.975928791Z"
+    created: "2023-01-23T18:42:00.043682112Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 309ea32c72e0b426d7aaddc36e56c50b9bada81ce3c305f699e5ea3cfb33d4d4
     home: https://www.openfaas.com
@@ -1525,7 +1525,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-11.0.0.tgz
     version: 11.0.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.960758259Z"
+    created: "2023-01-23T18:42:00.025176912Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 37ae0a50f9d95702b7318e2373b54ea9797946f38d44b147d23326adfe94de38
     home: https://www.openfaas.com
@@ -1551,7 +1551,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.13.tgz
     version: 10.2.13
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.958415581Z"
+    created: "2023-01-23T18:42:00.023165381Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: cee1804357e5162c413b030be086a6a3ccfe4b02332b49faa1de4bdfc5818d64
     home: https://www.openfaas.com
@@ -1577,7 +1577,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.12.tgz
     version: 10.2.12
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.956325842Z"
+    created: "2023-01-23T18:42:00.020943627Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 8cface2b5d5a39f365c904b8511fa0baf0015d666e8c314239fb5bfbee55c38a
     home: https://www.openfaas.com
@@ -1603,7 +1603,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.11.tgz
     version: 10.2.11
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.954837743Z"
+    created: "2023-01-23T18:42:00.018613041Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 56be99b85f4734031819defd9d825459421f1fd0555fb3909d379b90ede54a60
     home: https://www.openfaas.com
@@ -1629,7 +1629,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.10.tgz
     version: 10.2.10
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.973754179Z"
+    created: "2023-01-23T18:42:00.041797504Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: c35fe55ca20c6f1ef36780fa1ad0d0cea03840caec14bf4327e5e49d0f54d88b
     home: https://www.openfaas.com
@@ -1655,7 +1655,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.9.tgz
     version: 10.2.9
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.972648163Z"
+    created: "2023-01-23T18:42:00.039415737Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 210ee87dc07d061ccae9a0399f6badd5c6cf491877918783892aa35e9654090c
     home: https://www.openfaas.com
@@ -1681,7 +1681,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.8.tgz
     version: 10.2.8
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.971601758Z"
+    created: "2023-01-23T18:42:00.0371107Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: bc85d497a340a378d106a5e4ff353b655bf79533a7e63e08cc12f703347364f0
     home: https://www.openfaas.com
@@ -1707,7 +1707,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.7.tgz
     version: 10.2.7
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.970537683Z"
+    created: "2023-01-23T18:42:00.034716503Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: a1c6244819534d374d7de24a0c0027d6a8d1118e5bec16cda4c377dfd995ffb3
     home: https://www.openfaas.com
@@ -1733,7 +1733,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.6.tgz
     version: 10.2.6
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.969193358Z"
+    created: "2023-01-23T18:42:00.031805124Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 7a50e3ab2c63164c980024c1eb5ac52dd94761b7ec2df266f5d697c024b81815
     home: https://www.openfaas.com
@@ -1759,7 +1759,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.5.tgz
     version: 10.2.5
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.966482528Z"
+    created: "2023-01-23T18:42:00.030048109Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 10246e6f48b06bdfcca75269775a36f48fd07f555eb3ae31a9f60da708322e7f
     home: https://www.openfaas.com
@@ -1785,7 +1785,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.4.tgz
     version: 10.2.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.964532514Z"
+    created: "2023-01-23T18:42:00.028431387Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: c314cc6ce2fd0f7c723e27ff6d8b5aa21058b926ae583964333f7447a225dbab
     home: https://www.openfaas.com
@@ -1811,7 +1811,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.3.tgz
     version: 10.2.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.962644061Z"
+    created: "2023-01-23T18:42:00.026748193Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ca128987afb7240ceb9530330a58787985a42d8d8235263dbc20bab8b68198a0
     home: https://www.openfaas.com
@@ -1837,7 +1837,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.2.tgz
     version: 10.2.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.953412966Z"
+    created: "2023-01-23T18:42:00.016254294Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 7317c7ebec91cdf523b12ca1b89cc50fd7308d1a835d97ea26f1295161e0e60f
     home: https://www.openfaas.com
@@ -1863,7 +1863,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.1.tgz
     version: 10.2.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.95203393Z"
+    created: "2023-01-23T18:42:00.014112741Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ca8263eb1b14fc1ce3c3c921481e950c4102b685abf91a0961cb74c85d1ec506
     home: https://www.openfaas.com
@@ -1889,7 +1889,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.2.0.tgz
     version: 10.2.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.950475459Z"
+    created: "2023-01-23T18:42:00.011695553Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 2f8cf5f1986b1f75d748d1f04ba8abec9592ad2d5c55fd43ccdd95f7aa4cbe9b
     home: https://www.openfaas.com
@@ -1915,7 +1915,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.1.4.tgz
     version: 10.1.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.948890116Z"
+    created: "2023-01-23T18:42:00.010020409Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 77926bf5f98a47a5e44c3fc9276728a2e7f2a66c5d2add6d0c0048bc2a523ee1
     home: https://www.openfaas.com
@@ -1941,7 +1941,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.1.3.tgz
     version: 10.1.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.947758608Z"
+    created: "2023-01-23T18:42:00.007811385Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 1529a7bc0f788125c5e10bd3fdb95b9f1191c715dee079ad2c84162c59d7334e
     home: https://www.openfaas.com
@@ -1967,7 +1967,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.1.2.tgz
     version: 10.1.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.946489386Z"
+    created: "2023-01-23T18:42:00.005581331Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 1e94ac1bf91b182bc4a70aa53017aadf280d9f67a336f63eb23c93591df8cee3
     home: https://www.openfaas.com
@@ -1993,7 +1993,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.1.1.tgz
     version: 10.1.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.944638935Z"
+    created: "2023-01-23T18:42:00.003309635Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 050eda187d1303f42bb6f8200b790c6346beef6a0b1dc868335a44cc4bacbce4
     home: https://www.openfaas.com
@@ -2019,7 +2019,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.1.0.tgz
     version: 10.1.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.932876516Z"
+    created: "2023-01-23T18:41:59.988967219Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 5053a6af09c82dca40d1afd79bc66d00ad822ca3da00fb8f1395f58b3a297f40
     home: https://www.openfaas.com
@@ -2045,7 +2045,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.28.tgz
     version: 10.0.28
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.931859363Z"
+    created: "2023-01-23T18:41:59.987256125Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: e8c7e565a72f72a22a79646cb08f5612a13e06f6a58b81b4df4886af42bf99dd
     home: https://www.openfaas.com
@@ -2071,7 +2071,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.27.tgz
     version: 10.0.27
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.930806818Z"
+    created: "2023-01-23T18:41:59.985534091Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: aa5fcf1bf0c25edd1b3127a4fe6619bdf68298263a6ab7066d81e1669bb360f7
     home: https://www.openfaas.com
@@ -2097,7 +2097,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.25.tgz
     version: 10.0.25
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.929226185Z"
+    created: "2023-01-23T18:41:59.983821677Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: fefb60a72623d54906de3a9df36a9170a13bedad33413f36279b8696d4f0c30f
     home: https://www.openfaas.com
@@ -2123,7 +2123,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.24.tgz
     version: 10.0.24
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.92784119Z"
+    created: "2023-01-23T18:41:59.981851258Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 651ab07949817e0649bbaff973f30619b4561c2943f22f30345eb5f4a100ced6
     home: https://www.openfaas.com
@@ -2147,7 +2147,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.23.tgz
     version: 10.0.23
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.925875815Z"
+    created: "2023-01-23T18:41:59.979507371Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 758a7bf0a689a278236a26c01e3475ffb9f04244539e3db4b0283be6070fcb93
     home: https://www.openfaas.com
@@ -2171,7 +2171,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.22.tgz
     version: 10.0.22
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.9248179Z"
+    created: "2023-01-23T18:41:59.977649013Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ee87efd307cdd3c4b0a8ec84b6c5290d919aea00f83ea074b7e030b1c6fd6165
     home: https://www.openfaas.com
@@ -2195,7 +2195,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.21.tgz
     version: 10.0.21
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.923763165Z"
+    created: "2023-01-23T18:41:59.975824827Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ade9365e4b26cd116e58fbe9320f7aeaf201363c960ef49bfcf7b1463c117083
     home: https://www.openfaas.com
@@ -2219,7 +2219,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.20.tgz
     version: 10.0.20
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.921360195Z"
+    created: "2023-01-23T18:41:59.972294526Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: c84eaae4d8715722dc2ed628f652ef139826f3eb67ebdc8b5665eec5c6120bdb
     home: https://www.openfaas.com
@@ -2243,7 +2243,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.19.tgz
     version: 10.0.19
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.919305107Z"
+    created: "2023-01-23T18:41:59.970236775Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 1c0248fc03c0179f63786278239e2fdc3c7a1b23bcf549b9f44e88169167af1c
     home: https://www.openfaas.com
@@ -2267,7 +2267,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.17.tgz
     version: 10.0.17
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.917982063Z"
+    created: "2023-01-23T18:41:59.969104963Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: dfe550333fcee30a8533cd0352469c1115da753f41f971d760ec8892e78fbc33
     home: https://www.openfaas.com
@@ -2291,7 +2291,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.16.tgz
     version: 10.0.16
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.916699261Z"
+    created: "2023-01-23T18:41:59.96797796Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 6f6cc2fc7d5dffd8434e152e459122c82703bb7bd8e27e71b5f8c51ba3d4d825
     home: https://www.openfaas.com
@@ -2315,7 +2315,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.15.tgz
     version: 10.0.15
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.915370367Z"
+    created: "2023-01-23T18:41:59.966910739Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ce8930519796651c8a73d2c1428d218f71294fb5325404181d452b05c185f9ba
     home: https://www.openfaas.com
@@ -2339,7 +2339,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.14.tgz
     version: 10.0.14
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.914010802Z"
+    created: "2023-01-23T18:41:59.965787847Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: b0a3bab45a6e21c67686c291db81217b969e884223f27f61cebd8f6db7629fbc
     home: https://www.openfaas.com
@@ -2363,7 +2363,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.13.tgz
     version: 10.0.13
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.912602135Z"
+    created: "2023-01-23T18:41:59.963972771Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f9904174431dc0e792d57e2c686e52c9a5b5ee0b78aedec047d4c143515628e3
     home: https://www.openfaas.com
@@ -2387,7 +2387,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.12.tgz
     version: 10.0.12
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.91062529Z"
+    created: "2023-01-23T18:41:59.962789867Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 3affb5ae8852bfe150a1888c6e9ee4ae3e4d166f996d1328ee5f457409682cae
     home: https://www.openfaas.com
@@ -2411,7 +2411,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.11.tgz
     version: 10.0.11
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.909525483Z"
+    created: "2023-01-23T18:41:59.960668525Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 85ef8245e7b8c7949983af66c29aa9141e6fdf560d8e218f6b912054266e7093
     home: https://www.openfaas.com
@@ -2435,7 +2435,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.10.tgz
     version: 10.0.10
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.942778684Z"
+    created: "2023-01-23T18:42:00.000414598Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 71627b67840be8d360d37fd20c6d4c13d906a4a9b75eb014df27a87f87872485
     home: https://www.openfaas.com
@@ -2459,7 +2459,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.9.tgz
     version: 10.0.9
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.940663714Z"
+    created: "2023-01-23T18:41:59.999341226Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 082b13a8a75f7e6c7a1c86450d1907b29c6f9d31cbc836b84ec31915d6c22d5e
     home: https://www.openfaas.com
@@ -2483,7 +2483,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.8.tgz
     version: 10.0.8
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.939618909Z"
+    created: "2023-01-23T18:41:59.997873167Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 5c6ac52c5d2a28e11f67a9f241ac93e520f998c2595d877522123e5634a87547
     home: https://www.openfaas.com
@@ -2507,7 +2507,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.7.tgz
     version: 10.0.7
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.938552674Z"
+    created: "2023-01-23T18:41:59.996231344Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: e024848f68ffe4f6ac10140c0621094918fb9dd419bcf639deaa62c86feb7b08
     home: https://www.openfaas.com
@@ -2531,7 +2531,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.6.tgz
     version: 10.0.6
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.937191889Z"
+    created: "2023-01-23T18:41:59.994557241Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ee5390106602108ca86c6f735dfb4cd01f2b687501b09034fa86bd4ee9028fff
     home: https://www.openfaas.com
@@ -2555,7 +2555,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.5.tgz
     version: 10.0.5
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.935871785Z"
+    created: "2023-01-23T18:41:59.992786725Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: cc8453bd258d392a3a7a7a454c420809de9a663ba5c98a04bfd805b56265bfe7
     home: https://www.openfaas.com
@@ -2579,7 +2579,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.4.tgz
     version: 10.0.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.934229031Z"
+    created: "2023-01-23T18:41:59.990627512Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 396bfb83c37d55f995ba2a58a939db39fb00955fb2bd97fe3cb606a5c251aad1
     home: https://www.openfaas.com
@@ -2603,7 +2603,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.3.tgz
     version: 10.0.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.922679099Z"
+    created: "2023-01-23T18:41:59.97397085Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f03774cdfffa47400bd4952342dea21cea1e81076135d5a4c7ed330b3276d82d
     home: https://www.openfaas.com
@@ -2627,7 +2627,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.2.tgz
     version: 10.0.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.907835808Z"
+    created: "2023-01-23T18:41:59.958607293Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 78228ec7d71f7c61e64c1c6db1a1ddeba4de730ee9409ca5cbdefbb20c3fb8ba
     home: https://www.openfaas.com
@@ -2651,7 +2651,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.1.tgz
     version: 10.0.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:18.906109691Z"
+    created: "2023-01-23T18:41:59.956474101Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 608d37100a2008cefd74a69793482b8cdd35d6755cff75b56005ffb83d8faf4a
     home: https://www.openfaas.com
@@ -2675,7 +2675,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-10.0.0.tgz
     version: 10.0.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.182512198Z"
+    created: "2023-01-23T18:42:00.249844499Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: c7195a933e3ec516c959986f7ac3bdb6bf1659fdf484e41fa577072e6a30f760
     home: https://www.openfaas.com
@@ -2701,7 +2701,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-9.0.2.tgz
     version: 9.0.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.180862323Z"
+    created: "2023-01-23T18:42:00.248024882Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: b6c705b1e61b4af6abaaf64129ed8568831d6daa9fc73ab8acc59b045746cfeb
     home: https://www.openfaas.com
@@ -2727,7 +2727,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-9.0.1.tgz
     version: 9.0.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.179206178Z"
+    created: "2023-01-23T18:42:00.247090194Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: cd6d569f2d3cd5176e08a4e81b2b8b8248a6ccffdfd9fc1b1914ae208ba035e6
     home: https://www.openfaas.com
@@ -2753,7 +2753,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-9.0.0.tgz
     version: 9.0.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.177046767Z"
+    created: "2023-01-23T18:42:00.246100844Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 3091976030ac3b2043f351eb72182410bb75a884c79327e117b82f7605bbd8ec
     home: https://www.openfaas.com
@@ -2779,7 +2779,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.1.3.tgz
     version: 8.1.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.176111916Z"
+    created: "2023-01-23T18:42:00.245131265Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 28ace538f03ddbe01d41e683863a318718dc957feac5523ad36cdbe25a614360
     home: https://www.openfaas.com
@@ -2805,7 +2805,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.1.2.tgz
     version: 8.1.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.175188475Z"
+    created: "2023-01-23T18:42:00.244196066Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: d62605f5f277455c9c5ab3c977fd3b4edc3dae804374ebf4a6b912e27c5a04c4
     home: https://www.openfaas.com
@@ -2831,7 +2831,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.1.1.tgz
     version: 8.1.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.174290286Z"
+    created: "2023-01-23T18:42:00.243247827Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 4358371100066f56747c6ad9709dbed08144de5b993df8753497281344aaef75
     home: https://www.openfaas.com
@@ -2857,7 +2857,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.1.0.tgz
     version: 8.1.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.173314463Z"
+    created: "2023-01-23T18:42:00.240850389Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: fa5fc22434f55e663e1c6ea4f4d939a2aaef07d4bba285568615934b344779fa
     home: https://www.openfaas.com
@@ -2883,7 +2883,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.7.tgz
     version: 8.0.7
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.172375442Z"
+    created: "2023-01-23T18:42:00.23936394Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 768b1ab76dadbe2921faeb76afb09a3c407850ecb5ec4ce0bd84f18c84369baa
     home: https://www.openfaas.com
@@ -2909,7 +2909,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.6.tgz
     version: 8.0.6
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.170965585Z"
+    created: "2023-01-23T18:42:00.2378858Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ea89690161e44b0dd6d590622a34f10b72a472ef0ccbc11c99437a4ae4334742
     home: https://www.openfaas.com
@@ -2935,7 +2935,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.5.tgz
     version: 8.0.5
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.169568949Z"
+    created: "2023-01-23T18:42:00.23640577Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: cbc2353db6915574d700b55d1ced7ef0ed18569e906ad2345854ba7e3c850b44
     home: https://www.openfaas.com
@@ -2961,7 +2961,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.4.tgz
     version: 8.0.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.168655649Z"
+    created: "2023-01-23T18:42:00.23489205Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 966e48f7955f543a85b688bad540ee5189b50f83b08a2a36e70365ea5208a13a
     home: https://www.openfaas.com
@@ -2987,7 +2987,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.3.tgz
     version: 8.0.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.167741149Z"
+    created: "2023-01-23T18:42:00.233445351Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 79a22450a575a463cfd8ccdc0149f286411108401ca4e56c264e94ea9d8fa68e
     home: https://www.openfaas.com
@@ -3013,7 +3013,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.2.tgz
     version: 8.0.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.166840829Z"
+    created: "2023-01-23T18:42:00.232236197Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: aa440cb36e8a6021290500c5bbe2ef73d26e9ec8a903a02d81c3ac0d1e0f8f6d
     home: https://www.openfaas.com
@@ -3039,7 +3039,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.1.tgz
     version: 8.0.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.16537935Z"
+    created: "2023-01-23T18:42:00.230057673Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: a0c8fd7ca435daf758dff635a834cd49d5d01559efec554ac852d8f6df99ee1d
     home: https://www.openfaas.com
@@ -3065,7 +3065,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-8.0.0.tgz
     version: 8.0.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.164204102Z"
+    created: "2023-01-23T18:42:00.228545463Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 2b93bb822ea558d78f6fc44c0dae5dde891cf92a44913693691bfd04cdbe2c73
     home: https://www.openfaas.com
@@ -3091,7 +3091,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.4.4.tgz
     version: 7.4.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.162486915Z"
+    created: "2023-01-23T18:42:00.227052543Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 98fa1c88d41e6ce1406a0876c3c8cf3192c1142242a99180d77278d38ab198b5
     home: https://www.openfaas.com
@@ -3117,7 +3117,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.4.3.tgz
     version: 7.4.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.161480362Z"
+    created: "2023-01-23T18:42:00.225522943Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 382031dd362c5bec8ba69c7b44ce7c750ad8653016b2daf321d498131630d537
     home: https://www.openfaas.com
@@ -3143,7 +3143,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.4.2.tgz
     version: 7.4.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.160558631Z"
+    created: "2023-01-23T18:42:00.223993803Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f7c35ea485fa1bab40e98253dfe93789bea79e6b993eb1ce8e86be11c581516b
     home: https://www.openfaas.com
@@ -3169,7 +3169,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.4.1.tgz
     version: 7.4.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.1596316Z"
+    created: "2023-01-23T18:42:00.222741868Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 887fd25412847c689ac3c4d13eb1a34f7e853ea74a205041420efe95a368731a
     home: https://www.openfaas.com
@@ -3195,7 +3195,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.4.0.tgz
     version: 7.4.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.15871505Z"
+    created: "2023-01-23T18:42:00.220936262Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 19c3928b9847837212a2a70b68713f9ec9a8f640e576ba05ba7295e5581e3250
     home: https://www.openfaas.com
@@ -3221,7 +3221,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.3.2.tgz
     version: 7.3.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.157735027Z"
+    created: "2023-01-23T18:42:00.219964532Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: bdb550735abf96a6b0780e6c0748c898f047aa448db9b664e01283650e602c49
     home: https://www.openfaas.com
@@ -3247,7 +3247,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.3.1.tgz
     version: 7.3.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.156068243Z"
+    created: "2023-01-23T18:42:00.218999243Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f1c59f0e9c4a017519e3e89a0a8d74c4c198571ff6da2dda312a6a30478eb439
     home: https://www.openfaas.com
@@ -3273,7 +3273,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.3.0.tgz
     version: 7.3.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.155113081Z"
+    created: "2023-01-23T18:42:00.218008443Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f5add7a2802d4520c5edcf3e0fe6e9b142182534fd3a06fe00b9e0e2f0600dab
     home: https://www.openfaas.com
@@ -3299,7 +3299,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.8.tgz
     version: 7.2.8
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.153594141Z"
+    created: "2023-01-23T18:42:00.216463782Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 7534e1ee604b6e5d2d57c1a3758c39fa40a3722097e0474fc741abff9d0e393a
     home: https://www.openfaas.com
@@ -3325,7 +3325,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.7.tgz
     version: 7.2.7
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.151698768Z"
+    created: "2023-01-23T18:42:00.214875691Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 7d007708e7e1671c420e00f22dd64ae0d50fdb7ff953c9c24a52e7417343bd97
     home: https://www.openfaas.com
@@ -3351,7 +3351,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.6.tgz
     version: 7.2.6
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.149764774Z"
+    created: "2023-01-23T18:42:00.213261828Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 13a250251d1d2c1b9ba7b419236f5c3a1b09c20bfd85b6d6172715c3663a1b60
     home: https://www.openfaas.com
@@ -3377,7 +3377,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.5.tgz
     version: 7.2.5
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.14783329Z"
+    created: "2023-01-23T18:42:00.212041364Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 6f3caa7ef5ce337c8d0ddb44a0f9d463240972a6dc4800949770746d764b7fa9
     home: https://www.openfaas.com
@@ -3403,7 +3403,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.4.tgz
     version: 7.2.4
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.145469081Z"
+    created: "2023-01-23T18:42:00.211063274Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 0ea59d1ac83ea2e4390d2e90a6ee5ad0c30061e70859f32549a566ffdd1992cc
     home: https://www.openfaas.com
@@ -3429,7 +3429,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.3.tgz
     version: 7.2.3
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.143727454Z"
+    created: "2023-01-23T18:42:00.209124536Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 2b29cf6deaaadad545647508af9bf22df397dcf3fecb70d43f54a54ecb6536bd
     home: https://www.openfaas.com
@@ -3455,7 +3455,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.2.tgz
     version: 7.2.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.14268618Z"
+    created: "2023-01-23T18:42:00.207170606Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 68bba3705d2e9c0c0a6afea87d09e4edfc7a76f688fbe4abe08ab191bb4bd01e
     home: https://www.openfaas.com
@@ -3481,7 +3481,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.1.tgz
     version: 7.2.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.141095437Z"
+    created: "2023-01-23T18:42:00.205196927Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 1c1cc94e1883dabd6dc3817d6c2f91cc22674196c1f118ae5aa1edb4d7a6bc31
     home: https://www.openfaas.com
@@ -3507,7 +3507,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.2.0.tgz
     version: 7.2.0
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.139519175Z"
+    created: "2023-01-23T18:42:00.203163656Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 140f1475d1aac65f7236e452085c8ceb2c13a0ffe6d7bc411bdafa55ebf9f420
     home: https://www.openfaas.com
@@ -3533,7 +3533,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.1.2.tgz
     version: 7.1.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.137926002Z"
+    created: "2023-01-23T18:42:00.201145906Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 491a6a707145be70ccd2cf8f1a6250cc32fb9d11bca2b2952f1b9c86e641dc1d
     home: https://www.openfaas.com
@@ -3559,7 +3559,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.1.1.tgz
     version: 7.1.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.136304118Z"
+    created: "2023-01-23T18:42:00.200175767Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 2b55582ab7f8414c697832d49d427a63710053d2c15301adf226620b69377c49
     home: https://www.openfaas.com
@@ -3585,7 +3585,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.1.0.tgz
     version: 7.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.133855698Z"
+    created: "2023-01-23T18:42:00.199263679Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 833259e2de8fdfd9f4da0dbb78bda50572105db2af0362c36e7f644de6352d4c
     home: https://www.openfaas.com
@@ -3610,7 +3610,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.0.4.tgz
     version: 7.0.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.132303446Z"
+    created: "2023-01-23T18:42:00.197913562Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f8127c4f2b33bf7ea691ca929a3310633b0fd1a6721d99df7eb9b40fdab746b2
     home: https://www.openfaas.com
@@ -3635,7 +3635,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.0.3.tgz
     version: 7.0.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.130829797Z"
+    created: "2023-01-23T18:42:00.196458553Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 9104fd565cb86b366796a2ff49b2e354b2e320f60c9f8343043e6cb89a4367a5
     home: https://www.openfaas.com
@@ -3660,7 +3660,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.0.2.tgz
     version: 7.0.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.129346688Z"
+    created: "2023-01-23T18:42:00.195184768Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f7b37f2571bfb0dc596e37a000ce4f29aa8346254d79fda25ad4034d6a4848da
     home: https://www.openfaas.com
@@ -3685,7 +3685,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.0.1.tgz
     version: 7.0.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.127859599Z"
+    created: "2023-01-23T18:42:00.192672477Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 8c9482cc9ec00709ff3250ff640fee58c40284355e2299b04f5e8126bc048138
     home: https://www.openfaas.com
@@ -3710,7 +3710,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-7.0.0.tgz
     version: 7.0.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.126624668Z"
+    created: "2023-01-23T18:42:00.191134707Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 0e202802844d3575a74e317718d0b464144dc0f1266cbbd360c540b93f2ca306
     home: https://www.openfaas.com
@@ -3735,7 +3735,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.2.3.tgz
     version: 6.2.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.124787317Z"
+    created: "2023-01-23T18:42:00.189530864Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: cc5e7a0e79a7929d8539a7eff0868bbc33fb2b178dd6ccb4479067f3ed57029f
     home: https://www.openfaas.com
@@ -3760,7 +3760,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.2.2.tgz
     version: 6.2.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.123772834Z"
+    created: "2023-01-23T18:42:00.188052495Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: fbf8035b5c7346d082e91f685fbaa7f15245bbe86ed782f3e456205056f18fc7
     home: https://www.openfaas.com
@@ -3785,7 +3785,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.2.1.tgz
     version: 6.2.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.122868694Z"
+    created: "2023-01-23T18:42:00.186605396Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 8148bd55704fdb0ee98fb4da89f65507e1fefe25771f113218abee689e17fa63
     home: https://www.openfaas.com
@@ -3810,7 +3810,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.2.0.tgz
     version: 6.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.121518389Z"
+    created: "2023-01-23T18:42:00.185281449Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: f6c16c0741baae72090f7928b511078b315edf0298a5f51dc4b05bd337705f64
     home: https://www.openfaas.com
@@ -3835,7 +3835,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.6.tgz
     version: 6.1.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.120054381Z"
+    created: "2023-01-23T18:42:00.183443643Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: a2cb358daa37da91157ae4e6f1b7c6eef009bcb3255bc3ab63d3a20f4d060e71
     home: https://www.openfaas.com
@@ -3860,7 +3860,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.5.tgz
     version: 6.1.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.1188246Z"
+    created: "2023-01-23T18:42:00.182128026Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 777c9a843776e9276b49c867d7beabfe103c619ec0f16f753ea04250d5c9bdd4
     home: https://www.openfaas.com
@@ -3885,7 +3885,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.4.tgz
     version: 6.1.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.117648391Z"
+    created: "2023-01-23T18:42:00.180673337Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 546ba68e18d5c843b7f04a48d47b30d16ad4f4f70c861b570d71d719a9056a79
     home: https://www.openfaas.com
@@ -3910,7 +3910,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.3.tgz
     version: 6.1.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.11609205Z"
+    created: "2023-01-23T18:42:00.179208808Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 4b3ff5a6eb1582320e028b164ae87ba0a34a852095ff9a29070a273cc7b1205c
     home: https://www.openfaas.com
@@ -3935,7 +3935,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.2.tgz
     version: 6.1.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.11518475Z"
+    created: "2023-01-23T18:42:00.177740529Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 7274a6ce40958c7b73dc8cb218d019644b7c3ab7308b89efb79093eb208a695e
     home: https://www.openfaas.com
@@ -3960,7 +3960,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.1.tgz
     version: 6.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.11429764Z"
+    created: "2023-01-23T18:42:00.176282789Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 7e5ebeeb31d0a24d3c2b7118167a0d1b5bbf759f610900515787d68c3d4a71a6
     home: https://www.openfaas.com
@@ -3985,7 +3985,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.1.0.tgz
     version: 6.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.113364049Z"
+    created: "2023-01-23T18:42:00.175016424Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 92dc80552b0e09e6ddde3d2490f813ab9aad0e2804d5c95ab3f3d61513bb056b
     home: https://www.openfaas.com
@@ -4010,7 +4010,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.0.4.tgz
     version: 6.0.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.112440729Z"
+    created: "2023-01-23T18:42:00.173420592Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 53e87262f1e63b532045ad55081fdbedcc0fcaf74e3c4123fdc6ab00db3d765a
     home: https://www.openfaas.com
@@ -4035,7 +4035,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.0.3.tgz
     version: 6.0.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.111461496Z"
+    created: "2023-01-23T18:42:00.172525995Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 2721cbfca07b105f5b89fbf7862e88962dbedad968c80dbd895fe7d5a07b4c4a
     home: https://www.openfaas.com
@@ -4060,7 +4060,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.0.2.tgz
     version: 6.0.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.109741059Z"
+    created: "2023-01-23T18:42:00.171613917Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: ee7d69ad9cae2b8067833749ed071f0e88efba65012963a79b23e808c649591f
     home: https://www.openfaas.com
@@ -4083,7 +4083,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.0.1.tgz
     version: 6.0.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.108809488Z"
+    created: "2023-01-23T18:42:00.170482644Z"
     description: OpenFaaS - Serverless Functions Made Simple
     digest: 90ee77d9ea47450c93dd30a9f29e9b95e2da40faa77fd252ea9240aac2e35790
     home: https://www.openfaas.com
@@ -4106,7 +4106,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-6.0.0.tgz
     version: 6.0.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.107875367Z"
+    created: "2023-01-23T18:42:00.168983944Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2eae955e48053814cf3110a68997df327011e651be6bbcbe3be1f2b6634b6e91
     home: https://www.openfaas.com
@@ -4129,7 +4129,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.8.tgz
     version: 5.8.8
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.106943196Z"
+    created: "2023-01-23T18:42:00.167818351Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b24b6a74f18aa2475fbf2cdc5528088900dd9019df5d9d26de6198b11d45f268
     home: https://www.openfaas.com
@@ -4152,7 +4152,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.7.tgz
     version: 5.8.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.105616763Z"
+    created: "2023-01-23T18:42:00.165846371Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: dc28a1e3ea8299301fa71832256aabcba2fcf7a60603ee44527445ceb802a093
     home: https://www.openfaas.com
@@ -4175,7 +4175,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.6.tgz
     version: 5.8.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.104350641Z"
+    created: "2023-01-23T18:42:00.164576786Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 19f636821dd3e041c1a33d5d762652b110c4f61cd0410fb34dfe5395177487c4
     home: https://www.openfaas.com
@@ -4198,7 +4198,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.5.tgz
     version: 5.8.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.103074899Z"
+    created: "2023-01-23T18:42:00.163325681Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8919ec3b5e6d39f0c26c0be9d0c5ab12d867871fe63caa2314fadeb68f696a4d
     home: https://www.openfaas.com
@@ -4221,7 +4221,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.4.tgz
     version: 5.8.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.101480166Z"
+    created: "2023-01-23T18:42:00.162075026Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 30484e15a7eebcd990f395e753aa1ac426a116af1c05912b8cb0a1a693205043
     home: https://www.openfaas.com
@@ -4244,7 +4244,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.3.tgz
     version: 5.8.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.100644088Z"
+    created: "2023-01-23T18:42:00.16079071Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 395381f7a0305c3a5e2c9506d6b1eaec42c3e5725bc6d708323407a6979ffbe3
     home: https://www.openfaas.com
@@ -4267,7 +4267,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.2.tgz
     version: 5.8.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.099665006Z"
+    created: "2023-01-23T18:42:00.159534285Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2c9118ed71b194ee3b6069e57a3e304e358b6ce46bc8df3b313ccf19ecef5bf9
     home: https://www.openfaas.com
@@ -4290,7 +4290,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.1.tgz
     version: 5.8.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.098471796Z"
+    created: "2023-01-23T18:42:00.15825382Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c0a639d6143fafc36733f94cf81a08f9a13a80a6a87f3fab97726b31dbaf64e2
     home: https://www.openfaas.com
@@ -4313,7 +4313,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.8.0.tgz
     version: 5.8.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.096838182Z"
+    created: "2023-01-23T18:42:00.157139257Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 0e4bf7b6f62ca43d0fdc4ddd5153fb3615fc544be1ea587ffeadb8dcf2904303
     home: https://www.openfaas.com
@@ -4336,7 +4336,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.7.2.tgz
     version: 5.7.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.095192278Z"
+    created: "2023-01-23T18:42:00.155374402Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b50d7ac5e2e27c1f6ec37726653d0b33cd89306cbe8ea3c1584193698fde555d
     home: https://www.openfaas.com
@@ -4359,7 +4359,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.7.1.tgz
     version: 5.7.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.093481641Z"
+    created: "2023-01-23T18:42:00.154580356Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2ee9d13840de3f3d4a7e2606e379d86acd33235e08e89fc565352dbb901c136f
     home: https://www.openfaas.com
@@ -4382,7 +4382,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.7.0.tgz
     version: 5.7.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.091482115Z"
+    created: "2023-01-23T18:42:00.1537802Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bf7026cc6929d19ce333b3b8ec2003fbd87dc5e125596dfe1f32faf261ae23f9
     home: https://www.openfaas.com
@@ -4405,7 +4405,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.7.tgz
     version: 5.6.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.090609146Z"
+    created: "2023-01-23T18:42:00.152996664Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e4a6410e51f31d43e0c854c2c088c01fe13479e6e8f808042ba810290c48baa7
     home: https://www.openfaas.com
@@ -4428,7 +4428,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.6.tgz
     version: 5.6.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.089372425Z"
+    created: "2023-01-23T18:42:00.152075786Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: a9702f013efed35cc01afe21455b397d6da797773c6164bd9091c07fc2c5a6cc
     home: https://www.openfaas.com
@@ -4451,7 +4451,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.5.tgz
     version: 5.6.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.088301Z"
+    created: "2023-01-23T18:42:00.150709139Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2cda47db8d988ef759b4d515e73678425c42aa8157bd1d298ad8330a67239cb2
     home: https://www.openfaas.com
@@ -4474,7 +4474,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.4.tgz
     version: 5.6.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.086721707Z"
+    created: "2023-01-23T18:42:00.149329301Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 5d932e61965f7683d463f48337312336e30602c969dbec4c4327b1e1f30fab09
     home: https://www.openfaas.com
@@ -4497,7 +4497,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.3.tgz
     version: 5.6.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.085130165Z"
+    created: "2023-01-23T18:42:00.148418173Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 6c88bd9c7b4aa6827753d6100aa633e720b4f48778bb55217f4c616f06458c11
     home: https://www.openfaas.com
@@ -4520,7 +4520,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.2.tgz
     version: 5.6.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.083518841Z"
+    created: "2023-01-23T18:42:00.146834062Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 3a0fe47eb80d4331000f067fc5591386808dea7de4316603a528fd0f28bcd0f8
     home: https://www.openfaas.com
@@ -4543,7 +4543,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.1.tgz
     version: 5.6.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.081865207Z"
+    created: "2023-01-23T18:42:00.146010666Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2def5b116b93e5ddc6022f1c79c0d51d0f085f866a308fa12753594a03820a84
     home: https://www.openfaas.com
@@ -4566,7 +4566,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.6.0.tgz
     version: 5.6.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.079988365Z"
+    created: "2023-01-23T18:42:00.145205789Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 609a386a806e285f2ae07fff3a4161ba9df26023a3bdd90f38b61a99498e39f4
     home: https://www.openfaas.com
@@ -4589,7 +4589,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.5.6.tgz
     version: 5.5.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.079186688Z"
+    created: "2023-01-23T18:42:00.144413264Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 66f1657c8c20aed59db77fd2f9d06201b9a73fcead1c507c4fd090a74b1f67af
     home: https://www.openfaas.com
@@ -4612,7 +4612,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.5.4.tgz
     version: 5.5.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.078180235Z"
+    created: "2023-01-23T18:42:00.143620658Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 7fe32a65e4fd0ba5ae5812c133f9b5da97f6b15aa712bfe95397b752349909df
     home: https://www.openfaas.com
@@ -4635,7 +4635,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.5.3.tgz
     version: 5.5.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.076954544Z"
+    created: "2023-01-23T18:42:00.142514746Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 72c323c15737305457e7462104f6c439e21372586bb529e56b86356b578ca21d
     home: https://www.openfaas.com
@@ -4658,7 +4658,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.5.2.tgz
     version: 5.5.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.075728604Z"
+    created: "2023-01-23T18:42:00.140907783Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 57d597c6bbacf2ca52cba4e702af5dea2ab98c2f18430624b4d86bf1425dd772
     home: https://www.openfaas.com
@@ -4681,7 +4681,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.5.1.tgz
     version: 5.5.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.074518874Z"
+    created: "2023-01-23T18:42:00.139276411Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bdbb2fe4f1d446f2941a0a13decb3864f891b5224132c6eb422d57e42cea8d6b
     home: https://www.openfaas.com
@@ -4704,7 +4704,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.5.0.tgz
     version: 5.5.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.073564702Z"
+    created: "2023-01-23T18:42:00.137794911Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: cd53e19257a7c3d41e171d5f75348b15e576f7085d5cd5f01d0cd98340faa14c
     home: https://www.openfaas.com
@@ -4727,7 +4727,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.4.1.tgz
     version: 5.4.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.072658742Z"
+    created: "2023-01-23T18:42:00.136582607Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ba61dbc9b56ffd92425fda67caf4cf9e396e2fcf15c6df2f4317c46da31d6e38
     home: https://www.openfaas.com
@@ -4750,7 +4750,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.4.0.tgz
     version: 5.4.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.063151918Z"
+    created: "2023-01-23T18:42:00.125335592Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c6d41580cfabb91bc2f3cb544d18eff8f543a2e0f34725277df6fad5555bd931
     home: https://www.openfaas.com
@@ -4773,7 +4773,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.11.tgz
     version: 5.3.11
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.061773622Z"
+    created: "2023-01-23T18:42:00.124677369Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 29ecc62c634105464689d5cb91159dfb04b1d0fc65ed51f7ba65dbbd8cba58f7
     home: https://www.openfaas.com
@@ -4796,7 +4796,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.10.tgz
     version: 5.3.10
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.071317018Z"
+    created: "2023-01-23T18:42:00.13574438Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: f34b491b431db50a553a190ae81da9e59909d188ceca43b89b931ca7b15b0d6a
     home: https://www.openfaas.com
@@ -4819,7 +4819,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.9.tgz
     version: 5.3.9
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.070566943Z"
+    created: "2023-01-23T18:42:00.135026336Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 31948e7bc549fae977ff4d5c1df582718f69376c73b3dbd8b0d145a299609aa4
     home: https://www.openfaas.com
@@ -4842,7 +4842,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.8.tgz
     version: 5.3.8
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.069425585Z"
+    created: "2023-01-23T18:42:00.133582537Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: dc790dd7ef8feb928a9c6709d1d47759494fba54e05e1e9b66e83cfb7f9816d8
     home: https://www.openfaas.com
@@ -4865,7 +4865,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.7.tgz
     version: 5.3.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.068300268Z"
+    created: "2023-01-23T18:42:00.132189769Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 259794d738c13144bf9d4db1786b72571eda241bf07b619d5c6f77c1e54d7d98
     home: https://www.openfaas.com
@@ -4888,7 +4888,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.6.tgz
     version: 5.3.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.067239933Z"
+    created: "2023-01-23T18:42:00.130796741Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 16d056eb463f740b65a2a8d67f2a1aa9f7cd7a8057e670890a1a0610cc0ec593
     home: https://www.openfaas.com
@@ -4911,7 +4911,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.5.tgz
     version: 5.3.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.066140166Z"
+    created: "2023-01-23T18:42:00.129378753Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: baf371944c011ff441ac95c062122427b4d22be915d13b01429e7a010dee7d76
     home: https://www.openfaas.com
@@ -4934,7 +4934,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.4.tgz
     version: 5.3.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.065175504Z"
+    created: "2023-01-23T18:42:00.127913044Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: fb2536df55a163efb68d10bc68c5deaca1615bc814f5a6c3da364e77fcf13a41
     home: https://www.openfaas.com
@@ -4957,7 +4957,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.3.tgz
     version: 5.3.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.064215033Z"
+    created: "2023-01-23T18:42:00.126064627Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 5859c2ca0ec6aba463fa216fd8a593710969c44fb23052ba8fc424ab5b23938d
     home: https://www.openfaas.com
@@ -4980,7 +4980,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.2.tgz
     version: 5.3.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.060985546Z"
+    created: "2023-01-23T18:42:00.124002266Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 61e780c469fc9404ce183b543b8d622328903a393750d7cabfe8d941fb87d316
     home: https://www.openfaas.com
@@ -5003,7 +5003,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.3.1.tgz
     version: 5.3.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.060279812Z"
+    created: "2023-01-23T18:42:00.123341503Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 1ebf5b8e4e6c2038d2ff7b4510605a4ce1880e7e721531d1524f805519de5a67
     home: https://www.openfaas.com
@@ -5028,7 +5028,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.2.2.tgz
     version: 5.2.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.05958969Z"
+    created: "2023-01-23T18:42:00.12270137Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ccc8469e3e0d86665345a2708b0b3fce1c22aaafb624909e6282ad5628d73f59
     home: https://www.openfaas.com
@@ -5053,7 +5053,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.2.1.tgz
     version: 5.2.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.058890956Z"
+    created: "2023-01-23T18:42:00.122038577Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 61fb1f1117ce10c2dda87402206b2b046885627d43c1fc90d0709d945b2b8919
     home: https://www.openfaas.com
@@ -5078,7 +5078,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.2.0.tgz
     version: 5.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.057904124Z"
+    created: "2023-01-23T18:42:00.121397744Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e70ecd66b98d9b9ef915c0a0c6bbf76fdb77687fec9886a3f1f75234163c9698
     home: https://www.openfaas.com
@@ -5103,7 +5103,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.1.5.tgz
     version: 5.1.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.056841829Z"
+    created: "2023-01-23T18:42:00.120725931Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: f3629d7aabbefce5d0045160e859c7a95bcc0cc28333fb226097e559790654a0
     home: https://www.openfaas.com
@@ -5128,7 +5128,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.1.4.tgz
     version: 5.1.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.055602068Z"
+    created: "2023-01-23T18:42:00.119441705Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 609f4ecf6cb80601dcc55ddc389fc25315526da5bda521834fd49564304f9698
     home: https://www.openfaas.com
@@ -5153,7 +5153,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.1.3.tgz
     version: 5.1.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.054704718Z"
+    created: "2023-01-23T18:42:00.118635699Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 42ed71363397c2c45a1476da33c8cea195b473574d830c70431223dc35279f1f
     home: https://www.openfaas.com
@@ -5178,7 +5178,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.1.2.tgz
     version: 5.1.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.053204629Z"
+    created: "2023-01-23T18:42:00.117594508Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 49516bf0c5940ec8e9317a4af4d0b0fc8223d74f605936ffaea8fed9e85da48a
     home: https://www.openfaas.com
@@ -5203,7 +5203,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.1.1.tgz
     version: 5.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.052487165Z"
+    created: "2023-01-23T18:42:00.116565037Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 0650d10307bfe350e5e07603f0bf3e8dff8f39b4bdb08344dddb9e25bc4d1bdd
     home: https://www.openfaas.com
@@ -5228,7 +5228,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.1.0.tgz
     version: 5.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.051758791Z"
+    created: "2023-01-23T18:42:00.115520226Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 5369f5b2927b4d7481b66667d07b260792e65eb8b36623911ee889c9612a9cb1
     home: https://www.openfaas.com
@@ -5253,7 +5253,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.0.1.tgz
     version: 5.0.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.051067438Z"
+    created: "2023-01-23T18:42:00.114504856Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: fbd1761f0c9337bfdb25d55f275490a8e7213c0c9076f640a15cb6c284719b3b
     home: https://www.openfaas.com
@@ -5278,7 +5278,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-5.0.0.tgz
     version: 5.0.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.049975971Z"
+    created: "2023-01-23T18:42:00.113475096Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b2d6576eeba77f691402c2614947e97234f04c8b6425fb1342c7fba9f2ea2661
     home: https://www.openfaas.com
@@ -5303,7 +5303,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.8.2.tgz
     version: 4.8.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.048596976Z"
+    created: "2023-01-23T18:42:00.112461155Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8fca83fc2f0627c72dcfc825f83e54838402f4e87cb37da06e133d0ca040a5fd
     home: https://www.openfaas.com
@@ -5328,7 +5328,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.8.1.tgz
     version: 4.8.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.04721839Z"
+    created: "2023-01-23T18:42:00.111511536Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: f873a01735eaf2db837772eb170217df47da04b0369f8c79b577833423984a98
     home: https://www.openfaas.com
@@ -5353,7 +5353,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.8.0.tgz
     version: 4.8.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.045627897Z"
+    created: "2023-01-23T18:42:00.109564197Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 9edf338218af0110a938525c9e1e5bd93e448768bd643e2a836d26405e36144e
     home: https://www.openfaas.com
@@ -5378,7 +5378,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.7.4.tgz
     version: 4.7.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.044225471Z"
+    created: "2023-01-23T18:42:00.108463165Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ca70d59f7e0cc2ffc0983cfd7dd21fbb462ae63c57f9588a5bd61ac5bfe8eb3f
     home: https://www.openfaas.com
@@ -5403,7 +5403,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.7.3.tgz
     version: 4.7.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.04268535Z"
+    created: "2023-01-23T18:42:00.107484856Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 4130462a951d5b0979ed5d15d2dd60d8d6c08e5f68e6f600b47606ad29c54ebd
     home: https://www.openfaas.com
@@ -5428,7 +5428,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.7.2.tgz
     version: 4.7.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.041424149Z"
+    created: "2023-01-23T18:42:00.106527547Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 29caf942ddc24aef3840425ff916549a15ea1806071b475395092bbdf4cceefc
     home: https://www.openfaas.com
@@ -5453,7 +5453,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.7.1.tgz
     version: 4.7.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.040822619Z"
+    created: "2023-01-23T18:42:00.105551207Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: a4fb0e6707fd64fc3f3d964c612edf67b52d03eeceec7e01246c82f832a64cf9
     home: https://www.openfaas.com
@@ -5478,7 +5478,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.7.0.tgz
     version: 4.7.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.040231599Z"
+    created: "2023-01-23T18:42:00.104597988Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e43f996bdd7da5e79220dd7e03de477706b24e717235e3462d0fc0bc062c6592
     home: https://www.openfaas.com
@@ -5503,7 +5503,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.6.4.tgz
     version: 4.6.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.039619569Z"
+    created: "2023-01-23T18:42:00.103634319Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: fc1fcfac0669f4922458d25fea8a57d416615d001f5d31f481d71d94ad3c1ac9
     home: https://www.openfaas.com
@@ -5528,7 +5528,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.6.3.tgz
     version: 4.6.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.039013389Z"
+    created: "2023-01-23T18:42:00.102662249Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: beafa0f247e1934e6dab208979831d762df18b2b8eb3c2afc9e44090d3d63328
     home: https://www.openfaas.com
@@ -5553,7 +5553,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.6.2.tgz
     version: 4.6.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.038221862Z"
+    created: "2023-01-23T18:42:00.10172096Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bdccac3babaf5c0f063c22093916276d4e2a27bdc28df27f14d79ebe89d6ecda
     home: https://www.openfaas.com
@@ -5578,7 +5578,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.6.1.tgz
     version: 4.6.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.037215119Z"
+    created: "2023-01-23T18:42:00.100970455Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 1ec994bfe542a70904a3700922435aae5e734f1c349a8ec6f311b848c0eba3d4
     home: https://www.openfaas.com
@@ -5603,7 +5603,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.6.0.tgz
     version: 4.6.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.036208406Z"
+    created: "2023-01-23T18:42:00.0996763Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: d2e815e64da306d92944ae288477a2c0add9b040a3357b132f1f2c1ec90f8445
     home: https://www.openfaas.com
@@ -5628,7 +5628,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.5.0.tgz
     version: 4.5.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.035315166Z"
+    created: "2023-01-23T18:42:00.098071997Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c958a207e5bd22026e6e60a1382892d221d458e719fe19ebb10e32debdc2c7db
     home: https://www.openfaas.com
@@ -5653,7 +5653,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.4.1.tgz
     version: 4.4.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.034552531Z"
+    created: "2023-01-23T18:42:00.097025957Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 16ae856a8cbb85997f4117249222b9617fd3a3160e178a520d2a9432752b8074
     home: https://www.openfaas.com
@@ -5678,7 +5678,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.4.0.tgz
     version: 4.4.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.033158285Z"
+    created: "2023-01-23T18:42:00.096019667Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bf4f279e9863d52a47fa349444853d5852570b15fae20d0b288dc4e6f1bfc711
     home: https://www.openfaas.com
@@ -5703,7 +5703,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.3.5.tgz
     version: 4.3.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.032581866Z"
+    created: "2023-01-23T18:42:00.095051658Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: fb1c23263188eb6b578b63357ec346b28964138b37b1b74f1c264d8c89b1f9a8
     home: https://www.openfaas.com
@@ -5728,7 +5728,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.3.4.tgz
     version: 4.3.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.032049018Z"
+    created: "2023-01-23T18:42:00.09418407Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 4a84e17d3faade9382517258582e40ec74ac44259b78f0eb0c466fa0f2e0e122
     home: https://www.openfaas.com
@@ -5753,7 +5753,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.3.3.tgz
     version: 4.3.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.031553832Z"
+    created: "2023-01-23T18:42:00.093338124Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 305d7f3752360d4bd2e8faf54930e0f56be16b32dc8278afc5bf45ca0d07a94f
     home: https://www.openfaas.com
@@ -5778,7 +5778,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.3.2.tgz
     version: 4.3.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.031047945Z"
+    created: "2023-01-23T18:42:00.092494977Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ca9cc6c463c8dbf851f9a3af07cc7ad82c6bb0cb154c0cfe1af35574c5f57f2d
     home: https://www.openfaas.com
@@ -5803,7 +5803,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.3.1.tgz
     version: 4.3.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.030493637Z"
+    created: "2023-01-23T18:42:00.09165753Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 89f1706dd6d37580958bccfc7deaa3c18b7567501d02e390585fb8633c5c3bfa
     home: https://www.openfaas.com
@@ -5828,7 +5828,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.3.0.tgz
     version: 4.3.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.029364509Z"
+    created: "2023-01-23T18:42:00.090828183Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b9c635c702bfe5b87de7fc5026e73cfb8dba34368fae8ad637b3ac9120ea9e36
     home: https://www.openfaas.com
@@ -5853,7 +5853,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.2.0.tgz
     version: 4.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.02818725Z"
+    created: "2023-01-23T18:42:00.090171Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 334d5c9fccb83830c0db2c1c930c5725d10b4e5c4051d88e3ac32509bc25c462
     home: https://www.openfaas.com
@@ -5878,7 +5878,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.1.1.tgz
     version: 4.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.027117445Z"
+    created: "2023-01-23T18:42:00.089509847Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 1d90e4836620979c4b0ad0ed35b73e6b9df4fffff028aa4349103bc498b4fa81
     home: https://www.openfaas.com
@@ -5903,7 +5903,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.1.0.tgz
     version: 4.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.026003888Z"
+    created: "2023-01-23T18:42:00.088362374Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bb69e13f76f0f9f6bc62612e52e16c9ca073590928ecc73bf05506970fbc44c2
     home: https://www.openfaas.com
@@ -5928,7 +5928,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-4.0.0.tgz
     version: 4.0.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.024953463Z"
+    created: "2023-01-23T18:42:00.087827613Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 7a8ad9756c3b243c33f37aa43bea1ac32360804350b9e21fa32f3c96fcf4808e
     home: https://www.openfaas.com
@@ -5953,7 +5953,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-3.3.1.tgz
     version: 3.3.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.023907779Z"
+    created: "2023-01-23T18:42:00.087307673Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 3e9cf71bffb7c44aaa0c876f3b5adcf46e7b338c759e337e9464a9e2ab9c102e
     home: https://www.openfaas.com
@@ -5978,7 +5978,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-3.3.0.tgz
     version: 3.3.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.02243222Z"
+    created: "2023-01-23T18:42:00.086635439Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 5b5a05c50da7dbd313f734b2194148b0c65563e6ed44c41881e4fb64ea973780
     home: https://www.openfaas.com
@@ -6003,7 +6003,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-3.2.3.tgz
     version: 3.2.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.021770408Z"
+    created: "2023-01-23T18:42:00.085797523Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bf9f7e610cb842d394589d3f43ac223d9e3b6a9d34d6eb5e708159c7b1a4cb12
     home: https://www.openfaas.com
@@ -6028,7 +6028,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-3.2.2.tgz
     version: 3.2.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.021272042Z"
+    created: "2023-01-23T18:42:00.085014997Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ac4bb202a70d5abc58c667a3662b749b8998aaa66eb31dfcaac202f148fc9fe1
     home: https://www.openfaas.com
@@ -6053,7 +6053,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-3.2.0.tgz
     version: 3.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.020790456Z"
+    created: "2023-01-23T18:42:00.084216671Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 9af11f0f8b5567676233ea779435d85b389bf19f7b6be2753b8cdee6fcbb5e09
     home: https://www.openfaas.com
@@ -6078,7 +6078,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-3.0.0.tgz
     version: 3.0.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.02031083Z"
+    created: "2023-01-23T18:42:00.083408295Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ebb50d8e3acc4ac6a5637c81b5c4bf791ba3b69556fb177e5f711f069f354be0
     home: https://www.openfaas.com
@@ -6103,7 +6103,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-2.1.4.tgz
     version: 2.1.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.019833474Z"
+    created: "2023-01-23T18:42:00.082636619Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bb1a10058c6cb2d42246ef88ac0118c3b8b67e7f622d891b2605c898da2759ef
     home: https://www.openfaas.com
@@ -6128,7 +6128,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-2.1.3.tgz
     version: 2.1.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.019350138Z"
+    created: "2023-01-23T18:42:00.081827493Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 9b85946a5153725578a40b06199127d9595b3ed9c36cabaca7990b4a23578187
     home: https://www.openfaas.com
@@ -6153,7 +6153,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-2.1.2.tgz
     version: 2.1.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.018877972Z"
+    created: "2023-01-23T18:42:00.081040348Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 3ea4d0c129cb4296deb61c44c325f15ddb0bce9e95d42de5903acccfab9728f5
     home: https://www.openfaas.com
@@ -6178,7 +6178,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-2.1.1.tgz
     version: 2.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.018118337Z"
+    created: "2023-01-23T18:42:00.080256792Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: d414ec291117ec3d2d3c88eee79bcfcb4777ffe1a17ece2150ebe0c959630a17
     home: https://www.openfaas.com
@@ -6203,7 +6203,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-2.1.0.tgz
     version: 2.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.017134775Z"
+    created: "2023-01-23T18:42:00.079466796Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: ea9449ae717c8e621e5d8c536050691fcb3c593991128ebe656d3e1ba50327f0
     home: https://www.openfaas.com
@@ -6228,7 +6228,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-2.0.0.tgz
     version: 2.0.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.904372573Z"
+    created: "2023-01-23T18:41:59.953864229Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 681ee9cb041db8204863bc16156f6ad9ee410e188a318223ce8d347021583da9
     home: https://www.openfaas.com
@@ -6253,7 +6253,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.9.1.tgz
     version: 1.9.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.903176003Z"
+    created: "2023-01-23T18:41:59.95339825Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c086269fed6b434bb06bbd1f8ad5a5255c71519044d3043d023b3f5f3720dc37
     home: https://www.openfaas.com
@@ -6278,7 +6278,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.8.1.tgz
     version: 1.8.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.902338506Z"
+    created: "2023-01-23T18:41:59.9529064Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: bc5ddaf593348ae9fce336a340c1c283ebaea380f253f7400af83d102aab1154
     home: https://www.openfaas.com
@@ -6303,7 +6303,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.8.0.tgz
     version: 1.8.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.901725425Z"
+    created: "2023-01-23T18:41:59.95240049Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: dcc1c3cee2f005abce4136eda6bd33755e43534f3f6b02c5d9834d6b4d18cd70
     home: https://www.openfaas.com
@@ -6326,7 +6326,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.7.1.tgz
     version: 1.7.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.901168917Z"
+    created: "2023-01-23T18:41:59.95191881Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c12d29315a6d69c954b64141fa3f91c7c524573e79b263cb3c5ea0aea6c8884e
     home: https://www.openfaas.com
@@ -6349,7 +6349,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.7.0.tgz
     version: 1.7.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.900580967Z"
+    created: "2023-01-23T18:41:59.951472551Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2295d3256256fec9d4c22c51bc99bbb6476fcb69dd2e98f990b793323be35bbc
     home: https://www.openfaas.com
@@ -6372,7 +6372,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.6.2.tgz
     version: 1.6.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.900032079Z"
+    created: "2023-01-23T18:41:59.951013252Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 96c42df1fcea981fb108f2366a3685dd27cc26661aa8bb18f4cf529b9f179d32
     home: https://www.openfaas.com
@@ -6395,7 +6395,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.6.1.tgz
     version: 1.6.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.89946772Z"
+    created: "2023-01-23T18:41:59.950477202Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 375d873875b0f0cb8c6b6eb5e9de3dbc7ba2d30fcd76bc85d63ecf67213107b8
     home: https://www.openfaas.com
@@ -6418,7 +6418,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.6.0.tgz
     version: 1.6.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.898907032Z"
+    created: "2023-01-23T18:41:59.949930981Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 916494e9852895abb6e8190bbec49d1785f2a0f2f4042df23796fa7d9c188bf2
     home: https://www.openfaas.com
@@ -6441,7 +6441,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.5.0.tgz
     version: 1.5.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.898334743Z"
+    created: "2023-01-23T18:41:59.94939412Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 050281112653d480395fedd0f8dd8c838e590937bfe19514b7ed0a83ac81a09e
     home: https://www.openfaas.com
@@ -6464,7 +6464,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.4.4.tgz
     version: 1.4.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.897748404Z"
+    created: "2023-01-23T18:41:59.948851249Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c53e92aff0b0a0221b046da0edb0b041173b04c9994e6b06f4c87b069a6c9857
     home: https://www.openfaas.com
@@ -6487,7 +6487,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.4.3.tgz
     version: 1.4.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.897185665Z"
+    created: "2023-01-23T18:41:59.948301188Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: d968c2a45bbd51d882634cb19a0d49fd09d6eaac80993dee1d1b84641b8564d7
     home: https://www.openfaas.com
@@ -6510,7 +6510,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.3.3.tgz
     version: 1.3.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.896626997Z"
+    created: "2023-01-23T18:41:59.947714936Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 237f21453d94363c77eb445cd428322be3cbdbe08e6ea3a5f555fa7fd9695fb1
     home: https://www.openfaas.com
@@ -6533,7 +6533,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.3.2.tgz
     version: 1.3.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.896039047Z"
+    created: "2023-01-23T18:41:59.946115424Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 69f2a54c60acb5f873d98dec801a1bb374a143e307198dd333b3eecb86a3fd0e
     home: https://www.openfaas.com
@@ -6556,7 +6556,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.3.1.tgz
     version: 1.3.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.89491494Z"
+    created: "2023-01-23T18:41:59.94540559Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 54a9abc4c087fd5aa62d4c9b41e6939ced012cf42c439b31929f2ed0727263a8
     home: https://www.openfaas.com
@@ -6579,7 +6579,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.3.0.tgz
     version: 1.3.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.894122504Z"
+    created: "2023-01-23T18:41:59.944700206Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2954703f117c665363786ea5d2a83d27f1f6db6f4fa830534d0acb665f18ff03
     home: https://www.openfaas.com
@@ -6602,7 +6602,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.9.tgz
     version: 1.2.9
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.893551925Z"
+    created: "2023-01-23T18:41:59.944002772Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b7f55e0fe1040f7fff93ad1532632855245dd2800b9407f774afbad6a26de134
     home: https://www.openfaas.com
@@ -6625,7 +6625,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.8.tgz
     version: 1.2.8
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.893004677Z"
+    created: "2023-01-23T18:41:59.943250017Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: fcb1c441c1ca27f88302d872fd4e87e4d88d1aa4f51739d39f4fff17c3721fd9
     home: https://www.openfaas.com
@@ -6648,7 +6648,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.7.tgz
     version: 1.2.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.892467489Z"
+    created: "2023-01-23T18:41:59.942449701Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 19b0a917d4825a6a40b7904e9072b9994c9ec2f9110f2871021695c5715f5cfb
     home: https://www.openfaas.com
@@ -6671,7 +6671,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.6.tgz
     version: 1.2.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.891942882Z"
+    created: "2023-01-23T18:41:59.941706146Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b91aff9318fa01e18f4cb23906647f910cb3170d06d378044ee1409268b30ee0
     home: https://www.openfaas.com
@@ -6694,7 +6694,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.5.tgz
     version: 1.2.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.891415224Z"
+    created: "2023-01-23T18:41:59.941002922Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2318825fb60f308c172d608b769ea150c368177361c2449998c129f6cf426eba
     home: https://www.openfaas.com
@@ -6717,7 +6717,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.4.tgz
     version: 1.2.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.890887487Z"
+    created: "2023-01-23T18:41:59.940274478Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: fad03135ed925a86b5b004986bc0916b1dacce3292dfdf8c968aba45d518ce33
     home: https://www.openfaas.com
@@ -6740,7 +6740,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.3.tgz
     version: 1.2.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.890353889Z"
+    created: "2023-01-23T18:41:59.939461552Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 776f09ac11a7e6fcdb1b32a7ac48db0f84dccb622a1b906dff2b804ecab00fba
     home: https://www.openfaas.com
@@ -6763,7 +6763,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.2.tgz
     version: 1.2.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.889814051Z"
+    created: "2023-01-23T18:41:59.938584964Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c6e08ca7839be38fa97c6be953cb38c5d6dc7e016a4f873aa45ff553799b3f6b
     home: https://www.openfaas.com
@@ -6786,7 +6786,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.1.tgz
     version: 1.2.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.889285734Z"
+    created: "2023-01-23T18:41:59.937713017Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8dcc919b9d17fafac602cf75e958e428846b4c9fc3b55d13029334cab05b8a38
     home: https://www.openfaas.com
@@ -6809,7 +6809,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.2.0.tgz
     version: 1.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.888770737Z"
+    created: "2023-01-23T18:41:59.936745708Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 2f5ad4dd1afc2535ff11325eafc7cde1b15470352753287b16ca38075c5dfd67
     home: https://www.openfaas.com
@@ -6832,7 +6832,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.7.tgz
     version: 1.1.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.888221699Z"
+    created: "2023-01-23T18:41:59.935311019Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 724871c9d312638c03796e092460d0979bf0e3629610e705573e02505b294e8d
     home: https://www.openfaas.com
@@ -6855,7 +6855,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.6.tgz
     version: 1.1.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.887672851Z"
+    created: "2023-01-23T18:41:59.934756668Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: c9b20f965b79e4fe13165a5fae15eeae76d45295c098bf3da0a0bf281deecf0d
     home: https://www.openfaas.com
@@ -6878,7 +6878,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.5.tgz
     version: 1.1.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.88645924Z"
+    created: "2023-01-23T18:41:59.933899501Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 9f4bf7e660d0f3ec75617c6fb1c6629460f79532d393519e8d2581d70372cbbe
     home: https://www.openfaas.com
@@ -6901,7 +6901,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.4.tgz
     version: 1.1.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.885943473Z"
+    created: "2023-01-23T18:41:59.933106815Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 14979bee23155a1340876e2024e810c0e07702911fee1f99e8efde22adefae7c
     home: https://www.openfaas.com
@@ -6924,7 +6924,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.3.tgz
     version: 1.1.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.885464708Z"
+    created: "2023-01-23T18:41:59.932319679Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e94224cfca6954585eaacd99bb1e0edb6a2e3a6719eded9443886a11fce5221e
     home: https://www.openfaas.com
@@ -6947,7 +6947,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.2.tgz
     version: 1.1.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.884951081Z"
+    created: "2023-01-23T18:41:59.931506863Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 3d60131c5f195f2fedd3ea8d55b3054a8ca705f909adc39f836d5c6ce7ee493f
     home: https://www.openfaas.com
@@ -6970,7 +6970,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.1.tgz
     version: 1.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.884430793Z"
+    created: "2023-01-23T18:41:59.930666086Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 652ff06c8188502f83f0def4a4bb33a6b4b0c6d8e3a408782e875423ae42220c
     home: https://www.openfaas.com
@@ -6993,7 +6993,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.1.0.tgz
     version: 1.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.883942047Z"
+    created: "2023-01-23T18:41:59.929601335Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8a1ebc077d40cb4e31945e57cdf69a71c5c8ebe8cff7d1c976e8e862ad9710eb
     home: https://www.openfaas.com
@@ -7014,7 +7014,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.21.tgz
     version: 1.0.21
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.883473361Z"
+    created: "2023-01-23T18:41:59.928707227Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 3f28fd8eb6dd411a612e4092f1d569377dcfea9b247c40357b6ca93d2633f99c
     home: https://www.openfaas.com
@@ -7035,7 +7035,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.20.tgz
     version: 1.0.20
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.883021857Z"
+    created: "2023-01-23T18:41:59.927927411Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 655e12161299bfe0dad9a8c76a80619a133d1b6413924b1b26bd1980c9334bb2
     home: https://www.openfaas.com
@@ -7056,7 +7056,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.19.tgz
     version: 1.0.19
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.882579542Z"
+    created: "2023-01-23T18:41:59.927210747Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: b5485851da4921afc87ac73d8004570cd1f17219440944b76e3d187043d46f7a
     home: https://www.openfaas.com
@@ -7077,7 +7077,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.18.tgz
     version: 1.0.18
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.882157528Z"
+    created: "2023-01-23T18:41:59.926518643Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 49fdd14e168a14e83c4aa61674f44b7eeeca35ed98251d5abc0aa31fdcea8858
     home: https://www.openfaas.com
@@ -7098,7 +7098,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.17.tgz
     version: 1.0.17
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.881772185Z"
+    created: "2023-01-23T18:41:59.925813169Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: f8e694e8b868524bfa8fec82239becb60d0e17b9384076856df0a303012138da
     home: https://www.openfaas.com
@@ -7119,7 +7119,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.16.tgz
     version: 1.0.16
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.881396583Z"
+    created: "2023-01-23T18:41:59.925191107Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: 8b69ee7b5de254eb8d9f2a8db2574e74e6d9dccf995e06cb9a2316b780c678ca
     home: https://www.openfaas.com
@@ -7140,7 +7140,7 @@ entries:
     - https://openfaas.github.io/faas-netes/openfaas-1.0.15.tgz
     version: 1.0.15
   - apiVersion: v1
-    created: "2023-01-20T14:10:18.88101737Z"
+    created: "2023-01-23T18:41:59.924555804Z"
     description: Enable Kubernetes as a backend for OpenFaaS (Functions as a Service)
     digest: e484ee66f94d3893ab4af2159a4514dac6e072639bae6f3bbe9801ae68112f78
     home: https://www.openfaas.com
@@ -7162,7 +7162,27 @@ entries:
     version: 1.0.14
   postgres-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.184283936Z"
+    created: "2023-01-23T18:42:00.251624084Z"
+    description: Trigger OpenFaaS functions from PostgreSQL
+    digest: 94336e8d27daffbee76fb0a1615dab74ff4e6a0930c145ae265931f53b5b8dbe
+    home: https://www.openfaas.com
+    icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+    keywords:
+    - openfaaspro
+    - serverless
+    - postgres
+    - events
+    maintainers:
+    - email: alex@openfaas.com
+      name: alexellis
+    name: postgres-connector
+    sources:
+    - https://github.com/openfaas/faas-netes
+    urls:
+    - https://openfaas.github.io/faas-netes/postgres-connector-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v1
+    created: "2023-01-23T18:42:00.251300388Z"
     description: Trigger OpenFaaS functions from PostgreSQL
     digest: 9d2707588e81a2ad430f2cb5c4433ad4635082623f916ce02f96234407e0b7c2
     home: https://www.openfaas.com
@@ -7182,7 +7202,7 @@ entries:
     - https://openfaas.github.io/faas-netes/postgres-connector-0.0.5.tgz
     version: 0.0.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.183934205Z"
+    created: "2023-01-23T18:42:00.250964911Z"
     description: Trigger OpenFaaS functions from PostgreSQL
     digest: 537621b43d5f04ee2e5ea04716873110a2b82b2bc91d28d3f17f08a02f9259fd
     home: https://www.openfaas.com
@@ -7202,7 +7222,7 @@ entries:
     - https://openfaas.github.io/faas-netes/postgres-connector-0.0.4.tgz
     version: 0.0.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.183546782Z"
+    created: "2023-01-23T18:42:00.250686145Z"
     description: Trigger OpenFaaS functions from PostgreSQL
     digest: f47cd883be4d8d2d39f6b288bda6bd50673b3259eb135db931ae86a0ff90d3d4
     home: https://www.openfaas.com
@@ -7222,7 +7242,7 @@ entries:
     - https://openfaas.github.io/faas-netes/postgres-connector-0.0.3.tgz
     version: 0.0.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.18320144Z"
+    created: "2023-01-23T18:42:00.25041274Z"
     description: Trigger OpenFaaS functions from PostgreSQL
     digest: ee3e01c2ff1212f7bb74a328a91744266e7c22921be50eab12a6324434cefbfb
     home: https://www.openfaas.com
@@ -7242,7 +7262,7 @@ entries:
     - https://openfaas.github.io/faas-netes/postgres-connector-0.0.2.tgz
     version: 0.0.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.182858899Z"
+    created: "2023-01-23T18:42:00.250130644Z"
     description: Trigger OpenFaaS functions from PostgreSQL
     digest: 06f343bee14de814495f1a2d902a2e69d4df4c4e067bd6a5a68456d4a1559814
     home: https://www.openfaas.com
@@ -7263,9 +7283,9 @@ entries:
     version: 0.0.1
   pro-builder:
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.187461371Z"
+    created: "2023-01-23T18:42:00.254991451Z"
     description: Build OpenFaaS functions via a REST API
-    digest: cf8ca3c5d3dbc892f36ff5ef19b3d9db6fe24473896ee034c0ccbf8d671921fe
+    digest: a10bf401c938b80847e1dddb8b3ecfd0bd4aac0a89f831220ce1823686540b7a
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -7283,7 +7303,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.8.tgz
     version: 0.3.8
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.187105809Z"
+    created: "2023-01-23T18:42:00.254452301Z"
     description: Build OpenFaaS functions via a REST API
     digest: 2cde40035be1703b7a2650edca6abc42cb68a2c5d3dbae4830a553084c618ea0
     home: https://www.openfaas.com
@@ -7303,7 +7323,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.7.tgz
     version: 0.3.7
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.18683376Z"
+    created: "2023-01-23T18:42:00.254022542Z"
     description: Build OpenFaaS functions via a REST API
     digest: dfd863b3af4dcb672b6cb999d96a263e20aec3330ecf90dfd4df6603a7f7c909
     home: https://www.openfaas.com
@@ -7323,7 +7343,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.6.tgz
     version: 0.3.6
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.186342654Z"
+    created: "2023-01-23T18:42:00.253498102Z"
     description: Build OpenFaaS functions via a REST API
     digest: 7b96975b0140d83a9d03a8a630716adb58113dce86fd5f676f317a8b7172016a
     home: https://www.openfaas.com
@@ -7343,7 +7363,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.5.tgz
     version: 0.3.5
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.185756095Z"
+    created: "2023-01-23T18:42:00.252992231Z"
     description: Build OpenFaaS functions via a REST API
     digest: a50f2a8bbbbb8b40b91649fa29349d0d2f9009dba7c0fc43a91b20252f458771
     home: https://www.openfaas.com
@@ -7363,7 +7383,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.3.tgz
     version: 0.3.3
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.185349971Z"
+    created: "2023-01-23T18:42:00.252644784Z"
     description: Build OpenFaaS functions via a REST API
     digest: 91a9569a561800b6385eca1008308b055e1eba0cb16159212aa883270213e711
     home: https://www.openfaas.com
@@ -7383,7 +7403,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.18499444Z"
+    created: "2023-01-23T18:42:00.252304858Z"
     description: Build OpenFaaS functions via a REST API
     digest: b2edc6840b2a1a2da795c3201a05498b0c85819c4b1a6dd13592364d7f7d44fa
     home: https://www.openfaas.com
@@ -7403,7 +7423,7 @@ entries:
     - https://openfaas.github.io/faas-netes/pro-builder-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.184643008Z"
+    created: "2023-01-23T18:42:00.251955371Z"
     description: Build OpenFaaS functions via a REST API
     digest: 559ab7a218ecef5b37b29117955fed21a9ce5a51aeecf539e85ba635911e3805
     home: https://www.openfaas.com
@@ -7424,7 +7444,7 @@ entries:
     version: 0.3.0
   probuilder:
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.188000079Z"
+    created: "2023-01-23T18:42:00.255565943Z"
     description: Build OpenFaaS functions via a REST API
     digest: f143268f50f71590b7138d7b28570b43bc1c7ead82a720110b651bcc3d66c271
     home: https://www.openfaas.com
@@ -7444,7 +7464,7 @@ entries:
     - https://openfaas.github.io/faas-netes/probuilder-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.187661058Z"
+    created: "2023-01-23T18:42:00.255278047Z"
     description: Build functions via API
     digest: 9b23240d618cdd993bb2586e073febe3ebb357fb8cadc708685d581e58be8ef8
     home: https://www.openfaas.com
@@ -7463,9 +7483,9 @@ entries:
     version: 0.1.0
   queue-worker:
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.18983291Z"
+    created: "2023-01-23T18:42:00.25641566Z"
     description: JetStream for OpenFaaS queue-worker
-    digest: bc58b57978aa258448f35e80ace82e404a7a2fcc691a791d4fd3366fc9c195dd
+    digest: 76a64ed5988148f2f8294d00c76cbcc5f751261fc9b8db8a6381d58467e2e27a
     keywords:
     - openfaas
     - jetstream
@@ -7482,7 +7502,7 @@ entries:
     - https://openfaas.github.io/faas-netes/queue-worker-0.1.2.tgz
     version: 0.1.2
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.189377935Z"
+    created: "2023-01-23T18:42:00.256174995Z"
     description: JetStream for OpenFaaS queue-worker
     digest: eabc088ca3b25089014d28c2b03183b97c472bea7d81e98bf8ca5d485d15d4d6
     keywords:
@@ -7501,7 +7521,7 @@ entries:
     - https://openfaas.github.io/faas-netes/queue-worker-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v2
-    created: "2023-01-20T14:10:19.188887528Z"
+    created: "2023-01-23T18:42:00.255891929Z"
     description: JetStream for OpenFaaS queue-worker
     digest: e0b5a60f4d44c2b2c19987867fed6d05ae9d147b4b5c7b77b6d25609ec4c6ebf
     keywords:
@@ -7521,9 +7541,9 @@ entries:
     version: 0.1.0
   sns-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.190856234Z"
+    created: "2023-01-23T18:42:00.257038802Z"
     description: Invoke functions from an AWS SNS messages.
-    digest: 0756823c260de7970f19474ad4cbbfc81754ad9a8245ab239437638ac1b21e3e
+    digest: 5820bedab23c0656e1b9835a5a888345fef80d4ae174cb14caaef858b4bfa12e
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -7542,7 +7562,7 @@ entries:
     - https://openfaas.github.io/faas-netes/sns-connector-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.190345567Z"
+    created: "2023-01-23T18:42:00.256702226Z"
     description: Invoke functions from an AWS SNS messages.
     digest: 1738055881df1912aaa0bb5eb5508bf133f1f87b20b59c04feb5cb9100d2cbbb
     home: https://www.openfaas.com
@@ -7564,9 +7584,9 @@ entries:
     version: 0.1.0
   sqs-connector:
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.193553113Z"
+    created: "2023-01-23T18:42:00.259688485Z"
     description: Connect OpenFaaS functions to SQS topics
-    digest: b9b2ae42a2d6f32d982253af7ba68ef4503561708caccfa18702baca15be471e
+    digest: d6acde4fcc7d57ef74816b12d9715de625cea9fb5fea96d3111cf75e0bd02e37
     home: https://www.openfaas.com
     icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
     keywords:
@@ -7584,7 +7604,7 @@ entries:
     - https://openfaas.github.io/faas-netes/sqs-connector-0.2.2.tgz
     version: 0.2.2
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.193085008Z"
+    created: "2023-01-23T18:42:00.25940915Z"
     description: Connect OpenFaaS functions to SQS topics
     digest: 6d9b126365656d66ea8c9deee9b1bcd77e83fb89aff06d1ac1ccf722a9b1bd21
     home: https://www.openfaas.com
@@ -7604,7 +7624,7 @@ entries:
     - https://openfaas.github.io/faas-netes/sqs-connector-0.2.1.tgz
     version: 0.2.1
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.192614132Z"
+    created: "2023-01-23T18:42:00.259131234Z"
     description: Connect OpenFaaS functions to SQS topics
     digest: 510aea96bff3e013fb909d7f5866ea3b97320d48963857c09996da3d5583dba6
     home: https://www.openfaas.com
@@ -7624,7 +7644,7 @@ entries:
     - https://openfaas.github.io/faas-netes/sqs-connector-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.192181328Z"
+    created: "2023-01-23T18:42:00.258837938Z"
     description: Connect OpenFaaS functions to SQS topics
     digest: 98cef218fcc6c3ffebc9a4ce77d6e8537623208e1c0af48a5ddf0ba12406279e
     home: https://www.openfaas.com
@@ -7644,7 +7664,7 @@ entries:
     - https://openfaas.github.io/faas-netes/sqs-connector-0.1.0.tgz
     version: 0.1.0
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.191734903Z"
+    created: "2023-01-23T18:42:00.258327618Z"
     description: Connect OpenFaaS functions to SQS topics
     digest: 9024b049319bec33ae2110f292c16c52a7b068154d6fa5387c10732068f6bef3
     home: https://www.openfaas.com
@@ -7664,7 +7684,7 @@ entries:
     - https://openfaas.github.io/faas-netes/sqs-connector-0.0.4.tgz
     version: 0.0.4
   - apiVersion: v1
-    created: "2023-01-20T14:10:19.191305759Z"
+    created: "2023-01-23T18:42:00.257361879Z"
     description: Connect OpenFaaS functions to SQS topics
     digest: 343e4c430df3a5e83b77585c25b60da4e2507e707131bff685ae39ab59834d22
     home: https://www.openfaas.com
@@ -7683,4 +7703,4 @@ entries:
     urls:
     - https://openfaas.github.io/faas-netes/sqs-connector-0.0.3.tgz
     version: 0.0.3
-generated: "2023-01-20T14:10:18.865703274Z"
+generated: "2023-01-23T18:41:59.907242399Z"
