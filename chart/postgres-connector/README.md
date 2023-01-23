@@ -81,21 +81,22 @@ $ helm upgrade postgres-connector ./chart/postgres-connector \
 
 Additional postgres-connector options in `values.yaml`.
 
-| Parameter                | Description                                                                            | Default                        |
-| ------------------------ | -------------------------------------------------------------------------------------- | ------------------------------ |
-| `connectionSecret`       | The name of the secret containing the connection string                                | `postgresql-connection`        |
-| `publication`           | The name of the publication to be created in Postgres, we do not recommend changing this value. | `ofltd`                        |
+| Parameter          | Description                                                                                                        | Default                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `wal`              | Start the connector in WAL mode or trigger mode. Set to `false` for trigger mode.                                  | `true`                         |
+| `connectionSecret` | The name of the secret containing the connection string                                                            | `postgresql-connection`        |
+| `publication`      | The name of the publication to be created in Postgres, we do not recommend changing this value.                    | `ofltd`                        |
 | `filters`                | A comma separated list of filters to apply to the stream i.e. `TABLENAME:ACTION`, action can be: `insert`, `delete` or `update`, multiple items can be comma separated such as `T1:insert,T2:delete,T3:insert`  | `""`                           |
-| `upstreamTimeout`        | Maximum timeout for upstream function call, must be a Go formatted duration string.    | `2m`                          |
-| `rebuildInterval`        | Interval for rebuilding function to topic map, must be a Go formatted duration string. | `30s`                           |
-| `asyncInvocation`        | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`   |
-| `gatewayURL`             | The URL for the API gateway.                                                           | `http://gateway.openfaas:8080` |
-| `fullnameOverride`       | Override the name value used for the Connector Deployment object.                      | ``                             |
-| `contentType`            | Set a HTTP Content Type during function invocation.                                    | `""`                           |
-| `replicas`               | Number of replicas for the Connector Deployment object, we recommend setting this to `1`    | `1`                            |
-| `resources`              | Resources requests and limits configuration                               | `requests.memory: "64Mi"`                  |
-| `logs.debug`           | Print debug logs                                                                                                   | `false`                        |
-| `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                     | `console`                      |
+| `upstreamTimeout`  | Maximum timeout for upstream function call, must be a Go formatted duration string.                                | `2m`                           |
+| `rebuildInterval`  | Interval for rebuilding function to topic map, must be a Go formatted duration string.                             | `30s`                          |
+| `asyncInvocation`  | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`                        |
+| `gatewayURL`       | The URL for the API gateway.                                                                                       | `http://gateway.openfaas:8080` |
+| `fullnameOverride` | Override the name value used for the Connector Deployment object.                                                  | ``                             |
+| `contentType`      | Set a HTTP Content Type during function invocation.                                                                | `""`                           |
+| `replicas`         | Number of replicas for the Connector Deployment object, we recommend setting this to `1`                           | `1`                            |
+| `resources`        | Resources requests and limits configuration                                                                        | `requests.memory: "64Mi"`      |
+| `logs.debug`       | Print debug logs                                                                                                   | `false`                        |
+| `logs.format`      | The log encoding format. Supported values: `json` or `console`                                                     | `console`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 
