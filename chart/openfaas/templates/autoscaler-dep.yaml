@@ -1,3 +1,4 @@
+{{- if .Values.openfaasPro }}
 {{- if  .Values.autoscaler.enabled }}
 apiVersion: apps/v1
 kind: Deployment
@@ -28,29 +29,21 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
-      {{- if .Values.autoscaler.enabled }}
       - name: license
         secret:
           secretName: openfaas-license
-      {{- end }}
       containers:
       - name:  autoscaler
         resources:
           {{- .Values.autoscaler.resources | toYaml | nindent 12 }}
-      {{- if .Values.autoscaler.enabled }}
         image: {{ .Values.autoscaler.image }}
-      {{- else }}
-        image: {{ .Values.autoscaler.image }}
-      {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        {{- if .Values.autoscaler.enabled }}
         command:
           - "/usr/bin/autoscaler"
           - "-license-file=/var/secrets/license/license"
       {{- if eq (or .Values.autoscaler.disableHorizontalScaling false) true }}
           - "-horizontal-scaling=false"
       {{- end }}
-        {{- end }}
         env:
         - name: gateway_url
           value: "http://gateway.{{ .Release.Namespace }}:8080/"
@@ -64,11 +57,9 @@ spec:
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
         volumeMounts:
-        {{- if .Values.autoscaler.enabled }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
-        {{- end }}
         - name: auth
           readOnly: true
           mountPath: "/var/secrets/autoscaler"
@@ -85,4 +76,5 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+{{- end }}
 {{- end }}

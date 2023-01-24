@@ -4,12 +4,18 @@
 # Initial configuration to set Pro configurations on
 openfaasPro: true
 
-# The operator mode supports the Function CustomResource
-# which enables tooling like ArgoCD / Flux v2 
+# Recommended operating mode for the OpenFaaS controller aka "faas-netes"
+# is operator mode, including a CustomResource for functions.
+#
+# The operator mode is required for GitOps tooling like ArgoCD / Flux v2
+# and to export existing functions for backup purposes. 
 operator:
   create: true
 
-# Do not turn off, enables authentication on all core components
+# Enable authentication on all OpenFaaS core components.
+# You must not turn off basicAuth, however, you can pre-create the 
+# secret, if you're using a GitOps tool to create a stable secret
+# before installing OpenFaaS Pro via this chart
 generateBasicAuth: true
 
 # Follow docs at: https://docs.openfaas.com/openfaas-pro/dashboard/
@@ -18,8 +24,9 @@ dashboard:
   publicURL: localhost
   enabled: true
 
+# The autoscaler is enabled by default
+# Learn more: 
 # https://docs.openfaas.com/architecture/autoscaling/
-# The autoscaler is not enabled by default, but should be enabled here
 autoscaler:
   enabled: true
 

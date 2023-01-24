@@ -48,13 +48,15 @@ Get it from arkade:
 arkade get helm
 ```
 
-Or use the helm3 installer:
+Or use the Helm installation script:
 
 ```bash
 curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 ```
 
-We recommend creating two namespaces, one for the OpenFaaS *core services* and one for the *functions*:
+We recommend creating two namespaces, one for the OpenFaaS *core services* and one for the *functions*.
+
+You can skip this step if you're using arkade to install OpenFaaS.
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
@@ -70,19 +72,17 @@ helm repo add openfaas https://openfaas.github.io/faas-netes/
 
 Now decide how you want to expose the services and edit the `helm upgrade` command as required.
 
-* To use NodePorts (default) pass no additional flags
-* To use a LoadBalancer add `--set serviceType=LoadBalancer`
-* To use an IngressController add `--set ingress.enabled=true`
+* To use NodePorts/ClusterIP - (the default and best for development, with port-forwarding)
+* To use an IngressController add `--set ingress.enabled=true` (recommended for production, for use with TLS)
+* To use a LoadBalancer add `--set serviceType=LoadBalancer` (not recommended, since it will expose plain HTTP)
 
-> Note: even without a LoadBalancer or IngressController you can access your gateway at any time via `kubectl port-forward`.
+## Deploy OpenFaaS Community Edition (CE)
 
-## Deploy OpenFaaS Community Edition
+> OpenFaaS Community Edition is meant exploration and development.
+> 
+> OpenFaaS Pro has been tuned for production use including flexible auto-scaling, high-available deployments, durability, add-on features, and more.
 
-> The Community Edition is meant for open source developers
-
-> OpenFaaS Pro customers should read on to the next section for production deployments.
-
-Now deploy OpenFaaS from the helm chart repo:
+Deploy CE from the helm chart repo directly:
 
 ```sh
 helm repo update \
@@ -101,9 +101,11 @@ PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-a
 echo "OpenFaaS admin password: $PASSWORD"
 ```
 
-## Deploy as an OpenFaaS Pro customer
+It is not recommended to disable basic authentication.
 
-* Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/support/):
+## Deploy OpenFaaS Pro
+
+* Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/pricing/):
 
 ```bash
 kubectl create secret generic \
@@ -502,7 +504,7 @@ yaml) |
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `autoscaler.disableHorizontalScaling` | Set to true, to only scale to zero, without scaling replicas between the defined Min and Max count for the function | `false` |
-| `autoscaler.enabled ` | Enable the autoscaler | `false` |
+| `autoscaler.enabled ` | Enable the autoscaler - if openfaasPro is set to true | `true` |
 | `autoscaler.image` | Container image used for the autoscaler | See [values.yaml](./values.yaml) |
 | `autoscaler.replicas` | Replicas of the autoscaler | `1` |
 | `autoscaler.resources` | Resource limits and requests for the autoscaler pods | See [values.yaml](./values.yaml) |
