@@ -84,8 +84,9 @@ Deploy CE from the helm chart repo directly:
 
 ```sh
 helm repo update \
- && helm upgrade openfaas --install openfaas/openfaas \
-    --namespace openfaas
+ && helm upgrade openfaas \
+  --install openfaas/openfaas \
+  --namespace openfaas
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -103,9 +104,9 @@ echo "OpenFaaS admin password: $PASSWORD"
 
 ```bash
 kubectl create secret generic \
-    -n openfaas \
-    openfaas-license \
-    --from-file license=$HOME/.openfaas/LICENSE
+  -n openfaas \
+  openfaas-license \
+  --from-file license=$HOME/.openfaas/LICENSE
 ```
 
 If you wish to use the OpenFaaS Pro dashboard, [you must run the steps to "Create a signing key"](https://docs.openfaas.com/openfaas-pro/dashboard/#installation) before installing the Helm chart.
@@ -114,9 +115,10 @@ Now deploy OpenFaaS from the helm chart repo:
 
 ```sh
 helm repo update \
- && helm upgrade openfaas --install openfaas/openfaas \
-    --namespace openfaas  \
-    --set openfaasPro=true
+ && helm upgrade openfaas \
+  --install openfaas/openfaas \
+  --namespace openfaas  \
+  --set openfaasPro=true
 ```
 
 The main change here is to add: `--set openfaasPro=true`
@@ -127,10 +129,11 @@ Example installation with a values.yaml file instead of using `--set`:
 
 ```sh
 helm repo update \
- && helm upgrade openfaas --install openfaas/openfaas \
-    --namespace openfaas  \
-    -f values.yaml \
-    -f values-pro.yaml
+ && helm upgrade openfaas \
+  --install openfaas/openfaas \
+  --namespace openfaas  \
+  -f values.yaml \
+  -f values-pro.yaml
 ```
 
 You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
@@ -154,10 +157,11 @@ If you are working on a patch for the helm chart, you can deploy it directly fro
 You can run the following command from within the `faas-netes` folder, not the chart's folder.
 
 ```sh
-helm upgrade openfaas --install chart/openfaas \
-    --namespace openfaas \
-    -f ./chart/openfaas/values.yaml \
-    -f ./chart/openfaas/values-pro.yaml
+helm upgrade openfaas \
+  --install chart/openfaas \
+  --namespace openfaas \
+  -f ./chart/openfaas/values.yaml \
+  -f ./chart/openfaas/values-pro.yaml
 ```
 
 In the example above, I'm overlaying two additional YAML files for settings for the chart.
@@ -215,15 +219,6 @@ In addition:
 * Use an in-cluster registry to reduce the pull latency for images
 * Set the `imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available
 * Explore alternatives such as not scaling to absolute zero, and using async calls which do not show the cold start
-
-#### httpProbe vs. execProbe
-
-A note on health-checking probes for functions:
-
-* httpProbe - (`default`) most efficient. (compatible with Istio >= 1.1.5)
-* execProbe - least efficient option, but compatible with Istio < 1.1.5
-
-Use `--set faasnetes.httpProbe=true/false` to toggle between http / exec probes.
 
 ### Verify the installation
 
@@ -351,22 +346,21 @@ If you use a service mesh like Linkerd or Istio in your cluster, then you should
 
 ### Istio mTLS
 
-To install OpenFaaS with Istio mTLS pass `--set istio.mtls=true` and disable the HTTP probes:
+Istio requires OpenFaaS Pro to function correctly.
+
+To install OpenFaaS Pro with Istio mTLS pass `--set istio.mtls=true` and disable the HTTP probes:
 
 ```sh
 helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas  \
-    --set basic_auth=true \
+    --set openfaasPro=true \
     --set exposeServices=false \
-    --set faasnetes.httpProbe=false \
-    --set httpProbe=false \
     --set gateway.directFunctions=true \
+    --set gateway.probeFunctions=true \
     --set istio.mtls=true
 ```
 
 The above command will enable mTLS for the openfaas control plane services and functions excluding NATS.
-
-> Note that the above instructions were tested on GKE 1.13 and Istio 1.2
 
 ## Zero scale
 
@@ -479,7 +473,7 @@ yaml) |
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `faasnetes.httpProbe` | Use a httpProbe instead of exec | `false` |
+| `faasnetes.httpProbe` | Use a httpProbe instead of exec | `true` |
 | `faasnetes.image` | Container image used for provider API | See [values.yaml](./values.yaml) |
 | `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
 | `faasnetes.livenessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated  | `2` |
