@@ -19,7 +19,7 @@
 
 ## Deploy OpenFaaS
 
-### 1) Install with arkade
+### 1) Install Community Edition (CE) with arkade
 
 It is recommended that you use arkade to install OpenFaaS. arkade is a CLI tool which automates the helm CLI and chart download and installation. The `openfaas` app also has a number of options available via `arkade install openfaas --help`
 
@@ -76,7 +76,7 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 * To use an IngressController add `--set ingress.enabled=true` (recommended for production, for use with TLS)
 * To use a LoadBalancer add `--set serviceType=LoadBalancer` (not recommended, since it will expose plain HTTP)
 
-## Deploy OpenFaaS Community Edition (CE)
+#### Deploy OpenFaaS Community Edition (CE)
 
 > OpenFaaS Community Edition is meant exploration and development.
 > 
@@ -103,7 +103,7 @@ echo "OpenFaaS admin password: $PASSWORD"
 
 It is not recommended to disable basic authentication.
 
-## Deploy OpenFaaS Pro
+#### Deploy OpenFaaS Pro
 
 * Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/pricing/):
 
@@ -130,13 +130,14 @@ The main change here is to add: `--set openfaasPro=true`
 
 You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
 
-### Installing OpenFaaS without Cluster Admin access
+#### Installing OpenFaaS Pro without Cluster Admin access
 
-In order to install OpenFaaS, you need to create at least one namespace, a Cluster Admin role and Custom Resource Definitions (CRDs), however some DevOps teams prevent business teams from getting access to Cluster Admin.
+In order to install OpenFaaS Pro, you need to create at least one namespace, a Cluster Admin role and Custom Resource Definitions (CRDs), however some DevOps teams prevent business teams from getting access to Cluster Admin.
 
 This option is reserved for OpenFaaS Pro customers, see the installation steps here: [Split installation instructions](https://github.com/openfaas/openfaas-pro/blob/master/split-installation.md)
 
 See also:
+
 * Scale-down to zero (in this document)
 * [OpenFaaS Pro SSO/OIDC](https://docs.openfaas.com/openfaas-pro/sso/)
 * [OpenFaaS Pro Kafka Event Connector](https://docs.openfaas.com/openfaas-pro/kafka-events/)
