@@ -13,7 +13,7 @@ operator:
   create: true
 
 # Enable authentication on all OpenFaaS core components.
-# You must not turn off basicAuth, however, you can pre-create the 
+# You must not turn off basic_auth for the chart, however, you can pre-create the 
 # secret, if you're using a GitOps tool to create a stable secret
 # before installing OpenFaaS Pro via this chart
 generateBasicAuth: true

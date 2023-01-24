@@ -38,8 +38,6 @@ If you wish to continue without using arkade, read on for instructions.
 
 ### 2) Install with helm
 
-These instructions are for Intel (normal computers), jump to the end of the document for ARM and Raspberry Pi.
-
 To use the chart, you will need to use Helm 3:
 
 Get it from arkade:
@@ -88,8 +86,7 @@ Deploy CE from the helm chart repo directly:
 helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
-    --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true
+    --set functionNamespace=openfaas-fn
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -100,8 +97,6 @@ Retrieve the OpenFaaS credentials with:
 PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode) && \
 echo "OpenFaaS admin password: $PASSWORD"
 ```
-
-It is not recommended to disable basic authentication.
 
 #### Deploy OpenFaaS Pro
 
@@ -114,6 +109,8 @@ kubectl create secret generic \
     --from-file license=$HOME/.openfaas/LICENSE
 ```
 
+If you wish to use the OpenFaaS Pro dashboard, [you must run the steps to "Create a signing key"](https://docs.openfaas.com/openfaas-pro/dashboard/#installation) before installing the Helm chart.
+
 Now deploy OpenFaaS from the helm chart repo:
 
 ```sh
@@ -121,12 +118,24 @@ helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true \
     --set openfaasPro=true \
     --set autoscaler.enabled=true
 ```
 
 The main change here is to add: `--set openfaasPro=true`
+
+For production, we recommend creating your own values.yaml file, but make sure you do not copy any more settings into it than strictly necessary. This way the file can be maintained easily over time.
+
+Example installation with a values.yaml file instead of using `--set`:
+
+```sh
+helm repo update \
+ && helm upgrade openfaas --install openfaas/openfaas \
+    --namespace openfaas  \
+    --set functionNamespace=openfaas-fn \
+    -f values.yaml \
+    -f values-pro.yaml
+```
 
 You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
 
@@ -152,7 +161,6 @@ You can run the following command from within the `faas-netes` folder, not the c
 helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas \
     --set functionNamespace=openfaas-fn \
-    --set generateBasicAuth=true \
     -f ./chart/openfaas/values.yaml \
     -f ./chart/openfaas/values-pro.yaml
 ```
@@ -405,12 +413,6 @@ kubectl delete namespace openfaas openfaas-fn
 
 In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
 
-## ARM and Raspberry Pi
-
-OpenFaaS container images are currently published as multi-arch for ARM64, armhf and `x64_64`. It's recommended that you use [arkade](https://get-arkade.dev) to install, or use the appropriate values.yaml file.
-
-See also: [Kubernetes and Raspberry Pi in the docs](https://docs.openfaas.com/deployment/kubernetes)
-
 ## Kubernetes versioning
 
 This Helm chart currently supports version 1.16+
@@ -424,6 +426,7 @@ Feel free to seek out help using the [OpenFaaS Slack workspace](https://slack.op
 ## Configuration
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
+
 See [values.yaml](./values.yaml) for detailed configuration.
 
 ### General parameters
@@ -435,6 +438,7 @@ yaml) |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS | `true` |
 | `queueMode` | Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming|
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
+| `generateBasicAuth` | Generate admin password for basic authentication | `true` |
 | `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
 | `basicAuthPlugin.replicas` | Replicas of the basic-auth-plugin | `1` |
 | `basicAuthPlugin.resources` | Resource limits and requests for basic-auth-plugin containers | See [values.yaml](./values.yaml) |
@@ -443,7 +447,6 @@ yaml) |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `openfaas-fn` |
 | `gatewayExternal.annotations` | Annotation for getaway-external service | `{}` |
-| `generateBasicAuth` | Generate admin password for basic authentication | `false` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |

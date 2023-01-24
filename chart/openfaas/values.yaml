@@ -9,7 +9,7 @@ createCRDs: true              # Set to false if applying CRDs in another way
 
 basic_auth: true              # Authentication for core components, no good reason to disable this
 rbac: true                    # Kubernetes RBAC, no good reason to disable this
-generateBasicAuth: false      # Set to false if applying credentials separately from the chart, otherwise set to true
+generateBasicAuth: true      # Set to false if applying credentials separately from the chart, otherwise set to true
 securityContext: true
 
 exposeServices: true
@@ -17,12 +17,6 @@ serviceType: NodePort        # serviceType for OpenFaaS gateway
 async: true                  # No known reason to disable this, kept for legacy reasons 
 
 queueMode: ""                # Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming 
-
-# Set to true to use legacy / community-edition auto-scaling
-# when openfaasPro is set to true to use the original 
-# auto-scaling logic
-# Then set proScaler.enabled=false
-ceScaling: false
 
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/

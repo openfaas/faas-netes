@@ -30,3 +30,6 @@ of_kind_portforward.pid
 /chart/pro-builder/out
 /chart/pro-builder/payload.txt
 /pgconnector.yaml
+
+jwt_key
+jwt_key.pub
