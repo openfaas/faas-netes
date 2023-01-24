@@ -5,9 +5,8 @@ go 1.18
 require (
 	github.com/google/go-cmp v0.5.9
 	github.com/gorilla/mux v1.8.0
-	github.com/openfaas/faas-provider v0.19.1
+	github.com/openfaas/faas-provider v0.20.0
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.14.0
 	k8s.io/api v0.22.2
 	k8s.io/apimachinery v0.22.2
 	k8s.io/client-go v0.22.2
@@ -35,6 +34,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/onsi/gomega v1.14.0 // indirect
+	github.com/prometheus/client_golang v1.14.0 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
