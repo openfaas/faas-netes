@@ -1,5 +1,6 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- if .Values.basic_auth }}
+{{- if .Values.openfaasPro }}
 {{- if not .Values.oidcAuthPlugin.enabled }}
 ---
 apiVersion: apps/v1
@@ -102,5 +103,6 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
 
+{{- end }}
 {{- end }}
 {{- end }}
