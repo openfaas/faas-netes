@@ -121,8 +121,6 @@ charts-only:
 
 render-charts:
 	./contrib/create-static-manifest.sh
-	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_arm64 ./chart/openfaas/values-arm64.yaml
-	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_armhf ./chart/openfaas/values-armhf.yaml
 
 start-kind: ## attempt to start a new dev environment
 	@./contrib/create_dev.sh
