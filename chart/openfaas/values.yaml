@@ -9,7 +9,7 @@ createCRDs: true              # Set to false if applying CRDs in another way
 
 basic_auth: true              # Authentication for core components, no good reason to disable this
 rbac: true                    # Kubernetes RBAC, no good reason to disable this
-generateBasicAuth: true      # Set to false if applying credentials separately from the chart, otherwise set to true
+generateBasicAuth: true       # Set to false if applying credentials separately from the chart, otherwise set to true
 securityContext: true
 
 exposeServices: true

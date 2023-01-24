@@ -85,8 +85,7 @@ Deploy CE from the helm chart repo directly:
 ```sh
 helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
-    --namespace openfaas  \
-    --set functionNamespace=openfaas-fn
+    --namespace openfaas
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
@@ -117,9 +116,7 @@ Now deploy OpenFaaS from the helm chart repo:
 helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
-    --set functionNamespace=openfaas-fn \
-    --set openfaasPro=true \
-    --set autoscaler.enabled=true
+    --set openfaasPro=true
 ```
 
 The main change here is to add: `--set openfaasPro=true`
@@ -132,7 +129,6 @@ Example installation with a values.yaml file instead of using `--set`:
 helm repo update \
  && helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
-    --set functionNamespace=openfaas-fn \
     -f values.yaml \
     -f values-pro.yaml
 ```
@@ -160,7 +156,6 @@ You can run the following command from within the `faas-netes` folder, not the c
 ```sh
 helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas \
-    --set functionNamespace=openfaas-fn \
     -f ./chart/openfaas/values.yaml \
     -f ./chart/openfaas/values-pro.yaml
 ```
@@ -169,15 +164,16 @@ In the example above, I'm overlaying two additional YAML files for settings for 
 
 You can override specific images by adding `--set gateway.image=` for instance.
 
-#### Generate basic-auth credentials
+#### Pre-create basic-auth credentials for OpenFaaS Pro/CE
 
-The chart has a pre-install hook which can generate basic-auth credentials, enable it with `--set generateBasicAuth=true`.
+If you're using a GitOps tool like ArgoCD or Flux to install OpenFaaS, then you will need to pre-create the basic-auth credentials, so that they remain stable.
 
-Alternatively, you can set `generateBasicAuth` to `false` and generate or supply the basic-auth credentials yourself. This is the option you may want if you are using `helm template`.
+Why? The chart has a pre-install hook which can generate basic-auth credentials. It is enabled by default and can be turned off with `--set generateBasicAuth=false`.
+
+Example command to generate a random password:
 
 ```sh
 # generate a random password
-PASSWORD=$(head -c 12 /dev/urandom | shasum| cut -d' ' -f1)
 kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
@@ -355,13 +351,12 @@ If you use a service mesh like Linkerd or Istio in your cluster, then you should
 
 ### Istio mTLS
 
-To install OpenFaaS with Istio mTLS pass  `--set istio.mtls=true` and disable the HTTP probes:
+To install OpenFaaS with Istio mTLS pass `--set istio.mtls=true` and disable the HTTP probes:
 
 ```sh
 helm upgrade openfaas --install chart/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
-    --set functionNamespace=openfaas-fn \
     --set exposeServices=false \
     --set faasnetes.httpProbe=false \
     --set httpProbe=false \
