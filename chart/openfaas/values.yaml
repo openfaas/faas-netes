@@ -64,7 +64,7 @@ dashboard:
 ## now be set "enabled=false" when using the new autoscaler
 ## since it handles scaling to zero
 faasIdler:
-  image: ghcr.io/openfaasltd/faas-idler:0.5.1
+  image: ghcr.io/openfaasltd/faas-idler:0.5.2
   replicas: 1
   enabled: false
   inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
@@ -95,14 +95,14 @@ oidcAuthPlugin:
       memory: "120Mi"
       cpu: "50m"
   replicas: 1
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.4
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.5
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.9
+  image: ghcr.io/openfaasltd/gateway:0.2.11
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.26.2
+  image: ghcr.io/openfaas/gateway:0.26.3
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -151,13 +151,13 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.3
+  image: ghcr.io/openfaasltd/faas-netes:0.2.4
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.3
+  image: ghcr.io/openfaasltd/faas-netes:0.2.4
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.3
+  image: ghcr.io/openfaas/faas-netes:0.16.4
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -175,7 +175,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.16.3
+  image: ghcr.io/openfaas/faas-netes:0.16.4
   create: false
   resources:
     requests:
@@ -187,7 +187,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.1
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.3
   durableName: "faas-workers"
   logs:
     debug: false
@@ -202,7 +202,7 @@ jetstreamQueueWorker:
 #
 # Enabled automatically when openfaasPro is set to true
 queueWorkerPro:
-  image: ghcr.io/openfaasltd/queue-worker:0.2.1
+  image: ghcr.io/openfaasltd/queue-worker:0.2.2
   maxRetryAttempts: "10"
   maxRetryWait: "120s"
   initialRetryWait: "10s"

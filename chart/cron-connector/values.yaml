@@ -5,7 +5,7 @@ gatewayURL: http://gateway.openfaas:8080
 openfaasPro: false
 
 pro:
-  image: ghcr.io/openfaasltd/cron-connector:0.1.1
+  image: ghcr.io/openfaasltd/cron-connector:0.1.2
 
 logs:
   # Log debug messages
