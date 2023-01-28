@@ -24,6 +24,11 @@ kubectl --context "kind-$DEVENV" port-forward deploy/gateway -n openfaas 8080:80
 # port-forward needs some time to start
 sleep 10
 
+
+echo "Using existing password for OpenFaaS gateway retrieved from Kubernetes."
+PASSWORD=$(kubectl get secret -n openfaas basic-auth -o=go-template='{{index .data "basic-auth-password"}}' | base64 --decode)
+echo -n $PASSWORD > password.txt
+
 export OPENFAAS_URL=http://127.0.0.1:8080
 
 # Login into the gateway

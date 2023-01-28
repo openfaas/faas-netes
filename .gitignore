@@ -33,3 +33,4 @@ of_kind_portforward.pid
 
 jwt_key
 jwt_key.pub
+/*.pid
