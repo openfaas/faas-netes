@@ -7,7 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -26,7 +26,7 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 			defer r.Body.Close()
 		}
 
-		body, _ := ioutil.ReadAll(r.Body)
+		body, _ := io.ReadAll(r.Body)
 
 		request := types.FunctionDeployment{}
 		err := json.Unmarshal(body, &request)

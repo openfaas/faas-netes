@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/openfaas/faas-provider/types"
@@ -42,7 +42,7 @@ func MakeDeleteHandler(defaultNamespace string, clientset *kubernetes.Clientset)
 			return
 		}
 
-		body, _ := ioutil.ReadAll(r.Body)
+		body, _ := io.ReadAll(r.Body)
 
 		request := types.DeleteFunctionRequest{}
 		err := json.Unmarshal(body, &request)

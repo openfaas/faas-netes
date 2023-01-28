@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -65,7 +66,7 @@ func NewNamespaceResolver(defaultNamespace string, kube kubernetes.Interface) Na
 			}
 
 		case http.MethodPost, http.MethodPut, http.MethodDelete:
-			body, _ := ioutil.ReadAll(r.Body)
+			body, _ := io.ReadAll(r.Body)
 			err := json.Unmarshal(body, &req)
 			if err != nil {
 				log.Printf("error while getting namespace: %s\n", err)

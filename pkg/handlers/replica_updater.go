@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 
@@ -44,7 +44,7 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 
 		if r.Body != nil {
 			defer r.Body.Close()
-			bytesIn, _ := ioutil.ReadAll(r.Body)
+			bytesIn, _ := io.ReadAll(r.Body)
 			marshalErr := json.Unmarshal(bytesIn, &req)
 			if marshalErr != nil {
 				w.WriteHeader(http.StatusBadRequest)
@@ -56,7 +56,9 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 		}
 
 		if req.Replicas == 0 {
-			http.Error(w, fmt.Errorf("for OpenFaaS CE, replicas cannot be set to 0").Error(), http.StatusBadRequest)
+			http.Error(w, "replicas cannot be set to 0 in OpenFaaS CE",
+				http.StatusBadRequest)
+			return
 		}
 
 		options := metav1.GetOptions{
@@ -77,17 +79,19 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 
 		oldReplicas := *deployment.Spec.Replicas
 		replicas := int32(req.Replicas)
+		if replicas >= MaxReplicas {
+			replicas = MaxReplicas
+		}
 
 		log.Printf("Set replicas - %s %s, %d/%d\n", functionName, lookupNamespace, replicas, oldReplicas)
 
 		deployment.Spec.Replicas = &replicas
 
-		_, err = clientset.AppsV1().Deployments(lookupNamespace).Update(context.TODO(), deployment, metav1.UpdateOptions{})
+		if _, err = clientset.AppsV1().Deployments(lookupNamespace).
+			Update(context.TODO(), deployment, metav1.UpdateOptions{}); err != nil {
 
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Unable to update function deployment " + functionName))
-			log.Println(err)
+			log.Printf("unable to update function deployment: %s, %s", functionName, err)
+			http.Error(w, fmt.Sprintf("unable to update function deployment: %s", functionName), http.StatusInternalServerError)
 			return
 		}
 

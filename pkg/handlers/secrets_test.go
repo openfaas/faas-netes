@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -284,7 +284,7 @@ func Test_SecretsHandler_ListEmpty(t *testing.T) {
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("want status code '%d', got '%d'", http.StatusOK, resp.StatusCode)
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 
 	if string(body) == "null" {
 		t.Errorf(`want empty list to be valid json i.e. "[]", but was %q`, string(body))
