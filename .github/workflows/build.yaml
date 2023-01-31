@@ -33,7 +33,7 @@ jobs:
         run: echo "GIT_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build x86_64 container into library
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -46,7 +46,7 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/faas-netes:${{ github.sha }}
 
       - name: Build multi-arch containers for validation only
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
