@@ -183,6 +183,10 @@ operator:
 jetstreamQueueWorker:
   image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.6
   durableName: "faas-workers"
+  # Configure the max waiting pulls for the queue-worker JetStream consumer. 
+  # The value should be at least max_inflight * replicas.
+  # Note that this value can not be updated once the consumer is created.
+  maxWaiting: 512
   logs:
     debug: false
     format: "console"

@@ -62,6 +62,8 @@ spec:
           value: "{{ .Values.queueWorker.ackWait }}"
         - name: max_inflight
           value: "{{ .Values.queueWorkerPro.maxInflight }}"
+        - name: max_waiting
+          value: "{{ .Values.jetstreamQueueWorker.maxWaiting }}"
         - name: "debug"
           value: "{{ .Values.jetstreamQueueWorker.logs.debug }}"
         - name: "log_encoding"

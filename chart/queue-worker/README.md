@@ -33,6 +33,8 @@ helm upgrade slow-queue chart/queue-worker \
 |-----------|-------------|---------|
 | `image` | The jetstream-queue-worker image that should be deployed | See values.yaml |
 | `replicas` | Number of queue-worker replicas to create | `1` |
+| `maxInflight` | Control the concurrent invocations | `1` |
+| `maxWaiting` | Configure the max waiting pulls for the queue-worker JetStream consumer. The value should be at least max_inflight * queue_worker.replicas. Note that this value can not be updated once the consumer is created. | `512` |
 | `upstreamTimeout` | Maximum duration of upstream function call | `1m` |
 | `maxRetryAttempts` | The amount of times to try sending a message to a function before discarding it |`10` |
 | `maxRetryWait` | The maximum amount of time to wait between retries | `120s` |

@@ -57,6 +57,8 @@ spec:
               value: "{{ .Values.gateway.host }}:{{ .Values.gateway.port }}"
             - name: "max_inflight"
               value: "{{ .Values.maxInflight }}"
+            - name: max_waiting
+              value: "{{ .Values.maxWaiting }}"
             - name: "upstream_timeout"
               value: "{{ .Values.upstreamTimeout }}"
             - name: "tls_insecure"
