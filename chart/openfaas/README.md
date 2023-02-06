@@ -508,6 +508,7 @@ yaml) |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `jetstreamQueueWorker.durableName` | Durable name used by JetStream consumers | `faas-workers` |
 | `jetstreamQueueWorker.image` | Container image used for the queue-worker when the `queueMode` is `jetstream` | See [values.yaml](./values.yaml) |
+| `jetstreamQueueWorker.maxWaiting` | Configure the max waiting pulls for the queue-worker JetStream consumer. The value should be at least max_inflight * queue_worker.replicas. Note that this value can not be updated once the consumer is created. | `512` |
 | `jetstreamQueueWorker.logs.debug` | Log debug messages | `false` |
 | `jetstreamQueueWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
 | `nats.channel` | The name of the NATS Streaming channel or NATS JetStream stream to use for asynchronous function invocations | `faas-request` |
