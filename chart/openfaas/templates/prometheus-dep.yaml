@@ -82,9 +82,11 @@ spec:
           name: prometheus-config
           subPath: prometheus-rules.yml
 {{- end }}
+{{- if eq .Values.openfaasPro false }}
         - mountPath: /etc/prometheus/alert.rules.yml
           name: prometheus-config
           subPath: alert.rules.yml
+{{- end}}
         - mountPath: /prometheus/data
           name: prom-data
       volumes:
@@ -95,9 +97,11 @@ spec:
               - key: prometheus.yml
                 path: prometheus.yml
                 mode: 0644
+{{- if eq .Values.openfaasPro false }}
               - key: alert.rules.yml
                 path: alert.rules.yml
                 mode: 0644
+{{- end }}
 {{- if .Values.openfaasPro }}
               - key: prometheus-rules.yml
                 path: prometheus-rules.yml
