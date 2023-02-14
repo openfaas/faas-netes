@@ -80,7 +80,7 @@ faasIdler:
 oidcAuthPlugin:
   enabled: false
   verbose: false # debug setting
-  provider: "" # Leave blank, or put "azure"
+  provider: "" # Put "azure" if using Azure as a provider, leave blank for any other provider.
   insecureTLS: false
   scopes: "openid profile email"
   openidURL: "https://example.eu.auth0.com/.well-known/openid-configuration"
