@@ -1,4 +1,4 @@
----
+{{- if .Values.openfaasPro }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,3 +22,5 @@ spec:
       protocol: TCP
   selector:
     app: gateway
+
+{{- end }}
