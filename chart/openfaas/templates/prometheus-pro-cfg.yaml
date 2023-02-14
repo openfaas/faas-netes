@@ -1,0 +1,173 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+
+# License: OpenFaaS Pro EULA
+# Any use, modification or coping without an OpenFaaS Pro license is prohibited
+# All rights reserved OpenFaaS Ltd 2023
+
+{{- if .Values.prometheus.create }}
+{{- if .Values.openfaasPro }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: prometheus-config
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: prometheus-config
+  namespace: {{ .Release.Namespace | quote }}
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval:     15s
+      evaluation_interval: 15s
+      external_labels:
+          monitor: 'faas-monitor'
+
+    rule_files:
+        - 'prometheus-rules.yml'
+
+    scrape_configs:
+      - job_name: 'prometheus'
+        scrape_interval: 10s
+        static_configs:
+          - targets: ['localhost:9090']
+
+      # Capture endpoints in the openfaas namespace with a scrape annotation
+      # such as the gateway-provider service.
+      - job_name: 'openfaas-endpoints'
+        kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - {{ .Release.Namespace }}
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_service_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          action: replace
+          target_label: kubernetes_name
+
+        - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+          separator: ;
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          target_label: __address__
+          replacement: $1:$2
+          action: replace
+
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+
+      - job_name: 'kubernetes-pods'
+        scrape_interval: 5s
+        honor_labels: false
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - {{ .Release.Namespace }}
+{{- if ne $functionNs (.Release.Namespace | toString) }}
+                - {{ $functionNs }}
+{{- end }}
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: kubernetes_pod_name
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+          target_label: __address__
+        - action: replace
+          regex: (.+)
+          source_labels:
+          - __meta_kubernetes_pod_annotation_prometheus_io_path
+          target_label: __metrics_path__
+
+      - job_name: 'kubernetes-resource-metrics'
+        scrape_interval: 10s
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+        - role: node
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - target_label: __address__
+          replacement: kubernetes.default.svc:443
+        - source_labels: [__meta_kubernetes_node_name]
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/${1}/proxy/metrics/resource
+        metric_relabel_configs:
+        - source_labels: [__name__]
+          regex: (pod)_(cpu|memory)_(.+)
+          action: keep
+        # Exclude container metrics
+        - source_labels: [__name__]
+          regex: container_(.+)
+          action: drop
+        - action: replace
+          source_labels:
+          - namespace
+          regex: '(.*)'
+          replacement: '$1'
+          target_label: kubernetes_namespace
+        # Output deployment name from Pod
+        - action: replace
+          source_labels:
+          - pod
+          regex: '^([0-9a-zA-Z-]+)+(-[0-9a-zA-Z]+-[0-9a-zA-Z]+)$'
+          replacement: '$1'
+          target_label: deployment_name
+        # Output fully-qualified function name fn.ns
+        - source_labels: [deployment_name, kubernetes_namespace]
+          separator: ";"
+          regex: '(.*);(.*)'
+          replacement: '${1}.${2}'
+          target_label: "function_name"
+
+  prometheus-rules.yml: |
+    groups:
+    - name: load
+      rules:
+      - record: job:function_current_load:sum
+        expr: sum by (function_name) ( rate( gateway_function_invocation_total{}[30s] ) )  and avg by (function_name) (gateway_service_target_load{scaling_type="rps"}) > 1
+        labels:
+          scaling_type: rps
+
+      - record: job:function_current_load:sum
+        expr: sum by (function_name) ( max_over_time( gateway_function_invocation_inflight[45s:5s])) and on (function_name) avg by(function_name) (gateway_service_target_load{scaling_type="capacity"}) > bool 1
+        labels:
+          scaling_type: capacity
+
+      - record: job:function_current_load:sum
+        expr: sum(irate ( pod_cpu_usage_seconds_total{}[1m])*1000) by (function_name) * on (function_name) avg by (function_name) (gateway_service_target_load{scaling_type="cpu"}  > bool 1 )
+        labels:
+          scaling_type: cpu
+
+    - name: recently_started_1m
+      interval: 10s
+      rules:
+      - record: job:function_current_started:max_sum
+        expr: max_over_time(sum by (function_name) (rate( gateway_function_invocation_started{}[1m]))[1m:5s]) > 0
+
+{{- end }}
+{{- end }}
