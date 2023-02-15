@@ -32,9 +32,11 @@ spec:
       - name: license
         secret:
           secretName: openfaas-license
+      {{- if .Values.dashboard.signingKeySecret }}
       - name: dashboard-jwt
         secret:
-          secretName: dashboard-jwt
+          secretName: {{ .Values.dashboard.signingKeySecret }}
+      {{- end }}
       containers:
       - name:  dashboard
         resources:
@@ -79,13 +81,14 @@ spec:
           readOnly: true
           mountPath: "/var/secrets/gateway"
         {{- end }}
-
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
+        {{- if .Values.dashboard.signingKeySecret }}
         - name: dashboard-jwt
           readOnly: true
           mountPath: "/var/secrets/dashboard-jwt"
+        {{- end }}
 
     {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -546,6 +546,7 @@ yaml) |
 | `dashboard.publicURL` | URL used to expose the dashboard. Needs to be a fully qualified domain name (FQDN) | `https://dashboard.example.com` |
 | `dashboard.replicas` | Replicas of the dashboard | `1` |
 | `dashboard.resources` | Resource limits and requests for the dashboard pods | See [values.yaml](./values.yaml) |
+| `dashboard.signingKeySecret` | Name of signing key secret for sessions. Can be left blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging. | `""` |
 
 ### OIDC / SSO (OpenFaaS Pro)
 
