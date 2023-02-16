@@ -1,4 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if not .Values.openfaasPro }}
 {{- if .Values.alertmanager.create }}
 ---
 kind: ConfigMap
@@ -44,4 +45,5 @@ data:
               username: admin
               password_file: /var/secrets/basic-auth-password
           {{- end -}}
+{{- end }}
 {{- end }}

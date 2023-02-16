@@ -1,4 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if not .Values.openfaasPro }}
 {{- if .Values.alertmanager.create }}
 ---
 apiVersion: v1
@@ -19,4 +20,5 @@ spec:
       protocol: TCP
   selector:
     app: alertmanager
+{{- end }}
 {{- end }}
