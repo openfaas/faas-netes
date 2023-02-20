@@ -27,6 +27,7 @@ spec:
       - name: auth
         secret:
           secretName: basic-auth
+      terminationGracePeriodSeconds: 1
       containers:
       - name: gateway
         resources:
