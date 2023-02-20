@@ -28,6 +28,9 @@ spec:
       volumes:
       - name: oidc-plugin-temp-volume
         emptyDir: {}
+      - name: issuer-key
+        secret:
+          secretName: issuer-key
       {{- if .Values.basic_auth }}
       - name: auth
         secret:
@@ -86,12 +89,6 @@ spec:
         {{- end }}
         - "-provider={{- .Values.oidcAuthPlugin.provider}}"
         env:
-        - name: client_id
-          value: "{{- .Values.oidcAuthPlugin.clientID}}"
-        - name: client_secret
-          value: "{{- .Values.oidcAuthPlugin.clientSecret}}"
-        - name: cookie_domain
-          value: "{{- .Values.oidcAuthPlugin.cookieDomain}}"
         - name: base_host
           value: "{{- .Values.oidcAuthPlugin.baseHost}}"
         - name: port
@@ -104,10 +101,11 @@ spec:
           value: ""
         - name: audience
           value: "{{- .Values.oidcAuthPlugin.audience}}"
-        - name: scopes
-          value: "{{- .Values.oidcAuthPlugin.scopes}}"
+
         - name: insecure_tls
           value: "{{- .Values.oidcAuthPlugin.insecureTLS}}"
+        - name: issuer_key_path
+          value: "/var/secrets/issuer-key/issuer.key"
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets/gateway"
@@ -115,6 +113,9 @@ spec:
         volumeMounts:
         - name: oidc-plugin-temp-volume
           mountPath: /tmp
+        - name: issuer-key
+          readOnly: true
+          mountPath: "/var/secrets/issuer-key"
         {{- if .Values.basic_auth }}
         - name: auth
           readOnly: true
