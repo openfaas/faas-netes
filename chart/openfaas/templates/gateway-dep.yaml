@@ -31,11 +31,14 @@ spec:
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
       volumes:
+<<<<<<< HEAD
       {{- if .Values.oidcAuthPlugin.enabled }}
       - name: issuer-key
         secret:
           secretName: issuer-key
       {{- end}}
+=======
+>>>>>>> Updates for OpenFaaS IAM
       # - name: faas-auth
       #   projected:
       #     sources:
