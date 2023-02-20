@@ -31,6 +31,13 @@ spec:
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
       volumes:
+      # - name: faas-auth
+      #   projected:
+      #     sources:
+      #     - serviceAccountToken:
+      #         path: token
+      #         audience: faas-netes.openfaas
+      #         expirationSeconds: 3600
       - name: faas-netes-temp-volume
         emptyDir: {}
       {{- if .Values.basic_auth }}
@@ -43,6 +50,7 @@ spec:
         secret:
           secretName: openfaas-license
       {{- end }}
+      terminationGracePeriodSeconds: 1
       containers:
       - name: gateway
         resources:
@@ -158,19 +166,13 @@ spec:
           value: "true"
         - name: secret_mount_path
           value: "/var/secrets"
-        {{- if .Values.oidcAuthPlugin.enabled }}
-        - name: auth_proxy_url
-          value: "http://oidc-plugin.{{ .Release.Namespace }}:8080/validate"
-        - name: auth_pass_body
-          value: "false"
-        {{- else }}
-        {{- if .Values.openfaasPro }}
-        - name: auth_proxy_url
-          value: "http://basic-auth-plugin.{{ .Release.Namespace }}:8080/validate"
-        - name: auth_pass_body
-          value: "false"
         {{- end }}
-        {{- end }}
+        {{- if .Values.gateway.authProxyUrl }}
+        - name: auth_proxy_url
+          value: "{{.Values.gateway.authProxyUrl}}"
+        {{- else if .Values.oidcAuthPlugin.enabled }}
+        - name: auth_proxy_url
+          value: "http://oidc-plugin.{{ .Release.Namespace }}:8080"
         {{- end }}
         - name: scale_from_zero
           value: "{{ .Values.gateway.scaleFromZero }}"
@@ -181,6 +183,8 @@ spec:
         - name: probe_functions
           value: "{{ .Values.gateway.probeFunctions }}"
         volumeMounts:
+        # - name: faas-auth
+        #   mountPath: /var/run/secrets/faas-auth
         {{- if .Values.basic_auth }}
         - name: auth
           readOnly: true
@@ -242,14 +246,25 @@ spec:
             value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
+        {{- if .Values.basic_auth }}
+          - name: basic_auth
+            value: "true"
+          - name: secret_mount_path
+            value: "/var/secrets"
+        {{- end }}
         ports:
         - containerPort: 8081
           protocol: TCP
-        {{- if .Values.openfaasPro }}
         volumeMounts:
+        {{- if .Values.openfaasPro }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
+        {{- end }}
+        {{- if .Values.basic_auth }}
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         {{- end }}
 
       {{- else }}
@@ -304,11 +319,22 @@ spec:
           value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
+        {{- if .Values.basic_auth }}
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/var/secrets"
+        {{- end }}
         volumeMounts:
         {{- if .Values.openfaasPro }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
+        {{- end }}
+        {{- if .Values.basic_auth }}
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         {{- end }}
         - mountPath: /tmp
           name: faas-netes-temp-volume

@@ -10,7 +10,7 @@ openfaasPro: true
 # The operator mode is required for GitOps tooling like ArgoCD / Flux v2
 # and to export existing functions for backup purposes. 
 operator:
-  create: true
+  create: false
 
 # Enable authentication on all OpenFaaS core components.
 # You must not turn off basic_auth for the chart, however, you can pre-create the 
@@ -22,13 +22,13 @@ generateBasicAuth: true
 # for setting up the new dashboard
 dashboard:
   publicURL: localhost
-  enabled: true
+  enabled: false
 
 # The autoscaler is enabled by default
 # Learn more: 
 # https://docs.openfaas.com/architecture/autoscaling/
 autoscaler:
-  enabled: true
+  enabled: false
 
 # A cluster role is required for OpenFaaS Pro due to:
 # 1) Autoscaling and metrics for functions - CPU / RAM
@@ -36,12 +36,21 @@ autoscaler:
 # https://docs.openfaas.com/reference/namespaces/
 clusterRole: true
 
+faasnetesPro:
+  image: ttl.sh/alexellis2/faas-netes-pro:r2
+
+
 # HPA CPU? 3 <=> 6
 # If you have purchased licenses for 6 gateway replicas for this environment
 # you can create a HPA rule to scale on CPU, but you must not scale beyond
 # what's been purchased.
 gateway:
-  replicas: 3
+  replicas: 1
+  authProxyUrl: "https://auth.exit.o6s.io"
+
+gatewayPro:
+  image: ttl.sh/alexellis2/gateway:0.2.13-10-gc48b60ed
+
 # Required gateway configuration for Istio
   # directFunctions: true
   # probeFunctions: true
@@ -49,10 +58,16 @@ gateway:
 # replicas x maxInflight = max concurrent messages processed.
 # 75 concurrent requests will be processed, 25 per queueWorker
 queueWorker:
-  replicas: 3
+  replicas: 0
+
+
+openfaasImagePullPolicy: IfNotPresent
+faasnetes:
+  imagePullPolicy: IfNotPresent
 
 queueWorkerPro:
-  maxInflight: 50
+  maxInflight: 1
+  replicas: 0
 
 # Enable JetStream for OpenFaaS, learn more at:
 # https://www.openfaas.com/blog/jetstream-for-openfaas/
@@ -66,3 +81,14 @@ nats:
 
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
+
+
+oidcAuthPlugin:
+  enabled: true
+  verbose: true # debug setting
+  openidURL: "https://alexellis.eu.auth0.com/.well-known/openid-configuration"
+  audience: https://alexellis.eu.auth0.com/api/v2/
+  baseHost: "https://gw.exit.o6s.io"
+  image: ttl.sh/alexellis/openfaas-oidc-plugin:0.5.5-10-g269b915-dirty
+
+
