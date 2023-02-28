@@ -51,15 +51,17 @@ spec:
           value: "prometheus.{{ .Release.Namespace }}"
         - name: prometheus_port
           value: "9090"
-        {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets/autoscaler"
+        {{- if .Values.basic_auth }}
         - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
+          value: "true"
+        {{- end }}
         volumeMounts:
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
+        {{- if .Values.basic_auth }}
         - name: auth
           readOnly: true
           mountPath: "/var/secrets/autoscaler"
