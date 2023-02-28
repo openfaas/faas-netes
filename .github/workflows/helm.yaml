@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: azure/setup-helm@v1
       - name: Helm Lint
         run: ./contrib/lint_chart.sh
@@ -30,7 +30,7 @@ jobs:
       - lint-chart
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: lra/setup-kubeval@v1
         with:
           version: v0.16.1
