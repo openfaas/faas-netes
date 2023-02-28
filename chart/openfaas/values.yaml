@@ -67,7 +67,7 @@ dashboard:
 ## now be set "enabled=false" when using the new autoscaler
 ## since it handles scaling to zero
 faasIdler:
-  image: ghcr.io/openfaasltd/faas-idler:0.5.2
+  image: ghcr.io/openfaasltd/faas-idler:0.5.3
   replicas: 1
   enabled: false
   inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
@@ -101,7 +101,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.11
+  image: ghcr.io/openfaasltd/gateway:0.2.12
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.26.3
@@ -153,10 +153,10 @@ basicAuthPlugin:
       cpu: "20m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.4
+  image: ghcr.io/openfaasltd/faas-netes:0.2.5
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.4
+  image: ghcr.io/openfaasltd/faas-netes:0.2.5
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.4
@@ -189,7 +189,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.3
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.5
   durableName: "faas-workers"
   logs:
     debug: false
@@ -237,7 +237,7 @@ queueWorker:
 # monitoring and auto-scaling components
 # both components
 prometheus:
-  image: prom/prometheus:v2.41.0
+  image: prom/prometheus:v2.42.0
   create: true
   resources:
     requests:
@@ -271,7 +271,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.9.11
+  image: nats:2.9.14
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
