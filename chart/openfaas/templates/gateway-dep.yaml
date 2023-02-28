@@ -163,13 +163,6 @@ spec:
           value: "http://oidc-plugin.{{ .Release.Namespace }}:8080/validate"
         - name: auth_pass_body
           value: "false"
-        {{- else }}
-        {{- if .Values.openfaasPro }}
-        - name: auth_proxy_url
-          value: "http://basic-auth-plugin.{{ .Release.Namespace }}:8080/validate"
-        - name: auth_pass_body
-          value: "false"
-        {{- end }}
         {{- end }}
         {{- end }}
         - name: scale_from_zero
