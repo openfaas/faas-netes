@@ -102,7 +102,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.12
+  image: ghcr.io/openfaasltd/gateway:0.2.13
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.26.3
@@ -144,14 +144,6 @@ gateway:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-
-basicAuthPlugin:
-  image: ghcr.io/openfaas/basic-auth:0.25.5
-  replicas: 1
-  resources:
-    requests:
-      memory: "50Mi"
-      cpu: "20m"
 
 faasnetesPro:
   image: ghcr.io/openfaasltd/faas-netes:0.2.5
