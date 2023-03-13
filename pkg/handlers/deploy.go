@@ -150,10 +150,10 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 
 	nodeSelector := createSelector(request.Constraints)
 
-	resources, resourceErr := createResources(request)
+	resources, err := createResources(request)
 
-	if resourceErr != nil {
-		return nil, resourceErr
+	if err != nil {
+		return nil, err
 	}
 
 	var imagePullPolicy apiv1.PullPolicy
