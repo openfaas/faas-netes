@@ -152,7 +152,7 @@ operatorPro:
   image: ghcr.io/openfaasltd/faas-netes:0.2.5
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.4
+  image: ghcr.io/openfaas/faas-netes:0.16.5
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -170,7 +170,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.16.4
+  image: ghcr.io/openfaas/faas-netes:0.16.5
   create: false
   resources:
     requests:
@@ -182,7 +182,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.5
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.6
   durableName: "faas-workers"
   logs:
     debug: false
@@ -264,7 +264,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.9.14
+  image: nats:2.9.15
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
