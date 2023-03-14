@@ -368,6 +368,7 @@ func (c *Controller) handleObject(obj interface{}) {
 		}
 		glog.V(4).Infof("Recovered deleted object '%s' from tombstone", object.GetName())
 	}
+
 	glog.V(4).Infof("Processing object: %s", object.GetName())
 	if ownerRef := metav1.GetControllerOf(object); ownerRef != nil {
 		// If this object is not owned by a function, we should not do anything more

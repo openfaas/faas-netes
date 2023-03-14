@@ -29,7 +29,7 @@ ${CODEGEN_PKG}: $(TOOLS_DIR)/code-generator.mod
 	@cd $(TOOLS_DIR) && go mod download -modfile=code-generator.mod
 
 local:
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
+	CGO_ENABLED=0 GOOS=linux go build -o faas-netes
 
 build-docker:
 	docker build \
