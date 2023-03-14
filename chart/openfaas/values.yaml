@@ -151,7 +151,7 @@ operatorPro:
   image: ghcr.io/openfaasltd/faas-netes:0.2.5
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.5
+  image: ghcr.io/openfaas/faas-netes:0.16.6
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -169,7 +169,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.16.5
+  image: ghcr.io/openfaas/faas-netes:0.16.6
   create: false
   resources:
     requests:
