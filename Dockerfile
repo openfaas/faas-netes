@@ -1,4 +1,4 @@
-FROM ghcr.io/openfaas/license-check:0.4.1 as license-check
+FROM ghcr.io/openfaas/license-check:0.4.2 as license-check
 
 FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.19 as build
 
