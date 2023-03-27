@@ -1,0 +1,49 @@
+{{- if .Values.oidcAuthPlugin.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    component: oidc-plugin
+  name: oidc-plugin
+  namespace: "openfaas"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    component: oidc-plugin
+  name: openfaas-roles
+  namespace: "openfaas"
+rules:
+  - apiGroups:
+      - "openfaas.com"
+    resources:
+      - "profiles"
+      - "jwtissuers"
+      - "policies"
+      - "roles"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    component: oidc-plugin
+  name: oidc-plugin
+  namespace: "openfaas"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: openfaas-roles
+subjects:
+  - kind: ServiceAccount
+    name: oidc-plugin
+    namespace: "openfaas"
+{{- end }}
