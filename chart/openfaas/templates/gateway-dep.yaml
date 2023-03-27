@@ -203,11 +203,7 @@ spec:
       - name: operator
         resources:
           {{- .Values.operator.resources | toYaml | nindent 12 }}
-      {{- if .Values.openfaasPro }}
         image: {{ .Values.operatorPro.image }}
-      {{- else }}
-        image: {{ .Values.operator.image }}
-      {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - ./faas-netes
@@ -319,6 +315,10 @@ spec:
           value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
+        {{- if .Values.oidcAuthPlugin.enabled }}
+        - name: system_issuer
+          value: {{ .Values.iam.systemIssuer | quote }}
+        {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
           value: "true"
