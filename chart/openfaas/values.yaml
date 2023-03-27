@@ -90,7 +90,6 @@ oidcAuthPlugin:
   audience: https://example.eu.auth0.com/api/v2/
   welcomePageURL: https://gateway.openfaas.example.com
   cookieDomain: ".openfaas.example.com"
-  baseHost: "https://auth.openfaas.example.com"
   clientSecret: ""
   clientID: ""
   resources:
