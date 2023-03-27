@@ -91,13 +91,9 @@ spec:
         - "-provider={{- .Values.oidcAuthPlugin.provider}}"
         env:
         - name: base_host
-          value: "{{- .Values.oidcAuthPlugin.baseHost}}"
+          value: "{{- .Values.iam.systemIssuer}}"
         - name: port
           value: "8080"
-        - name: openid_issuer
-          value: "{{- .Values.iam.primaryIssuer}}"
-        - name: welcome_page_url
-          value: "{{- .Values.oidcAuthPlugin.welcomePageURL}}"
         - name: public_key_path
           value: ""
         - name: audience
