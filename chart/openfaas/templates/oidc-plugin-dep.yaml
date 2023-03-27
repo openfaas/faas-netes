@@ -95,7 +95,7 @@ spec:
         - name: port
           value: "8080"
         - name: openid_issuer
-          value: "{{- .Values.oidcAuthPlugin.openidIssuer}}"
+          value: "{{- .Values.iam.primaryIssuer}}"
         - name: welcome_page_url
           value: "{{- .Values.oidcAuthPlugin.welcomePageURL}}"
         - name: public_key_path
