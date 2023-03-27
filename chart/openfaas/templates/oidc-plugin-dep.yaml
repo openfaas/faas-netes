@@ -93,8 +93,8 @@ spec:
           value: "{{- .Values.oidcAuthPlugin.baseHost}}"
         - name: port
           value: "8080"
-        - name: openid_url
-          value: "{{- .Values.oidcAuthPlugin.openidURL}}"
+        - name: openid_issuer
+          value: "{{- .Values.oidcAuthPlugin.openidIssuer}}"
         - name: welcome_page_url
           value: "{{- .Values.oidcAuthPlugin.welcomePageURL}}"
         - name: public_key_path
