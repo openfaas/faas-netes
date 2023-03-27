@@ -25,6 +25,7 @@ spec:
       labels:
         app: oidc-plugin
     spec:
+      serviceAccountName: oidc-plugin
       volumes:
       - name: oidc-plugin-temp-volume
         emptyDir: {}
