@@ -31,6 +31,11 @@ spec:
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
       volumes:
+      {{- if .Values.oidcAuthPlugin.enabled }}
+      - name: issuer-key
+        secret:
+          secretName: issuer-key
+      {{- end}}
       # - name: faas-auth
       #   projected:
       #     sources:
@@ -328,6 +333,8 @@ spec:
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
         {{- if .Values.oidcAuthPlugin.enabled }}
+        - name: issuer_key_path
+          value: "/var/secrets/issuer-key/issuer.key"
         - name: system_issuer
           value: {{ .Values.iam.systemIssuer | quote }}
         {{- end }}
@@ -338,6 +345,11 @@ spec:
           value: "/var/secrets"
         {{- end }}
         volumeMounts:
+        {{- if .Values.oidcAuthPlugin.enabled }}
+        - name: issuer-key
+          readOnly: true
+          mountPath: "/var/secrets/issuer-key"
+        {{- end }}
         {{- if .Values.openfaasPro }}
         - name: license
           readOnly: true
