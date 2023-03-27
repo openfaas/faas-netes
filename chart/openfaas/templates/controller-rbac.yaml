@@ -78,6 +78,7 @@ rules:
     resources:
       - "profiles"
       - "policies"
+      - "jwtissuers"
     verbs:
       - "get"
       - "list"
@@ -200,6 +201,7 @@ rules:
     resources:
       - "profiles"
       - "policies"
+      - "jwtissuers"
     verbs:
       - "get"
       - "list"
