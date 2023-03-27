@@ -327,6 +327,10 @@ spec:
           value: "{{ .Values.functions.livenessProbe.failureThreshold }}"
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
+        {{- if .Values.oidcAuthPlugin.enabled }}
+        - name: system_issuer
+          value: {{ .Values.iam.systemIssuer | quote }}
+        {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
           value: "true"

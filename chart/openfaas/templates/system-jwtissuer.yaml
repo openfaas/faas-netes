@@ -1,0 +1,16 @@
+{{- if .Values.oidcAuthPlugin.enabled }}
+---
+
+apiVersion: openfaas.com/v1
+kind: JwtIssuer
+metadata:
+  name: system
+  namespace: openfaas
+spec:
+  iss: {{.Values.iam.systemIssuer}}
+  issInternal: http://oidc-plugin.{{ .Release.Namespace | quote }}:8080
+  aud:
+  - {{.Values.iam.systemIssuer}}
+  tokenExpiry: "30m"
+
+{{- end }}
