@@ -1,20 +1,14 @@
-# Suggested additional overrides for OpenFaaS Pro users, 
-# in addition to (not instead of) values.yaml
-
 faasnetesPro:
-  image: ttl.sh/alexellis/faas-netes:0.1.3-56-g08511400-dirty
-
-# HPA CPU? 3 <=> 6
-# If you have purchased licenses for 6 gateway replicas for this environment
-# you can create a HPA rule to scale on CPU, but you must not scale beyond
-# what's been purchased.
-gateway:
-  replicas: 1
-  # authProxyUrl: "https://auth.exit.o6s.io"
+  image: ttl.sh/alexellis2/faas-netes:0.1.3-59-g94357b9b-dirty
 
 gatewayPro:
-  image: ttl.sh/alexellis2/gateway:0.2.13-11-gef3bf5c0
+  image: ttl.sh/alexellis/gateway:0.2.13-12-gff1ddbbc
 
+oidcAuthPlugin:
+  enabled: true
+  audience: https://alexellis.eu.auth0.com/api/v2/
+  image: ttl.sh/alexellis/openfaas-oidc-plugin:0.5.5-3-g43c3552
+  baseHost: https://gw.exit.o6s.io
 
 iam:
   # The primary issuer represents how users log into the OpenFaaS dashboard and via the CLI
@@ -23,11 +17,10 @@ iam:
   # systemIssuer represents the issuer for the OpenFaaS system components
   systemIssuer: "https://gw.exit.o6s.io"
 
-oidcAuthPlugin:
-  enabled: true
-  audience: https://alexellis.eu.auth0.com/api/v2/
-  image: ttl.sh/alexellis/openfaas-oidc-plugin:0.5.5-10-g269b915-dirty
 
+gateway:
+  replicas: 1
+  # authProxyUrl: "https://auth.exit.o6s.io"
 
 # ====================================================================================================
 
