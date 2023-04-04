@@ -62,7 +62,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		}
 
 		if namespace != functionNamespace {
-			http.Error(w, fmt.Sprintf("valid namespaces are: %s", functionNamespace), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("namespace must be: %s", functionNamespace), http.StatusBadRequest)
 			return
 		}
 

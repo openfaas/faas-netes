@@ -36,7 +36,7 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 		}
 
 		if lookupNamespace != defaultNamespace {
-			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("namespace must be: %s", defaultNamespace), http.StatusBadRequest)
 			return
 		}
 
