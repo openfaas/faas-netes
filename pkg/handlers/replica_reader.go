@@ -39,7 +39,7 @@ func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http
 		}
 
 		if lookupNamespace != defaultNamespace {
-			http.Error(w, fmt.Sprintf("valid namespaces are: %s", defaultNamespace), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("namespace must be: %s", defaultNamespace), http.StatusBadRequest)
 			return
 		}
 
