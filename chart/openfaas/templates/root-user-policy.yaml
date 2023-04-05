@@ -1,0 +1,19 @@
+{{- if .Values.oidcAuthPlugin.enabled }}
+
+apiVersion: openfaas.com/v1
+kind: Policy
+metadata:
+  name: root-user
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  statement:
+  - sid: 1-read-and-write-functions-and-secrets-cluster-wide
+    action:
+    - Function:Read
+    - Function:Admin
+    - Secret:Read
+    - Secret:Admin
+    effect: Allow
+    resource: [ "*" ]
+
+{{- end}}
