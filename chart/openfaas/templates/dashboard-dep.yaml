@@ -29,6 +29,17 @@ spec:
           secretName: basic-auth
       {{- end }}
 
+      {{- if .Values.oidcAuthPlugin.enabled }}
+      - name: aes-key
+        secret:
+          secretName: aes-key
+      {{- if .Values.dashboard.oauthClientSecret }}
+      - name: oauth-client-secret
+        secret:
+          secretName: {{ .Values.dashboard.oauthClientSecret }}
+      {{- end }}
+      {{- end }}
+
       - name: license
         secret:
           secretName: openfaas-license
@@ -74,6 +85,18 @@ spec:
           value: {{ .Values.dashboard.publicURL }}
         - name: jwt_mount_path
           value: /var/secrets/dashboard-jwt
+        - name: write_debug
+          value: {{ .Values.dashboard.logs.debug | quote }}
+        {{- if .Values.oidcAuthPlugin.enabled }}
+        - name: issuer_key_path
+          value: "/var/secrets/issuer-key/issuer.key"
+        - name: primary_issuer
+          value: {{ .Values.iam.primaryIssuer | quote }}
+        - name: system_issuer
+          value: {{ .Values.iam.systemIssuer | quote }}
+        - name: oauth_client_id
+          value: {{ .Values.dashboard.clientID }}
+        {{- end }}
 
         volumeMounts:
         {{- if .Values.basic_auth }}
@@ -81,6 +104,18 @@ spec:
           readOnly: true
           mountPath: "/var/secrets/gateway"
         {{- end }}
+
+        {{- if .Values.oidcAuthPlugin.enabled }}
+        - name: aes-key
+          readOnly: true
+          mountPath: "/var/secrets/dashboard-aes"
+        {{- if .Values.dashboard.oauthClientSecret }}
+        - name: oauth-client-secret
+          readOnly: true
+          mountPath: "/var/secrets/dashboard-oauth"
+        {{- end}}
+        {{- end}}
+
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
