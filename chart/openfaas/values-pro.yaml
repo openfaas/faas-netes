@@ -46,6 +46,10 @@ generateBasicAuth: true
 dashboard:
   publicURL: localhost
   enabled: false
+  clientID: ""
+  oauthClientSecret: ""
+  logs:
+    debug: false
 
 # The autoscaler is enabled by default
 # Learn more: 
