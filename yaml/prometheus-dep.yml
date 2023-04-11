@@ -18,7 +18,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "134634a261553daef79d649d79b207a01ed4ff2394ad60bb6a01a8435d66bf9e"
+        checksum/prometheus-config: "b578fa1ca526a86eb12c973a59242e25aee6d28062271f2fb64eccfa0c614a19"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -26,7 +26,7 @@ spec:
         resources:
             requests:
               memory: 512Mi
-        image: prom/prometheus:v2.42.0
+        image: prom/prometheus:v2.43.0
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
