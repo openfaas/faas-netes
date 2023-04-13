@@ -1,3 +1,5 @@
+# This should usually be disabled and is only required for testing
+
 {{- if .Values.openfaasPro }}
 apiVersion: v1
 kind: Service
@@ -18,7 +20,7 @@ spec:
   ports:
     - name: http
       port: 8081
-      targetPort: http
+      targetPort: 8081
       protocol: TCP
   selector:
     app: gateway
