@@ -14,13 +14,5 @@ spec:
       port: 8080
       targetPort: 8080
       protocol: TCP
-    - name: provider
-      port: 8081
-      targetPort: 8081
-      protocol: TCP
-    - name: provider
-      port: 8081
-      targetPort: http
-      protocol: TCP
   selector:
     app: gateway
