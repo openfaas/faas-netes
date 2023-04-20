@@ -85,8 +85,10 @@ spec:
           value: {{ .Values.dashboard.publicURL }}
         - name: jwt_mount_path
           value: /var/secrets/dashboard-jwt
-        - name: write_debug
-          value: {{ .Values.dashboard.logs.debug | quote }}
+        - name: "debug"
+          value: "{{ .Values.dashboard.logs.debug }}"
+        - name: "log_encoding"
+          value: "{{ .Values.dashboard.logs.format }}"
         {{- if .Values.oidcAuthPlugin.enabled }}
         - name: issuer_key_path
           value: "/var/secrets/issuer-key/issuer.key"
