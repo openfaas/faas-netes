@@ -58,6 +58,7 @@ dashboard:
   enabled: false
   logs:
     debug: false
+    format: "console"
   resources:
     requests:
       memory: "128Mi"
