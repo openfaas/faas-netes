@@ -1,0 +1,26 @@
+{{- if .Values.jetstreamQueueWorker.pprof }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: queue-worker
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+{{- if .Values.gatewayExternal.annotations }}
+  annotations: {{ toYaml .Values.gatewayExternal.annotations | nindent 4 }}
+{{- end }}
+  name: queue-worker-pprof
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: {{ .Values.serviceType }}
+  ports:
+    - name: pprof
+      port: 6060
+      protocol: TCP
+      targetPort: 6060
+  selector:
+    app: queue-worker
+  {{- end }}
