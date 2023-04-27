@@ -291,8 +291,7 @@ ingress:
       serviceName: gateway
       servicePort: 8080
       path: /
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  annotations: {}
   tls:
   # Secrets must be manually created in the namespace.
 
