@@ -35,10 +35,19 @@ spec:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
         image: {{ .Values.jetstreamQueueWorker.image }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.jetstreamQueueWorker.pprof }}
+        ports:
+        - name: pprof
+          containerPort: 6060
+          protocol: TCP
+        {{- end }}
         command:
           - "jetstream-queue-worker"
           {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
+          {{- end }}
+          {{- if .Values.jetstreamQueueWorker.pprof }}
+          - "-pprof=true"
           {{- end }}
         env:
         {{- if .Values.nats.external.enabled }}

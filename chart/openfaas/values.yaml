@@ -192,6 +192,9 @@ jetstreamQueueWorker:
     debug: false
     format: "console"
 
+  # Set pprof to listen on port 6000 to debug issues
+  pprof: false
+
 # OpenFaaS Pro
 # The values for queueWorkerPro are merged with those under
 # the "queueWorker" section
