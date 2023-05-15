@@ -85,9 +85,13 @@ spec:
                   type: array
                   items:
                     type: string
+            status:
+              description: FunctionStatus defines the observed state of a Function
+              type: object
       served: true
       storage: true
-      subresources: {}
+      subresources:
+        status: {}
 status:
   acceptedNames:
     kind: ""

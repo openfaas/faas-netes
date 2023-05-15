@@ -9,6 +9,7 @@ import (
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:printcolumn:name="Image",type=string,JSONPath=`.spec.image`
+// +kubebuilder:subresource:status
 
 // Function describes an OpenFaaS function
 type Function struct {
@@ -16,6 +17,9 @@ type Function struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec FunctionSpec `json:"spec"`
+
+	// +optional
+	Status FunctionStatus `json:"status"`
 }
 
 // FunctionSpec is the spec for a Function resource
@@ -41,6 +45,10 @@ type FunctionSpec struct {
 	Requests *FunctionResources `json:"requests,omitempty"`
 	// +optional
 	ReadOnlyRootFilesystem bool `json:"readOnlyRootFilesystem"`
+}
+
+// FunctionStatus defines the observed state of a Function
+type FunctionStatus struct {
 }
 
 // FunctionResources is used to set CPU and memory limits and requests
