@@ -146,10 +146,10 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.9
+  image: ghcr.io/openfaasltd/faas-netes:0.3.1
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.9
+  image: ghcr.io/openfaasltd/faas-netes:0.3.1
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.7
@@ -157,11 +157,11 @@ faasnetes:
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
   readinessProbe:
-    initialDelaySeconds: 2
+    initialDelaySeconds: 0
     timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
     periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
   livenessProbe:
-    initialDelaySeconds: 2
+    initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
   resources:
