@@ -24,7 +24,7 @@ spec:
         resources:
             requests:
               memory: 120Mi
-        image: nats-streaming:0.25.3
+        image: nats-streaming:0.25.4
         imagePullPolicy: Always
         ports:
         - containerPort: 4222
