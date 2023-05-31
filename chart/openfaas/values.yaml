@@ -102,7 +102,7 @@ oidcAuthPlugin:
   securityContext: true
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.2.13
+  image: ghcr.io/openfaasltd/gateway:0.2.15
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.26.3
@@ -146,10 +146,10 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.8
+  image: ghcr.io/openfaasltd/faas-netes:0.2.9
 
 operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.2.8
+  image: ghcr.io/openfaasltd/faas-netes:0.2.9
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.7
@@ -182,7 +182,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.6
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.9
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -237,7 +237,7 @@ queueWorker:
 # monitoring and auto-scaling components
 # both components
 prometheus:
-  image: prom/prometheus:v2.43.0
+  image: prom/prometheus:v2.44.0
   create: true
   resources:
     requests:
@@ -256,7 +256,7 @@ alertmanager:
 stan:
   # Image used for the NATS Streaming when using the deprecated 
   # support in the Community Edition (CE)
-  image: nats-streaming:0.25.3
+  image: nats-streaming:0.25.4
 
 # NATS (required for async)
 nats:
@@ -271,12 +271,12 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.9.15
+  image: nats:2.9.17
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
     enabled: false
-    image: natsio/prometheus-nats-exporter:0.10.1
+    image: natsio/prometheus-nats-exporter:0.11.0
   resources:
     requests:
       memory: "120Mi"
