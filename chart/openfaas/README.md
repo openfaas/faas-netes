@@ -485,9 +485,12 @@ yaml) |
 | `faasnetes.livenessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated  | `2` |
 | `faasnetes.livenessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
 | `faasnetes.livenessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
+| `faasnetes.livenessProbe.failureThreshold` | After a [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) fails failureThreshold times in a row, Kubernetes considers that the overall check has failed. | `3 `|
 | `faasnetes.readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated | `2` |
 | `faasnetes.readinessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
 | `faasnetes.readinessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
+| `faasnetes.readinessProbe.successThreshold` | Minimum consecutive successes for the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) to be considered successful after having failed. | `1` |
+| `faasnetes.readinessProbe.failureThreshold` | After a [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) fails failureThreshold times in a row, Kubernetes considers that the overall check has failed. | `3 `|
 | `faasnetes.readTimeout` | Read timeout for the faas-netes API | `""` (defaults to gateway.readTimeout)|
 | `faasnetes.resources` | Resource limits and requests for faas-netes container | See [values.yaml](./values.yaml) |
 | `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |

@@ -227,12 +227,18 @@ spec:
             value: "{{ .Values.faasnetes.readinessProbe.timeoutSeconds }}"
           - name: readiness_probe_period_seconds
             value: "{{ .Values.faasnetes.readinessProbe.periodSeconds }}"
+          - name: readiness_probe_success_threshold
+            value: "{{ .Values.faasnetes.readinessProbe.successThreshold }}"
+          - name: readiness_probe_failure_threshold
+            value: "{{ .Values.faasnetes.readinessProbe.failureThreshold }}"
           - name: liveness_probe_initial_delay_seconds
             value: "{{ .Values.faasnetes.livenessProbe.initialDelaySeconds }}"
           - name: liveness_probe_timeout_seconds
             value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
           - name: liveness_probe_period_seconds
             value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
+          - name: liveness_probe_failure_threshold
+            value: "{{ .Values.faasnetes.livenessProbe.failureThreshold }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
         ports:
@@ -289,12 +295,18 @@ spec:
           value: "{{ .Values.faasnetes.readinessProbe.timeoutSeconds }}"
         - name: readiness_probe_period_seconds
           value: "{{ .Values.faasnetes.readinessProbe.periodSeconds }}"
+        - name: readiness_probe_success_threshold
+          value: "{{ .Values.faasnetes.readinessProbe.successThreshold }}"
+        - name: readiness_probe_failure_threshold
+          value: "{{ .Values.faasnetes.readinessProbe.failureThreshold }}"
         - name: liveness_probe_initial_delay_seconds
           value: "{{ .Values.faasnetes.livenessProbe.initialDelaySeconds }}"
         - name: liveness_probe_timeout_seconds
           value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
         - name: liveness_probe_period_seconds
           value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
+        - name: liveness_probe_failure_threshold
+          value: "{{ .Values.faasnetes.livenessProbe.failureThreshold }}"
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
         volumeMounts:
