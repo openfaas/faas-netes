@@ -473,27 +473,32 @@ yaml) |
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `faasnetes.httpProbe` | Use a httpProbe instead of exec | `true` |
 | `faasnetes.image` | Container image used for provider API | See [values.yaml](./values.yaml) |
-| `faasnetes.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
-| `faasnetes.livenessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated  | `2` |
-| `faasnetes.livenessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
-| `faasnetes.livenessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
-| `faasnetes.livenessProbe.failureThreshold` | After a [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) fails failureThreshold times in a row, Kubernetes considers that the overall check has failed. | `3 `|
-| `faasnetes.readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated | `2` |
-| `faasnetes.readinessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
-| `faasnetes.readinessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
-| `faasnetes.readinessProbe.successThreshold` | Minimum consecutive successes for the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) to be considered successful after having failed. | `1` |
-| `faasnetes.readinessProbe.failureThreshold` | After a [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) fails failureThreshold times in a row, Kubernetes considers that the overall check has failed. | `3 `|
 | `faasnetes.readTimeout` | Read timeout for the faas-netes API | `""` (defaults to gateway.readTimeout)|
 | `faasnetes.resources` | Resource limits and requests for faas-netes container | See [values.yaml](./values.yaml) |
-| `faasnetes.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
 | `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `""` (defaults to gateway.writeTimeout) |
 | `faasnetesPro.image` | Container image used for faas-netes when `openfaasPro=true` | See [values.yaml](./values.yaml) |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
 | `operator.resources` | Resource limits and requests for openfaas-operator containers | See [values.yaml](./values.yaml) |
 | `operatorPro.image` | Container image used for the openfaas-operator when `openfaasPro=true` | See [values.yaml](./values.yaml) |
+
+### Functions
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `functions.httpProbe` | Use a httpProbe instead of exec | `true` |
+| `functions.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
+| `functions.livenessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated  | `2` |
+| `functions.livenessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
+| `functions.livenessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
+| `functions.livenessProbe.failureThreshold` | After a [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) fails failureThreshold times in a row, Kubernetes considers that the overall check has failed. | `3 `|
+| `functions.readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated | `2` |
+| `functions.readinessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
+| `functions.readinessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |
+| `functions.readinessProbe.successThreshold` | Minimum consecutive successes for the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) to be considered successful after having failed. | `1` |
+| `functions.readinessProbe.failureThreshold` | After a [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) fails failureThreshold times in a row, Kubernetes considers that the overall check has failed. | `3 `|
+| `functions.setNonRootUser` | Force all function containers to run with user id `12000` | `false` |
 
 ### Autoscaler (OpenFaaS Pro)
 

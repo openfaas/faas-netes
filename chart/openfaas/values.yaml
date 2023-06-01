@@ -151,8 +151,8 @@ faasnetesPro:
 operatorPro:
   image: ghcr.io/openfaasltd/faas-netes:0.3.1
 
-faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.7
+
+functions:
   imagePullPolicy: "Always"    # Image pull policy for deployed functions
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
@@ -160,10 +160,16 @@ faasnetes:
     initialDelaySeconds: 0
     timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
     periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    successThreshold: 1
+    failureThreshold: 3
   livenessProbe:
     initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    failureThreshold: 3
+  
+faasnetes:
+  image: ghcr.io/openfaas/faas-netes:0.16.7
   resources:
     requests:
       memory: "120Mi"

@@ -216,29 +216,29 @@ spec:
           - name: write_timeout
             value: "{{ $providerWriteTimeout }}"
           - name: image_pull_policy
-            value: {{ .Values.faasnetes.imagePullPolicy | quote }}
+            value: {{ .Values.functions.imagePullPolicy | quote }}
           - name: http_probe
-            value: "{{ .Values.faasnetes.httpProbe }}"
+            value: "{{ .Values.functions.httpProbe }}"
           - name: set_nonroot_user
-            value: "{{ .Values.faasnetes.setNonRootUser }}"
+            value: "{{ .Values.functions.setNonRootUser }}"
           - name: readiness_probe_initial_delay_seconds
-            value: "{{ .Values.faasnetes.readinessProbe.initialDelaySeconds }}"
+            value: "{{ .Values.functions.readinessProbe.initialDelaySeconds }}"
           - name: readiness_probe_timeout_seconds
-            value: "{{ .Values.faasnetes.readinessProbe.timeoutSeconds }}"
+            value: "{{ .Values.functions.readinessProbe.timeoutSeconds }}"
           - name: readiness_probe_period_seconds
-            value: "{{ .Values.faasnetes.readinessProbe.periodSeconds }}"
+            value: "{{ .Values.functions.readinessProbe.periodSeconds }}"
           - name: readiness_probe_success_threshold
-            value: "{{ .Values.faasnetes.readinessProbe.successThreshold }}"
+            value: "{{ .Values.functions.readinessProbe.successThreshold }}"
           - name: readiness_probe_failure_threshold
-            value: "{{ .Values.faasnetes.readinessProbe.failureThreshold }}"
+            value: "{{ .Values.functions.readinessProbe.failureThreshold }}"
           - name: liveness_probe_initial_delay_seconds
-            value: "{{ .Values.faasnetes.livenessProbe.initialDelaySeconds }}"
+            value: "{{ .Values.functions.livenessProbe.initialDelaySeconds }}"
           - name: liveness_probe_timeout_seconds
-            value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
+            value: "{{ .Values.functions.livenessProbe.timeoutSeconds }}"
           - name: liveness_probe_period_seconds
-            value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
+            value: "{{ .Values.functions.livenessProbe.periodSeconds }}"
           - name: liveness_probe_failure_threshold
-            value: "{{ .Values.faasnetes.livenessProbe.failureThreshold }}"
+            value: "{{ .Values.functions.livenessProbe.failureThreshold }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
         ports:
@@ -284,29 +284,29 @@ spec:
         - name: write_timeout
           value: "{{ $providerWriteTimeout }}"
         - name: image_pull_policy
-          value: {{ .Values.faasnetes.imagePullPolicy | quote }}
+          value: {{ .Values.functions.imagePullPolicy | quote }}
         - name: http_probe
-          value: "{{ .Values.faasnetes.httpProbe }}"
+          value: "{{ .Values.functions.httpProbe }}"
         - name: set_nonroot_user
-          value: "{{ .Values.faasnetes.setNonRootUser }}"
+          value: "{{ .Values.functions.setNonRootUser }}"
         - name: readiness_probe_initial_delay_seconds
-          value: "{{ .Values.faasnetes.readinessProbe.initialDelaySeconds }}"
+          value: "{{ .Values.functions.readinessProbe.initialDelaySeconds }}"
         - name: readiness_probe_timeout_seconds
-          value: "{{ .Values.faasnetes.readinessProbe.timeoutSeconds }}"
+          value: "{{ .Values.functions.readinessProbe.timeoutSeconds }}"
         - name: readiness_probe_period_seconds
-          value: "{{ .Values.faasnetes.readinessProbe.periodSeconds }}"
+          value: "{{ .Values.functions.readinessProbe.periodSeconds }}"
         - name: readiness_probe_success_threshold
-          value: "{{ .Values.faasnetes.readinessProbe.successThreshold }}"
+          value: "{{ .Values.functions.readinessProbe.successThreshold }}"
         - name: readiness_probe_failure_threshold
-          value: "{{ .Values.faasnetes.readinessProbe.failureThreshold }}"
+          value: "{{ .Values.functions.readinessProbe.failureThreshold }}"
         - name: liveness_probe_initial_delay_seconds
-          value: "{{ .Values.faasnetes.livenessProbe.initialDelaySeconds }}"
+          value: "{{ .Values.functions.livenessProbe.initialDelaySeconds }}"
         - name: liveness_probe_timeout_seconds
-          value: "{{ .Values.faasnetes.livenessProbe.timeoutSeconds }}"
+          value: "{{ .Values.functions.livenessProbe.timeoutSeconds }}"
         - name: liveness_probe_period_seconds
-          value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
+          value: "{{ .Values.functions.livenessProbe.periodSeconds }}"
         - name: liveness_probe_failure_threshold
-          value: "{{ .Values.faasnetes.livenessProbe.failureThreshold }}"
+          value: "{{ .Values.functions.livenessProbe.failureThreshold }}"
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
         volumeMounts:
