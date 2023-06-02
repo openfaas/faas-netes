@@ -487,7 +487,7 @@ yaml) |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |
 | `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
 | `operator.resources` | Resource limits and requests for openfaas-operator containers | See [values.yaml](./values.yaml) |
-| `operatorPro.image` | Container image used for the openfaas-operator when `openfaasPro=true` | See [values.yaml](./values.yaml) |
+| `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
 
 ### Functions
 
