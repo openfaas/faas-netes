@@ -220,6 +220,12 @@ In addition:
 * Set the `imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available
 * Explore alternatives such as not scaling to absolute zero, and using async calls which do not show the cold start
 
+For OpenFaaS CE, both liveness and readiness probes are set to:
+
+* `initialDelaySeconds: 2`
+* `timeoutSeconds: 1`
+* `periodSeconds: 2`
+
 ### Verify the installation
 
 Once all the services are up and running, log into your gateway using the OpenFaaS CLI. This will cache your credentials into your `~/.openfaas/config.yml` file.
