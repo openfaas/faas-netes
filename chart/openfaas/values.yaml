@@ -4,7 +4,12 @@ functionNamespace: openfaas-fn  # Default namespace for functions
 openfaasPro: false
 
 httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS core components
-clusterRole: false            # Set to true for multiple namespaces, pro scaler and CPU/RAM metrics in OpenFaaS REST API
+
+# set clusterRole: true for:
+## Multiple-namespaces
+## CPU/RAM metrics in OpenFaaS API
+clusterRole: false
+
 createCRDs: true              # Set to false if applying CRDs in another way
 
 basic_auth: true              # Authentication for core components, no good reason to disable this
@@ -25,81 +30,21 @@ psp: false
 # image pull policy for openfaas components, can change to `IfNotPresent` in offline env
 openfaasImagePullPolicy: "Always"
 
-# openfaasPro components, which require openfaasPro=true
-# clusterRole is also recommended for collecting CPU/RAM metrics for Pro add-ons
-
-# OpenFaaS Pro
-## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
-## Includes: scale to zero
-autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.2.9
-  replicas: 1
-  enabled: true
-  resources:
-    requests:
-      memory: "128Mi"
-    limits:
-      memory: "256Mi"
-  # When disableHorizontalScaling is set to true, then the autoscaler will 
-  # only scale to zero, without scaling replicas between the defined Min and Max
-  # count for the function
-  disableHorizontalScaling: false
-
-# OpenFaaS Pro
-## To use with port-forwarding, set publicURL to 
-## http://127.0.0.1
-dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.2.1
-  publicURL: https://dashboard.example.com
-  # Name of signing key secret for sessions.
-  # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
-  signingKeySecret: ""
-  replicas: 1
-  enabled: false
-  resources:
-    requests:
-      memory: "128Mi"
-    limits:
-      memory: "256Mi"
-
-# OpenFaaS Pro
-## faasIdler is the original scale to zero feature, but must
-## now be set "enabled=false" when using the new autoscaler
-## since it handles scaling to zero
-faasIdler:
-  image: ghcr.io/openfaasltd/faas-idler:0.5.3
-  replicas: 1
-  enabled: false
-  inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
-  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
-  readOnly: false                       # When set to true, no functions are scaled to zero
-  writeDebug: false                     # Write additional debug information
-  resources:
-    requests:
-      memory: "64Mi"
-
-# OpenFaaS Pro
-## OIDC plugin for authentication on the OpenFaaS REST API
-oidcAuthPlugin:
-  enabled: false
-  verbose: false # debug setting
-  provider: "" # Put "azure" if using Azure as a provider, leave blank for any other provider.
-  insecureTLS: false
-  scopes: "openid profile email"
-  openidURL: "https://example.eu.auth0.com/.well-known/openid-configuration"
-  audience: https://example.eu.auth0.com/api/v2/
-  welcomePageURL: https://gateway.openfaas.example.com
-  cookieDomain: ".openfaas.example.com"
-  baseHost: "https://auth.openfaas.example.com"
-  clientSecret: ""
-  clientID: ""
-  resources:
-    requests:
-      memory: "120Mi"
-      cpu: "50m"
-  replicas: 1
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.5
-  securityContext: true
+functions:
+  imagePullPolicy: "Always"    # Image pull policy for deployed functions
+  httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
+  setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
+  readinessProbe:
+    initialDelaySeconds: 0
+    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
+    periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    successThreshold: 1
+    failureThreshold: 3
+  livenessProbe:
+    initialDelaySeconds: 0
+    timeoutSeconds: 1
+    periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    failureThreshold: 3
 
 gatewayPro:
   image: ghcr.io/openfaasltd/gateway:0.2.15
@@ -148,40 +93,22 @@ gateway:
 faasnetesPro:
   image: ghcr.io/openfaasltd/faas-netes:0.3.1
 
-operatorPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.3.1
-
-
-functions:
-  imagePullPolicy: "Always"    # Image pull policy for deployed functions
-  httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
-  setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
-  readinessProbe:
-    initialDelaySeconds: 0
-    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
-    periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
-    successThreshold: 1
-    failureThreshold: 3
-  livenessProbe:
-    initialDelaySeconds: 0
-    timeoutSeconds: 1
-    periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
-    failureThreshold: 3
   
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.7
+  image: ghcr.io/openfaas/faas-netes:0.16.8
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaas/faas-netes:0.16.7
+  image: ghcr.io/openfaasltd/faas-netes:0.3.1
   create: false
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
+
 
 # The values for jetstreamQueueWorker are merged with those under
 # the "queueWorkerPro" and "queueWorker" section
@@ -240,8 +167,40 @@ queueWorker:
       memory: "120Mi"
       cpu: "50m"
 
-# monitoring and auto-scaling components
-# both components
+# OpenFaaS Pro
+## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
+## Includes: scale to zero
+autoscaler:
+  image: ghcr.io/openfaasltd/autoscaler:0.2.9
+  replicas: 1
+  enabled: true
+  resources:
+    requests:
+      memory: "128Mi"
+    limits:
+      memory: "256Mi"
+  # When disableHorizontalScaling is set to true, then the autoscaler will 
+  # only scale to zero, without scaling replicas between the defined Min and Max
+  # count for the function
+  disableHorizontalScaling: false
+
+# OpenFaaS Pro
+## To use with port-forwarding, set publicURL to 
+## http://127.0.0.1
+dashboard:
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.2.1
+  publicURL: https://dashboard.example.com
+  # Name of signing key secret for sessions.
+  # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
+  signingKeySecret: ""
+  replicas: 1
+  enabled: false
+  resources:
+    requests:
+      memory: "128Mi"
+    limits:
+      memory: "256Mi"
+
 prometheus:
   image: prom/prometheus:v2.44.0
   create: true
@@ -249,6 +208,48 @@ prometheus:
     requests:
       memory: "512Mi"
   annotations: {}
+
+
+# OpenFaaS Pro
+## faasIdler is the original scale to zero feature, but must
+## now be set "enabled=false" when using the new autoscaler
+## since it handles scaling to zero
+faasIdler:
+  image: ghcr.io/openfaasltd/faas-idler:0.5.3
+  replicas: 1
+  enabled: false
+  inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
+  reconcileInterval: 2m                 # The interval between each attempt to scale functions to zero
+  readOnly: false                       # When set to true, no functions are scaled to zero
+  writeDebug: false                     # Write additional debug information
+  resources:
+    requests:
+      memory: "64Mi"
+
+# OpenFaaS Pro
+## OIDC plugin for authentication on the OpenFaaS REST API
+## this component will be deprecated in the future in favour of
+## OpenFaaS for Enterprises IAM
+oidcAuthPlugin:
+  enabled: false
+  verbose: false # debug setting
+  provider: "" # Put "azure" if using Azure as a provider, leave blank for any other provider.
+  insecureTLS: false
+  scopes: "openid profile email"
+  openidURL: "https://example.eu.auth0.com/.well-known/openid-configuration"
+  audience: https://example.eu.auth0.com/api/v2/
+  welcomePageURL: https://gateway.openfaas.example.com
+  cookieDomain: ".openfaas.example.com"
+  baseHost: "https://auth.openfaas.example.com"
+  clientSecret: ""
+  clientID: ""
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
+  replicas: 1
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.5.5
+  securityContext: true
 
 alertmanager:
   image: prom/alertmanager:v0.25.0
