@@ -34,13 +34,6 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 	httpProbe := ftypes.ParseBoolValue(hasEnv.Getenv("http_probe"), false)
 	setNonRootUser := ftypes.ParseBoolValue(hasEnv.Getenv("set_nonroot_user"), false)
 
-	readinessProbeInitialDelaySeconds := ftypes.ParseIntValue(hasEnv.Getenv("readiness_probe_initial_delay_seconds"), 3)
-	readinessProbeTimeoutSeconds := ftypes.ParseIntValue(hasEnv.Getenv("readiness_probe_timeout_seconds"), 1)
-	readinessProbePeriodSeconds := ftypes.ParseIntValue(hasEnv.Getenv("readiness_probe_period_seconds"), 10)
-
-	livenessProbeInitialDelaySeconds := ftypes.ParseIntValue(hasEnv.Getenv("liveness_probe_initial_delay_seconds"), 3)
-	livenessProbeTimeoutSeconds := ftypes.ParseIntValue(hasEnv.Getenv("liveness_probe_timeout_seconds"), 1)
-	livenessProbePeriodSeconds := ftypes.ParseIntValue(hasEnv.Getenv("liveness_probe_period_seconds"), 10)
 	imagePullPolicy := ftypes.ParseString(hasEnv.Getenv("image_pull_policy"), "Always")
 
 	if !validPullPolicyOptions[imagePullPolicy] {
@@ -52,14 +45,6 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 
 	cfg.HTTPProbe = httpProbe
 	cfg.SetNonRootUser = setNonRootUser
-
-	cfg.ReadinessProbeInitialDelaySeconds = readinessProbeInitialDelaySeconds
-	cfg.ReadinessProbeTimeoutSeconds = readinessProbeTimeoutSeconds
-	cfg.ReadinessProbePeriodSeconds = readinessProbePeriodSeconds
-
-	cfg.LivenessProbeInitialDelaySeconds = livenessProbeInitialDelaySeconds
-	cfg.LivenessProbeTimeoutSeconds = livenessProbeTimeoutSeconds
-	cfg.LivenessProbePeriodSeconds = livenessProbePeriodSeconds
 
 	cfg.ImagePullPolicy = imagePullPolicy
 
@@ -76,30 +61,6 @@ type BootstrapConfig struct {
 	// SetNonRootUser determines if the Function is deployed with a overridden
 	// non-root user id.  Currently this is preconfigured to the uid 12000.
 	SetNonRootUser bool
-
-	// ReadinessProbeInitialDelaySeconds controls the value of
-	// ReadinessProbeInitialDelaySeconds in the Function  ReadinessProbe
-	ReadinessProbeInitialDelaySeconds int
-
-	// ReadinessProbeTimeoutSeconds controls the value of
-	// ReadinessProbeTimeoutSeconds in the Function  ReadinessProbe
-	ReadinessProbeTimeoutSeconds int
-
-	// ReadinessProbePeriodSeconds controls the value of
-	// ReadinessProbePeriodSeconds in the Function  ReadinessProbe
-	ReadinessProbePeriodSeconds int
-
-	// LivenessProbeInitialDelaySeconds controls the value of
-	// LivenessProbeInitialDelaySeconds in the Function  LivenessProbe
-	LivenessProbeInitialDelaySeconds int
-
-	// LivenessProbeTimeoutSeconds controls the value of
-	// LivenessProbeTimeoutSeconds in the Function  LivenessProbe
-	LivenessProbeTimeoutSeconds int
-
-	// LivenessProbePeriodSeconds controls the value of
-	// LivenessProbePeriodSeconds in the Function  LivenessProbe
-	LivenessProbePeriodSeconds int
 
 	// ImagePullPolicy controls the ImagePullPolicy set on the Function Deployment.
 	ImagePullPolicy string
@@ -133,11 +94,5 @@ func (c BootstrapConfig) Fprint(verbose bool) {
 		log.Printf("HTTPProbe: %v\n", c.HTTPProbe)
 		log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
 		log.Printf("SetNonRootUser: %v\n", c.SetNonRootUser)
-		log.Printf("ReadinessProbeInitialDelaySeconds: %d\n", c.ReadinessProbeInitialDelaySeconds)
-		log.Printf("ReadinessProbeTimeoutSeconds: %d\n", c.ReadinessProbeTimeoutSeconds)
-		log.Printf("ReadinessProbePeriodSeconds: %d\n", c.ReadinessProbePeriodSeconds)
-		log.Printf("LivenessProbeInitialDelaySeconds: %d\n", c.LivenessProbeInitialDelaySeconds)
-		log.Printf("LivenessProbeTimeoutSeconds: %d\n", c.LivenessProbeTimeoutSeconds)
-		log.Printf("LivenessProbePeriodSeconds: %d\n", c.LivenessProbePeriodSeconds)
 	}
 }
