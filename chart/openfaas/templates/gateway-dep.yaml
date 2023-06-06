@@ -213,9 +213,7 @@ spec:
         command:
           - ./faas-netes
           - -operator=true
-        {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
-        {{- end }}
         env:
           - name: port
             value: "8081"
