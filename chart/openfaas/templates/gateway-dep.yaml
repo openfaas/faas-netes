@@ -197,9 +197,7 @@ spec:
         command:
           - ./faas-netes
           - -operator=true
-        {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
-        {{- end }}
         env:
           - name: port
             value: "8081"
@@ -240,12 +238,10 @@ spec:
         ports:
         - containerPort: 8081
           protocol: TCP
-        {{- if .Values.openfaasPro }}
         volumeMounts:
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
-        {{- end }}
 
       {{- else }}
       - name: faas-netes
