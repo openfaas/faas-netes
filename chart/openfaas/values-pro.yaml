@@ -13,8 +13,7 @@ iam:
   # The primary issuer represents how users log into the OpenFaaS dashboard and via the CLI
   primaryIssuer: "https://alexellis.eu.auth0.com/"
 
-  # systemIssuer represents the issuer for the OpenFaaS system components
-  systemIssuer: "https://gw.exit.o6s.io"
+  
 
 
 gateway:
@@ -107,12 +106,3 @@ nats:
 
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
-
-oidcAuthPlugin:
-  enabled: false
-  verbose: true # debug setting
-  openidURL: "https://alexellis.eu.auth0.com/.well-known/openid-configuration"
-  audience: https://alexellis.eu.auth0.com/api/v2/
-  baseHost: "https://gw.exit.o6s.io"
-  image: ttl.sh/alexellis/openfaas-oidc-plugin:0.5.5-10-g269b915-dirty
-

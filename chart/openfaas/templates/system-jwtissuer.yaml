@@ -1,4 +1,4 @@
-{{- if .Values.oidcAuthPlugin.enabled }}
+{{- if .Values.iam.enabled }}
 ---
 
 apiVersion: openfaas.com/v1
@@ -7,9 +7,9 @@ metadata:
   name: system
   namespace: openfaas
 spec:
-  iss: {{.Values.iam.systemIssuer}}
+  iss: {{.Values.iam.systemIssuer.url}}
   aud:
-  - {{.Values.iam.systemIssuer}}
+  - {{.Values.iam.systemIssuer.url}}
   tokenExpiry: "30m"
 
 {{- end }}

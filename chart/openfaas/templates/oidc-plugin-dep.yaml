@@ -1,7 +1,6 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.oidcAuthPlugin.enabled }}
+{{- if .Values.iam.enabled }}
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,17 +87,11 @@ spec:
         {{- if .Values.oidcAuthPlugin.verbose }}
         - "-verbose=true"
         {{- end }}
-        - "-provider={{- .Values.oidcAuthPlugin.provider}}"
         env:
         - name: base_host
-          value: "{{- .Values.iam.systemIssuer}}"
+          value: "{{- .Values.iam.systemIssuer.url}}"
         - name: port
           value: "8080"
-        - name: public_key_path
-          value: ""
-        - name: audience
-          value: "{{- .Values.oidcAuthPlugin.audience}}"
-
         - name: insecure_tls
           value: "{{- .Values.oidcAuthPlugin.insecureTLS}}"
         - name: issuer_key_path
