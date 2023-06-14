@@ -536,7 +536,18 @@ yaml) |
 | `queueWorkerPro.maxRetryWait` | Maximum amount of time to wait between retries | `120s` |
 | `queueWorkerPro.printResponseBody` | Print the function response body | `false` |
 | `queueWorkerPro.printRequestBody` | Print the request body| `false` |
-| `stan.image` | Container image used for NATS streaming server | See [values.yaml](./values.yaml) | 
+| `stan.image` | Container image used for NATS streaming server | See [values.yaml](./values.yaml) |
+
+### Access and Identity Management (IAM)
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `iam.enabled` | Enable Access and Identity Management for OpenFaaS | `false` |
+| `iam.systemIssuer.url` | URL for the OpenFaaS OpenID connect provider for system components. This is usually the public url of the gateway | `https://gateway.example.com` |
+| `iam.dashboardIssuer.url` | URL of the OpenID connect provider to used by the dashboard | `https://example.eu.auth0.com` |
+| `iam.dashboardIssuer.clientId` | OAuth Client Id for the dashboard | `""` |
+| `iam.dashboardIssuer.clientSecret` | Name of the Kubernetes secret that contains the OAuth client secret for the dashboard | `""` |
+| `iam.dashboardIssuer.scopes` | OpenID Connect (OIDC) scopes for the dashboard | `[]` |
 
 ### Dashboard (OpenFaaS Pro)
 
@@ -551,25 +562,15 @@ yaml) |
 | `dashboard.resources` | Resource limits and requests for the dashboard pods | See [values.yaml](./values.yaml) |
 | `dashboard.signingKeySecret` | Name of signing key secret for sessions. Can be left blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging. | `""` |
 
-### OIDC / SSO (OpenFaaS Pro)
+### OIDC/SSO (OpenFaaS Pro)
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `oidcAuthPlugin.audience` | Audience URL | `https://example.eu.auth0.com/api/v2/` |
-| `oidcAuthPlugin.baseHost` | Base host | `https://auth.openfaas.example.com` |
-| `oidcAuthPlugin.clientID` | Client ID | `""` |
-| `oidcAuthPlugin.clientSecret` | Client secret | `""` |
-| `oidcAuthPlugin.cookieDomain` | Cookie domain | `.openfaas.example.com` |
-| `oidcAuthPlugin.enabled` | Enable the oidc-auth-plugin | `false` |
 | `oidcAuthPlugin.image` | Container image used for the oidc-auth-plugin | See [values.yaml](./values.yaml) |
 | `oidcAuthPlugin.insecureTLS` | Enable insecure TLS | `false` |
-| `oidcAuthPlugin.openidURL` | OpenID Connect metadata URL| `https://example.eu.auth0.com/.well-known/openid-configuration` |
-| `oidcAuthPlugin.provider` | Name of the auth provider. Leave blank, or set to "azure" if using Azure AD | `""`|
 | `oidcAuthPlugin.replicas` | Replicas of the oidc-auth-plugin | `1` |
 | `oidcAuthPlugin.resources` | Resource limits and requests for the oidc-auth-plugin containers | See [values.yaml](./values.yaml) |
-| `oidcAuthPlugin.scopes` | OpenID Connect (OIDC) scopes | `openid profile email` |
 | `oidcAuthPlugin.verbose` | Enable verbose logging | `false` |
-| `oidcAuthPlugin.welcomePageURL` | Welcome page URL | `https://gateway.openfaas.example.com` |
 
 ### faas-idler (OpenFaaS Pro)
 

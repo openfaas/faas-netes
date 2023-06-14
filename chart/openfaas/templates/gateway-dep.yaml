@@ -31,7 +31,7 @@ spec:
       serviceAccountName: {{ .Release.Name }}-controller
       {{- end }}
       volumes:
-      {{- if .Values.oidcAuthPlugin.enabled }}
+      {{- if .Values.iam.enabled }}
       - name: issuer-key
         secret:
           secretName: issuer-key
@@ -175,7 +175,7 @@ spec:
         {{- if .Values.gateway.authProxyUrl }}
         - name: auth_proxy_url
           value: "{{.Values.gateway.authProxyUrl}}"
-        {{- else if .Values.oidcAuthPlugin.enabled }}
+        {{- else if .Values.iam.enabled }}
         - name: auth_proxy_url
           value: "http://oidc-plugin.{{ .Release.Namespace }}:8080"
         {{- end }}
@@ -247,11 +247,11 @@ spec:
             value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
-          {{- if .Values.oidcAuthPlugin.enabled }}
+          {{- if .Values.iam.enabled }}
           - name: issuer_key_path
             value: "/var/secrets/issuer-key/issuer.key"
           - name: system_issuer
-            value: {{ .Values.iam.systemIssuer | quote }}
+            value: {{ .Values.iam.systemIssuer.url | quote }}
           {{- end }}
           {{- if .Values.basic_auth }}
           - name: basic_auth
@@ -263,7 +263,7 @@ spec:
         - containerPort: 8081
           protocol: TCP
         volumeMounts:
-        {{- if .Values.oidcAuthPlugin.enabled }}
+        {{- if .Values.iam.enabled }}
         - name: issuer-key
           readOnly: true
           mountPath: "/var/secrets/issuer-key"
@@ -331,11 +331,11 @@ spec:
           value: "{{ .Values.faasnetes.livenessProbe.periodSeconds }}"
         - name: cluster_role
           value: "{{ .Values.clusterRole }}"
-        {{- if .Values.oidcAuthPlugin.enabled }}
+        {{- if .Values.iam.enabled }}
         - name: issuer_key_path
           value: "/var/secrets/issuer-key/issuer.key"
         - name: system_issuer
-          value: {{ .Values.iam.systemIssuer | quote }}
+          value: {{ .Values.iam.systemIssuer.url | quote }}
         {{- end }}
         {{- if .Values.basic_auth }}
         - name: basic_auth
@@ -344,7 +344,7 @@ spec:
           value: "/var/secrets"
         {{- end }}
         volumeMounts:
-        {{- if .Values.oidcAuthPlugin.enabled }}
+        {{- if .Values.iam.enabled }}
         - name: issuer-key
           readOnly: true
           mountPath: "/var/secrets/issuer-key"
