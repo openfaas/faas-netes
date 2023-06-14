@@ -1,5 +1,5 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
-{{- if .Values.oidcAuthPlugin.enabled }}
+{{- if .Values.iam.enabled }}
 ---
 
 apiVersion: v1

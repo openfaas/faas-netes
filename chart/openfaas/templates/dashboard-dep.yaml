@@ -29,14 +29,14 @@ spec:
           secretName: basic-auth
       {{- end }}
 
-      {{- if .Values.oidcAuthPlugin.enabled }}
+      {{- if .Values.iam.enabled }}
       - name: aes-key
         secret:
           secretName: aes-key
-      {{- if .Values.dashboard.oauthClientSecret }}
+      {{- if .Values.iam.dashboardIssuer.clientSecret }}
       - name: oauth-client-secret
         secret:
-          secretName: {{ .Values.dashboard.oauthClientSecret }}
+          secretName: {{ .Values.iam.dashboardIssuer.clientSecret }}
       {{- end }}
       {{- end }}
 
@@ -89,15 +89,17 @@ spec:
           value: "{{ .Values.dashboard.logs.debug }}"
         - name: "log_encoding"
           value: "{{ .Values.dashboard.logs.format }}"
-        {{- if .Values.oidcAuthPlugin.enabled }}
+        {{- if .Values.iam.enabled }}
         - name: issuer_key_path
           value: "/var/secrets/issuer-key/issuer.key"
         - name: primary_issuer
-          value: {{ .Values.iam.primaryIssuer | quote }}
+          value: {{ .Values.iam.dashboardIssuer.url | quote }}
         - name: system_issuer
-          value: {{ .Values.iam.systemIssuer | quote }}
+          value: {{ .Values.iam.systemIssuer.url | quote }}
         - name: oauth_client_id
-          value: {{ .Values.dashboard.clientID }}
+          value: {{ .Values.iam.dashboardIssuer.clientId }}
+        - name: oauth_scopes
+          value: "{{join "," .Values.iam.dashboardIssuer.scopes }}"
         {{- end }}
 
         volumeMounts:
@@ -107,7 +109,7 @@ spec:
           mountPath: "/var/secrets/gateway"
         {{- end }}
 
-        {{- if .Values.oidcAuthPlugin.enabled }}
+        {{- if .Values.iam.enabled }}
         - name: aes-key
           readOnly: true
           mountPath: "/var/secrets/dashboard-aes"
