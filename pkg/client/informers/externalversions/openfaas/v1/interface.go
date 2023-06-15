@@ -16,8 +16,14 @@ import (
 type Interface interface {
 	// Functions returns a FunctionInformer.
 	Functions() FunctionInformer
+	// JwtIssuers returns a JwtIssuerInformer.
+	JwtIssuers() JwtIssuerInformer
+	// Policies returns a PolicyInformer.
+	Policies() PolicyInformer
 	// Profiles returns a ProfileInformer.
 	Profiles() ProfileInformer
+	// Roles returns a RoleInformer.
+	Roles() RoleInformer
 }
 
 type version struct {
@@ -36,7 +42,22 @@ func (v *version) Functions() FunctionInformer {
 	return &functionInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
+// JwtIssuers returns a JwtIssuerInformer.
+func (v *version) JwtIssuers() JwtIssuerInformer {
+	return &jwtIssuerInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Policies returns a PolicyInformer.
+func (v *version) Policies() PolicyInformer {
+	return &policyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
 // Profiles returns a ProfileInformer.
 func (v *version) Profiles() ProfileInformer {
 	return &profileInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Roles returns a RoleInformer.
+func (v *version) Roles() RoleInformer {
+	return &roleInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

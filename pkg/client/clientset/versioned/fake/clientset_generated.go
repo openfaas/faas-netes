@@ -64,7 +64,10 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 	return c.tracker
 }
 
-var _ clientset.Interface = &Clientset{}
+var (
+	_ clientset.Interface = &Clientset{}
+	_ testing.FakeClient  = &Clientset{}
+)
 
 // OpenfaasV1 retrieves the OpenfaasV1Client
 func (c *Clientset) OpenfaasV1() openfaasv1.OpenfaasV1Interface {

@@ -22,8 +22,20 @@ func (c *FakeOpenfaasV1) Functions(namespace string) v1.FunctionInterface {
 	return &FakeFunctions{c, namespace}
 }
 
+func (c *FakeOpenfaasV1) JwtIssuers(namespace string) v1.JwtIssuerInterface {
+	return &FakeJwtIssuers{c, namespace}
+}
+
+func (c *FakeOpenfaasV1) Policies(namespace string) v1.PolicyInterface {
+	return &FakePolicies{c, namespace}
+}
+
 func (c *FakeOpenfaasV1) Profiles(namespace string) v1.ProfileInterface {
 	return &FakeProfiles{c, namespace}
+}
+
+func (c *FakeOpenfaasV1) Roles(namespace string) v1.RoleInterface {
+	return &FakeRoles{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

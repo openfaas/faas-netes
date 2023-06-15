@@ -45,8 +45,14 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 	// Group=openfaas.com, Version=v1
 	case v1.SchemeGroupVersion.WithResource("functions"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Functions().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("jwtissuers"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().JwtIssuers().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("policies"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Policies().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("profiles"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Profiles().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("roles"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Roles().Informer()}, nil
 
 	}
 
