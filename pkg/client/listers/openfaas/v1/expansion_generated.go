@@ -16,6 +16,22 @@ type FunctionListerExpansion interface{}
 // FunctionNamespaceLister.
 type FunctionNamespaceListerExpansion interface{}
 
+// JwtIssuerListerExpansion allows custom methods to be added to
+// JwtIssuerLister.
+type JwtIssuerListerExpansion interface{}
+
+// JwtIssuerNamespaceListerExpansion allows custom methods to be added to
+// JwtIssuerNamespaceLister.
+type JwtIssuerNamespaceListerExpansion interface{}
+
+// PolicyListerExpansion allows custom methods to be added to
+// PolicyLister.
+type PolicyListerExpansion interface{}
+
+// PolicyNamespaceListerExpansion allows custom methods to be added to
+// PolicyNamespaceLister.
+type PolicyNamespaceListerExpansion interface{}
+
 // ProfileListerExpansion allows custom methods to be added to
 // ProfileLister.
 type ProfileListerExpansion interface{}
@@ -23,3 +39,11 @@ type ProfileListerExpansion interface{}
 // ProfileNamespaceListerExpansion allows custom methods to be added to
 // ProfileNamespaceLister.
 type ProfileNamespaceListerExpansion interface{}
+
+// RoleListerExpansion allows custom methods to be added to
+// RoleLister.
+type RoleListerExpansion interface{}
+
+// RoleNamespaceListerExpansion allows custom methods to be added to
+// RoleNamespaceLister.
+type RoleNamespaceListerExpansion interface{}

@@ -10,4 +10,10 @@ package v1
 
 type FunctionExpansion interface{}
 
+type JwtIssuerExpansion interface{}
+
+type PolicyExpansion interface{}
+
 type ProfileExpansion interface{}
+
+type RoleExpansion interface{}
