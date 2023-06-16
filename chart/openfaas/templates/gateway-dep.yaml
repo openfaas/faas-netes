@@ -1,6 +1,11 @@
 {{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
 {{- $providerReadTimeout :=  default .Values.gateway.readTimeout .Values.faasnetes.readTimeout }}
 {{- $providerWriteTimeout :=  default .Values.gateway.writeTimeout .Values.faasnetes.writeTimeout }}
+
+{{- if and .Values.operator.create (not .Values.openfaasPro) }}
+  {{- fail "enabling 'operator.create' is only supported for OpenFaaS Pro" }}
+{{- end }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
