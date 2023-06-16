@@ -10,11 +10,13 @@ package fake
 
 import (
 	"context"
+	json "encoding/json"
+	"fmt"
 
-	openfaasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/openfaas/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -26,25 +28,25 @@ type FakeJwtIssuers struct {
 	ns   string
 }
 
-var jwtissuersResource = schema.GroupVersionResource{Group: "openfaas.com", Version: "v1", Resource: "jwtissuers"}
+var jwtissuersResource = v1.SchemeGroupVersion.WithResource("jwtissuers")
 
-var jwtissuersKind = schema.GroupVersionKind{Group: "openfaas.com", Version: "v1", Kind: "JwtIssuer"}
+var jwtissuersKind = v1.SchemeGroupVersion.WithKind("JwtIssuer")
 
 // Get takes name of the jwtIssuer, and returns the corresponding jwtIssuer object, and an error if there is any.
-func (c *FakeJwtIssuers) Get(ctx context.Context, name string, options v1.GetOptions) (result *openfaasv1.JwtIssuer, err error) {
+func (c *FakeJwtIssuers) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.JwtIssuer, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(jwtissuersResource, c.ns, name), &openfaasv1.JwtIssuer{})
+		Invokes(testing.NewGetAction(jwtissuersResource, c.ns, name), &v1.JwtIssuer{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*openfaasv1.JwtIssuer), err
+	return obj.(*v1.JwtIssuer), err
 }
 
 // List takes label and field selectors, and returns the list of JwtIssuers that match those selectors.
-func (c *FakeJwtIssuers) List(ctx context.Context, opts v1.ListOptions) (result *openfaasv1.JwtIssuerList, err error) {
+func (c *FakeJwtIssuers) List(ctx context.Context, opts metav1.ListOptions) (result *v1.JwtIssuerList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewListAction(jwtissuersResource, jwtissuersKind, c.ns, opts), &openfaasv1.JwtIssuerList{})
+		Invokes(testing.NewListAction(jwtissuersResource, jwtissuersKind, c.ns, opts), &v1.JwtIssuerList{})
 
 	if obj == nil {
 		return nil, err
@@ -54,8 +56,8 @@ func (c *FakeJwtIssuers) List(ctx context.Context, opts v1.ListOptions) (result 
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &openfaasv1.JwtIssuerList{ListMeta: obj.(*openfaasv1.JwtIssuerList).ListMeta}
-	for _, item := range obj.(*openfaasv1.JwtIssuerList).Items {
+	list := &v1.JwtIssuerList{ListMeta: obj.(*v1.JwtIssuerList).ListMeta}
+	for _, item := range obj.(*v1.JwtIssuerList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)
 		}
@@ -64,57 +66,79 @@ func (c *FakeJwtIssuers) List(ctx context.Context, opts v1.ListOptions) (result 
 }
 
 // Watch returns a watch.Interface that watches the requested jwtIssuers.
-func (c *FakeJwtIssuers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakeJwtIssuers) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(jwtissuersResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a jwtIssuer and creates it.  Returns the server's representation of the jwtIssuer, and an error, if there is any.
-func (c *FakeJwtIssuers) Create(ctx context.Context, jwtIssuer *openfaasv1.JwtIssuer, opts v1.CreateOptions) (result *openfaasv1.JwtIssuer, err error) {
+func (c *FakeJwtIssuers) Create(ctx context.Context, jwtIssuer *v1.JwtIssuer, opts metav1.CreateOptions) (result *v1.JwtIssuer, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(jwtissuersResource, c.ns, jwtIssuer), &openfaasv1.JwtIssuer{})
+		Invokes(testing.NewCreateAction(jwtissuersResource, c.ns, jwtIssuer), &v1.JwtIssuer{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*openfaasv1.JwtIssuer), err
+	return obj.(*v1.JwtIssuer), err
 }
 
 // Update takes the representation of a jwtIssuer and updates it. Returns the server's representation of the jwtIssuer, and an error, if there is any.
-func (c *FakeJwtIssuers) Update(ctx context.Context, jwtIssuer *openfaasv1.JwtIssuer, opts v1.UpdateOptions) (result *openfaasv1.JwtIssuer, err error) {
+func (c *FakeJwtIssuers) Update(ctx context.Context, jwtIssuer *v1.JwtIssuer, opts metav1.UpdateOptions) (result *v1.JwtIssuer, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(jwtissuersResource, c.ns, jwtIssuer), &openfaasv1.JwtIssuer{})
+		Invokes(testing.NewUpdateAction(jwtissuersResource, c.ns, jwtIssuer), &v1.JwtIssuer{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*openfaasv1.JwtIssuer), err
+	return obj.(*v1.JwtIssuer), err
 }
 
 // Delete takes name of the jwtIssuer and deletes it. Returns an error if one occurs.
-func (c *FakeJwtIssuers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (c *FakeJwtIssuers) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(jwtissuersResource, c.ns, name), &openfaasv1.JwtIssuer{})
+		Invokes(testing.NewDeleteActionWithOptions(jwtissuersResource, c.ns, name, opts), &v1.JwtIssuer{})
 
 	return err
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakeJwtIssuers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *FakeJwtIssuers) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(jwtissuersResource, c.ns, listOpts)
 
-	_, err := c.Fake.Invokes(action, &openfaasv1.JwtIssuerList{})
+	_, err := c.Fake.Invokes(action, &v1.JwtIssuerList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched jwtIssuer.
-func (c *FakeJwtIssuers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *openfaasv1.JwtIssuer, err error) {
+func (c *FakeJwtIssuers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.JwtIssuer, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(jwtissuersResource, c.ns, name, pt, data, subresources...), &openfaasv1.JwtIssuer{})
+		Invokes(testing.NewPatchSubresourceAction(jwtissuersResource, c.ns, name, pt, data, subresources...), &v1.JwtIssuer{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*openfaasv1.JwtIssuer), err
+	return obj.(*v1.JwtIssuer), err
+}
+
+// Apply takes the given apply declarative configuration, applies it and returns the applied jwtIssuer.
+func (c *FakeJwtIssuers) Apply(ctx context.Context, jwtIssuer *openfaasv1.JwtIssuerApplyConfiguration, opts metav1.ApplyOptions) (result *v1.JwtIssuer, err error) {
+	if jwtIssuer == nil {
+		return nil, fmt.Errorf("jwtIssuer provided to Apply must not be nil")
+	}
+	data, err := json.Marshal(jwtIssuer)
+	if err != nil {
+		return nil, err
+	}
+	name := jwtIssuer.Name
+	if name == nil {
+		return nil, fmt.Errorf("jwtIssuer.Name must be provided to Apply")
+	}
+	obj, err := c.Fake.
+		Invokes(testing.NewPatchSubresourceAction(jwtissuersResource, c.ns, *name, types.ApplyPatchType, data), &v1.JwtIssuer{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*v1.JwtIssuer), err
 }

@@ -10,9 +10,12 @@ package v1
 
 import (
 	"context"
+	json "encoding/json"
+	"fmt"
 	"time"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/openfaas/v1"
 	scheme "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/scheme"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
@@ -36,6 +39,7 @@ type ProfileInterface interface {
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.ProfileList, error)
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
 	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Profile, err error)
+	Apply(ctx context.Context, profile *openfaasv1.ProfileApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Profile, err error)
 	ProfileExpansion
 }
 
@@ -161,6 +165,32 @@ func (c *profiles) Patch(ctx context.Context, name string, pt types.PatchType, d
 		Name(name).
 		SubResource(subresources...).
 		VersionedParams(&opts, scheme.ParameterCodec).
+		Body(data).
+		Do(ctx).
+		Into(result)
+	return
+}
+
+// Apply takes the given apply declarative configuration, applies it and returns the applied profile.
+func (c *profiles) Apply(ctx context.Context, profile *openfaasv1.ProfileApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Profile, err error) {
+	if profile == nil {
+		return nil, fmt.Errorf("profile provided to Apply must not be nil")
+	}
+	patchOpts := opts.ToPatchOptions()
+	data, err := json.Marshal(profile)
+	if err != nil {
+		return nil, err
+	}
+	name := profile.Name
+	if name == nil {
+		return nil, fmt.Errorf("profile.Name must be provided to Apply")
+	}
+	result = &v1.Profile{}
+	err = c.client.Patch(types.ApplyPatchType).
+		Namespace(c.ns).
+		Resource("profiles").
+		Name(*name).
+		VersionedParams(&patchOpts, scheme.ParameterCodec).
 		Body(data).
 		Do(ctx).
 		Into(result)

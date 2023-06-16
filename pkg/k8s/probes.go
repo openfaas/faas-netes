@@ -19,10 +19,10 @@ type FunctionProbes struct {
 // MakeProbes returns the liveness and readiness probes
 // by default the health check runs `cat /tmp/.lock` every ten seconds
 func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbes, error) {
-	var handler corev1.Handler
+	var handler corev1.ProbeHandler
 
 	if f.Config.HTTPProbe {
-		handler = corev1.Handler{
+		handler = corev1.ProbeHandler{
 			HTTPGet: &corev1.HTTPGetAction{
 				Path: "/_/health",
 				Port: intstr.IntOrString{
@@ -33,7 +33,7 @@ func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbe
 		}
 	} else {
 		path := filepath.Join("/tmp/", ".lock")
-		handler = corev1.Handler{
+		handler = corev1.ProbeHandler{
 			Exec: &corev1.ExecAction{
 				Command: []string{"cat", path},
 			},
@@ -42,7 +42,7 @@ func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbe
 
 	probes := FunctionProbes{}
 	probes.Readiness = &corev1.Probe{
-		Handler:             handler,
+		ProbeHandler:        handler,
 		InitialDelaySeconds: f.Config.ReadinessProbe.InitialDelaySeconds,
 		TimeoutSeconds:      int32(f.Config.ReadinessProbe.TimeoutSeconds),
 		PeriodSeconds:       int32(f.Config.ReadinessProbe.PeriodSeconds),
@@ -51,7 +51,7 @@ func (f *FunctionFactory) MakeProbes(r types.FunctionDeployment) (*FunctionProbe
 	}
 
 	probes.Liveness = &corev1.Probe{
-		Handler:             handler,
+		ProbeHandler:        handler,
 		InitialDelaySeconds: f.Config.LivenessProbe.InitialDelaySeconds,
 		TimeoutSeconds:      int32(f.Config.LivenessProbe.TimeoutSeconds),
 		PeriodSeconds:       int32(f.Config.LivenessProbe.PeriodSeconds),
