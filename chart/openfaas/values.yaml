@@ -91,7 +91,7 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.1
+  image: ghcr.io/openfaasltd/faas-netes:0.4.2
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.9
@@ -101,7 +101,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.1
+  image: ghcr.io/openfaasltd/faas-netes:0.4.2
   create: false
   resources:
     requests:
@@ -206,7 +206,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.0
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.1
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
