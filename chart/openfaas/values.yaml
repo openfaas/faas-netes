@@ -227,7 +227,10 @@ iam:
     url: https://example.eu.auth0.com
     clientId: ""
     clientSecret: ""
-    scopes: []
+    scopes:
+      - openid
+      - profile
+      - email
 
 prometheus:
   image: prom/prometheus:v2.44.0

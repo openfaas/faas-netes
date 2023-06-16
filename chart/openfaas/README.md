@@ -561,7 +561,7 @@ yaml) |
 | `iam.dashboardIssuer.url` | URL of the OpenID connect provider to used by the dashboard | `https://example.eu.auth0.com` |
 | `iam.dashboardIssuer.clientId` | OAuth Client Id for the dashboard | `""` |
 | `iam.dashboardIssuer.clientSecret` | Name of the Kubernetes secret that contains the OAuth client secret for the dashboard | `""` |
-| `iam.dashboardIssuer.scopes` | OpenID Connect (OIDC) scopes for the dashboard | `[]` |
+| `iam.dashboardIssuer.scopes` | OpenID Connect (OIDC) scopes for the dashboard | `[openid, email, profile]` |
 
 ### Dashboard (OpenFaaS Pro)
 
