@@ -35,3 +35,4 @@ jwt_key
 jwt_key.pub
 /*.pid
 *.txt
+/.secrets/*
