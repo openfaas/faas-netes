@@ -41,7 +41,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.26.3
+        image: ghcr.io/openfaas/gateway:0.26.4
         imagePullPolicy: Always
         command:
           - ./gateway
@@ -114,7 +114,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.16.8
+        image: ghcr.io/openfaas/faas-netes:0.16.9
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true

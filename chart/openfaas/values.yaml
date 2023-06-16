@@ -91,17 +91,17 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.0
+  image: ghcr.io/openfaasltd/faas-netes:0.4.1
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.8
+  image: ghcr.io/openfaas/faas-netes:0.16.9
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.0
+  image: ghcr.io/openfaasltd/faas-netes:0.4.1
   create: false
   resources:
     requests:
