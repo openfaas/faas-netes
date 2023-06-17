@@ -23,11 +23,22 @@ func (f *FunctionFactory) ConfigureContainerUserID(deployment *appsv1.Deployment
 		functionUser = &userID
 	}
 
-	if deployment.Spec.Template.Spec.Containers[0].SecurityContext == nil {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{}
+	if deployment == nil {
+		return
 	}
 
-	deployment.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser = functionUser
+	idx, container := FunctionContainer(*deployment)
+	if idx < 0 {
+		// function container not found
+		// and there is nothing we can do at this point
+		return
+	}
+
+	if container.SecurityContext == nil {
+		deployment.Spec.Template.Spec.Containers[idx].SecurityContext = &corev1.SecurityContext{}
+	}
+
+	deployment.Spec.Template.Spec.Containers[idx].SecurityContext.RunAsUser = functionUser
 }
 
 // ConfigureReadOnlyRootFilesystem will create or update the required settings and mounts to ensure
@@ -39,10 +50,21 @@ func (f *FunctionFactory) ConfigureContainerUserID(deployment *appsv1.Deployment
 //
 // This method is safe for both create and update operations.
 func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request types.FunctionDeployment, deployment *appsv1.Deployment) {
-	if deployment.Spec.Template.Spec.Containers[0].SecurityContext != nil {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
+	if deployment == nil {
+		return
+	}
+
+	idx, container := FunctionContainer(*deployment)
+	if idx < 0 {
+		// function container not found
+		// and there is nothing we can do at this point
+		return
+	}
+
+	if container.SecurityContext != nil {
+		deployment.Spec.Template.Spec.Containers[idx].SecurityContext.ReadOnlyRootFilesystem = &request.ReadOnlyRootFilesystem
 	} else {
-		deployment.Spec.Template.Spec.Containers[0].SecurityContext = &corev1.SecurityContext{
+		deployment.Spec.Template.Spec.Containers[idx].SecurityContext = &corev1.SecurityContext{
 			ReadOnlyRootFilesystem: &request.ReadOnlyRootFilesystem,
 		}
 	}
@@ -50,8 +72,8 @@ func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request types.Function
 	existingVolumes := removeVolume("temp", deployment.Spec.Template.Spec.Volumes)
 	deployment.Spec.Template.Spec.Volumes = existingVolumes
 
-	existingMounts := removeVolumeMount("temp", deployment.Spec.Template.Spec.Containers[0].VolumeMounts)
-	deployment.Spec.Template.Spec.Containers[0].VolumeMounts = existingMounts
+	existingMounts := removeVolumeMount("temp", container.VolumeMounts)
+	deployment.Spec.Template.Spec.Containers[idx].VolumeMounts = existingMounts
 
 	if request.ReadOnlyRootFilesystem {
 		deployment.Spec.Template.Spec.Volumes = append(
@@ -64,7 +86,7 @@ func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request types.Function
 			},
 		)
 
-		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(
+		deployment.Spec.Template.Spec.Containers[idx].VolumeMounts = append(
 			existingMounts,
 			corev1.VolumeMount{
 				Name:      "temp",
