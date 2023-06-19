@@ -113,7 +113,7 @@ spec:
         - name: aes-key
           readOnly: true
           mountPath: "/var/secrets/dashboard-aes"
-        {{- if .Values.dashboard.oauthClientSecret }}
+        {{- if .Values.iam.dashboardIssuer.clientSecret}}
         - name: oauth-client-secret
           readOnly: true
           mountPath: "/var/secrets/dashboard-oauth"
