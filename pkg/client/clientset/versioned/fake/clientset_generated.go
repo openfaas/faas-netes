@@ -10,6 +10,8 @@ package fake
 
 import (
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
+	iamv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/iam/v1"
+	fakeiamv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/iam/v1/fake"
 	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/openfaas/v1"
 	fakeopenfaasv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/openfaas/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -68,6 +70,11 @@ var (
 	_ clientset.Interface = &Clientset{}
 	_ testing.FakeClient  = &Clientset{}
 )
+
+// IamV1 retrieves the IamV1Client
+func (c *Clientset) IamV1() iamv1.IamV1Interface {
+	return &fakeiamv1.FakeIamV1{Fake: &c.Fake}
+}
 
 // OpenfaasV1 retrieves the OpenfaasV1Client
 func (c *Clientset) OpenfaasV1() openfaasv1.OpenfaasV1Interface {

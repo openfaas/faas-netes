@@ -1,6 +1,6 @@
 {{- if .Values.iam.enabled }}
 
-apiVersion: openfaas.com/v1
+apiVersion: iam.openfaas.com/v1
 kind: Policy
 metadata:
   name: root-user

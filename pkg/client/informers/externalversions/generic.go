@@ -11,7 +11,8 @@ package externalversions
 import (
 	"fmt"
 
-	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
+	v1 "github.com/openfaas/faas-netes/pkg/apis/iam/v1"
+	openfaasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -42,17 +43,19 @@ func (f *genericInformer) Lister() cache.GenericLister {
 // TODO extend this to unknown resources with a client pool
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
-	// Group=openfaas.com, Version=v1
-	case v1.SchemeGroupVersion.WithResource("functions"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Functions().Informer()}, nil
+	// Group=iam.openfaas.com, Version=v1
 	case v1.SchemeGroupVersion.WithResource("jwtissuers"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().JwtIssuers().Informer()}, nil
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Iam().V1().JwtIssuers().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("policies"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Policies().Informer()}, nil
-	case v1.SchemeGroupVersion.WithResource("profiles"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Profiles().Informer()}, nil
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Iam().V1().Policies().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("roles"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Roles().Informer()}, nil
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Iam().V1().Roles().Informer()}, nil
+
+		// Group=openfaas.com, Version=v1
+	case openfaasv1.SchemeGroupVersion.WithResource("functions"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Functions().Informer()}, nil
+	case openfaasv1.SchemeGroupVersion.WithResource("profiles"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Openfaas().V1().Profiles().Informer()}, nil
 
 	}
 

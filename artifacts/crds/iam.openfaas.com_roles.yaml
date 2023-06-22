@@ -1,0 +1,69 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.4
+  name: roles.iam.openfaas.com
+spec:
+  group: iam.openfaas.com
+  names:
+    kind: Role
+    listKind: RoleList
+    plural: roles
+    singular: role
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .spec.principal
+          name: Principal
+          type: string
+        - jsonPath: .spec.condition
+          name: Condition
+          type: string
+        - jsonPath: .spec.policy
+          name: Policy
+          type: string
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: Role is used to define a role for a function
+          type: object
+          required:
+            - spec
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: RoleSpec maps a number of principals or attributes within a JWT to a set of policies.
+              type: object
+              properties:
+                condition:
+                  description: 'Condition is a set of conditions that can be used instead of a principal to match against claims within a JWT { "StringLike": { "jwt:https://my-identity-provider.com#sub-id": [ "1234567890", "0987654321" ], } }'
+                  type: object
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                policy:
+                  description: Policy is a list of named policies which apply to this role
+                  type: array
+                  items:
+                    type: string
+                principal:
+                  description: Principal is the principal that the role applies to i.e. { "jwt:sub":["repo:alexellis/minty:ref:refs/heads/master"] }
+                  type: object
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+      served: true
+      storage: true
+      subresources: {}

@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
+	iamv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/iam/v1"
 	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/typed/openfaas/v1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
@@ -20,13 +21,20 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
+	IamV1() iamv1.IamV1Interface
 	OpenfaasV1() openfaasv1.OpenfaasV1Interface
 }
 
 // Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
+	iamV1      *iamv1.IamV1Client
 	openfaasV1 *openfaasv1.OpenfaasV1Client
+}
+
+// IamV1 retrieves the IamV1Client
+func (c *Clientset) IamV1() iamv1.IamV1Interface {
+	return c.iamV1
 }
 
 // OpenfaasV1 retrieves the OpenfaasV1Client
@@ -78,6 +86,10 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
+	cs.iamV1, err = iamv1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
 	cs.openfaasV1, err = openfaasv1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
@@ -103,6 +115,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
+	cs.iamV1 = iamv1.New(c)
 	cs.openfaasV1 = openfaasv1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)

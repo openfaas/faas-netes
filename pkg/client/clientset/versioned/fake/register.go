@@ -9,6 +9,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 package fake
 
 import (
+	iamv1 "github.com/openfaas/faas-netes/pkg/apis/iam/v1"
 	openfaasv1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -21,6 +22,7 @@ var scheme = runtime.NewScheme()
 var codecs = serializer.NewCodecFactory(scheme)
 
 var localSchemeBuilder = runtime.SchemeBuilder{
+	iamv1.AddToScheme,
 	openfaasv1.AddToScheme,
 }
 
