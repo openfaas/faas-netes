@@ -22,6 +22,13 @@ rules:
       - "openfaas.com"
     resources:
       - "profiles"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+  - apiGroups:
+      - "iam.openfaas.com"
+    resources:
       - "jwtissuers"
       - "policies"
       - "roles"

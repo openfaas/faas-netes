@@ -1,7 +1,7 @@
 {{- if .Values.iam.enabled }}
 ---
 
-apiVersion: openfaas.com/v1
+apiVersion: iam.openfaas.com/v1
 kind: JwtIssuer
 metadata:
   name: system

@@ -1,0 +1,64 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.4
+  name: jwtissuers.iam.openfaas.com
+spec:
+  group: iam.openfaas.com
+  names:
+    kind: JwtIssuer
+    listKind: JwtIssuerList
+    plural: jwtissuers
+    singular: jwtissuer
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .spec.iss
+          name: Issuer
+          type: string
+        - jsonPath: .spec.aud
+          name: Audience
+          type: string
+        - jsonPath: .spec.tokenExpiry
+          name: Expiry
+          type: string
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: JwtIssuer is used to define a JWT issuer for a function
+          type: object
+          required:
+            - spec
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: JwtIssuerSpec is the spec for a JwtIssuer resource
+              type: object
+              required:
+                - aud
+                - iss
+              properties:
+                aud:
+                  description: Audience is the intended audience of the JWT, at times, like with Auth0 this is the client ID of the app, and not our validating server
+                  type: array
+                  items:
+                    type: string
+                iss:
+                  description: Issuer is the issuer of the JWT
+                  type: string
+                issInternal:
+                  description: IssuerInternal provides an alternative URL to use to download the public key for this issuer. It's useful for the system issuer.
+                  type: string
+                tokenExpiry:
+                  type: string
+      served: true
+      storage: true
+      subresources: {}

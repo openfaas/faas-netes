@@ -14,6 +14,7 @@ import (
 	time "time"
 
 	versioned "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
+	iam "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/iam"
 	internalinterfaces "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/internalinterfaces"
 	openfaas "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/openfaas"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -233,7 +234,12 @@ type SharedInformerFactory interface {
 	// client.
 	InformerFor(obj runtime.Object, newFunc internalinterfaces.NewInformerFunc) cache.SharedIndexInformer
 
+	Iam() iam.Interface
 	Openfaas() openfaas.Interface
+}
+
+func (f *sharedInformerFactory) Iam() iam.Interface {
+	return iam.New(f, f.namespace, f.tweakListOptions)
 }
 
 func (f *sharedInformerFactory) Openfaas() openfaas.Interface {
