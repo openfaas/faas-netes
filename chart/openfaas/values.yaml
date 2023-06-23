@@ -91,17 +91,17 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.2
+  image: ghcr.io/openfaasltd/faas-netes:0.4.3
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.9
+  image: ghcr.io/openfaas/faas-netes:0.16.10
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.2
+  image: ghcr.io/openfaasltd/faas-netes:0.4.3
   create: false
   resources:
     requests:
@@ -206,7 +206,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.1
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.2
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
@@ -269,7 +269,7 @@ alertmanager:
 stan:
   # Image used for the NATS Streaming when using the deprecated 
   # support in the Community Edition (CE)
-  image: nats-streaming:0.25.4
+  image: nats-streaming:0.25.5
 
 # NATS (required for async)
 nats:
@@ -284,7 +284,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.9.18
+  image: nats:2.9.19
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
