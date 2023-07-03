@@ -8,10 +8,9 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- include "connector.labels" . | nindent 4 }}
   name: {{ template "connector.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-
 spec:
   replicas: 1
   selector:
@@ -26,62 +25,84 @@ spec:
         name: {{ template "connector.name" . }}
         component: cron-connector
     spec:
-      containers:
-      - name: cron-connector
-        {{- if .Values.openfaasPro }}
-        image: {{ .Values.pro.image }}
-        {{- else }}
-        image: {{ .Values.image }}
-        {{- end }}
-        {{- if .Values.openfaasPro }}
-        command:
-          - "/usr/bin/cron-connector"
-          - "-license-file=/var/secrets/license/license"
-        {{- end }}
-        env:
-          - name: gateway_url
-            value: {{ .Values.gatewayURL | quote }}
-          - name: asynchronous_invocation
-            value: {{ .Values.asyncInvocation | quote }}
-          - name: content_type
-            value: {{ .Values.contentType | quote }}
-          {{- if .Values.basicAuth }}
-          - name: basic_auth
-            value: "true"
-          - name: secret_mount_path
-            value: "/var/secrets"
-          {{- end }}
-          {{- if .Values.rebuildInterval }}
-          - name: rebuild_interval
-            value: {{ .Values.rebuildInterval | quote }}
-          {{- end }}
-          - name: "debug"
-            value: "{{ .Values.logs.debug }}"
-          - name: "log_encoding"
-            value: "{{ .Values.logs.format }}"
-        volumeMounts:
-        {{- if .Values.openfaasPro }}
-          - name: license
-            readOnly: true
-            mountPath: "/var/secrets/license"
-        {{- end }}
-          - name: auth
-            readOnly: true
-            mountPath: "/var/secrets/"
-        resources:
-          {{- .Values.resources | toYaml | nindent 10 }}
-      {{- if .Values.basicAuth }}
+      {{- if .Values.iam.enabled }}
+      serviceAccountName: {{ template "connector.fullname" . }}
+      {{- end }}
       volumes:
-      - name: auth
-        secret:
-          secretName: basic-auth
-      {{- if .Values.openfaasPro }}
-      - name: license
-        secret:
-          secretName: openfaas-license
-      {{- end }}
-
-      {{- end }}
+        {{- if .Values.basicAuth }}
+        - name: auth
+          secret:
+            secretName: basic-auth
+        {{- end }}
+        {{- if .Values.openfaasPro }}
+        - name: license
+          secret:
+            secretName: openfaas-license
+        {{- end }}
+        {{- if .Values.iam.enabled }}
+        - name: openfaas-token
+          projected:
+            sources:
+            - serviceAccountToken:
+                path: openfaas-token
+                expirationSeconds: 7200
+                audience: {{ .Values.iam.systemIssuer.url }}
+        {{- end }}
+      containers:
+        - name: cron-connector
+          {{- if .Values.openfaasPro }}
+          image: {{ .Values.pro.image }}
+          {{- else }}
+          image: {{ .Values.image }}
+          {{- end }}
+          {{- if .Values.openfaasPro }}
+          command:
+            - "/usr/bin/cron-connector"
+            - "-license-file=/var/secrets/license/license"
+          {{- end }}
+          env:
+            - name: gateway_url
+              value: {{ .Values.gatewayURL | quote }}
+            - name: asynchronous_invocation
+              value: {{ .Values.asyncInvocation | quote }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
+            {{- if .Values.basicAuth }}
+            - name: basic_auth
+              value: "true"
+            - name: secret_mount_path
+              value: "/var/secrets"
+            {{- end }}
+            {{- if .Values.rebuildInterval }}
+            - name: rebuild_interval
+              value: {{ .Values.rebuildInterval | quote }}
+            {{- end }}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
+            {{- if .Values.iam.enabled }}
+            - name: system_issuer
+              value: {{ .Values.iam.systemIssuer.url }}
+            {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 10 }}
+          volumeMounts:
+            {{- if .Values.openfaasPro }}
+            - name: license
+              readOnly: true
+              mountPath: "/var/secrets/license"
+            {{- end }}
+            {{- if .Values.basicAuth }}
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+            {{- end }}
+            {{- if .Values.iam.enabled }}
+            - name: openfaas-token
+              readOnly: true
+              mountPath: /var/secrets/tokens
+            {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

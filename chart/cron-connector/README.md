@@ -18,6 +18,21 @@ arkade install cron-connector
 arkade install cron-connector --set openfaasPro=true
 ```
 
+## Configure for token-based auth with [OpenFaaS IAM](https://docs.openfaas.com/openfaas-pro/iam/overview/)
+
+```yaml
+openfaasPro: true
+
+iam:
+  enabled: true
+  systemIssuer:
+  # URL for the OpenFaaS OpenID connect provider for system components. This is usually the public url of the gateway.
+    url: "https://gateway.example.com"
+  # Scope of access for the connector.
+  # By default it operates on all function namespaces.
+  resource: ["*"]
+```
+
 ## Install via the published chart
 
 - Add OpenFaaS chart repo to helm and install using the following command.
@@ -53,6 +68,10 @@ helm upgrade --install --namespace openfaas \
 | `gatewayURL`        | The URL for the API gateway.                                                 | `"http://gateway.openfaas:8080"` |
 | `basicAuth`         | Enable or disable basic auth                                                 | `true`                           |
 | `asyncInvocation`   | Invoke via the asynchronous function endpoint                                | `false`                          |
+| `iam.enabled` | Enable token-based authentication for use with OpenFaaS IAM | `false` |
+| `iam.systemIssuer.url` | URL for the OpenFaaS OpenID connect provider for system components. This is usually the public url of the gateway. | `"https://gateway.example.com"` |
+| `iam.resource` | Permission scope for the connecter. By default the connecter has access to all namespaces. | `["*"]` |
+
 | `contentType`       | Set a contentType for all invocations                                        | `text/plain`                     |
 | `logs.debug`        | Print debug logs (pro feature)                                               | `false`                          |
 | `logs.format`       | The log encoding format. Supported values: `json` or `console` (pro feature) | `console`                        |

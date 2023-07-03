@@ -30,3 +30,15 @@ Create chart name and version as used by the chart label.
 {{- define "connector.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "connector.labels" -}}
+helm.sh/chart: {{ include "connector.chart" . }}
+app.kubernetes.io/name: {{ include "connector.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/component: cron-connector
+app.kubernetes.io/part-of: openfaas
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}

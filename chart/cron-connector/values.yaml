@@ -5,7 +5,7 @@ gatewayURL: http://gateway.openfaas:8080
 openfaasPro: false
 
 pro:
-  image: ghcr.io/openfaasltd/cron-connector:0.1.2
+  image: ttl.sh/welteki/cron-connector-pro:0.1.2-2-gb657abe-amd64
 
 logs:
   # Log debug messages
@@ -29,6 +29,12 @@ tolerations: []
 affinity: {}
 
 basicAuth: true
+
+iam:
+  enabled: false
+  systemIssuer:
+    url: "https://gateway.example.com"
+  resource: ["*"]
 
 resources:
   requests:
