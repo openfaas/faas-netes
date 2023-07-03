@@ -1,0 +1,21 @@
+
+{{- if .Values.iam.enabled }}
+
+apiVersion: iam.openfaas.com/v1
+kind: Policy
+metadata:
+  name: {{ template "connector.fullname" . }}
+  namespace: openfaas
+  labels:
+    {{- include "connector.labels" . | nindent 4 }}
+spec:
+  statement:
+  - sid: 1-list
+    action:
+    - Function:List
+    - Namespace:List
+    effect: Allow
+    resource:
+      {{- toYaml .Values.iam.resource | nindent 6 }}
+
+{{- end }}
