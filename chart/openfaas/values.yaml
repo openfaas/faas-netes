@@ -47,7 +47,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.3.0
+  image: ghcr.io/openfaasltd/gateway:0.4.0
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.26.4
@@ -91,7 +91,7 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.4
+  image: ghcr.io/openfaasltd/faas-netes:0.4.7
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.10
@@ -101,7 +101,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.4
+  image: ghcr.io/openfaasltd/faas-netes:0.4.7
   create: false
   resources:
     requests:
@@ -114,7 +114,7 @@ operator:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.9
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.10
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -170,7 +170,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.2.9
+  image: ghcr.io/openfaasltd/autoscaler:0.3.0
   replicas: 1
   enabled: true
   resources:
@@ -206,7 +206,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.3
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.4
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
@@ -289,7 +289,7 @@ nats:
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
     enabled: false
-    image: natsio/prometheus-nats-exporter:0.11.0
+    image: natsio/prometheus-nats-exporter:0.12.0
   resources:
     requests:
       memory: "120Mi"

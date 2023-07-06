@@ -7,12 +7,12 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   statement:
-  - sid: 1-read-and-write-functions-and-secrets-cluster-wide
+  - sid: 1-full-access-cluster
     action:
-    - Function:Read
-    - Function:Admin
-    - Secret:Read
-    - Secret:Admin
+    - Function:*
+    - Secret:*
+    - Namespace:*
+    - System:*
     effect: Allow
     resource: [ "*" ]
 
