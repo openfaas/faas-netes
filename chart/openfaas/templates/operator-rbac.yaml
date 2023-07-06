@@ -138,6 +138,10 @@ rules:
   - apiGroups: [""]
     resources: ["pods", "pods/log", "namespaces", "endpoints"]
     verbs: ["get", "list", "watch"]
+# Required for namespace CRUD
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["create", "update", "delete"]
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
