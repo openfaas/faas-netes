@@ -16,6 +16,6 @@ spec:
   condition:
     StringEqual:
       jwt:iss:
-        - "https://kubernetes.default.svc.cluster.local"
+        - {{.Values.iam.kubernetesIssuer.url}}
 
 {{- end }}
