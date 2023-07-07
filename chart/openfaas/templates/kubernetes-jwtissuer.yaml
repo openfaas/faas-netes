@@ -1,0 +1,14 @@
+{{- if and .Values.iam.enabled .Values.iam.kubernetesIssuer.create }}
+
+apiVersion: iam.openfaas.com/v1
+kind: JwtIssuer
+metadata:
+  name: kubernetes
+  namespace: openfaas
+spec:
+  iss: {{.Values.iam.kubernetesIssuer.url}}
+  aud:
+  - {{.Values.iam.systemIssuer.url}}
+  tokenExpiry: {{.Values.iam.kubernetesIssuer.tokenExpiry}}
+
+{{- end }}

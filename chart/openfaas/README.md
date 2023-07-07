@@ -562,6 +562,9 @@ yaml) |
 | `iam.dashboardIssuer.clientId` | OAuth Client Id for the dashboard | `""` |
 | `iam.dashboardIssuer.clientSecret` | Name of the Kubernetes secret that contains the OAuth client secret for the dashboard | `""` |
 | `iam.dashboardIssuer.scopes` | OpenID Connect (OIDC) scopes for the dashboard | `[openid, email, profile]` |
+| `iam.kubernetesIssuer.create` | Create a JwtIssuer object for the kubernetes service account issuer | `true` |
+| `iam.kubernetesIssuer.tokenExpiry` | Expiry time of OpenFaaS access tokens exchanged for tokens issued by the Kubernetes issuer. | `2h` | 
+| `iam.kubernetesIssuer.url` | URL for the Kubernetes service account issuer. | `https://kubernetes.default.svc.cluster.local` |
 
 ### Dashboard (OpenFaaS Pro)
 

@@ -232,6 +232,12 @@ iam:
       - profile
       - email
 
+  # kubernetesIssuer represents the Kubernetes service account issuer.
+  kubernetesIssuer:
+    create: true
+    url: https://kubernetes.default.svc.cluster.local
+    tokenExpiry: 2h
+
 prometheus:
   image: prom/prometheus:v2.45.0
   create: true
