@@ -70,6 +70,7 @@ helm upgrade --install --namespace openfaas \
 | `asyncInvocation`   | Invoke via the asynchronous function endpoint                                | `false`                          |
 | `iam.enabled` | Enable token-based authentication for use with OpenFaaS IAM | `false` |
 | `iam.systemIssuer.url` | URL for the OpenFaaS OpenID connect provider for system components. This is usually the public url of the gateway. | `"https://gateway.example.com"` |
+| `iam.kubernetesIssuer.url` | URL for the Kubernetes service account issuer. | `"https://kubernetes.default.svc.cluster.local"` |
 | `iam.resource` | Permission scope for the connecter. By default the connecter has access to all namespaces. | `["*"]` |
 
 | `contentType`       | Set a contentType for all invocations                                        | `text/plain`                     |
