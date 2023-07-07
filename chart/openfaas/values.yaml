@@ -50,7 +50,7 @@ gatewayPro:
   image: ghcr.io/openfaasltd/gateway:0.4.0
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.26.4
+  image: ghcr.io/openfaas/gateway:0.26.5
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -91,7 +91,7 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.8
+  image: ghcr.io/openfaasltd/faas-netes:0.4.9
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.10
@@ -101,7 +101,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.8
+  image: ghcr.io/openfaasltd/faas-netes:0.4.9
   create: false
   resources:
     requests:
@@ -246,7 +246,7 @@ prometheus:
 ## now be set "enabled=false" when using the new autoscaler
 ## since it handles scaling to zero
 faasIdler:
-  image: ghcr.io/openfaasltd/faas-idler:0.5.3
+  image: ghcr.io/openfaasltd/faas-idler:0.5.4
   replicas: 1
   enabled: false
   inactivityDuration: 3m                # If a function is inactive for 15 minutes, it may be scaled to zero
