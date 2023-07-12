@@ -91,7 +91,7 @@ gateway:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.9
+  image: ghcr.io/openfaasltd/faas-netes:0.4.10
 
 faasnetes:
   image: ghcr.io/openfaas/faas-netes:0.16.10
@@ -101,7 +101,7 @@ faasnetes:
       cpu: "50m"
 
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.9
+  image: ghcr.io/openfaasltd/faas-netes:0.4.10
   create: false
   resources:
     requests:
@@ -187,7 +187,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.3.1
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.3.2
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
