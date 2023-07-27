@@ -15,6 +15,7 @@ import (
 	"github.com/openfaas/faas-netes/pkg/k8s"
 
 	types "github.com/openfaas/faas-provider/types"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -109,10 +110,7 @@ func updateDeploymentSpec(
 	if len(deployment.Spec.Template.Spec.Containers) > 0 {
 		deployment.Spec.Template.Spec.Containers[0].Image = request.Image
 
-		// Disabling update support to prevent unexpected mutations of deployed functions,
-		// since imagePullPolicy is now configurable. This could be reconsidered later depending
-		// on desired behavior, but will need to be updated to take config.
-		//deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = v1.PullAlways
+		deployment.Spec.Template.Spec.Containers[0].ImagePullPolicy = corev1.PullAlways
 
 		deployment.Spec.Template.Spec.Containers[0].Env = buildEnvVars(&request)
 

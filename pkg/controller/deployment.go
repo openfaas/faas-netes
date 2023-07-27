@@ -98,7 +98,7 @@ func newDeployment(
 							Ports: []corev1.ContainerPort{
 								{ContainerPort: int32(functionPort), Protocol: corev1.ProtocolTCP},
 							},
-							ImagePullPolicy: corev1.PullPolicy(factory.Factory.Config.ImagePullPolicy),
+							ImagePullPolicy: corev1.PullAlways,
 							Env:             envVars,
 							Resources:       *resources,
 							LivenessProbe:   probes.Liveness,

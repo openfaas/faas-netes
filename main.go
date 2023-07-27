@@ -115,7 +115,6 @@ func main() {
 			TimeoutSeconds:      int32(1),
 			PeriodSeconds:       int32(2),
 		},
-		ImagePullPolicy:   config.ImagePullPolicy,
 		ProfilesNamespace: config.ProfilesNamespace,
 	}
 

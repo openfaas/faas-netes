@@ -16,7 +16,6 @@ type DeploymentConfig struct {
 	HTTPProbe       bool
 	ReadinessProbe  *ProbeConfig
 	LivenessProbe   *ProbeConfig
-	ImagePullPolicy string
 	// SetNonRootUser will override the function image user to ensure that it is not root. When
 	// true, the user will set to 12000 for all functions.
 	SetNonRootUser bool

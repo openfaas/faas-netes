@@ -209,7 +209,9 @@ faasnetes:
     initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 1
+
 # redacted
+functions:
   imagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
 ```
 
@@ -217,10 +219,10 @@ In addition:
 
 * Pre-pull images on each node
 * Use an in-cluster registry to reduce the pull latency for images
-* Set the `imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available
+* Set the `functions.imagePullPolicy` to `IfNotPresent` so that the `kubelet` only pulls images which are not already available
 * Explore alternatives such as not scaling to absolute zero, and using async calls which do not show the cold start
 
-For OpenFaaS CE, both liveness and readiness probes are set to:
+For OpenFaaS CE, both liveness and readiness probes are set to, and the `PullPolicy` for functions is set to `Always`:
 
 * `initialDelaySeconds: 2`
 * `timeoutSeconds: 1`
@@ -416,7 +418,11 @@ Note that OpenFaaS itself may support a wider range of versions, [see here](../.
 
 ## Getting help
 
-Feel free to seek out help using the [OpenFaaS Slack workspace](https://slack.openfaas.io/), please do not raise issues for technical support, unless you suspect and can provide instructions for reproducing an error in the chart.
+Comprehensive documentation is offered in the [OpenFaaS docs](https://docs.openfaas.com/).
+
+For technical support and questions, join the [Weekly Office Hours call](https://docs.openfaas.com/community)
+
+For suspected bugs, feel free to raise an issue. If you do not fill out the whole issue template, or delete the template, it's unlikely that you'll get the help that you're looking for.
 
 ## Configuration
 
@@ -494,7 +500,7 @@ yaml) |
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `functions.httpProbe` | Use a httpProbe instead of exec | `true` |
-| `functions.imagePullPolicy` | Image pull policy for deployed functions | `Always` |
+| `functions.imagePullPolicy` | Image pull policy for deployed functions (OpenFaaS Pro) | `Always` |
 | `functions.livenessProbe.initialDelaySeconds` | Number of seconds after the container has started before [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) is initiated  | `2` |
 | `functions.livenessProbe.periodSeconds` | How often (in seconds) to perform the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) | `2` |
 | `functions.livenessProbe.timeoutSeconds` | Number of seconds after which the [probe](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes) times out | `1` |

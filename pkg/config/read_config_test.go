@@ -70,35 +70,3 @@ func TestRead_HTTPProbeConfig_true(t *testing.T) {
 		t.Fail()
 	}
 }
-
-func TestRead_ImagePullPolicy_set(t *testing.T) {
-	defaults := NewEnvBucket()
-	defaults.Setenv("image_pull_policy", "IfNotPresent")
-
-	readConfig := ReadConfig{}
-	config, err := readConfig.Read(defaults)
-	if err != nil {
-		t.Fatalf("Unexpected error while reading env %s", err.Error())
-	}
-
-	if (config.ImagePullPolicy) != "IfNotPresent" {
-		t.Logf("ImagePullPolicy incorrect, got: %v\n", config.ImagePullPolicy)
-		t.Fail()
-	}
-}
-
-func TestRead_ImagePullPolicy_empty(t *testing.T) {
-	defaults := NewEnvBucket()
-	defaults.Setenv("image_pull_policy", "")
-
-	readConfig := ReadConfig{}
-	config, err := readConfig.Read(defaults)
-	if err != nil {
-		t.Fatalf("Unexpected error while reading env %s", err.Error())
-	}
-
-	if (config.ImagePullPolicy) != "Always" {
-		t.Logf("ImagePullPolicy incorrect, got: %v\n", config.ImagePullPolicy)
-		t.Fail()
-	}
-}

@@ -26,9 +26,9 @@ Any changes to the helm chart will also need a corresponding change in the [Char
 
     For version updates please review the [Semantic Versioning](https://semver.org/spec/v0.1.0.html) guidelines.
 
-### ARM builds
+### Arm builds
 
-ARM builds are provided on a best effort basis by OpenFaaS Ltd. If you need an updated ARM build or have run into an issue, then please contact the project team via Slack or by creating an Issue.
+Arm builds are provided on a best effort basis by OpenFaaS Ltd. If you need an updated Arm build or have run into an issue, then please contact the project team by creating an Issue.
 
 ## Local development of faas-netes
 
@@ -58,7 +58,6 @@ helm upgrade openfaas --install openfaas/openfaas \
     --namespace openfaas  \
     --set basic_auth=true \
     --set openfaasImagePullPolicy=IfNotPresent \
-    --set faasnetes.imagePullPolicy=IfNotPresent \
     --set faasnetes.image=openfaas/faas-netes:latest \
     --set functionNamespace=openfaas-fn
 ```

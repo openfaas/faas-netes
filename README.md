@@ -53,7 +53,7 @@ Commercial options:
 
 * Tutorial: [Deploy OpenFaaS to Kubernetes with its helm chart](https://docs.openfaas.com/deployment)
 * [Read news and tutorials on the openfaas.com blog](https://www.openfaas.com/blog/)
-* Chat with the community [on OpenFaaS Slack](https://docs.openfaas.com/community)
+* [Meet the community at the weekly Office Hours](https://docs.openfaas.com/community)
 
 ### The PLONK Stack
 
@@ -115,8 +115,8 @@ You can also use the [IngressOperator to set up custom domains and HTTP paths](h
 ### Image pull policy
 
 By default, deployed functions will use an [imagePullPolicy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) of `Always`, which ensures functions using static image tags are refreshed during an update.
-If this is not desired behavior, set the `image_pull_policy` environment variable to an alternative.  `IfNotPresent` is particularly useful when developing locally with minikube.
-In this case, you can set your local environment to [use minikube's docker](https://kubernetes.io/docs/getting-started-guides/minikube/#reusing-the-docker-daemon) so `faas-cli build` builds directly into minikube's image store.
+
+If this is not desired behavior, OpenFaaS Pro customers can set the `image_pull_policy` environment variable to an alternative. `IfNotPresent` is particularly useful when developing locally with minikube. In this case, you can set your local environment to [use minikube's docker](https://kubernetes.io/docs/getting-started-guides/minikube/#reusing-the-docker-daemon) so `faas-cli build` builds directly into minikube's image store.
 `faas-cli push` is unnecessary in this workflow - use `faas-cli build` then `faas-cli deploy`.
 
 Note: When set to `Never`, **only** local (or pulled) images will work.  When set to `IfNotPresent`, function deployments may not be updated when using static image tags.

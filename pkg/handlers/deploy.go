@@ -19,7 +19,6 @@ import (
 
 	types "github.com/openfaas/faas-provider/types"
 	appsv1 "k8s.io/api/apps/v1"
-	apiv1 "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -131,7 +130,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 	}
 }
 
-func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[string]*apiv1.Secret, factory k8s.FunctionFactory) (*appsv1.Deployment, error) {
+func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[string]*corev1.Secret, factory k8s.FunctionFactory) (*appsv1.Deployment, error) {
 	envVars := buildEnvVars(&request)
 
 	initialReplicas := int32p(initialReplicasCount)
@@ -154,16 +153,6 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 
 	if err != nil {
 		return nil, err
-	}
-
-	var imagePullPolicy apiv1.PullPolicy
-	switch factory.Config.ImagePullPolicy {
-	case "Never":
-		imagePullPolicy = apiv1.PullNever
-	case "IfNotPresent":
-		imagePullPolicy = apiv1.PullIfNotPresent
-	default:
-		imagePullPolicy = apiv1.PullAlways
 	}
 
 	annotations, err := buildAnnotations(request)
@@ -205,19 +194,19 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 				},
 			},
 			RevisionHistoryLimit: int32p(10),
-			Template: apiv1.PodTemplateSpec{
+			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:        request.Service,
 					Labels:      labels,
 					Annotations: annotations,
 				},
-				Spec: apiv1.PodSpec{
+				Spec: corev1.PodSpec{
 					NodeSelector: nodeSelector,
-					Containers: []apiv1.Container{
+					Containers: []corev1.Container{
 						{
 							Name:  request.Service,
 							Image: request.Image,
-							Ports: []apiv1.ContainerPort{
+							Ports: []corev1.ContainerPort{
 								{
 									Name:          "http",
 									ContainerPort: factory.Config.RuntimeHTTPPort,
@@ -226,7 +215,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 							},
 							Env:             envVars,
 							Resources:       *resources,
-							ImagePullPolicy: imagePullPolicy,
+							ImagePullPolicy: corev1.PullAlways,
 							LivenessProbe:   probes.Liveness,
 							ReadinessProbe:  probes.Readiness,
 							SecurityContext: &corev1.SecurityContext{
@@ -358,10 +347,10 @@ func createSelector(constraints []string) map[string]string {
 	return selector
 }
 
-func createResources(request types.FunctionDeployment) (*apiv1.ResourceRequirements, error) {
-	resources := &apiv1.ResourceRequirements{
-		Limits:   apiv1.ResourceList{},
-		Requests: apiv1.ResourceList{},
+func createResources(request types.FunctionDeployment) (*corev1.ResourceRequirements, error) {
+	resources := &corev1.ResourceRequirements{
+		Limits:   corev1.ResourceList{},
+		Requests: corev1.ResourceList{},
 	}
 
 	// Set Memory limits
@@ -370,7 +359,7 @@ func createResources(request types.FunctionDeployment) (*apiv1.ResourceRequireme
 		if err != nil {
 			return resources, err
 		}
-		resources.Limits[apiv1.ResourceMemory] = qty
+		resources.Limits[corev1.ResourceMemory] = qty
 	}
 
 	if request.Requests != nil && len(request.Requests.Memory) > 0 {
@@ -378,7 +367,7 @@ func createResources(request types.FunctionDeployment) (*apiv1.ResourceRequireme
 		if err != nil {
 			return resources, err
 		}
-		resources.Requests[apiv1.ResourceMemory] = qty
+		resources.Requests[corev1.ResourceMemory] = qty
 	}
 
 	// Set CPU limits
@@ -387,7 +376,7 @@ func createResources(request types.FunctionDeployment) (*apiv1.ResourceRequireme
 		if err != nil {
 			return resources, err
 		}
-		resources.Limits[apiv1.ResourceCPU] = qty
+		resources.Limits[corev1.ResourceCPU] = qty
 	}
 
 	if request.Requests != nil && len(request.Requests.CPU) > 0 {
@@ -395,7 +384,7 @@ func createResources(request types.FunctionDeployment) (*apiv1.ResourceRequireme
 		if err != nil {
 			return resources, err
 		}
-		resources.Requests[apiv1.ResourceCPU] = qty
+		resources.Requests[corev1.ResourceCPU] = qty
 	}
 
 	return resources, nil
