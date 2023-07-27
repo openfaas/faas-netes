@@ -29,7 +29,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker:0.13.3
+        image: ghcr.io/openfaas/queue-worker:0.14.0
         imagePullPolicy: Always
         env:
         - name: faas_nats_address
