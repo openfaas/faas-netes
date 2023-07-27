@@ -50,7 +50,7 @@ gatewayPro:
   image: ghcr.io/openfaasltd/gateway:0.4.0
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.26.5
+  image: ghcr.io/openfaas/gateway:0.27.0
   readTimeout: "65s"
   writeTimeout: "65s"
   upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
@@ -94,7 +94,7 @@ faasnetesPro:
   image: ghcr.io/openfaasltd/faas-netes:0.4.12
 
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.16.10
+  image: ghcr.io/openfaas/faas-netes:0.17.0
   resources:
     requests:
       memory: "120Mi"
@@ -156,7 +156,7 @@ queueWorkerPro:
 # Community Edition, maxInflight is 1
 # Name of shared queue is "faas-request"
 queueWorker:
-  image: ghcr.io/openfaas/queue-worker:0.13.3
+  image: ghcr.io/openfaas/queue-worker:0.14.0
   # Control HA of queue-worker
   replicas: 1
   queueGroup: "faas"
@@ -239,7 +239,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.45.0
+  image: prom/prometheus:v2.46.0
   create: true
   resources:
     requests:
@@ -290,7 +290,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.9.19
+  image: nats:2.9.20
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)

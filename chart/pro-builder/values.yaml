@@ -31,7 +31,7 @@ buildkit:
   # nodepool for the function builder pods, which is recycled often
   # through the use of spot instances or preemptive VMs.
   #
-  # image: moby/buildkit:v0.11.6
+  # image: moby/buildkit:v0.12.0
   # rootless: false
   # securityContext:
   #   runAsUser: 0
@@ -41,7 +41,7 @@ buildkit:
   # For a rootless configuration, preferred, if the configuration
   # and Kernel version of your Kubernetes nodes supports it
   # 
-  image: moby/buildkit:v0.11.6
+  image: moby/buildkit:v0.12.0-rootless
   rootless: true
   securityContext:
     # Needs Kubernetes >= 1.19
