@@ -27,11 +27,11 @@ queueMode: ""                # Set to `jetstream` to run the async system backed
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 psp: false
 
-# image pull policy for openfaas components, can change to `IfNotPresent` in offline env
+# image pull policy for openfaas components, can change to `IfNotPresent` for an air-gapped environment
 openfaasImagePullPolicy: "Always"
 
 functions:
-  imagePullPolicy: "Always"    # Image pull policy for deployed functions
+  imagePullPolicy: "Always"    # Image pull policy for deployed functions, for OpenFaaS Pro you can also set: IfNotPresent and Never.
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
   setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
   readinessProbe:
@@ -51,9 +51,9 @@ gatewayPro:
 
 gateway:
   image: ghcr.io/openfaas/gateway:0.27.0
-  readTimeout: "65s"
-  writeTimeout: "65s"
-  upstreamTimeout: "60s"  # Must be smaller than read/write_timeout
+  readTimeout: "1m05s"
+  writeTimeout: "1m05s"
+  upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
   replicas: 1
   scaleFromZero: true
   # change the port when creating multiple releases in the same baremetal cluster
@@ -70,7 +70,7 @@ gateway:
   probeFunctions: false
 
   # See the HPA rule from the Customer Community
-  # https://github.com/openfaas/openfaas-pro/blob/master/gateway-hpa.yaml
+  # https://github.com/openfaas/customers/blob/master/gateway-hpa.yaml
   resources:
     requests:
       memory: "120Mi"
@@ -90,16 +90,7 @@ gateway:
     failureThreshold: 3
     successThreshold: 1
 
-faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.12
-
-faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.17.0
-  resources:
-    requests:
-      memory: "120Mi"
-      cpu: "50m"
-
+# For OpenFaaS Pro and the Function CRD
 operator:
   image: ghcr.io/openfaasltd/faas-netes:0.4.12
   create: false
@@ -108,6 +99,16 @@ operator:
       memory: "120Mi"
       cpu: "50m"
 
+faasnetesPro:
+  image: ghcr.io/openfaasltd/faas-netes:0.4.12
+
+# For the Community Edition
+faasnetes:
+  image: ghcr.io/openfaas/faas-netes:0.17.1
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
 
 # The values for jetstreamQueueWorker are merged with those under
 # the "queueWorkerPro" and "queueWorker" section

@@ -68,11 +68,11 @@ spec:
             port: 8080
         env:
         - name: read_timeout
-          value: "65s"
+          value: "1m05s"
         - name: write_timeout
-          value: "65s"
+          value: "1m05s"
         - name: upstream_timeout
-          value: "60s"
+          value: "1m"
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
         - name: direct_functions
@@ -114,7 +114,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.17.0
+        image: ghcr.io/openfaas/faas-netes:0.17.1
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -128,11 +128,11 @@ spec:
         - name: function_namespace
           value: "openfaas-fn"
         - name: read_timeout
-          value: "65s"
+          value: "1m05s"
         - name: profiles_namespace
           value: "openfaas"
         - name: write_timeout
-          value: "65s"
+          value: "1m05s"
         - name: image_pull_policy
           value: "Always"
         - name: http_probe
