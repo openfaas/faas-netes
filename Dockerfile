@@ -29,7 +29,7 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
         -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
         -o faas-netes .
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.18.2 as ship
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.18.3 as ship
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
       org.label-schema.vcs-type="Git" \
