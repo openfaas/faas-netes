@@ -94,8 +94,8 @@ github.com/munnerz/goautoneg
 ## explicit; go 1.18
 # github.com/onsi/gomega v1.27.6
 ## explicit; go 1.18
-# github.com/openfaas/faas-provider v0.19.1
-## explicit; go 1.17
+# github.com/openfaas/faas-provider v0.24.1
+## explicit; go 1.20
 github.com/openfaas/faas-provider
 github.com/openfaas/faas-provider/auth
 github.com/openfaas/faas-provider/httputil
