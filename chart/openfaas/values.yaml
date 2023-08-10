@@ -92,7 +92,7 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.13
+  image: ghcr.io/openfaasltd/faas-netes:0.4.14
   create: false
   resources:
     requests:
@@ -100,7 +100,7 @@ operator:
       cpu: "50m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.13
+  image: ghcr.io/openfaasltd/faas-netes:0.4.14
 
 # For the Community Edition
 faasnetes:
@@ -188,7 +188,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.3.2
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.4.0
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
