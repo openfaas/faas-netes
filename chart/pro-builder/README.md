@@ -25,6 +25,8 @@ The [pro-builder](https://docs.openfaas.com/openfaas-pro/builder/) is used to bu
 
 Create a registry push secret for the Pro Builder to use to push images to your registry.
 
+### Registry authentication
+
 For testing with ttl.sh, create an empty auths section:
 
 ```json
@@ -32,19 +34,26 @@ cat << EOF > ttlsh-config.json
 {
   "auths": {}
 }
+EOF
 ```
+
+Then create the secret within the cluster:
 
 ```bash
 kubectl create secret generic registry-secret \
     --from-file config.json=./ttlsh-config.json -n openfaas
 ```
 
-If you want to use a Docker config with an authenticated registry, you must either:
+When you want to authenticate to a private registry, you must either:
 
 * Use `faas-cli registry-login` and the resulting file
 * Or, turn off the credential store for Docker Desktop, delete `~/docker/config.json` and then run: `docker login` and enter your credentials.
 
-> For pushing images to ECR see: [Push images to Amazon ECR](#push-images-to-amazon-ecr)
+And remember to delete any existing secret from the cluster first: `kubectl delete secret registry-secret -n openfaas`.
+
+For pushing images to ECR see: [Push images to Amazon ECR](#push-images-to-amazon-ecr)
+
+### Signing secret
 
 Create a HMAC signing secret for use between the Pro Builder and your client:
 
@@ -61,6 +70,8 @@ Create a secret with the contents of the signing secret:
 kubectl create secret generic payload-secret \
   --from-file payload-secret=payload.txt -n openfaas
 ```
+
+### mTLS certificates
 
 Generate mTLS certificates for BuildKit and the Pro Builder which are used to encrypt messages between the builder component and BuildKit.
 
