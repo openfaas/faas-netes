@@ -29,7 +29,7 @@ Create a registry push secret for the Pro Builder to use to push images to your 
 
 For testing with ttl.sh, create an empty auths section:
 
-```json
+```bash
 cat << EOF > ttlsh-config.json
 {
   "auths": {}
