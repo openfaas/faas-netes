@@ -187,7 +187,9 @@ echo "OpenFaaS admin password: $PASSWORD"
 
 #### Tuning function cold-starts
 
-The concept of a cold-start in OpenFaaS only applies if you A) use faas-idler and B) set a specific function to [scale to zero](https://docs.openfaas.com/openfaas-pro/scale-to-zero/). Otherwise there is not a cold-start, because at least one replica of your function remains available.
+The concept of a cold-start in OpenFaaS only applies if you enable it for a specific function, using [scale to zero](https://docs.openfaas.com/openfaas-pro/scale-to-zero/). Otherwise there is not a cold-start, because at least one replica of your function remains available.
+
+See also: [Fine-tuning the cold-start in OpenFaaS](https://www.openfaas.com/blog/fine-tuning-the-cold-start/)
 
 There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, which is around 1-2 seconds.
 
@@ -195,24 +197,23 @@ There are two ways to reduce the Kubernetes cold-start for a pre-pulled image, w
 2) Use async invocations via the `/async-function/<name>` route on the gateway, so that the latency is hidden from the caller
 3) Tune the readinessProbes to be aggressively low values. This will reduce the cold-start at the cost of more `kubelet` CPU usage
 
-To achieve around 1s coldstart, set `values.yaml`:
+To achieve a coldstart of between 0.7 and 1.9s, set the following in `values.yaml`:
 
 ```yaml
-faasnetes:
-
-# redacted
+functions:
+  imagePullPolicy: "IfNotPresent"
+...
   readinessProbe:
     initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
   livenessProbe:
     initialDelaySeconds: 0
     timeoutSeconds: 1
     periodSeconds: 1
-
-# redacted
-functions:
-  imagePullPolicy: "IfNotPresent"    # Image pull policy for deployed functions
+    failureThreshold: 3
 ```
 
 In addition:
@@ -225,8 +226,8 @@ In addition:
 For OpenFaaS CE, both liveness and readiness probes are set to, and the `PullPolicy` for functions is set to `Always`:
 
 * `initialDelaySeconds: 2`
-* `timeoutSeconds: 1`
 * `periodSeconds: 2`
+* `timeoutSeconds: 1`
 
 ### Verify the installation
 
@@ -382,17 +383,15 @@ Scaling up from zero replicas is enabled by default, to turn it off set `scaleFr
 
 ### Scale-down to zero (off by default)
 
-Scaling down to zero replicas can be achieved either through the REST API and your own controller, or by using the faas-idler component. This is an OpenFaaS Pro feature and an effective way to save costs on your infrastructure costs.
+Scaling to zero is managed by the OpenFaaS Standard autoscaler, which:
 
-OpenFaaS Pro will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`.
+* can save on infrastructure costs
+* helps to reduce the attack surface of your application
+* mitigates against functions which use high CPU or memory at idle, or which contain leaks
+
+OpenFaaS Pro will only scale down functions which have marked themselves as eligible for this behaviour through the use of a label: `com.openfaas.scale.zero=true`. The time to wait until scaling a specific function to zero is controlled by: `com.openfaas.scale.zero-duration` which is a Go duration set in minutes i.e. `15m`.
 
 See also: [Scale to Zero docs](https://docs.openfaas.com/openfaas-pro/scale-to-zero/).
-
-Check the logs with:
-
-```bash
-kubectl logs -n openfaas deploy/faas-idler
-```
 
 ## Removing the OpenFaaS
 
@@ -598,18 +597,6 @@ yaml) |
 ### faas-idler (OpenFaaS Pro)
 
 Deprecated and replaced by the new autoscaler, which supports scale to zero.
-
-| Parameter               | Description                           | Default                                                    |
-| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `faasIdler.enabled` | Create the faasIdler component | `false` |
-| `faasIdler.image` | Container image used for the faas-idler | See [values.yaml](./values.yaml) |
-| `faasIdler.inactivityDuration` | Duration after which faas-idler will scale function down to 0 | `3m` |
-| `faasIdler.readOnly` | When set to true, no functions are scaled to zero | `false` |
-| `faasIdler.reconcileInterval` | The interval between each attempt to scale functions to zero | `2m` |
-| `faasIdler.replicas` | Replicas of the faas-idler | `1` |
-| `faasIdler.resources` | Resource limits and requests for the faas-idler pods | See [values.yaml](./values.yaml) |
-| `faasIdler.writeDebug` | Write additional debug information | `false` |
-
 
 ### ingressOperator
 

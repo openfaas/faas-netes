@@ -49,8 +49,8 @@ spec:
           readOnlyRootFilesystem: true
           runAsUser: 10001
         livenessProbe:
-          initialDelaySeconds: 0
-          periodSeconds: 10
+          initialDelaySeconds: 1
+          periodSeconds: 5
           timeoutSeconds: 5
           failureThreshold: 3
           successThreshold: 1
@@ -58,8 +58,8 @@ spec:
             path: /healthz
             port: 8080
         readinessProbe:
-          initialDelaySeconds: 0
-          periodSeconds: 10
+          initialDelaySeconds: 1
+          periodSeconds: 5
           timeoutSeconds: 5
           failureThreshold: 3
           successThreshold: 1
