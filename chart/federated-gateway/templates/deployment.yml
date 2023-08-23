@@ -49,6 +49,8 @@ spec:
               value: {{ .Values.issuer | quote }}
             - name: audience
               value: {{ .Values.audience | quote }}
+            - name: allow_invoke
+              value: {{ .Values.allowInvoke | quote }}
             - name: secret_mount_path
               value: "/var/secrets"
             - name: "debug"
