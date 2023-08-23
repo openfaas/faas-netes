@@ -27,6 +27,10 @@ audience: fed-gw.example.com
 # The issuer is the root URL for the OIDC provider you're using. It must be accessible on the Internet
 # from the federated cluster.
 issuer: https://keycloak.example.com/realms/openfaas
+
+# When set to false, only the API and its /system endpoints are allowed to be accessed
+# Set allowInvoke to true to allow invoking functions via the /function or /async-function endpoint
+allowInvoke: false
 ```
 
 ## Install the chart
@@ -61,6 +65,7 @@ Additional federated-gateway options in `values.yaml`.
 | --------------------- | ------------------------------------------------------------------------------------------- | ------------------------------ |
 | `issuer`              | The root URL of your IdP                                                                    | `""`                           |
 | `audience`            | The client ID for this federated gateway in your IDP                                        | `""`                           |
+| `allowInvoke`         | Allow invoking functions via the /function or /async-function endpoint                      | `false`                        |
 | `nodeSelector`        | Node labels for pod assignment.                                                             | `{}`                           |
 | `affinity`            | Node affinity for pod assignments.                                                          | `{}`                           |
 | `tolerations`         | Node tolerations for pod assignment.                                                        | `[]`                           |
