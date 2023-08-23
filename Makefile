@@ -122,7 +122,8 @@ charts-only:
 		helm package sqs-connector/ && \
 		helm package postgres-connector/ && \
 		helm package queue-worker/ && \
-		helm package sns-connector/
+		helm package sns-connector/ && \
+		helm package federated-gateway/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 	./contrib/create-static-manifest.sh
