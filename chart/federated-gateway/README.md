@@ -22,11 +22,11 @@ The proxy needs to be accessible from the control plane, either the Internet wit
 
 ```yaml
 # The audience is the client_id in your OIDC provider which represents this customer
-audience: fed-gw.exit.o6s.io
+audience: fed-gw.example.com
 
 # The issuer is the root URL for the OIDC provider you're using. It must be accessible on the Internet
 # from the federated cluster.
-issuer: https://keycloak.exit.o6s.io/realms/openfaas
+issuer: https://keycloak.example.com/realms/openfaas
 ```
 
 ## Install the chart
