@@ -88,7 +88,8 @@ verify-charts:
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sqs-connector/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/postgres-connector/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/queue-worker/values.yaml && \
-	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sns-connector/values.yaml
+	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sns-connector/values.yaml && \
+	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/federated-gateway/values.yaml
 
 # Only upgrade the openfaas chart, for speed
 upgrade-chart:
@@ -106,7 +107,9 @@ upgrade-charts:
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/sqs-connector/values.yaml && \
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/postgres-connector/values.yaml && \
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/queue-worker/values.yaml && \
-	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/sns-connector/values.yaml
+	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/sns-connector/values.yaml && \
+	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/federated-gateway/values.yaml
+
 
 charts-only:
 	@cd chart && \
