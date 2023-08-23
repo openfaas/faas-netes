@@ -1,37 +1,17 @@
-# The OpenFaaS OIDC Proxy is part of Actuated
-#
-# A subscription license is required for actuated, learn more at
-# https://actuated.dev
+# Access to the federated gateway can be requested by OpenFaaS customers
+# Email us using your current channels for more.
 
-# You will need to create a license named "actuated-license" - see the
-# chart README for detailed instructions.
-
-image: ghcr.io/openfaasltd/federated-gateway:0.0.4
+image: ghcr.io/openfaasltd/federated-gateway:0.0.1
 replicas: 1
 
 # OpenFaaS gateway URL
 gatewayURL: http://gateway.openfaas:8080
 
-# Comma separated list of repository owners for which short-lived OIDC tokens are authorized.
-# Each item can be an individual user or an organization.
-# For example: "alexellis,self-actuated"
-repositoryOwners: ""
+# OIDC Issuer to federate with
+issuer: https://keycloak.example/realms/openfaas
 
-# The public URL to access the proxy
-# i.e. https://oidc-proxy.example.com
-publicURL: ""
-
-ingress:
-  # Create an ingress resource for the proxy
-  enabled: true
-  # Ingress class
-  class: "nginx"
-  # Hostname used for the ingress resource
-  host: ""
-  # Name of cert-manager Issuer
-  issuer: letsencrypt-prod
-  # Annotations to be added to the ingress resource
-  annotations: {}
+# OIDC Audience to verify on tokens
+audience: customer1-openfaas.example.com
 
 logs:
   # Log debug messages
