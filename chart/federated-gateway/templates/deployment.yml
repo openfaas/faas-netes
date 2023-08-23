@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "federated-gateway.name" . }}
+    component: federated-gateway
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "federated-gateway.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
+    app.kubernetes.io/component: federated-gateway
+    app.kubernetes.io/part-of: openfaas
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "federated-gateway.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "federated-gateway.name" . }}
+      component: federated-gateway
+
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: {{ template "federated-gateway.name" . }}
+        component: federated-gateway
+    spec:
+      volumes:
+        - name: auth
+          secret:
+            secretName: basic-auth
+      containers:
+        - name: proxy
+          image: {{ .Values.image }}
+          command:
+            - "/usr/bin/federated-gateway"
+          env:
+            - name: port
+              value: "8080"
+            - name: gateway_url
+              value: {{ .Values.gatewayURL | quote }}
+            - name: issuer
+              value: {{ .Values.issuer | quote }}
+            - name: audience
+              value: {{ .Values.audience | quote }}
+            - name: secret_mount_path
+              value: "/var/secrets"
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
+          volumeMounts:
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
