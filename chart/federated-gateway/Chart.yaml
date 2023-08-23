@@ -1,14 +1,14 @@
 apiVersion: v2
-description: Proxy for OpenFaaS for actuated customers.
+description: Federated Gateway for OpenFaaS service providers
 name: federated-gateway
-version: 0.0.4
-home: https://actuated.dev/
+version: 0.0.1
+home: https://openfaas.com
 keywords:
 - openfaas
-- actuated
+- oidc
 - proxy
-- ci
-- github-actions
 maintainers:
 - name: alexellis
   email: alex@openfaas.com
+- name: welteki
+  email: han@openfaas.com

@@ -1,17 +1,17 @@
 # Access to the federated gateway can be requested by OpenFaaS customers
 # Email us using your current channels for more.
 
-image: ghcr.io/openfaasltd/federated-gateway:0.0.1
+image: ghcr.io/openfaasltd/federated-gateway:0.2.0
 replicas: 1
 
 # OpenFaaS gateway URL
 gatewayURL: http://gateway.openfaas:8080
 
 # OIDC Issuer to federate with
-issuer: https://keycloak.example/realms/openfaas
+issuer: https://keycloak.example.com/realms/openfaas
 
 # OIDC Audience to verify on tokens
-audience: customer1-openfaas.example.com
+audience: fed-gw.example.com
 
 logs:
   # Log debug messages
