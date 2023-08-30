@@ -92,7 +92,7 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.20
+  image: ghcr.io/openfaasltd/faas-netes:0.4.21
   create: false
   resources:
     requests:
@@ -100,7 +100,7 @@ operator:
       cpu: "50m"
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.20
+  image: ghcr.io/openfaasltd/faas-netes:0.4.21
 
 # For the Community Edition
 faasnetes:
