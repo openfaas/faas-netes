@@ -79,6 +79,8 @@ spec:
           value: "{{ .Values.jetstreamQueueWorker.logs.format }}"
         - name: upstream_timeout
           value: "{{ .Values.gateway.upstreamTimeout }}"
+        - name: backoff
+          value: "{{ .Values.queueWorkerPro.backoff }}"
 
         # OpenFaaS PRO license required
         - name: "max_retry_attempts"

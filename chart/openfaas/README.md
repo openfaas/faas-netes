@@ -547,6 +547,7 @@ yaml) |
 | `queueWorker.replicas` | Replicas of the queue-worker, pick more than `1` for HA | `1` |
 | `queueWorker.resources` | Resource limits and requests for the queue-worker pods | See [values.yaml](./values.yaml) |
 | `queueWorker.queueGroup` | The name of the queue group used to process asynchronous function invocations | `faas` |
+| `queueWorkerPro.backoff` | The backoff algorithm used for retries. Must be one off `exponential`, `full` or `equal`| `exponential` |
 | `queueWorkerPro.httpRetryCodes` | Comma-separated list of HTTP status codes the queue-worker should retry | `408,429,500,502,503,504` |
 | `queueWorkerPro.image` | Container image used for the Pro version of the queue-worker | See [values.yaml](./values.yaml) |
 | `queueWorkerPro.initialRetryWait` | Time to wait for the first retry | `10s` |
