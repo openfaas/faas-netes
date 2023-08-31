@@ -40,6 +40,7 @@ helm upgrade slow-queue chart/queue-worker \
 | `maxRetryWait` | The maximum amount of time to wait between retries | `120s` |
 | `initialRetryWait` | The amount of time to wait for the first retry | `10s` |
 | `httpRetryCodes` | A comma-separated list of HTTP status codes which the queue worker will retry when received from a function | `408,429,500,502,503,504` |
+| `backoff` | The backoff algorithm used for retries. Must be one off `exponential`, `full` or `equal`| `exponential` |
 | `gateway.host` | The host at which the OpenFaaS gateway can be reached | `http://gateway.openfaas` |
 | `insecureTLS` | Enable insecure tls for callbacks | `false` |
 | `gateway.port` | The port at which the OpenFaaS gateway can be reached | `8080` |

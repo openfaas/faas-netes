@@ -72,6 +72,8 @@ spec:
               value: "{{ .Values.initialRetryWait }}"
             - name: "retry_http_codes"
               value: "{{ .Values.httpRetryCodes }}"
+            - name: "backoff"
+              value: "{{ .Values.backoff }}"
 
             - name: "debug"
               value: "{{ .Values.logs.debug }}"
