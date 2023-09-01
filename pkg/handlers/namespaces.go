@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -78,7 +77,7 @@ func NewNamespaceResolver(defaultNamespace string, kube kubernetes.Interface) Na
 			}
 
 			// Reconstruct Body
-			r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+			r.Body = io.NopCloser(bytes.NewBuffer(body))
 		}
 
 		if req.Namespace != defaultNamespace {
