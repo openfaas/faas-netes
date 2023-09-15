@@ -50,7 +50,7 @@ gatewayPro:
   image: ghcr.io/openfaasltd/gateway:0.4.6
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.1
+  image: ghcr.io/openfaas/gateway:0.27.2
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout

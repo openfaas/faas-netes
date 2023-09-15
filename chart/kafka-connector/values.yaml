@@ -5,7 +5,7 @@
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaasltd/kafka-connector:0.7.2
+image: ghcr.io/openfaasltd/kafka-connector:0.7.3
 
 # Output detailed logs from the consumer group's lifecycle
 sessionLogging: true
