@@ -1,6 +1,5 @@
-# The Postgres connector is an OpenFaaS Pro feature
-#
-# Purchase a license at https://openfaas.com/support/
+# This component is licensed for OpenFaaS Standard/Enterprise customers only.
+# Purchase or obtain a trial license at https://openfaas.com/pricing/
 
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.

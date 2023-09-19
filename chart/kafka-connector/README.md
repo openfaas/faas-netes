@@ -75,31 +75,33 @@ $ helm upgrade kafka-connector ./chart/kafka-connector \
 
 Additional kafka-connector options in `values.yaml`.
 
-| Parameter              | Description                                                                                                        | Default                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `topics`               | Topics to which the connector will bind, provide as a comma-separated list or a single item.                       | `faas-request`                 |
-| `brokerHost`           | location of the Kafka brokers.                                                                                     | `kafka`                        |
-| `asyncInvocation`      | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream | `false`                        |
-| `upstreamTimeout`      | Maximum timeout for upstream function call, must be a Go formatted duration string.                                | `2m`                           |
-| `rebuildInterval`      | Interval for rebuilding function to topic map, must be a Go formatted duration string.                             | `30s`                          |
-| `gatewayURL`           | The URL for the API gateway.                                                                                       | `http://gateway.openfaas:8080` |
-| `printResponse`        | Output the response of calling a function in the logs.                                                             | `true`                         |
-| `printResponseBody`    | Output to the logs the response body when calling a function.                                                      | `false`                        |
-| `printRequestBody`     | Output to the logs the request body when calling a function.                                                       | `false`                        |
-| `fullnameOverride`     | Override the name value used for the Connector Deployment object.                                                  | ``                             |
-| `sasl`                 | Enable auth with a SASL username/password                                                                          | `false`                        |
-| `brokerPasswordSecret` | Name of secret for SASL password                                                                                   | `kafka-broker-password`        |
-| `brokerUsernameSecret` | Name of secret for SASL username                                                                                   | `kafka-broker-username`        |
-| `caSecret`             | Name secret for TLS CA - leave empty to disable                                                                    | `kafka-broker-ca`              |
-| `certSecret`           | Name secret for TLS client certificate cert - leave empty to disable                                               | `kafka-broker-cert`            |
-| `keySecret`            | Name secret for TLS client certificate private key - leave empty to disable                                        | `kafka-broker-key`             |
-| `contentType`          | Set a HTTP Content Type during function invocation.                                                                | `""`                           |
-| `group`                | Set the Kafka consumer group name.                                                                                 | `""`                           |
-| `maxBytes`             | Set the maximum size of messages from the Kafka broker.                                                            | `1024*1024`                    |
-| `sessionLogging`       | Enable detailed logging from the consumer group.                                                                   | `"false"`                      |
-| `initialOffset`        | Either newest or oldest.                                                                                           | `"oldest"`                     |
-| `logs.debug`           | Print debug logs                                                                                                   | `false`                        |
-| `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                     | `console`                      |
+| Parameter              | Description                                                                                                                        | Default                        |
+|------------------------|------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| `topics`               | A single topic or list of comma separated topics to consume.                                                                       | `faas-request`                 |
+| `replicas`             | The number of replicas of this connector, should be set to the size of the partition for the given topic, or a higher lower value. | `1`                            |
+| `brokerHosts`          | Host and port for the Kafka bootstrap server, multiple servers can be specified as a comma-separated list.                         | `kafka:9092`                   |
+| `asyncInvocation`      | For long running or slow functions, offload to asychronous function invocations and carry on processing the stream                 | `false`                        |
+| `upstreamTimeout`      | Maximum timeout for upstream function call, must be a Go formatted duration string.                                                | `2m`                           |
+| `rebuildInterval`      | Interval for rebuilding function to topic map, must be a Go formatted duration string.                                             | `30s`                          |
+| `gatewayURL`           | The URL for the API gateway.                                                                                                       | `http://gateway.openfaas:8080` |
+| `printResponse`        | Output the response of calling a function in the logs.                                                                             | `true`                         |
+| `printResponseBody`    | Output to the logs the response body when calling a function.                                                                      | `false`                        |
+| `printRequestBody`     | Output to the logs the request body when calling a function.                                                                       | `false`                        |
+| `fullnameOverride`     | Override the name value used for the Connector Deployment object.                                                                  | ``                             |
+| `tls`                  | Connect to the broker server(s) using TLS encryption                                                                               | `true`                         |
+| `sasl`                 | Enable auth with a SASL username/password                                                                                          | `false`                        |
+| `brokerPasswordSecret` | Name of secret for SASL password                                                                                                   | `kafka-broker-password`        |
+| `brokerUsernameSecret` | Name of secret for SASL username                                                                                                   | `kafka-broker-username`        |
+| `caSecret`             | Name secret for TLS CA - leave empty to disable                                                                                    | `kafka-broker-ca`              |
+| `certSecret`           | Name secret for TLS client certificate cert - leave empty to disable                                                               | `kafka-broker-cert`            |
+| `keySecret`            | Name secret for TLS client certificate private key - leave empty to disable                                                        | `kafka-broker-key`             |
+| `contentType`          | Set a HTTP Content Type during function invocation.                                                                                | `""`                           |
+| `group`                | Set the Kafka consumer group name.                                                                                                 | `""`                           |
+| `maxBytes`             | Set the maximum size of messages from the Kafka broker.                                                                            | `1024*1024`                    |
+| `sessionLogging`       | Enable detailed logging from the consumer group.                                                                                   | `"false"`                      |
+| `initialOffset`        | Either newest or oldest.                                                                                                           | `"oldest"`                     |
+| `logs.debug`           | Print debug logs                                                                                                                   | `false`                        |
+| `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                                     | `console`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
 

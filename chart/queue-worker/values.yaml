@@ -1,3 +1,9 @@
+# This component is licensed for OpenFaaS Standard/Enterprise customers only.
+# Purchase or obtain a trial license at https://openfaas.com/pricing/
+
+# You will need to create a license named "openfaas-license" - see the
+# chart README for detailed instructions.
+
 image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.13
 
 replicas: 1
