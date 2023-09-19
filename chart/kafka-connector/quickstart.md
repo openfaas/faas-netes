@@ -63,7 +63,7 @@
   Example for Kafka helm chart:
 
   ```yaml
-  brokerHost: cp-helm-charts-cp-kafka.default:9092
+  brokerHosts: cp-helm-charts-cp-kafka.default:9092
   tls: false
   saslAuth: false
 
@@ -75,7 +75,7 @@
   Example for Aiven cloud with client certificates:
 
   ```yaml
-  brokerHost: kafka-202504b5-openfaas-910b.aivencloud.com:10905
+  brokerHosts: kafka-202504b5-openfaas-910b.aivencloud.com:10905
   tls: true
   saslAuth: false
   
@@ -87,7 +87,7 @@
   Example for Confluent Cloud with Let's Encrypt and SASL auth:
 
   ```yaml
-  brokerHost: pkc-4r297.europe-west1.gcp.confluent.cloud:9092
+  brokerHosts: pkc-4r297.europe-west1.gcp.confluent.cloud:9092
   tls: true
   saslAuth: true
   

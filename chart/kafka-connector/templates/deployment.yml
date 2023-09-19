@@ -105,8 +105,8 @@ spec:
             - name: secret_mount_path
               value: "/var/secrets"
             {{- end }}
-            - name: broker_host
-              value: {{ .Values.brokerHost | quote }}
+            - name: broker_hosts
+              value: {{ .Values.brokerHosts | quote }}
             {{- if .Values.upstreamTimeout }}
             - name: upstream_timeout
               value: {{ .Values.upstreamTimeout | quote }}

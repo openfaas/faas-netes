@@ -1,15 +1,27 @@
-# The Kafka connector is an OpenFaaS Pro feature
-#
-# Purchase a license at https://openfaas.com/support/
+# This component is licensed for OpenFaaS Standard/Enterprise customers only.
+# Purchase or obtain a trial license at https://openfaas.com/pricing/
 
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
+
+
+# Set either a single topic, or multiple with a comma separating each
+# topics: payment.requested
+# topics: "payment.requested,customer.created,invoice.generated"
+topics: faas-request
+
+# The address of the Kafka broker, if multiple are available, include
+# them as a comma separated list i.e. "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+brokerHosts: kf-kafka:9092
 
 image: ghcr.io/openfaasltd/kafka-connector:0.7.3
 
 # Output detailed logs from the consumer group's lifecycle
 sessionLogging: true
 
+# The number of replicas of the connector should usually match the size of the
+# partition exactly. So for a topic with 6 partitions, set the replicas to 6.
+# This number must not be higher, but can be lower, to save on resources.
 replicas: 1
 
 # Max timeout for a function
@@ -20,14 +32,6 @@ rebuildInterval: 30s
 
 # Use with slow consumers or long running functions
 asyncInvocation: false
-
-# Set either a single topic, or multiple with a comma separating each
-# topics: payment.requested
-# topics: payment.requested,customer.created,invoice.generated
-topics: faas-request
-
-# Your Kafka broker
-brokerHost: kf-kafka:9092
 
 # 1MB = 1024 bytes * 1024
 maxBytes: "1048576"
@@ -85,8 +89,8 @@ resources:
   # limits:
   #   memory: "256Mi"
 
-# Encryption
-tls: false
+# Use TLS Encryption, this is usually set to true.
+tls: true
 
 # Authentication
 
