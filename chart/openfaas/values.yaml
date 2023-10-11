@@ -92,15 +92,21 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.21
+  image: ghcr.io/openfaasltd/faas-netes:0.4.22
   create: false
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
 
+  # For OpenFaaS for Enterprises, these numbers can be set higher,
+  # if experiencing rate limiting due to a large number of functions
+  # within the cluster
+  kubeClientQPS: 100
+  kubeClientBurst: 250
+
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.21
+  image: ghcr.io/openfaasltd/faas-netes:0.4.22
 
 # For the Community Edition
 faasnetes:

@@ -493,6 +493,8 @@ yaml) |
 | `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
 | `operator.resources` | Resource limits and requests for openfaas-operator containers | See [values.yaml](./values.yaml) |
 | `operator.image` | Container image used for the openfaas-operator | See [values.yaml](./values.yaml) |
+| `operator.kubeClientQPS` | QPS rate-limit for the Kubernetes client, (OpenFaaS for Enterprises) | `""` (defaults to 100) |
+| `operator.kubeClientBurst` | Burst rate-limit for the Kubernetes client (OpenFaaS for Enterprises) | `""` (defaults to 250) |
 
 ### Functions
 

@@ -256,6 +256,10 @@ spec:
             value: "{{ .Values.functions.livenessProbe.failureThreshold }}"
           - name: cluster_role
             value: "{{ .Values.clusterRole }}"
+          - name: kube_client_qps
+            value: "{{ .Values.operator.kubeClientQPS }}"
+          - name: kube_client_burst
+            value: "{{ .Values.operator.kubeClientBurst }}"
           {{- if .Values.iam.enabled }}
           - name: issuer_key_path
             value: "/var/secrets/issuer-key/issuer.key"
