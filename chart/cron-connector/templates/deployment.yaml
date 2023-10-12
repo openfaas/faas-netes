@@ -86,7 +86,7 @@ spec:
               value: {{ .Values.iam.systemIssuer.url }}
             {{- end }}
           resources:
-            {{- .Values.resources | toYaml | nindent 10 }}
+            {{- .Values.resources | toYaml | nindent 12 }}
           volumeMounts:
             {{- if .Values.openfaasPro }}
             - name: license
