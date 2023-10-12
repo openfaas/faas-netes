@@ -92,7 +92,7 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.22
+  image: ghcr.io/openfaasltd/faas-netes:0.4.23
   create: false
   resources:
     requests:
@@ -106,7 +106,7 @@ operator:
   kubeClientBurst: 250
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.22
+  image: ghcr.io/openfaasltd/faas-netes:0.4.23
 
 # For the Community Edition
 faasnetes:

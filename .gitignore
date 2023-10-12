@@ -36,3 +36,5 @@ jwt_key.pub
 /*.pid
 *.txt
 /.secrets/*
+
+/pro.sh
