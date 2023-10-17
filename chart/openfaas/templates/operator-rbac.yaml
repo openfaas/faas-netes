@@ -47,6 +47,9 @@ rules:
 - apiGroups: [""]
   resources: ["pods", "pods/log", "namespaces", "endpoints"]
   verbs: ["get", "list", "watch"]
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -132,6 +135,10 @@ rules:
   - apiGroups: [""]
     resources: ["services"]
     verbs: ["get", "list", "watch", "create", "delete", "update"]
+#  Add discovery for endpointslices
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "list", "watch"]
   - apiGroups: ["extensions", "apps"]
     resources: ["deployments"]
     verbs: ["get", "list", "watch", "create", "delete", "update"]

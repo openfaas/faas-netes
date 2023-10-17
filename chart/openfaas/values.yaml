@@ -28,7 +28,7 @@ queueMode: ""                # Set to `jetstream` to run the async system backed
 psp: false
 
 # image pull policy for openfaas components, can change to `IfNotPresent` for an air-gapped environment
-openfaasImagePullPolicy: "Always"
+openfaasImagePullPolicy: "IfNotPresent"
 
 functions:
   imagePullPolicy: "Always"    # Image pull policy for deployed functions, for OpenFaaS Pro you can also set: IfNotPresent and Never.
