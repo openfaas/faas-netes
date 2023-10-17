@@ -262,6 +262,10 @@ spec:
             value: "{{ .Values.operator.kubeClientQPS }}"
           - name: kube_client_burst
             value: "{{ .Values.operator.kubeClientBurst }}"
+          {{ if .Values.operator.leaderElection.enabled }}
+          - name: leader_election
+            value: "true"
+          {{- end }}
           {{- if .Values.iam.enabled }}
           - name: issuer_key_path
             value: "/var/secrets/issuer-key/issuer.key"
