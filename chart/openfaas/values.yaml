@@ -94,6 +94,10 @@ gateway:
 operator:
   image: ghcr.io/openfaasltd/faas-netes:0.4.23
   create: false
+  # Unnecessary when running a single replica of the gateway
+  leaderElection:
+    enabled: true
+  reconcileWorkers: 2
   resources:
     requests:
       memory: "120Mi"
