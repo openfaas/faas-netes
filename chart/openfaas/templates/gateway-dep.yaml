@@ -221,7 +221,7 @@ spec:
           - "-license-file=/var/secrets/license/license"
         env:
           - name: reconcile_workers
-            value: {{ .Values.operator.reconcileWorkers  }}
+            value: {{ .Values.operator.reconcileWorkers | quote }}
           - name: port
             value: "8081"
           - name: function_namespace
