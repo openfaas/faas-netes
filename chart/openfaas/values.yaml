@@ -96,24 +96,25 @@ operator:
   create: false
   # Unnecessary when running a single replica of the gateway
   leaderElection:
-    enabled: false
+    enabled: true
   reconcileWorkers: 2
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
-  # When set to true, pprof will be enabled, and the 
-  # service "faas-provider" will gain an extra port to
-  # expose the pprof endpoint, this cannot be used in production
-  # since it may bypass authentication, and should only be used
-  # for debugging purposes
-  pprof: false
 
   # For OpenFaaS for Enterprises, these numbers can be set higher,
   # if experiencing rate limiting due to a large number of functions
   # within the cluster
   kubeClientQPS: 100
   kubeClientBurst: 250
+
+  # When set to true, pprof will be enabled, and the 
+  # service "faas-provider" will gain an extra port to
+  # expose the pprof endpoint, this cannot be used in production
+  # since it may bypass authentication, and should only be used
+  # for debugging purposes
+  pprof: false
 
 faasnetesPro:
   image: ghcr.io/openfaasltd/faas-netes:0.4.24
