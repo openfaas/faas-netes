@@ -92,7 +92,7 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.23
+  image: ghcr.io/openfaasltd/faas-netes:0.4.24
   create: false
   resources:
     requests:
@@ -106,7 +106,7 @@ operator:
   kubeClientBurst: 250
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.23
+  image: ghcr.io/openfaasltd/faas-netes:0.4.24
 
 # For the Community Edition
 faasnetes:
@@ -177,7 +177,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.1
+  image: ghcr.io/openfaasltd/autoscaler:0.3.2
   replicas: 1
   enabled: true
   resources:
@@ -194,7 +194,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.4.7
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.0
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -246,7 +246,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.47.0
+  image: prom/prometheus:v2.47.2
   create: true
   resources:
     requests:
@@ -280,7 +280,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.9.22
+  image: nats:2.10.3
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
