@@ -41,7 +41,7 @@ clusterRole: true
 # you can create a HPA rule to scale on CPU, but you must not scale beyond
 # what's been purchased.
 gateway:
-  replicas: 3
+  replicas: 1
 # Required gateway configuration for Istio
   # directFunctions: true
   # probeFunctions: true

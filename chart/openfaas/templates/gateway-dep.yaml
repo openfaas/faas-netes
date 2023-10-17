@@ -220,6 +220,8 @@ spec:
           - -operator=true
           - "-license-file=/var/secrets/license/license"
         env:
+          - name: reconcile_workers
+            value: "2"
           - name: port
             value: "8081"
           - name: function_namespace
