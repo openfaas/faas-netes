@@ -266,6 +266,10 @@ spec:
           - name: leader_election
             value: "true"
           {{- end }}
+          {{- if eq (or .Values.operator.pprof false) true }}
+          - name: pprof
+            value: {{ .Values.operator.pprof | quote }}
+          {{- end }}
           {{- if .Values.iam.enabled }}
           - name: issuer_key_path
             value: "/var/secrets/issuer-key/issuer.key"
