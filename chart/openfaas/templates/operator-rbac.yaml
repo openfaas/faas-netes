@@ -44,7 +44,7 @@ rules:
 {{- if .Values.operator.leaderElection.enabled }}
 - apiGroups: [""]
   resources: ["configmaps"]
-  verbs: [ "update", "patch", "delete"]
+  verbs: [ "update", "patch", "delete", "watch"]
 {{- end }}
 - apiGroups: ["apps", "extensions"]
   resources: ["deployments"]
@@ -161,7 +161,7 @@ rules:
 {{- if .Values.operator.leaderElection.enabled }}
   - apiGroups: [""]
     resources: ["configmaps"]
-    verbs: [ "update", "patch", "delete"]
+    verbs: [ "update", "patch", "delete", "watch"]
 {{- end }}
 # TODO: AE - remove endpoints from RBAC now that operator uses EndpointSlices
   - apiGroups: [""]
