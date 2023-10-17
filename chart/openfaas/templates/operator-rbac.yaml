@@ -44,12 +44,18 @@ rules:
 - apiGroups: ["apps", "extensions"]
   resources: ["deployments"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+# TODO: AE - remove endpoints from RBAC now that operator uses EndpointSlices
 - apiGroups: [""]
   resources: ["pods", "pods/log", "namespaces", "endpoints"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["discovery.k8s.io"]
   resources: ["endpointslices"]
   verbs: ["get", "list", "watch"]
+# AE: For leader election
+# PATCH may not be required?
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -135,7 +141,6 @@ rules:
   - apiGroups: [""]
     resources: ["services"]
     verbs: ["get", "list", "watch", "create", "delete", "update"]
-#  Add discovery for endpointslices
   - apiGroups: ["discovery.k8s.io"]
     resources: ["endpointslices"]
     verbs: ["get", "list", "watch"]
@@ -148,6 +153,7 @@ rules:
   - apiGroups: [""]
     resources: ["configmaps"]
     verbs: ["get",  "create"]
+# TODO: AE - remove endpoints from RBAC now that operator uses EndpointSlices
   - apiGroups: [""]
     resources: ["pods", "pods/log", "namespaces", "endpoints"]
     verbs: ["get", "list", "watch"]
@@ -157,6 +163,11 @@ rules:
     verbs: ["create", "update", "delete"]
   - apiGroups: [""]
     resources: ["events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+# AE: For leader election
+# PATCH may not be required?
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
