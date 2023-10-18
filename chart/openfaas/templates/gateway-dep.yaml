@@ -262,6 +262,10 @@ spec:
             value: "{{ .Values.operator.kubeClientQPS }}"
           - name: kube_client_burst
             value: "{{ .Values.operator.kubeClientBurst }}"
+          - name: reconcile_qps
+            value: "{{ .Values.operator.reconcileQPS }}"
+          - name: reconcile_burst
+            value: "{{ .Values.operator.reconcileBurst }}"
           {{ if .Values.operator.leaderElection.enabled }}
           - name: leader_election
             value: "true"
