@@ -12,6 +12,17 @@ openfaasPro: true
 operator:
   create: true
 
+  # For when you are running more than one replica of the gateway
+  leaderElection:
+    enabled: false
+
+  # For handling large amounts of functions
+  kubeClientQPS: 100
+  kubeClientBurst: 250
+
+  reconcileQPS: 100
+  reconcileBurst: 250
+  
 # Enable authentication on all OpenFaaS core components.
 # You must not turn off basic_auth for the chart, however, you can pre-create the 
 # secret, if you're using a GitOps tool to create a stable secret
