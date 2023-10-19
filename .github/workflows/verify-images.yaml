@@ -9,7 +9,7 @@ jobs:
   verifyImages:
     strategy:
       matrix:
-        go-version: [1.19.x]
+        go-version: [1.21.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
