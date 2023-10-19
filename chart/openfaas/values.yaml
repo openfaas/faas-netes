@@ -94,14 +94,17 @@ gateway:
 operator:
   image: ghcr.io/openfaasltd/faas-netes:0.5.0
   create: false
-  # Unnecessary when running a single replica of the gateway
-  leaderElection:
-    enabled: true
-  reconcileWorkers: 2
   resources:
     requests:
       memory: "120Mi"
       cpu: "50m"
+
+  # For when you are running more than one replica of the gateway
+  leaderElection:
+    enabled: false
+
+  # Set to 2 for large amounts of functions
+  reconcileWorkers: 1
 
   # For OpenFaaS for Enterprises, these numbers can be set higher,
   # if experiencing rate limiting due to a large number of functions
