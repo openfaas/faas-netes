@@ -16,11 +16,16 @@ import (
 	types "github.com/openfaas/faas-provider/types"
 	"k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/client-go/listers/apps/v1"
-	glog "k8s.io/klog"
+	klog "k8s.io/klog"
 )
 
 // MaxReplicas licensed for OpenFaaS CE is 5/5
+// a license for OpenFaaS Standard is required to increase this limit.
 const MaxReplicas = 5
+
+// MaxFunctions licensed for OpenFaaS CE is 30
+// a license for OpenFaaS Standard is required to increase this limit.
+const MaxFunctions = 30
 
 // MakeReplicaReader reads the amount of replicas for a deployment
 func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http.HandlerFunc {
@@ -62,7 +67,7 @@ func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http
 
 		functionBytes, err := json.Marshal(function)
 		if err != nil {
-			glog.Errorf("Failed to marshal function: %s", err.Error())
+			klog.Errorf("Failed to marshal function: %s", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Failed to marshal function"))
 			return

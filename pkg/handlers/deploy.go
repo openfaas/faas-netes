@@ -29,7 +29,7 @@ import (
 const initialReplicasCount = 1
 
 // MakeDeployHandler creates a handler to create new functions in the cluster
-func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) http.HandlerFunc {
+func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory, functionList *k8s.FunctionList) http.HandlerFunc {
 	secrets := k8s.NewSecretsClient(factory.Client)
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -73,6 +73,12 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 		}
 
 		deploymentSpec, specErr := makeDeploymentSpec(request, existingSecrets, factory)
+		if specErr != nil {
+			wrappedErr := fmt.Errorf("failed create Deployment spec: %s", specErr.Error())
+			log.Println(wrappedErr)
+			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
+			return
+		}
 
 		var profileList []k8s.Profile
 		if request.Annotations != nil {
@@ -85,21 +91,26 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory) ht
 				return
 			}
 		}
+
 		for _, profile := range profileList {
 			factory.ApplyProfile(profile, deploymentSpec)
 		}
 
-		if specErr != nil {
-			wrappedErr := fmt.Errorf("failed create Deployment spec: %s", specErr.Error())
-			log.Println(wrappedErr)
-			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
+		count, err := functionList.Count()
+		if err != nil {
+			err := fmt.Errorf("unable to count functions: %s", err.Error())
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if count+1 > MaxFunctions {
+			err := fmt.Errorf("unable to create function, maximum: %d", MaxFunctions)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		deploy := factory.Client.AppsV1().Deployments(namespace)
-
-		_, err = deploy.Create(context.TODO(), deploymentSpec, metav1.CreateOptions{})
-		if err != nil {
+		if _, err = deploy.Create(context.TODO(), deploymentSpec, metav1.CreateOptions{}); err != nil {
 			wrappedErr := fmt.Errorf("unable create Deployment: %s", err.Error())
 			log.Println(wrappedErr)
 			http.Error(w, wrappedErr.Error(), http.StatusInternalServerError)

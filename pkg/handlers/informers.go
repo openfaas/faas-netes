@@ -1,10 +1,9 @@
-package controller
+package handlers
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/openfaas/faas-netes/pkg/handlers"
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -63,8 +62,8 @@ func applyValidation(deployment *appsv1.Deployment, kubeClient *kubernetes.Clien
 	var target int
 	if current == 0 {
 		target = 1
-	} else if current > handlers.MaxReplicas {
-		target = handlers.MaxReplicas
+	} else if current > MaxReplicas {
+		target = MaxReplicas
 	} else {
 		return nil
 	}

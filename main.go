@@ -15,7 +15,6 @@ import (
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
 	v1 "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/openfaas/v1"
 	"github.com/openfaas/faas-netes/pkg/config"
-	"github.com/openfaas/faas-netes/pkg/controller"
 	"github.com/openfaas/faas-netes/pkg/handlers"
 	"github.com/openfaas/faas-netes/pkg/k8s"
 	"github.com/openfaas/faas-netes/pkg/signals"
@@ -41,6 +40,8 @@ import (
 	// main.go:36:2: import "sigs.k8s.io/controller-tools/cmd/controller-gen" is a program, not an importable package
 	// _ "sigs.k8s.io/controller-tools/cmd/controller-gen"
 )
+
+const defaultResync = time.Hour * 10
 
 func main() {
 	var kubeconfig string
@@ -118,10 +119,6 @@ func main() {
 		ProfilesNamespace: config.ProfilesNamespace,
 	}
 
-	// the sync interval does not affect the scale to/from zero feature
-	// auto-scaling is does via the HTTP API that acts on the deployment Spec.Replicas
-	defaultResync := time.Minute * 5
-
 	namespaceScope := config.DefaultFunctionNamespace
 
 	if namespaceScope == "" {
@@ -146,7 +143,6 @@ func main() {
 	}
 
 	runController(setup)
-
 }
 
 type customInformers struct {
@@ -197,16 +193,17 @@ func runController(setup serverSetup) {
 	stopCh := signals.SetupSignalHandler()
 	operator := false
 	listers := startInformers(setup, stopCh, operator)
-	controller.RegisterEventHandlers(listers.DeploymentInformer, kubeClient, config.DefaultFunctionNamespace)
-
+	handlers.RegisterEventHandlers(listers.DeploymentInformer, kubeClient, config.DefaultFunctionNamespace)
+	deployLister := listers.DeploymentInformer.Lister()
 	functionLookup := k8s.NewFunctionLookup(config.DefaultFunctionNamespace, listers.EndpointsInformer.Lister())
+	functionList := k8s.NewFunctionList(config.DefaultFunctionNamespace, deployLister)
 
 	bootstrapHandlers := providertypes.FaaSHandlers{
 		FunctionProxy:        proxy.NewHandlerFunc(config.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(config.DefaultFunctionNamespace, kubeClient),
-		DeployHandler:        handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory),
-		FunctionReader:       handlers.MakeFunctionReader(config.DefaultFunctionNamespace, listers.DeploymentInformer.Lister()),
-		ReplicaReader:        handlers.MakeReplicaReader(config.DefaultFunctionNamespace, listers.DeploymentInformer.Lister()),
+		DeployHandler:        handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory, functionList),
+		FunctionReader:       handlers.MakeFunctionReader(config.DefaultFunctionNamespace, deployLister),
+		ReplicaReader:        handlers.MakeReplicaReader(config.DefaultFunctionNamespace, deployLister),
 		ReplicaUpdater:       handlers.MakeReplicaUpdater(config.DefaultFunctionNamespace, kubeClient),
 		UpdateHandler:        handlers.MakeUpdateHandler(config.DefaultFunctionNamespace, factory),
 		HealthHandler:        handlers.MakeHealthHandler(),
@@ -217,7 +214,6 @@ func runController(setup serverSetup) {
 	}
 
 	faasProvider.Serve(&bootstrapHandlers, &config.FaaSConfig)
-
 }
 
 // serverSetup is a container for the config and clients needed to start the

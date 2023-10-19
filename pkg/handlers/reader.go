@@ -14,7 +14,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/selection"
 	v1 "k8s.io/client-go/listers/apps/v1"
-	glog "k8s.io/klog"
+	klog "k8s.io/klog"
 
 	"github.com/openfaas/faas-netes/pkg/k8s"
 )
@@ -52,7 +52,7 @@ func MakeFunctionReader(defaultNamespace string, deploymentLister v1.DeploymentL
 
 		functionBytes, err := json.Marshal(functions)
 		if err != nil {
-			glog.Errorf("Failed to marshal functions: %s", err.Error())
+			klog.Errorf("Failed to marshal functions: %s", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Failed to marshal functions"))
 			return
