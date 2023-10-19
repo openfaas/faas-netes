@@ -92,7 +92,7 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.24
+  image: ghcr.io/openfaasltd/faas-netes:0.5.0
   create: false
   # Unnecessary when running a single replica of the gateway
   leaderElection:
@@ -109,6 +109,12 @@ operator:
   kubeClientQPS: 100
   kubeClientBurst: 250
 
+  # For OpenFaaS for Enterprises, these numbers can be set higher,
+  # For very high usage, you can increase the rate at which Function CRs
+  # are processed and turned into deployments, or updated in response to changes
+  reconcileQPS: 100
+  reconcileBurst: 250
+
   # When set to true, pprof will be enabled, and the 
   # service "faas-provider" will gain an extra port to
   # expose the pprof endpoint, this cannot be used in production
@@ -117,11 +123,11 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.4.24
+  image: ghcr.io/openfaasltd/faas-netes:0.5.0
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.17.1
+  image: ghcr.io/openfaas/faas-netes:0.17.2
   resources:
     requests:
       memory: "120Mi"
