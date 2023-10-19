@@ -130,6 +130,12 @@ spec:
         - name: logs_provider_url
           value: "{{ .Values.gateway.logsProviderURL }}"
         {{- end }}
+        {{- if .Values.openfaasPro }}
+        {{- if (or .Values.gatewayPro.pprof false) }}
+        - name: pprof
+          value: {{ .Values.gatewayPro.pprof | quote }}
+        {{- end }}
+        {{- end }}
         - name: read_timeout
           value: "{{ .Values.gateway.readTimeout }}"
         - name: write_timeout
