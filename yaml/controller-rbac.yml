@@ -52,17 +52,9 @@ rules:
       - update
       - patch
       - delete
-  - apiGroups:
-      - ""
-    resources:
-      - pods
-      - pods/log
-      - namespaces
-      - endpoints
-    verbs:
-      - get
-      - list
-      - watch
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "namespaces", "endpoints"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role

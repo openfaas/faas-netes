@@ -18,7 +18,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "e853d90ec905d2dc8d6d441c00d36e6eff2054c68c02018b214af15a0d799351"
+        checksum/prometheus-config: "43108ae0efa9d64ba3979efcc70c575688df4515a180cc49e50cd08142984cc6"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -30,7 +30,7 @@ spec:
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
             path: /-/healthy
