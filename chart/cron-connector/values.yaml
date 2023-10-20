@@ -1,11 +1,9 @@
-image: ghcr.io/openfaas/cron-connector:0.6.1
-
-gatewayURL: http://gateway.openfaas:8080
-
 openfaasPro: false
 
 pro:
-  image: ghcr.io/openfaasltd/cron-connector:0.2.0
+  image: ghcr.io/openfaasltd/cron-connector:0.2.1
+
+image: ghcr.io/openfaas/cron-connector:0.6.1
 
 logs:
   # Log debug messages
@@ -21,6 +19,8 @@ contentType: text/plain
 
 # Time between querying the gateway for cron schedules
 rebuildInterval: 30s
+
+gatewayURL: http://gateway.openfaas:8080
 
 nodeSelector: {}
 
