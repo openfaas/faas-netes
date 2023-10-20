@@ -16,6 +16,9 @@ type Function struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec FunctionSpec `json:"spec"`
+
+	// +optional
+	Status FunctionStatus `json:"status,omitempty"`
 }
 
 // FunctionSpec is the spec for a Function resource
@@ -47,6 +50,12 @@ type FunctionSpec struct {
 type FunctionResources struct {
 	Memory string `json:"memory,omitempty"`
 	CPU    string `json:"cpu,omitempty"`
+}
+
+// FunctionStatus is the status for a Function resource
+type FunctionStatus struct {
+	// +optional
+	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
