@@ -41,7 +41,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.27.2
+        image: ghcr.io/openfaas/gateway:0.27.3
         imagePullPolicy: IfNotPresent
         command:
           - ./gateway
