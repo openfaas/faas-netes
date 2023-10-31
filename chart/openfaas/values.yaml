@@ -301,12 +301,12 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.3
+  image: nats:2.10.4
   enableMonitoring: false
   metrics:
     # Should stay off by default because the exporter is not multi-arch (yet)
     enabled: false
-    image: natsio/prometheus-nats-exporter:0.12.0
+    image: natsio/prometheus-nats-exporter:0.13.0
   resources:
     requests:
       memory: "120Mi"
