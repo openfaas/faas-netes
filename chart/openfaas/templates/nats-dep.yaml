@@ -18,10 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io/scrape: {{ .Values.nats.metrics.enabled | quote }}
-        {{- if .Values.nats.metrics.enabled }}
-        prometheus.io/port: "7777"
-        {{- end }}
+        prometheus.io/scrape: false
       labels:
         app: nats
     spec:
@@ -38,10 +35,6 @@ spec:
         ports:
         - containerPort: 4222
           protocol: TCP
-        {{- if .Values.nats.enableMonitoring }}
-        - containerPort: 8222
-          protocol: TCP
-        {{- end }}
         {{- if not (eq .Values.queueMode "jetstream") }}
         command: ["/nats-streaming-server"]
         {{- end }}
@@ -54,32 +47,6 @@ spec:
           - --cluster_id
           - faas-cluster
           {{- end }}
-          {{- if or .Values.nats.enableMonitoring .Values.nats.metrics.enabled }}
-          - -m
-          - "8222"
-          {{- end }}
-      {{- if .Values.nats.metrics.enabled }}
-      - name: metrics
-        image: {{ .Values.nats.metrics.image }}
-        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
-        ports:
-        - containerPort: 7777
-          protocol: TCP
-        args:
-        - -port
-        - "7777"
-        - -connz
-        - -routez
-        - -subz
-        - -varz
-        {{- if eq .Values.queueMode "jetstream" }}
-        - -jsz=all
-        {{- else }}
-        - -channelz
-        - -serverz
-        {{- end }}
-        - http://localhost:8222
-      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

@@ -1,5 +1,3 @@
-# This should usually be disabled and is only required for testing
-
 {{- if .Values.openfaasPro }}
 apiVersion: v1
 kind: Service
@@ -18,7 +16,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: http
+    - name: provider
       port: 8081
       targetPort: 8081
       protocol: TCP

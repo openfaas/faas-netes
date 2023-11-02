@@ -215,6 +215,9 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
+        - name: gw-metrics
+          containerPort: 8082
+          protocol: TCP
       {{- if .Values.operator.create }}
       - name: operator
         resources:
@@ -293,7 +296,8 @@ spec:
             value: "/var/secrets"
           {{- end }}
         ports:
-        - containerPort: 8081
+        - name: provider
+          containerPort: 8081
           protocol: TCP
         volumeMounts:
         {{- if .Values.iam.enabled }}
@@ -401,7 +405,8 @@ spec:
         - mountPath: /tmp
           name: faas-netes-temp-volume
         ports:
-        - containerPort: 8081
+        - name: provider
+          containerPort: 8081
           protocol: TCP
       {{- end }}
     {{- with .Values.nodeSelector }}

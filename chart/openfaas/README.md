@@ -535,14 +535,11 @@ yaml) |
 | `jetstreamQueueWorker.logs.debug` | Log debug messages | `false` |
 | `jetstreamQueueWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
 | `nats.channel` | The name of the NATS Streaming channel or NATS JetStream stream to use for asynchronous function invocations | `faas-request` |
-| `nats.enableMonitoring` | Enable the NATS monitoring endpoints on port `8222` for NATS Streaming deployments managed by this chart | `false` |
 | `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `""` |
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
 | `nats.external.host` | The host at which the externally-managed NATS Streaming server can be reached | `""` |
 | `nats.external.port` | The port at which the externally-managed NATS Streaming server can be reached | `""` |
 | `nats.image` | Container image used for NATS | See [values.yaml](./values.yaml) |
-| `nats.metrics.enabled` | Export Prometheus metrics for NATS, no multi-arch support  | `false` |
-| `nats.metrics.image` | Container image used for the NATS Prometheus exporter | See [values.yaml](./values.yaml) |
 | `nats.resources` | Resource limits and requests for the nats pods | See [values.yaml](./values.yaml) |
 | `nats.streamReplication` | JetStream stream replication factor. For production a value of at least 3 is recommended. | `1` |
 | `queueWorker.ackWait` | Max duration of any async task/request | `60s` |

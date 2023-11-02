@@ -109,6 +109,9 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
+        - name: gw-metrics
+          containerPort: 8082
+          protocol: TCP
       - name: faas-netes
         resources:
             requests:
@@ -170,5 +173,6 @@ spec:
         - mountPath: /tmp
           name: faas-netes-temp-volume
         ports:
-        - containerPort: 8081
+        - name: provider
+          containerPort: 8081
           protocol: TCP

@@ -2,9 +2,3 @@ prometheus:
   resources:
     requests:
       memory: "100Mi"
-
-nats:
-  enableMonitoring: false
-  metrics:
-    # Should stay off by default because the exporter is not multi-arch (yet)
-    enabled: false

@@ -17,16 +17,6 @@ spec:
     - port: 4222
       protocol: TCP
       name: tcp
-    {{- if .Values.nats.enableMonitoring }}
-    - port: 8222
-      protocol: TCP
-      name: monitoring
-    {{- end }}
-    {{- if .Values.nats.metrics.enabled }}
-    - port: 7777
-      protocol: TCP
-      name: metrics
-    {{- end }}
   selector:
     app: nats
 {{- end }}

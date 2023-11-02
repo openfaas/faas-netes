@@ -142,7 +142,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.14
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.16
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -302,11 +302,6 @@ nats:
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
   image: nats:2.10.4
-  enableMonitoring: false
-  metrics:
-    # Should stay off by default because the exporter is not multi-arch (yet)
-    enabled: false
-    image: natsio/prometheus-nats-exporter:0.13.0
   resources:
     requests:
       memory: "120Mi"
