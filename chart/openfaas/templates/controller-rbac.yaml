@@ -25,7 +25,6 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ .Release.Name }}-controller
-  namespace: {{ $functionNs | quote }}
 rules:
   - apiGroups:
       - ""
@@ -217,6 +216,12 @@ rules:
       - "get"
       - "list"
       - "watch"
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
