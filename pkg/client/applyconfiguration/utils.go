@@ -43,6 +43,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationopenfaasv1.FunctionResourcesApplyConfiguration{}
 	case openfaasv1.SchemeGroupVersion.WithKind("FunctionSpec"):
 		return &applyconfigurationopenfaasv1.FunctionSpecApplyConfiguration{}
+	case openfaasv1.SchemeGroupVersion.WithKind("FunctionStatus"):
+		return &applyconfigurationopenfaasv1.FunctionStatusApplyConfiguration{}
 	case openfaasv1.SchemeGroupVersion.WithKind("Profile"):
 		return &applyconfigurationopenfaasv1.ProfileApplyConfiguration{}
 	case openfaasv1.SchemeGroupVersion.WithKind("ProfileSpec"):
