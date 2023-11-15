@@ -47,7 +47,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.9
+  image: ghcr.io/openfaasltd/gateway:0.4.10
   pprof: false
 
 gateway:
@@ -142,7 +142,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.16
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.19
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -301,7 +301,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.4
+  image: nats:2.10.5
   resources:
     requests:
       memory: "120Mi"
