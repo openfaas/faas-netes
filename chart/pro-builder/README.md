@@ -221,11 +221,23 @@ kubectl create secret generic registry-secret \
 
 > For more details on the configuration see: [amazon-ecr-credentials-helper](https://github.com/awslabs/amazon-ecr-credential-helper#docker)
 
-Create a secret for the AWS credentials. The credentials must have a policy applied that  allows access to Amazon ECR.
+Create a secret for the AWS credentials file. The credentials must have a policy applied that allows access to Amazon ECR.
+
+Create the credentials file:
+```bash
+export AWS_ACCESS_KEY_ID=""
+export AWS_ACCESS_SECRET_KEY=""
+
+cat > ecr-credentials.txt <<EOF
+[default]
+aws_access_key_id=$AWS_ACCESS_KEY_ID
+aws_secret_access_key=$AWS_ACCESS_SECRET_KEY
+EOF
+```
 
 ```
 kubectl create secret generic -n openfaas \
-  aws-ecr-credentials --from-file aws-ecr-credentials=$HOME/ecr-credentials.txt
+  aws-ecr-credentials --from-file aws-ecr-credentials=./ecr-credentials.txt
 ```
 
 Modify your `values.yaml` file accordingly to mount the secret in the Pro Builder.
