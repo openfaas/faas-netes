@@ -267,7 +267,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.47.2
+  image: prom/prometheus:v2.48.0
   create: true
   resources:
     requests:
@@ -286,7 +286,7 @@ alertmanager:
 stan:
   # Image used for the NATS Streaming when using the deprecated 
   # support in the Community Edition (CE)
-  image: nats-streaming:0.25.5
+  image: nats-streaming:0.25.6
 
 # NATS (required for async)
 nats:
