@@ -328,14 +328,15 @@ ingress:
   #ingressClassName: nginx
 
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
-# https://github.com/openfaas-incubator/ingress-operator
+# https://github.com/openfaas/ingress-operator
 ingressOperator:
-  image: ghcr.io/openfaas/ingress-operator:0.8.1
+  image: ghcr.io/openfaas/ingress-operator:0.8.2
   replicas: 1
   create: false
   resources:
     requests:
       memory: "25Mi"
+      cpu: "50m"
 
 nodeSelector: {}
 

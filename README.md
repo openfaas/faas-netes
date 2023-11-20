@@ -110,7 +110,7 @@ To configure ingress see the `helm` chart. By default NodePorts are used. These 
 
 By default functions are exposed at `http://gateway:8080/function/NAME`.
 
-You can also use the [IngressOperator to set up custom domains and HTTP paths](https://github.com/openfaas-incubator/ingress-operator)
+You can also use the [IngressOperator to set up custom domains and HTTP paths](https://github.com/openfaas/ingress-operator)
 
 ### Image pull policy
 
