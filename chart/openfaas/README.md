@@ -496,6 +496,8 @@ yaml) |
 | `operator.kubeClientQPS` | QPS rate-limit for the Kubernetes client, (OpenFaaS for Enterprises) | `""` (defaults to 100) |
 | `operator.kubeClientBurst` | Burst rate-limit for the Kubernetes client (OpenFaaS for Enterprises) | `""` (defaults to 250) |
 | `operator.reconcileWorkers` | Number of reconciliation workers to run to convert Function CRs into Deployments | `1` |
+| `operator.logs.format` | Set the log format, supports `console` or `json` | `console` |
+| `operator.logs.debug`           | Print debug logs    | `false`                        |
 | `operator.leaderElection.enabled`| When set to true, only one replica of the operator within the gateway pod will perform reconciliation | `false` |
 
 ### Functions

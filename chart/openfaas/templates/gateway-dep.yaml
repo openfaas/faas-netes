@@ -283,6 +283,12 @@ spec:
           - name: pprof
             value: {{ .Values.operator.pprof | quote }}
           {{- end }}
+          {{- if .Values.operator.logs}}
+          - name: "debug"
+            value: "{{ .Values.operator.logs.debug }}"
+          - name: "log_encoding"
+            value: "{{ .Values.operator.logs.format }}"
+          {{- end }}
           {{- if .Values.iam.enabled }}
           - name: issuer_key_path
             value: "/var/secrets/issuer-key/issuer.key"
