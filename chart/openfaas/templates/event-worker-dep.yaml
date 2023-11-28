@@ -1,0 +1,92 @@
+{{- if .Values.openfaasPro }}
+{{- if .Values.eventSubscription.metering.enabled }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: event-worker
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: event-worker
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.queueWorker.replicas }}
+  selector:
+    matchLabels:
+      app: event-worker
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: event-worker
+    spec:
+      volumes:
+      - name: license
+        secret:
+          secretName: openfaas-license
+      {{- if .Values.eventSubscription.endpointSecret }}
+      - name: endpoint-secret
+        secret:
+          secretName: {{.Values.eventSubscription.endpointSecret}}
+      {{- end }}
+      containers:
+      - name:  event-worker
+        resources:
+          {{- .Values.eventWorker.resources | toYaml | nindent 12 }}
+        image: {{ .Values.eventWorker.image }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        command:
+          - "event-worker"
+          - "-license-file=/var/secrets/license/license"
+          {{- if .Values.eventSubscription.endpointSecret }}
+          - "-webhook-secret-file=/var/secrets/webhook-secret/webhook-secret"
+          {{- end}}
+        env:
+        {{- if .Values.nats.external.enabled }}
+        - name: nats_host
+          value: "{{ .Values.nats.external.host }}"
+        - name: nats_port
+          value: "{{ .Values.nats.external.port }}"
+        {{- else }}
+        - name: nats_host
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- end}}
+        - name: nats_stream_replicas
+          value: "{{ .Values.nats.streamReplication }}"
+        - name: "tls_insecure"
+          value: "{{ .Values.eventSubscription.insecureTLS }}"
+        - name: "webhook_endpoint"
+          value: "{{ .Values.eventSubscription.endpoint }}"
+        - name: "debug"
+          value: "{{ .Values.eventWorker.logs.debug }}"
+        - name: "log_encoding"
+          value: "{{ .Values.eventWorker.logs.format }}"
+
+        volumeMounts:
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
+        {{- if .Values.eventSubscription.endpointSecret }}
+        - name: endpoint-secret
+          readOnly: true
+          mountPath: "/var/secrets/webhook-secret"
+        {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+
+{{- end }}
+{{- end }}
