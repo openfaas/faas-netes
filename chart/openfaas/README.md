@@ -598,6 +598,20 @@ yaml) |
 | `oidcAuthPlugin.resources` | Resource limits and requests for the oidc-auth-plugin containers | See [values.yaml](./values.yaml) |
 | `oidcAuthPlugin.verbose` | Enable verbose logging | `false` |
 
+### Event subscriptions
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `eventSubscription.endpoint` | The webhook endpoint to receive events. | `""`|
+| `eventSubscription.endpointSecret` | Name of the Kubernetes secret that contains the secret key for signing webhook requests. | `""` |
+| `eventSubscription.insecureTLS` | Enable insecure TLS for webhook invocations | `false` |
+| `eventSubscription.metering.enabled` | Enable metering events. | `false` |
+| `eventSubscription.metering.defaultRAM` | Default memory value used in function_usage events for metering when no memory limit is set on the function.  | `40Mi` |
+| `eventWorker.image` | Container image used for the events-worker | See [values.yaml](./values.yaml) |
+| `eventWorker.resources` |  Resource limits and requests for the event-worker container | See [values.yaml](./values.yaml) |
+| `eventWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
+| `eventWorker.logs.debug` | Print debug logs    | `false` |
+
 ### faas-idler (OpenFaaS Pro)
 
 Deprecated and replaced by the new autoscaler, which supports scale to zero.

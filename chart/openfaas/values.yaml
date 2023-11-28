@@ -91,6 +91,26 @@ gateway:
     failureThreshold: 3
     successThreshold: 1
 
+eventSubscription:
+  endpoint: ""
+  endpointSecret: ""
+  insecureTLS: false
+  metering:
+    enabled: false
+    # Default memory value used in function_usage events for metering
+    # when no memory limit is set on the function.
+    defaultRAM: 40Mi
+  
+eventWorker:
+  image: ghcr.io/openfaasltd/event-worker:0.0.1
+  logs:
+    debug: false
+    format: "console"
+  resources:
+    requests:
+      memory: "120Mi"
+      cpu: "50m"
+
 # For OpenFaaS Pro and the Function CRD
 operator:
   image: ghcr.io/openfaasltd/faas-netes:0.5.3

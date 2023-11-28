@@ -164,7 +164,7 @@ spec:
         - name: faas_nats_channel
           value: "{{ .Values.nats.channel }}"
         {{- else }}
-        {{- if .Values.async }}
+        {{- if or .Values.async .Values.eventSubscription.metering.enabled }}
         - name: faas_nats_address
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         - name: faas_nats_port
@@ -198,6 +198,12 @@ spec:
           value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
         - name: probe_functions
           value: "{{ .Values.gateway.probeFunctions }}"
+        - name: metering_default_memory 
+          value: "{{ .Values.eventSubscription.metering.defaultRAM }}"
+        - name: metering 
+          value: "{{ .Values.eventSubscription.metering.enabled }}"
+        - name: async
+          value: "{{ .Values.async }}"
         volumeMounts:
         # - name: faas-auth
         #   mountPath: /var/run/secrets/faas-auth
