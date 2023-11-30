@@ -93,7 +93,7 @@ gateway:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.3
+  image: ghcr.io/openfaasltd/faas-netes:0.5.4
   create: false
   logs:
     debug: false
@@ -131,7 +131,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.3
+  image: ghcr.io/openfaasltd/faas-netes:0.5.4
 
 # For the Community Edition
 faasnetes:
@@ -146,7 +146,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.19
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.20
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
