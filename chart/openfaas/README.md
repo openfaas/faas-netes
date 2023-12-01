@@ -607,6 +607,8 @@ yaml) |
 | `eventSubscription.insecureTLS` | Enable insecure TLS for webhook invocations | `false` |
 | `eventSubscription.metering.enabled` | Enable metering events. | `false` |
 | `eventSubscription.metering.defaultRAM` | Default memory value used in function_usage events for metering when no memory limit is set on the function.  | `40Mi` |
+| `eventSubscription.auditing.enabled` | Enable auditing events | `false` |
+| `eventSubscription.auditing.httpVerbs` | Comma-separated list of HTTP methods to audit | `"PUT,POST,DELETE"`|
 | `eventWorker.image` | Container image used for the events-worker | See [values.yaml](./values.yaml) |
 | `eventWorker.resources` |  Resource limits and requests for the event-worker container | See [values.yaml](./values.yaml) |
 | `eventWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |

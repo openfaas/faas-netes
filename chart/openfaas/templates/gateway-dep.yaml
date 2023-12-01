@@ -309,6 +309,23 @@ spec:
           - name: secret_mount_path
             value: "/var/secrets"
           {{- end }}
+          {{- if .Values.eventSubscription.auditing.enabled }}
+          {{- if .Values.nats.external.enabled }}
+          - name: nats_address
+            value: "{{ .Values.nats.external.host }}"
+          - name: nats_port
+            value: "{{ .Values.nats.external.port }}"
+          {{- else }}
+          - name: nats_address
+            value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+          - name: nats_port
+            value: "4222"
+          {{- end }}
+          - name: auditing
+            value: "{{ .Values.eventSubscription.auditing.enabled }}"
+          - name: auditing_http_verbs
+            value: "{{ .Values.eventSubscription.auditing.httpVerbs }}"
+          {{- end}}
         ports:
         - name: provider
           containerPort: 8081
@@ -400,6 +417,23 @@ spec:
         - name: secret_mount_path
           value: "/var/secrets"
         {{- end }}
+        {{- if .Values.eventSubscription.auditing.enabled }}
+        {{- if .Values.nats.external.enabled }}
+        - name: nats_address
+          value: "{{ .Values.nats.external.host }}"
+        - name: nats_port
+          value: "{{ .Values.nats.external.port }}"
+        {{- else }}
+        - name: nats_address
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        - name: nats_port
+          value: "4222"
+        {{- end }}
+        - name: auditing
+          value: "{{ .Values.eventSubscription.auditing.enabled }}"
+        - name: auditing_http_verbs
+          value: "{{ .Values.eventSubscription.auditing.httpVerbs }}"
+        {{- end}}
         volumeMounts:
         {{- if .Values.iam.enabled }}
         - name: issuer-key

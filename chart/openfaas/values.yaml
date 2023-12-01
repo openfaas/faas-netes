@@ -108,6 +108,10 @@ eventSubscription:
     # Comma-separated list of namespaces to exclude from metering
     # for when functions are used to handle the metering webhook events
     excludedNamespaces: ""
+  auditing:
+    enabled: false
+    # Comma-separated list of HTTP methods to audit.
+    httpVerbs: "PUT,POST,DELETE"
   
 eventWorker:
   image: ghcr.io/openfaasltd/event-worker:0.0.4

@@ -1,4 +1,4 @@
-{{- if and (or .Values.async .Values.eventSubscription.metering.enabled) (not .Values.nats.external.enabled ) }}
+{{- if and (or .Values.async (or .Values.eventSubscription.metering.enabled .Values.eventSubscription.auditing.enabled)) (not .Values.nats.external.enabled ) }}
 ---
 apiVersion: v1
 kind: Service
