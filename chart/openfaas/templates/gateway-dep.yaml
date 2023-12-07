@@ -60,7 +60,7 @@ spec:
         secret:
           secretName: openfaas-license
       {{- end }}
-      terminationGracePeriodSeconds: 1
+      # terminationGracePeriodSeconds: 1
       containers:
       - name: gateway
         resources:

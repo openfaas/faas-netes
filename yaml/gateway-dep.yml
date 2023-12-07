@@ -34,7 +34,7 @@ spec:
       - name: auth
         secret:
           secretName: basic-auth
-      terminationGracePeriodSeconds: 1
+      # terminationGracePeriodSeconds: 1
       containers:
       - name: gateway
         resources:
@@ -117,7 +117,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.17.2
+        image: ghcr.io/openfaas/faas-netes:0.17.3
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
