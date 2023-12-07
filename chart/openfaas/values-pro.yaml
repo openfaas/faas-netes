@@ -47,12 +47,10 @@ autoscaler:
 # https://docs.openfaas.com/reference/namespaces/
 clusterRole: true
 
-# HPA CPU? 3 <=> 6
-# If you have purchased licenses for 6 gateway replicas for this environment
-# you can create a HPA rule to scale on CPU, but you must not scale beyond
-# what's been purchased.
+# 3x replicas are recommended for production
+# 1x is recommended for staging and development
 gateway:
-  replicas: 1
+  replicas: 3
 # Required gateway configuration for Istio
   # directFunctions: true
   # probeFunctions: true
