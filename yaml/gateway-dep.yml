@@ -99,6 +99,12 @@ spec:
           value: "1024"
         - name: probe_functions
           value: "false"
+        - name: metering_default_memory 
+          value: "40Mi"
+        - name: metering 
+          value: "false"
+        - name: async
+          value: "true"
         volumeMounts:
         # - name: faas-auth
         #   mountPath: /var/run/secrets/faas-auth
