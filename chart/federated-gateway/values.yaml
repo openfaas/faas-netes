@@ -1,7 +1,7 @@
 # Access to the federated gateway can be requested by OpenFaaS customers
 # Email us using your current channels for more.
 
-image: ghcr.io/openfaasltd/federated-gateway:0.2.2
+image: ghcr.io/openfaasltd/federated-gateway:0.2.3
 replicas: 1
 
 # OpenFaaS gateway URL

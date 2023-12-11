@@ -1,7 +1,7 @@
 apiVersion: v2
 description: Federated Gateway for OpenFaaS service providers
 name: federated-gateway
-version: 0.0.3
+version: 0.1.0
 home: https://openfaas.com
 keywords:
 - openfaas

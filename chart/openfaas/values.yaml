@@ -47,7 +47,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.13
+  image: ghcr.io/openfaasltd/gateway:0.4.14
   pprof: false
 
 gateway:
@@ -102,7 +102,7 @@ eventSubscription:
     defaultRAM: 40Mi
   
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.0.1
+  image: ghcr.io/openfaasltd/event-worker:0.0.2
   logs:
     debug: false
     format: "console"
@@ -113,7 +113,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.5
+  image: ghcr.io/openfaasltd/faas-netes:0.5.6
   create: false
   logs:
     debug: false
@@ -151,7 +151,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.5
+  image: ghcr.io/openfaasltd/faas-netes:0.5.6
 
 # For the Community Edition
 faasnetes:
@@ -166,7 +166,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.20
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.21
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -222,7 +222,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.2
+  image: ghcr.io/openfaasltd/autoscaler:0.3.3
   replicas: 1
   enabled: true
   resources:
@@ -258,7 +258,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.5
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.6
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
@@ -291,7 +291,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.48.0
+  image: prom/prometheus:v2.48.1
   create: true
   resources:
     requests:

@@ -44,7 +44,7 @@ buildkit:
   # For a rootless configuration, preferred, if the configuration
   # and Kernel version of your Kubernetes nodes supports it
   # 
-  image: moby/buildkit:v0.12.3-rootless
+  image: moby/buildkit:v0.13.0-beta1-rootless
   rootless: true
   securityContext:
     # Needs Kubernetes >= 1.19
