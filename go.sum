@@ -73,10 +73,8 @@ github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/onsi/ginkgo/v2 v2.9.4 h1:xR7vG4IXt5RWx6FfIjyAtsoMAtnc3C/rFXBBd2AjZwE=
 github.com/onsi/gomega v1.27.6 h1:ENqfyGeS5AX/rlXDd/ETokDz93u0YufY1Pgxuy/PvWE=
-github.com/openfaas/faas-provider v0.19.1 h1:xH8lTWabfDZwzIvC0u1AO48ghD3BNw6Vo231DLqTeI0=
-github.com/openfaas/faas-provider v0.19.1/go.mod h1:Farrp+9Med8LeK3aoYpqplMP8f5ebTILbCSLg2LPLZk=
-github.com/openfaas/faas-provider v0.24.4 h1:Zzbkabgd0PoQmnRjy53NbMXjhLaIyoIiwP3qaLkm9rE=
-github.com/openfaas/faas-provider v0.24.4/go.mod h1:NsETIfEndZn4mn/w/XnBTcDTwKqULCziphLp7KgeRcA=
+github.com/openfaas/faas-provider v0.25.0 h1:2R1QT22eemeBZV++DsiZOG+h4qKlQRnF9DAP21lyqG0=
+github.com/openfaas/faas-provider v0.25.0/go.mod h1:NsETIfEndZn4mn/w/XnBTcDTwKqULCziphLp7KgeRcA=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

@@ -7,15 +7,16 @@
 //
 // openfaas-provider has implemented a standard HTTP HandlerFunc that will handle setting
 // timeout values, parsing the request path, and copying the request/response correctly.
-// 		bootstrapHandlers := bootTypes.FaaSHandlers{
-// 			FunctionProxy:  proxy.NewHandlerFunc(timeout, resolver),
-// 			DeleteHandler:  handlers.MakeDeleteHandler(clientset),
-// 			DeployHandler:  handlers.MakeDeployHandler(clientset),
-// 			FunctionReader: handlers.MakeFunctionReader(clientset),
-// 			ReplicaReader:  handlers.MakeReplicaReader(clientset),
-// 			ReplicaUpdater: handlers.MakeReplicaUpdater(clientset),
-// 			InfoHandler:    handlers.MakeInfoHandler(),
-// 		}
+//
+//	bootstrapHandlers := bootTypes.FaaSHandlers{
+//		FunctionProxy:  proxy.NewHandlerFunc(timeout, resolver),
+//		DeleteHandler:  handlers.MakeDeleteHandler(clientset),
+//		DeployHandler:  handlers.MakeDeployHandler(clientset),
+//		FunctionLister: handlers.MakeFunctionLister(clientset),
+//		ReplicaReader:  handlers.MakeReplicaReader(clientset),
+//		ReplicaUpdater: handlers.MakeReplicaUpdater(clientset),
+//		InfoHandler:    handlers.MakeInfoHandler(),
+//	}
 //
 // proxy.NewHandlerFunc is optional, but does simplify the logic of your provider.
 package proxy
@@ -34,8 +35,9 @@ import (
 )
 
 const (
-	watchdogPort       = "8080"
-	defaultContentType = "text/plain"
+	watchdogPort           = "8080"
+	defaultContentType     = "text/plain"
+	openFaaSInternalHeader = "X-OpenFaaS-Internal"
 )
 
 // BaseURLResolver URL resolver for proxy requests
@@ -48,16 +50,18 @@ type BaseURLResolver interface {
 }
 
 // NewHandlerFunc creates a standard http.HandlerFunc to proxy function requests.
+// When verbose is set to true, the timing of each invocation will be printed out to
+// stderr.
 // The returned http.HandlerFunc will ensure:
 //
-// 	- proper proxy request timeouts
-// 	- proxy requests for GET, POST, PATCH, PUT, and DELETE
-// 	- path parsing including support for extracing the function name, sub-paths, and query paremeters
-// 	- passing and setting the `X-Forwarded-Host` and `X-Forwarded-For` headers
-// 	- logging errors and proxy request timing to stdout
+//   - proper proxy request timeouts
+//   - proxy requests for GET, POST, PATCH, PUT, and DELETE
+//   - path parsing including support for extracing the function name, sub-paths, and query paremeters
+//   - passing and setting the `X-Forwarded-Host` and `X-Forwarded-For` headers
+//   - logging errors and proxy request timing to stdout
 //
 // Note that this will panic if `resolver` is nil.
-func NewHandlerFunc(config types.FaaSConfig, resolver BaseURLResolver) http.HandlerFunc {
+func NewHandlerFunc(config types.FaaSConfig, resolver BaseURLResolver, verbose bool) http.HandlerFunc {
 	if resolver == nil {
 		panic("NewHandlerFunc: empty proxy handler resolver, cannot be nil")
 	}
@@ -77,7 +81,7 @@ func NewHandlerFunc(config types.FaaSConfig, resolver BaseURLResolver) http.Hand
 			http.MethodGet,
 			http.MethodOptions,
 			http.MethodHead:
-			proxyRequest(w, r, proxyClient, resolver)
+			proxyRequest(w, r, proxyClient, resolver, verbose)
 
 		default:
 			w.WriteHeader(http.StatusMethodNotAllowed)
@@ -130,26 +134,33 @@ func NewProxyClient(timeout time.Duration, maxIdleConns int, maxIdleConnsPerHost
 }
 
 // proxyRequest handles the actual resolution of and then request to the function service.
-func proxyRequest(w http.ResponseWriter, originalReq *http.Request, proxyClient *http.Client, resolver BaseURLResolver) {
+func proxyRequest(w http.ResponseWriter, originalReq *http.Request, proxyClient *http.Client, resolver BaseURLResolver, verbose bool) {
 	ctx := originalReq.Context()
 
 	pathVars := mux.Vars(originalReq)
 	functionName := pathVars["name"]
 	if functionName == "" {
+		w.Header().Add(openFaaSInternalHeader, "proxy")
+
 		httputil.Errorf(w, http.StatusBadRequest, "Provide function name in the request path")
 		return
 	}
 
-	functionAddr, resolveErr := resolver.Resolve(functionName)
-	if resolveErr != nil {
+	functionAddr, err := resolver.Resolve(functionName)
+	if err != nil {
+		w.Header().Add(openFaaSInternalHeader, "proxy")
+
 		// TODO: Should record the 404/not found error in Prometheus.
-		log.Printf("resolver error: no endpoints for %s: %s\n", functionName, resolveErr.Error())
+		log.Printf("resolver error: no endpoints for %s: %s\n", functionName, err.Error())
 		httputil.Errorf(w, http.StatusServiceUnavailable, "No endpoints available for: %s.", functionName)
 		return
 	}
 
 	proxyReq, err := buildProxyRequest(originalReq, functionAddr, pathVars["params"])
 	if err != nil {
+
+		w.Header().Add(openFaaSInternalHeader, "proxy")
+
 		httputil.Errorf(w, http.StatusInternalServerError, "Failed to resolve service: %s.", functionName)
 		return
 	}
@@ -165,6 +176,8 @@ func proxyRequest(w http.ResponseWriter, originalReq *http.Request, proxyClient 
 	if err != nil {
 		log.Printf("error with proxy request to: %s, %s\n", proxyReq.URL.String(), err.Error())
 
+		w.Header().Add(openFaaSInternalHeader, "proxy")
+
 		httputil.Errorf(w, http.StatusInternalServerError, "Can't reach service for: %s.", functionName)
 		return
 	}
@@ -173,7 +186,9 @@ func proxyRequest(w http.ResponseWriter, originalReq *http.Request, proxyClient 
 		defer response.Body.Close()
 	}
 
-	log.Printf("%s took %f seconds\n", functionName, seconds.Seconds())
+	if verbose {
+		log.Printf("%s took %f seconds\n", functionName, seconds.Seconds())
+	}
 
 	clientHeader := w.Header()
 	copyHeaders(clientHeader, &response.Header)
