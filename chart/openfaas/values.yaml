@@ -113,7 +113,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.6
+  image: ghcr.io/openfaasltd/faas-netes:0.5.7
   create: false
   logs:
     debug: false
@@ -151,7 +151,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.6
+  image: ghcr.io/openfaasltd/faas-netes:0.5.7
 
 # For the Community Edition
 faasnetes:
