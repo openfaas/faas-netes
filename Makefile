@@ -1,4 +1,4 @@
-.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts verify-charts charts-only
+.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts verify-charts verify-chart charts-only
 IMG_NAME?=faas-netes
 
 VERBOSE?=false
@@ -90,6 +90,10 @@ verify-charts:
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/queue-worker/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sns-connector/values.yaml && \
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/federated-gateway/values.yaml
+
+verify-chart:
+	@echo Verifying helm chart images in remote registries && \
+	arkade chart verify --verbose=$(VERBOSE) -f ./chart/openfaas/values.yaml
 
 # Only upgrade the openfaas chart, for speed
 upgrade-chart:

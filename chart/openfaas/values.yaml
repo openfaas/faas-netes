@@ -75,7 +75,7 @@ gateway:
   resources:
     requests:
       memory: "120Mi"
-      cpu: "50m"
+      cpu: "100m"
 
   readinessProbe:
     initialDelaySeconds: 1
@@ -155,11 +155,11 @@ faasnetesPro:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.17.3
+  image: ghcr.io/openfaas/faas-netes:0.17.4
   resources:
     requests:
       memory: "120Mi"
-      cpu: "50m"
+      cpu: "100m"
 
 # The values for jetstreamQueueWorker are merged with those under
 # the "queueWorkerPro" and "queueWorker" section
@@ -228,6 +228,7 @@ autoscaler:
   resources:
     requests:
       memory: "128Mi"
+      cpu: "100m"
     limits:
       memory: "256Mi"
   # When disableHorizontalScaling is set to true, then the autoscaler will 
@@ -252,6 +253,7 @@ dashboard:
   resources:
     requests:
       memory: "128Mi"
+      cpu: "50m"
     limits:
       memory: "256Mi"
 
@@ -296,6 +298,7 @@ prometheus:
   resources:
     requests:
       memory: "512Mi"
+      cpu: "100m"
   annotations: {}
 
 alertmanager:
@@ -304,6 +307,7 @@ alertmanager:
   resources:
     requests:
       memory: "25Mi"
+      cpu: "50m"
     limits:
       memory: "50Mi"
 
@@ -329,6 +333,8 @@ nats:
   resources:
     requests:
       memory: "120Mi"
+      cpu: "100m"
+
 
 # ingress configuration
 ingress:

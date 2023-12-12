@@ -39,7 +39,7 @@ spec:
       - name: gateway
         resources:
             requests:
-              cpu: 50m
+              cpu: 100m
               memory: 120Mi
         image: ghcr.io/openfaas/gateway:0.27.3
         imagePullPolicy: IfNotPresent
@@ -121,9 +121,9 @@ spec:
       - name: faas-netes
         resources:
             requests:
-              cpu: 50m
+              cpu: 100m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.17.3
+        image: ghcr.io/openfaas/faas-netes:0.17.4
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true

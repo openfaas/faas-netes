@@ -18,7 +18,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "0fc577bf26f34a5aab72c497479f792dbbf9996b8c541a0e13fc8991be1dad66"
+        checksum/alertmanager-config: "c410082db942a378b7f2e8c25854993ed04144ed80bf55456236c4b0b10da03a"
     spec:
       containers:
       - name: alertmanager
@@ -46,6 +46,7 @@ spec:
             limits:
               memory: 50Mi
             requests:
+              cpu: 50m
               memory: 25Mi
         volumeMounts:
         - mountPath: /alertmanager.yml
