@@ -71,6 +71,10 @@ func main() {
 	fmt.Printf("faas-netes - Community Edition (CE)\n"+
 		"\nVersion: %s Commit: %s Mode: %s\n", release, sha, mode)
 
+	if err := config.ConnectivityCheck(); err != nil {
+		log.Fatalf("Error checking connectivity, OpenFaaS CE cannot be run in an offline environment: %s", err.Error())
+	}
+
 	clientCmdConfig, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
 	if err != nil {
 		log.Fatalf("Error building kubeconfig: %s", err.Error())
