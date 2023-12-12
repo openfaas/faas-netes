@@ -48,6 +48,10 @@ Commercial options:
 * Multiple namespace support
 * gVisor support and runtimeClass for isolation
 * Affinity and advanced scheduling / security constraints
+* Airgap
+* RBAC/IAM & SSO
+
+Find out more: [OpenFaaS Standard and For Enterprises](https://www.openfaas.com/pricing)
 
 ## Get started
 

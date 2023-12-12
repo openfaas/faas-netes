@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -28,7 +28,7 @@ func ConnectivityCheck() error {
 	}
 
 	if res.StatusCode != http.StatusOK {
-		body, _ := ioutil.ReadAll(res.Body)
+		body, _ := io.ReadAll(res.Body)
 
 		return fmt.Errorf("unexpected status code checking connectivity: %d, body: %s", res.StatusCode, strings.TrimSpace(string(body)))
 	}
