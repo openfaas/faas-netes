@@ -606,7 +606,8 @@ yaml) |
 | `eventSubscription.endpointSecret` | Name of the Kubernetes secret that contains the secret key for signing webhook requests. | `""` |
 | `eventSubscription.insecureTLS` | Enable insecure TLS for webhook invocations | `false` |
 | `eventSubscription.metering.enabled` | Enable metering events. | `false` |
-| `eventSubscription.metering.defaultRAM` | Default memory value used in function_usage events for metering when no memory limit is set on the function.  | `40Mi` |
+| `eventSubscription.metering.defaultRAM` | Default memory value used in function_usage events for metering when no memory limit is set on the function.  | `512Mi` |
+| `eventSubscription.metering.excludedNamespaces` | Comma-separated list of namespaces to exclude from metering for when functions are used to handle the metering webhook events | `""` |
 | `eventSubscription.auditing.enabled` | Enable auditing events | `false` |
 | `eventSubscription.auditing.httpVerbs` | Comma-separated list of HTTP methods to audit | `"PUT,POST,DELETE"`|
 | `eventWorker.image` | Container image used for the events-worker | See [values.yaml](./values.yaml) |
