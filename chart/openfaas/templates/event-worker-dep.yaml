@@ -13,7 +13,7 @@ metadata:
   name: event-worker
   namespace: {{ .Release.Namespace | quote }}
 spec:
-  replicas: {{ .Values.queueWorker.replicas }}
+  replicas: {{ coalesce .Values.eventWorker.replicas 1 }}
   selector:
     matchLabels:
       app: event-worker

@@ -103,6 +103,7 @@ eventSubscription:
   
 eventWorker:
   image: ghcr.io/openfaasltd/event-worker:0.0.2
+  replicas: 1
   logs:
     debug: false
     format: "console"
