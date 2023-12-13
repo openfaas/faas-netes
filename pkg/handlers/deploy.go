@@ -104,7 +104,7 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory, fu
 		}
 
 		if count+1 > MaxFunctions {
-			err := fmt.Errorf("unable to create function, maximum: %d", MaxFunctions)
+			err := fmt.Errorf("unable to create function, maximum: %d, visit https://openfaas.com/pricing to upgrade to OpenFaaS Standard", MaxFunctions)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
