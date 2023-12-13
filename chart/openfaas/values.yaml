@@ -99,7 +99,7 @@ eventSubscription:
     enabled: false
     # Default memory value used in function_usage events for metering
     # when no memory limit is set on the function.
-    defaultRAM: 40Mi
+    defaultRAM: 512Mi
   
 eventWorker:
   image: ghcr.io/openfaasltd/event-worker:0.0.2
