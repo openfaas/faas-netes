@@ -94,15 +94,23 @@ gateway:
 eventSubscription:
   endpoint: ""
   endpointSecret: ""
+
+  # Do not validate the TLS certificate of the endpoint, use when 
+  # testing with self-signed certificates
   insecureTLS: false
+
   metering:
     enabled: false
+
     # Default memory value used in function_usage events for metering
     # when no memory limit is set on the function.
     defaultRAM: 512Mi
+    # Comma-separated list of namespaces to exclude from metering
+    # for when functions are used to handle the metering webhook events
+    excludedNamespaces: ""
   
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.0.2
+  image: ghcr.io/openfaasltd/event-worker:0.0.4
   replicas: 1
   logs:
     debug: false

@@ -196,12 +196,16 @@ spec:
           value: "{{ .Values.gateway.maxIdleConnsPerHost }}"
         - name: probe_functions
           value: "{{ .Values.gateway.probeFunctions }}"
-        - name: metering_default_memory 
-          value: "{{ .Values.eventSubscription.metering.defaultRAM }}"
-        - name: metering 
-          value: "{{ .Values.eventSubscription.metering.enabled }}"
         - name: async
           value: "{{ .Values.async }}"
+{{- if .Values.eventSubscription.metering.enabled }}
+        - name: metering 
+          value: "{{ .Values.eventSubscription.metering.enabled }}"
+        - name: metering_excluded_namespaces
+          value: "{{ .Values.eventSubscription.metering.excludedNamespaces }}"
+        - name: metering_default_memory 
+          value: "{{ .Values.eventSubscription.metering.defaultRAM }}"
+{{- end }}
         volumeMounts:
         # - name: faas-auth
         #   mountPath: /var/run/secrets/faas-auth
