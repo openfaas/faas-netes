@@ -47,7 +47,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.15
+  image: ghcr.io/openfaasltd/gateway:0.4.17
   pprof: false
 
 gateway:
@@ -112,9 +112,9 @@ eventSubscription:
     enabled: false
     # Comma-separated list of HTTP methods to audit.
     httpVerbs: "PUT,POST,DELETE"
-  
+
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.0.4
+  image: ghcr.io/openfaasltd/event-worker:0.0.6
   replicas: 1
   logs:
     debug: false
@@ -126,7 +126,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.7
+  image: ghcr.io/openfaasltd/faas-netes:0.5.8
   create: false
   logs:
     debug: false
@@ -164,7 +164,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.7
+  image: ghcr.io/openfaasltd/faas-netes:0.5.8
 
 # For the Community Edition
 faasnetes:
