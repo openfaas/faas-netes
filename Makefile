@@ -1,4 +1,4 @@
-.PHONY: build local push namespaces install charts start-kind stop-kind build-buildx render-charts verify-charts verify-chart charts-only
+.PHONY: local publish-buildx publish-buildx-all namespaces install charts start-kind stop-kind build-buildx build-buildx-all render-charts verify-charts verify-chart charts-only
 IMG_NAME?=faas-netes
 
 VERBOSE?=false
@@ -20,6 +20,9 @@ GIT_COMMIT := $(shell git rev-parse HEAD)
 
 all: build-docker
 
+local:
+	CGO_ENABLED=0 GOOS=linux go build -o faas-netes
+
 $(TOOLS_DIR)/code-generator.mod: go.mod
 	@echo "syncing code-generator tooling version"
 	@cd $(TOOLS_DIR) && go mod edit -require "k8s.io/code-generator@${CODEGEN_VERSION}"
@@ -27,9 +30,6 @@ $(TOOLS_DIR)/code-generator.mod: go.mod
 ${CODEGEN_PKG}: $(TOOLS_DIR)/code-generator.mod
 	@echo "(re)installing k8s.io/code-generator-${CODEGEN_VERSION}"
 	@cd $(TOOLS_DIR) && go mod download -modfile=code-generator.mod
-
-local:
-	CGO_ENABLED=0 GOOS=linux go build -o faas-netes
 
 build-docker:
 	docker build \
@@ -42,7 +42,7 @@ build-buildx:
 	@echo $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) && \
 	docker buildx create --use --name=multiarch --node=multiarch && \
 	docker buildx build \
-		--push \
+		--output "type=image,push=false" \
 		--platform linux/amd64 \
         --build-arg GIT_COMMIT=$(GIT_COMMIT) \
         --build-arg VERSION=$(VERSION) \
@@ -72,8 +72,17 @@ publish-buildx-all:
 		--tag $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) \
 		.
 
-push:
-	docker push $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG)
+.PHONY: publish-buildx
+publish-buildx:
+	@echo  $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) && \
+	docker buildx create --use --name=multiarch --node=multiarch && \
+	docker buildx build \
+		--platform linux/amd64 \
+		--push=true \
+        --build-arg GIT_COMMIT=$(GIT_COMMIT) \
+        --build-arg VERSION=$(VERSION) \
+		--tag $(SERVER)/$(OWNER)/$(IMG_NAME):$(TAG) \
+		.
 
 charts: verify-charts charts-only
 
