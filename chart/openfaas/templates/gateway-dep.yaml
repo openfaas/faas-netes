@@ -434,6 +434,12 @@ spec:
         - name: auditing_http_verbs
           value: "{{ .Values.eventSubscription.auditing.httpVerbs }}"
         {{- end}}
+        {{- if .Values.faasnetesPro.logs}}
+        - name: "debug"
+          value: "{{ .Values.faasnetesPro.logs.debug }}"
+        - name: "log_encoding"
+          value: "{{ .Values.faasnetesPro.logs.format }}"
+        {{- end }}
         volumeMounts:
         {{- if .Values.iam.enabled }}
         - name: issuer-key

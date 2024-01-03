@@ -172,6 +172,9 @@ operator:
 
 faasnetesPro:
   image: ghcr.io/openfaasltd/faas-netes:0.5.14
+  logs:
+    debug: false
+    format: "console"
 
 # For the Community Edition
 faasnetes:
