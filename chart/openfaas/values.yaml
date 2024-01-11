@@ -51,7 +51,7 @@ gatewayPro:
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.4
+  image: ghcr.io/openfaas/gateway:0.27.5
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -168,7 +168,7 @@ faasnetesPro:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.17.5
+  image: ghcr.io/openfaas/faas-netes:0.17.6
   resources:
     requests:
       memory: "120Mi"
