@@ -81,6 +81,8 @@ github.com/openfaas/faas-provider v0.24.4 h1:Zzbkabgd0PoQmnRjy53NbMXjhLaIyoIiwP3
 github.com/openfaas/faas-provider v0.24.4/go.mod h1:NsETIfEndZn4mn/w/XnBTcDTwKqULCziphLp7KgeRcA=
 github.com/openfaas/faas-provider v0.25.2 h1:sAyL96CzAk/YnuXQZiRJcHo7UrcYMaf7RDvKxsQb/2o=
 github.com/openfaas/faas-provider v0.25.2/go.mod h1:NsETIfEndZn4mn/w/XnBTcDTwKqULCziphLp7KgeRcA=
+github.com/openfaas/faas-provider v0.25.3 h1:cy5GKP1R/xZkPjg+9We7yqpfz298GrKw4ZRYJVprt7Q=
+github.com/openfaas/faas-provider v0.25.3/go.mod h1:NsETIfEndZn4mn/w/XnBTcDTwKqULCziphLp7KgeRcA=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

@@ -72,6 +72,9 @@ func NewHandlerFunc(config types.FaaSConfig, resolver BaseURLResolver, verbose b
 	reverseProxy := httputil.ReverseProxy{}
 	reverseProxy.Director = func(req *http.Request) {
 		// At least an empty director is required to prevent runtime errors.
+		req.URL.Scheme = "http"
+	}
+	reverseProxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, err error) {
 	}
 
 	// Errors are common during disconnect of client, no need to log them.
@@ -187,7 +190,9 @@ func proxyRequest(w http.ResponseWriter, originalReq *http.Request, proxyClient 
 	}
 
 	if v := originalReq.Header.Get("Accept"); v == "text/event-stream" {
-		reverseProxy.ServeHTTP(w, proxyReq)
+		originalReq.URL = proxyReq.URL
+
+		reverseProxy.ServeHTTP(w, originalReq)
 		return
 	}
 

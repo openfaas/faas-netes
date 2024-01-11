@@ -2,11 +2,10 @@ module github.com/openfaas/faas-netes
 
 go 1.21
 
-
 require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gorilla/mux v1.8.1
-	github.com/openfaas/faas-provider v0.25.2
+	github.com/openfaas/faas-provider v0.25.3
 	github.com/pkg/errors v0.9.1
 	k8s.io/api v0.29.0
 	k8s.io/apimachinery v0.29.0
