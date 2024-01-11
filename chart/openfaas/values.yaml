@@ -47,11 +47,11 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.17
+  image: ghcr.io/openfaasltd/gateway:0.4.20
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.3
+  image: ghcr.io/openfaas/gateway:0.27.4
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -114,7 +114,7 @@ eventSubscription:
     httpVerbs: "PUT,POST,DELETE"
 
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.0.6
+  image: ghcr.io/openfaasltd/event-worker:0.0.8
   replicas: 1
   logs:
     debug: false
@@ -126,7 +126,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.8
+  image: ghcr.io/openfaasltd/faas-netes:0.5.11
   create: false
   logs:
     debug: false
@@ -164,11 +164,11 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.8
+  image: ghcr.io/openfaasltd/faas-netes:0.5.11
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.17.4
+  image: ghcr.io/openfaas/faas-netes:0.17.5
   resources:
     requests:
       memory: "120Mi"
@@ -179,7 +179,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.21
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.22
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -342,7 +342,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.7
+  image: nats:2.10.8
   resources:
     requests:
       memory: "120Mi"
