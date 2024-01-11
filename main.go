@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -202,22 +203,25 @@ func runController(setup serverSetup) {
 	functionLookup := k8s.NewFunctionLookup(config.DefaultFunctionNamespace, listers.EndpointsInformer.Lister())
 	functionList := k8s.NewFunctionList(config.DefaultFunctionNamespace, deployLister)
 
+	printFunctionExecutionTime := true
 	bootstrapHandlers := providertypes.FaaSHandlers{
-		FunctionProxy:        proxy.NewHandlerFunc(config.FaaSConfig, functionLookup),
-		DeleteHandler:        handlers.MakeDeleteHandler(config.DefaultFunctionNamespace, kubeClient),
-		DeployHandler:        handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory, functionList),
-		FunctionReader:       handlers.MakeFunctionReader(config.DefaultFunctionNamespace, deployLister),
-		ReplicaReader:        handlers.MakeReplicaReader(config.DefaultFunctionNamespace, deployLister),
-		ReplicaUpdater:       handlers.MakeReplicaUpdater(config.DefaultFunctionNamespace, kubeClient),
-		UpdateHandler:        handlers.MakeUpdateHandler(config.DefaultFunctionNamespace, factory),
-		HealthHandler:        handlers.MakeHealthHandler(),
-		InfoHandler:          handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
-		SecretHandler:        handlers.MakeSecretHandler(config.DefaultFunctionNamespace, kubeClient),
-		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(kubeClient, config.DefaultFunctionNamespace), config.FaaSConfig.WriteTimeout),
-		ListNamespaceHandler: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, kubeClient),
+		FunctionProxy:  proxy.NewHandlerFunc(config.FaaSConfig, functionLookup, printFunctionExecutionTime),
+		DeleteFunction: handlers.MakeDeleteHandler(config.DefaultFunctionNamespace, kubeClient),
+		DeployFunction: handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory, functionList),
+		FunctionLister: handlers.MakeFunctionReader(config.DefaultFunctionNamespace, deployLister),
+		FunctionStatus: handlers.MakeReplicaReader(config.DefaultFunctionNamespace, deployLister),
+		ScaleFunction:  handlers.MakeReplicaUpdater(config.DefaultFunctionNamespace, kubeClient),
+		UpdateFunction: handlers.MakeUpdateHandler(config.DefaultFunctionNamespace, factory),
+		Health:         handlers.MakeHealthHandler(),
+		Info:           handlers.MakeInfoHandler(version.BuildVersion(), version.GitCommit),
+		Secrets:        handlers.MakeSecretHandler(config.DefaultFunctionNamespace, kubeClient),
+		Logs:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(kubeClient, config.DefaultFunctionNamespace), config.FaaSConfig.WriteTimeout),
+		ListNamespaces: handlers.MakeNamespacesLister(config.DefaultFunctionNamespace, kubeClient),
 	}
 
-	faasProvider.Serve(&bootstrapHandlers, &config.FaaSConfig)
+	ctx := context.Background()
+
+	faasProvider.Serve(ctx, &bootstrapHandlers, &config.FaaSConfig)
 }
 
 // serverSetup is a container for the config and clients needed to start the
