@@ -47,7 +47,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.20
+  image: ghcr.io/openfaasltd/gateway:0.4.21
   pprof: false
 
 gateway:
@@ -126,7 +126,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.11
+  image: ghcr.io/openfaasltd/faas-netes:0.5.12
   create: false
   logs:
     debug: false
@@ -164,7 +164,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.11
+  image: ghcr.io/openfaasltd/faas-netes:0.5.12
 
 # For the Community Edition
 faasnetes:
@@ -342,7 +342,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.8
+  image: nats:2.10.9
   resources:
     requests:
       memory: "120Mi"
