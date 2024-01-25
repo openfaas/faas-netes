@@ -442,6 +442,7 @@ yaml) |
 | `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
 | `basicAuthPlugin.replicas` | Replicas of the basic-auth-plugin | `1` |
 | `basicAuthPlugin.resources` | Resource limits and requests for basic-auth-plugin containers | See [values.yaml](./values.yaml) |
+| `caBundleSecretName` | Name of the Kubernetes secret that contains the CA bundle for making HTTP requests for IAM (optional) | `""` |
 | `clusterRole` | Use a `ClusterRole` for the Operator or faas-netes. Set to `true` for multiple namespace, pro scaler and CPU/RAM metrics in OpenFaaS REST API | `false` |
 | `createCRDs` | Create the CRDs for OpenFaaS Functions and Profiles | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
