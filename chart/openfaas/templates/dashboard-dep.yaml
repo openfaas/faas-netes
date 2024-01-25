@@ -40,6 +40,12 @@ spec:
       {{- end }}
       {{- end }}
 
+      {{- if .Values.caBundleSecretName }}
+      - name: ca-bundle
+        secret:
+          secretName: {{ .Values.caBundleSecretName }}
+      {{- end }}
+
       - name: license
         secret:
           secretName: openfaas-license
@@ -127,6 +133,12 @@ spec:
         - name: dashboard-jwt
           readOnly: true
           mountPath: "/var/secrets/dashboard-jwt"
+        {{- end }}
+
+        {{- if .Values.caBundleSecretName }}
+        - name: ca-bundle
+          readOnly: true
+          mountPath: "/var/secrets/ca-bundle"
         {{- end }}
 
     {{- with .Values.nodeSelector }}

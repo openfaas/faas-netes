@@ -30,6 +30,13 @@ psp: false
 # image pull policy for openfaas components, can change to `IfNotPresent` for an air-gapped environment
 openfaasImagePullPolicy: "IfNotPresent"
 
+# Optionally, give the name of a secret containing a CA bundle to be added to the 
+# OIDC plugin and OpenFaaS Dashboard components when a self-signed certificate is used
+#
+# kubectl create secret generic -n openfaas ca-bundle --from-file=ca.crt=./ca.crt
+#
+caBundleSecretName: ""       # Name of the secret containing the CA bundle for the OpenFaaS gateway
+
 functions:
   imagePullPolicy: "Always"    # Image pull policy for deployed functions, for OpenFaaS Pro you can also set: IfNotPresent and Never.
   httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods

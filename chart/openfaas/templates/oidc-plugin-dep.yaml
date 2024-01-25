@@ -31,6 +31,11 @@ spec:
       - name: issuer-key
         secret:
           secretName: issuer-key
+      {{- if .Values.caBundleSecretName }}
+      - name: ca-bundle
+        secret:
+          secretName: {{ .Values.caBundleSecretName }}
+      {{- end }}
       {{- if .Values.basic_auth }}
       - name: auth
         secret:
@@ -114,6 +119,13 @@ spec:
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
+
+        {{- if .Values.caBundleSecretName }}
+        - name: ca-bundle
+          readOnly: true
+          mountPath: "/var/secrets/ca-bundle"
+        {{- end }}
+
         ports:
         - name: http
           containerPort: 8080
