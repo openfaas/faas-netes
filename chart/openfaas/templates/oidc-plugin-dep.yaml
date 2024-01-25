@@ -101,6 +101,10 @@ spec:
           value: "{{- .Values.oidcAuthPlugin.insecureTLS}}"
         - name: issuer_key_path
           value: "/var/secrets/issuer-key/issuer.key"
+        {{ if .Values.caBundleSecretName }}
+        - name: ca_bundle_path
+          value: /var/secrets/ca-bundle/ca.crt
+        {{- end }}
         {{- if .Values.basic_auth }}
         - name: secret_mount_path
           value: "/var/secrets/gateway"

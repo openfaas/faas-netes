@@ -108,6 +108,11 @@ spec:
           value: "{{join "," .Values.iam.dashboardIssuer.scopes }}"
         {{- end }}
 
+        {{ if .Values.caBundleSecretName }}
+        - name: ca_bundle_path
+          value: /var/secrets/ca-bundle/ca.crt
+        {{- end }}
+
         volumeMounts:
         {{- if .Values.basic_auth }}
         - name: auth
