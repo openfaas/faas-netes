@@ -260,7 +260,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.3
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.7
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -280,7 +280,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.8
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.6.9
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
