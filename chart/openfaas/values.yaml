@@ -54,7 +54,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.21
+  image: ghcr.io/openfaasltd/gateway:0.4.22
   pprof: false
 
 gateway:
