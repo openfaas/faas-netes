@@ -168,6 +168,10 @@ spec:
           value: "true"
         - name: secret_mount_path
           value: "/var/secrets"
+        - name: "debug"
+          value: "false"
+        - name: "log_encoding"
+          value: "console"
         volumeMounts:
         - name: auth
           readOnly: true
