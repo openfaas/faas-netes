@@ -1,4 +1,5 @@
-.PHONY: local publish-buildx publish-buildx-all namespaces install charts start-kind stop-kind build-buildx build-buildx-all render-charts verify-charts verify-chart charts-only
+.PHONY: local publish-buildx publish-buildx-all namespaces install charts start-kind stop-kind build-buildx build-buildx-all render-charts verify-charts verify-chart charts-only bump-charts
+
 IMG_NAME?=faas-netes
 
 VERBOSE?=false
@@ -123,6 +124,19 @@ upgrade-charts:
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/sns-connector/values.yaml && \
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/federated-gateway/values.yaml
 
+bump-charts:
+	arkade chart bump --file ./chart/openfaas/Chart.yaml -w && \
+	arkade chart bump --file ./chart/kafka-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/cron-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/nats-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/mqtt-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/pro-builder/Chart.yaml -w && \
+	arkade chart bump --file ./chart/sqs-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/postgres-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/queue-worker/Chart.yaml -w && \
+	arkade chart bump --file ./chart/sns-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/federated-gateway/Chart.yaml -w
+	
 
 charts-only:
 	@cd chart && \
