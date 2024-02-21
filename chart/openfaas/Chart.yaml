@@ -2,7 +2,7 @@ apiVersion: v2
 type: application
 description: OpenFaaS - Serverless Functions Made Simple
 name: openfaas
-version: 14.2.18
+version: 14.2.19
 sources:
 - https://github.com/openfaas/faas
 - https://github.com/openfaas/faas-netes
