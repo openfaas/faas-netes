@@ -180,7 +180,7 @@ faasnetesPro:
     format: "console"
 
 faasnetesOem:
-  image: ghcr.io/openfaasltd/faas-netes-oem:0.1.0-rc1
+  image: ghcr.io/openfaasltd/faas-netes-oem:0.1.0
 
 # For the Community Edition
 faasnetes:
