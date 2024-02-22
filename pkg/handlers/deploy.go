@@ -33,7 +33,6 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory, fu
 	secrets := k8s.NewSecretsClient(factory.Client)
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
 
 		if r.Body != nil {
 			defer r.Body.Close()
@@ -78,22 +77,6 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory, fu
 			log.Println(wrappedErr)
 			http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
 			return
-		}
-
-		var profileList []k8s.Profile
-		if request.Annotations != nil {
-			profileNamespace := factory.Config.ProfilesNamespace
-			profileList, err = factory.GetProfiles(ctx, profileNamespace, *request.Annotations)
-			if err != nil {
-				wrappedErr := fmt.Errorf("failed create Deployment spec: %s", err.Error())
-				log.Println(wrappedErr)
-				http.Error(w, wrappedErr.Error(), http.StatusBadRequest)
-				return
-			}
-		}
-
-		for _, profile := range profileList {
-			factory.ApplyProfile(profile, deploymentSpec)
 		}
 
 		count, err := functionList.Count()

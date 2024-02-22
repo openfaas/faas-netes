@@ -9,7 +9,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
@@ -48,7 +47,6 @@ func main() {
 	var kubeconfig string
 	var masterURL string
 	var (
-		operator,
 		verbose bool
 	)
 
@@ -58,18 +56,13 @@ func main() {
 	flag.StringVar(&masterURL, "master", "",
 		"The address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster.")
 
-	flag.BoolVar(&operator, "operator", false, "Use the operator mode instead of faas-netes")
 	flag.Parse()
-
-	if operator {
-		klog.Errorf("The operator mode is deprecated in OpenFaaS Community Edition (CE), upgrade to OpenFaaS Pro to continue using it")
-		os.Exit(1)
-	}
 
 	mode := "controller"
 
 	sha, release := version.GetReleaseInfo()
 	fmt.Printf("faas-netes - Community Edition (CE)\n"+
+		"Warning: Commercial use limited to 60 days.\n"+
 		"\nVersion: %s Commit: %s Mode: %s\n", release, sha, mode)
 
 	if err := config.ConnectivityCheck(); err != nil {
@@ -121,7 +114,6 @@ func main() {
 			TimeoutSeconds:      int32(1),
 			PeriodSeconds:       int32(2),
 		},
-		ProfilesNamespace: config.ProfilesNamespace,
 	}
 
 	namespaceScope := config.DefaultFunctionNamespace

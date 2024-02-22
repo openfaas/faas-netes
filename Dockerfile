@@ -1,6 +1,6 @@
 FROM ghcr.io/openfaas/license-check:0.4.2 as license-check
 
-FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.21 as build
+FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.22 as build
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -29,8 +29,8 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
         -X github.com/openfaas/faas-netes/version.Version=${VERSION}" \
         -o faas-netes .
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.19.0 as ship
-LABEL org.label-schema.license="MIT" \
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.19.1 as ship
+LABEL org.label-schema.license="Non-commercial use only" \
       org.label-schema.vcs-url="https://github.com/openfaas/faas-netes" \
       org.label-schema.vcs-type="Git" \
       org.label-schema.name="openfaas/faas-netes" \

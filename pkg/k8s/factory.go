@@ -15,24 +15,16 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// NamespacedProfiler is a subset of the v1.ProfileLister that is needed for the function factory
-// to support Profiles
-type NamespacedProfiler interface {
-	Profiles(namespace string) v1.ProfileNamespaceLister
-}
-
 // FunctionFactory is handling Kubernetes operations to materialise functions into deployments and services
 type FunctionFactory struct {
-	Client   kubernetes.Interface
-	Config   DeploymentConfig
-	Profiler NamespacedProfiler
+	Client kubernetes.Interface
+	Config DeploymentConfig
 }
 
 func NewFunctionFactory(clientset kubernetes.Interface, config DeploymentConfig, faasclient openfaasv1.OpenfaasV1Interface) FunctionFactory {
 	return FunctionFactory{
-		Client:   clientset,
-		Config:   config,
-		Profiler: &Lister{f: faasclient},
+		Client: clientset,
+		Config: config,
 	}
 }
 

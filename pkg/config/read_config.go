@@ -28,7 +28,6 @@ func (ReadConfig) Read(hasEnv ftypes.HasEnv) (BootstrapConfig, error) {
 	setNonRootUser := ftypes.ParseBoolValue(hasEnv.Getenv("set_nonroot_user"), false)
 
 	cfg.DefaultFunctionNamespace = ftypes.ParseString(hasEnv.Getenv("function_namespace"), "openfaas-fn")
-	cfg.ProfilesNamespace = ftypes.ParseString(hasEnv.Getenv("profiles_namespace"), cfg.DefaultFunctionNamespace)
 
 	cfg.HTTPProbe = httpProbe
 	cfg.SetNonRootUser = setNonRootUser
@@ -52,11 +51,6 @@ type BootstrapConfig struct {
 	// variable is not set, it is set to "default".
 	DefaultFunctionNamespace string
 
-	// ProfilesNamespace defines which namespace is used to look up available Profiles.
-	// Value is set via the profiles_namespace environment variable. If the
-	// variable is not set, then it falls back to DefaultFunctionNamespace.
-	ProfilesNamespace string
-
 	// FaaSConfig contains the configuration for the FaaSProvider
 	FaaSConfig ftypes.FaaSConfig
 }
@@ -75,7 +69,6 @@ func (c BootstrapConfig) Fprint(verbose bool) {
 		log.Printf("MaxIdleConns: %d\n", c.FaaSConfig.MaxIdleConns)
 		log.Printf("MaxIdleConnsPerHost: %d\n", c.FaaSConfig.MaxIdleConnsPerHost)
 		log.Printf("HTTPProbe: %v\n", c.HTTPProbe)
-		log.Printf("ProfilesNamespace: %s\n", c.ProfilesNamespace)
 		log.Printf("SetNonRootUser: %v\n", c.SetNonRootUser)
 	}
 }

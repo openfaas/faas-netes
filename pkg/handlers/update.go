@@ -137,9 +137,6 @@ func updateDeploymentSpec(
 		// deployment.Labels = labels
 		deployment.Spec.Template.ObjectMeta.Labels = labels
 
-		// store the current annotations so that we can diff the annotations
-		// and determine which profiles need to be removed
-		currentAnnotations := deployment.Annotations
 		deployment.Annotations = annotations
 		deployment.Spec.Template.Annotations = annotations
 		deployment.Spec.Template.ObjectMeta.Annotations = annotations
@@ -171,25 +168,6 @@ func updateDeploymentSpec(
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
 		deployment.Spec.Template.Spec.Containers[0].ReadinessProbe = probes.Readiness
 
-		// compare the annotations from args to the cache copy of the deployment annotations
-		// at this point we have already updated the annotations to the new value, if we
-		// compare to that it will produce an empty list
-		profileNamespace := factory.Config.ProfilesNamespace
-		profileList, err := factory.GetProfilesToRemove(ctx, profileNamespace, annotations, currentAnnotations)
-		if err != nil {
-			return err, http.StatusBadRequest
-		}
-		for _, profile := range profileList {
-			factory.RemoveProfile(profile, deployment)
-		}
-
-		profileList, err = factory.GetProfiles(ctx, profileNamespace, annotations)
-		if err != nil {
-			return err, http.StatusBadRequest
-		}
-		for _, profile := range profileList {
-			factory.ApplyProfile(profile, deployment)
-		}
 	}
 
 	if _, updateErr := factory.Client.AppsV1().
