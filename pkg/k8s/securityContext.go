@@ -32,10 +32,10 @@ func (f *FunctionFactory) ConfigureContainerUserID(deployment *appsv1.Deployment
 
 // ConfigureReadOnlyRootFilesystem will create or update the required settings and mounts to ensure
 // that the ReadOnlyRootFilesystem setting works as expected, meaning:
-// 1. when ReadOnlyRootFilesystem is true, the security context of the container will have ReadOnlyRootFilesystem also
-//    marked as true and a new `/tmp` folder mount will be added to the deployment spec
-// 2. when ReadOnlyRootFilesystem is false, the security context of the container will also have ReadOnlyRootFilesystem set
-//    to false and there will be no mount for the `/tmp` folder
+//  1. when ReadOnlyRootFilesystem is true, the security context of the container will have ReadOnlyRootFilesystem also
+//     marked as true and a new `/tmp` folder mount will be added to the deployment spec
+//  2. when ReadOnlyRootFilesystem is false, the security context of the container will also have ReadOnlyRootFilesystem set
+//     to false and there will be no mount for the `/tmp` folder
 //
 // This method is safe for both create and update operations.
 func (f *FunctionFactory) ConfigureReadOnlyRootFilesystem(request types.FunctionDeployment, deployment *appsv1.Deployment) {

@@ -290,7 +290,7 @@ func buildAnnotations(request types.FunctionDeployment) (map[string]string, erro
 		}
 	}
 
-	for k, _ := range annotations {
+	for k := range annotations {
 		if strings.Contains(k, "amazonaws.com") || strings.Contains(k, "gke.io") {
 			return nil, fmt.Errorf("annotation %q is not supported in the Community Edition", k)
 		}
