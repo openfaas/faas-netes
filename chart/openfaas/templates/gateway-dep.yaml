@@ -364,7 +364,6 @@ spec:
         {{- end }}
         command:
           - ./faas-netes
-          - -operator=false
         {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
         {{- end }}

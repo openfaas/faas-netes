@@ -55,6 +55,7 @@ func main() {
 	flag.BoolVar(&verbose, "verbose", false, "Print verbose config information")
 	flag.StringVar(&masterURL, "master", "",
 		"The address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster.")
+	flag.Bool("operator", false, "Run as an operator (not available in CE)")
 
 	flag.Parse()
 

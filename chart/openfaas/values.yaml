@@ -358,7 +358,6 @@ nats:
       memory: "120Mi"
       cpu: "100m"
 
-
 # ingress configuration
 ingress:
   enabled: false

@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/openfaas/faas-netes/pkg/k8s"
-
 	types "github.com/openfaas/faas-provider/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -64,7 +63,7 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 			return
 		}
 
-		if err, status := updateDeploymentSpec(ctx, lookupNamespace, factory, request, annotations); err != nil {
+		if status, err := updateDeploymentSpec(ctx, lookupNamespace, factory, request, annotations); err != nil {
 			if !k8s.IsNotFound(err) {
 				log.Printf("error updating deployment: %s.%s, error: %s\n", request.Service, lookupNamespace, err)
 
@@ -76,7 +75,7 @@ func MakeUpdateHandler(defaultNamespace string, factory k8s.FunctionFactory) htt
 			return
 		}
 
-		if err, status := updateService(lookupNamespace, factory, request, annotations); err != nil {
+		if status, err := updateService(lookupNamespace, factory, request, annotations); err != nil {
 			if !k8s.IsNotFound(err) {
 				log.Printf("error updating service: %s.%s, error: %s\n", request.Service, lookupNamespace, err)
 			}
@@ -95,7 +94,7 @@ func updateDeploymentSpec(
 	functionNamespace string,
 	factory k8s.FunctionFactory,
 	request types.FunctionDeployment,
-	annotations map[string]string) (err error, httpStatus int) {
+	annotations map[string]string) (int, error) {
 
 	getOpts := metav1.GetOptions{}
 
@@ -104,7 +103,11 @@ func updateDeploymentSpec(
 		Get(context.TODO(), request.Service, getOpts)
 
 	if findDeployErr != nil {
-		return findDeployErr, http.StatusNotFound
+		return http.StatusNotFound, findDeployErr
+	}
+
+	if err := isAnonymous(request.Image); err != nil {
+		return http.StatusBadRequest, err
 	}
 
 	if len(deployment.Spec.Template.Spec.Containers) > 0 {
@@ -143,7 +146,7 @@ func updateDeploymentSpec(
 
 		resources, resourceErr := createResources(request)
 		if resourceErr != nil {
-			return resourceErr, http.StatusBadRequest
+			return http.StatusBadRequest, resourceErr
 		}
 
 		deployment.Spec.Template.Spec.Containers[0].Resources = *resources
@@ -151,18 +154,18 @@ func updateDeploymentSpec(
 		secrets := k8s.NewSecretsClient(factory.Client)
 		existingSecrets, err := secrets.GetSecrets(functionNamespace, request.Secrets)
 		if err != nil {
-			return err, http.StatusBadRequest
+			return http.StatusBadRequest, err
 		}
 
 		err = factory.ConfigureSecrets(request, deployment, existingSecrets)
 		if err != nil {
 			log.Println(err)
-			return err, http.StatusBadRequest
+			return http.StatusBadRequest, err
 		}
 
 		probes, err := factory.MakeProbes(request)
 		if err != nil {
-			return err, http.StatusBadRequest
+			return http.StatusBadRequest, err
 		}
 
 		deployment.Spec.Template.Spec.Containers[0].LivenessProbe = probes.Liveness
@@ -174,17 +177,17 @@ func updateDeploymentSpec(
 		Deployments(functionNamespace).
 		Update(context.TODO(), deployment, metav1.UpdateOptions{}); updateErr != nil {
 
-		return updateErr, http.StatusInternalServerError
+		return http.StatusInternalServerError, updateErr
 	}
 
-	return nil, http.StatusAccepted
+	return http.StatusAccepted, nil
 }
 
 func updateService(
 	functionNamespace string,
 	factory k8s.FunctionFactory,
 	request types.FunctionDeployment,
-	annotations map[string]string) (err error, httpStatus int) {
+	annotations map[string]string) (int, error) {
 
 	getOpts := metav1.GetOptions{}
 
@@ -193,7 +196,7 @@ func updateService(
 		Get(context.TODO(), request.Service, getOpts)
 
 	if findServiceErr != nil {
-		return findServiceErr, http.StatusNotFound
+		return http.StatusNotFound, findServiceErr
 	}
 
 	service.Annotations = annotations
@@ -202,8 +205,8 @@ func updateService(
 		Services(functionNamespace).
 		Update(context.TODO(), service, metav1.UpdateOptions{}); updateErr != nil {
 
-		return updateErr, http.StatusInternalServerError
+		return http.StatusInternalServerError, updateErr
 	}
 
-	return nil, http.StatusAccepted
+	return http.StatusAccepted, nil
 }

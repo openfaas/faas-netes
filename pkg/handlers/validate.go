@@ -5,10 +5,14 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"strconv"
 
+	"github.com/google/go-containerregistry/pkg/authn"
+	"github.com/google/go-containerregistry/pkg/name"
+	"github.com/google/go-containerregistry/pkg/v1/remote"
 	types "github.com/openfaas/faas-provider/types"
 )
 
@@ -87,6 +91,26 @@ func validateScalingLabels(request *types.FunctionDeployment) error {
 				return fmt.Errorf("com.openfaas.scale.min is set too high for Community Edition")
 			}
 		}
+	}
+
+	return nil
+}
+
+func isAnonymous(image string) error {
+	// Use context to cancel or timeout requests
+	ctx := context.Background()
+
+	// Set up authentication using anonymous credentials
+	auth := authn.Anonymous
+
+	// Try to fetch the image manifest
+	ref, err := name.ParseReference(image)
+	if err != nil {
+		return fmt.Errorf("unable to parse image reference: %s", err.Error())
+	}
+
+	if _, err := remote.Head(ref, remote.WithAuth(auth), remote.WithContext(ctx)); err != nil {
+		return fmt.Errorf("the Community Edition license agreement only supports public images")
 	}
 
 	return nil

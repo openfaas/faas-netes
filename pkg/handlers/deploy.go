@@ -71,6 +71,11 @@ func MakeDeployHandler(functionNamespace string, factory k8s.FunctionFactory, fu
 			return
 		}
 
+		if err := isAnonymous(request.Image); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
 		deploymentSpec, specErr := makeDeploymentSpec(request, existingSecrets, factory)
 		if specErr != nil {
 			wrappedErr := fmt.Errorf("failed create Deployment spec: %s", specErr.Error())
