@@ -3,7 +3,6 @@ faas-netes - Serverless Functions For Kubernetes with OpenFaaS
 
 [![Build Status](https://github.com/openfaas/faas-netes/workflows/build/badge.svg?branch=master)](https://github.com/openfaas/faas-netes/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/openfaas/faas-netes)](https://goreportcard.com/report/github.com/openfaas/faas-netes)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenFaaS](https://img.shields.io/badge/openfaas-serverless-blue.svg)](https://www.openfaas.com)
 
 ## Introduction
@@ -21,6 +20,7 @@ You can deploy OpenFaaS to any Kubernetes service - whether managed or local, in
 
 ## Highlights
 
+* Free for personal, non-commercial use, commercial use limited to 60 days.
 * Platform for deploying [serverless-style workloads](https://docs.openfaas.com/reference/workloads/) - microservices and functions
 * Native Kubernetes integrations (API and ecosystem)
 * Built-in UI portal
