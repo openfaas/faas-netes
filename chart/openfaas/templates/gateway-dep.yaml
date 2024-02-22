@@ -55,7 +55,7 @@ spec:
         secret:
           secretName: basic-auth
       {{- end }}
-      {{- if .Values.openfaasPro }}
+      {{- if or .Values.openfaasPro .Values.oem }}
       - name: license
         secret:
           secretName: openfaas-license
@@ -353,6 +353,8 @@ spec:
           {{- .Values.faasnetes.resources | toYaml | nindent 12 }}
       {{- if .Values.openfaasPro }}
         image: {{ .Values.faasnetesPro.image }}
+      {{- else if .Values.oem }}
+        image: {{ .Values.faasnetesOem.image}}
       {{- else }}
         image: {{ .Values.faasnetes.image }}
       {{- end }}
@@ -364,7 +366,7 @@ spec:
         {{- end }}
         command:
           - ./faas-netes
-        {{- if .Values.openfaasPro }}
+        {{- if or .Values.openfaasPro .Values.oem }}
           - "-license-file=/var/secrets/license/license"
         {{- end }}
         env:
@@ -445,7 +447,7 @@ spec:
           readOnly: true
           mountPath: "/var/secrets/issuer-key"
         {{- end }}
-        {{- if .Values.openfaasPro }}
+        {{- if or .Values.openfaasPro .Values.oem }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"

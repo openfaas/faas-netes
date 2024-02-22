@@ -456,6 +456,7 @@ yaml) |
 | `nodeSelector` | Global [NodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `openfaasPro` | Deploy OpenFaaS Pro | `false` |
+| `oem` | Deploy OpenFaaS oem | `false` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
 | `rbac` | Enable RBAC | `true` |
 | `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
@@ -490,6 +491,7 @@ yaml) |
 | `faasnetes.resources` | Resource limits and requests for faas-netes container | See [values.yaml](./values.yaml) |
 | `faasnetes.writeTimeout` | Write timeout for the faas-netes API | `""` (defaults to gateway.writeTimeout) |
 | `faasnetesPro.image` | Container image used for faas-netes when `openfaasPro=true` | See [values.yaml](./values.yaml) |
+| `faasnetesOem.image` | Container image used for faas-netes when `oem=true` | See [values.yaml](./values.yaml) |
 | `faasnetesPro.logs.format` | Set the log format, supports `console` or `json` | `console` |
 | `faasnetesPro.logs.debug` | Print debug logs | `false` |
 | `operator.create` | Use the OpenFaaS operator CRD controller, default uses faas-netes as the Kubernetes controller | `false` |

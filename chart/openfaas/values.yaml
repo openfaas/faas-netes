@@ -3,6 +3,9 @@ functionNamespace: openfaas-fn  # Default namespace for functions
 # Contact us via https://www.openfaas.com/support to purchase a license
 openfaasPro: false
 
+# Contact us via https://www.openfaas.com/support to purchase a license
+oem: false
+
 httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS core components
 
 # set clusterRole: true for:
@@ -175,6 +178,9 @@ faasnetesPro:
   logs:
     debug: false
     format: "console"
+
+faasnetesOem:
+  image: ghcr.io/openfaasltd/faas-netes-oem:0.1.0-rc1
 
 # For the Community Edition
 faasnetes:
