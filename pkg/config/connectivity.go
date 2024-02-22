@@ -11,6 +11,7 @@ import (
 
 // ConnectivityCheck checks if the controller can reach the
 // public Internet via HTTPS.
+// A license is required to use OpenFaaS for Commercial Use.
 func ConnectivityCheck() error {
 	req, err := http.NewRequest(http.MethodGet, "https://checkip.amazonaws.com", nil)
 	if err != nil {

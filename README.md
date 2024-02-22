@@ -9,7 +9,7 @@ faas-netes - Serverless Functions For Kubernetes with OpenFaaS
 
 `faas-netes` is an [OpenFaaS provider](https://github.com/openfaas/faas-provider) which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). It's part of a larger stack that brings a cloud-agnostic serverless experience to Kubernetes.
 
-The existing REST API, CLI and UI are fully compatible. With OpenFaaS Pro, you have an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
+The existing REST API, CLI and UI are fully compatible. With OpenFaaS Standard/Enterprise, you have an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
 
 You can deploy OpenFaaS to any Kubernetes service - whether managed or local, including to OpenShift. You will find any specific instructions and additional links in the documentation.
 
@@ -20,7 +20,7 @@ You can deploy OpenFaaS to any Kubernetes service - whether managed or local, in
 
 ## Highlights
 
-* Free for personal, non-commercial use, commercial use limited to 60 days.
+* Free for personal & non-commercial use. Commercial use limited to 60 days, then you [must buy a license](https://openfaas.com/pricing/).
 * Platform for deploying [serverless-style workloads](https://docs.openfaas.com/reference/workloads/) - microservices and functions
 * Native Kubernetes integrations (API and ecosystem)
 * Built-in UI portal
@@ -73,8 +73,8 @@ The rest of this document is dedicated to technical and operational information 
 
 There are two modes available for faas-netes, the classic mode is the default.
 
-* Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD - available in Community Edition and OpenFaaS Pro/Enteprise
-* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD and multiple-namespace [OpenFaaS Pro/Enterprise](https://openfaas.com/pricing/)
+* Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD - available in Community Edition and OpenFaaS Standard/Enteprise
+* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD and multiple-namespace [OpenFaaS Standard/Enterprise](https://openfaas.com/pricing/)
 
 See also: [README for "The OpenFaaS Operator"](README-OPERATOR.md)
 
