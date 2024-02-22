@@ -178,7 +178,7 @@ faasnetesPro:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.17.6
+  image: ghcr.io/openfaas/faas-netes:0.18.0
   resources:
     requests:
       memory: "120Mi"
@@ -316,7 +316,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.49.1
+  image: prom/prometheus:v2.50.0
   create: true
   resources:
     requests:

@@ -119,14 +119,13 @@ spec:
             requests:
               cpu: 100m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.17.6
+        image: ghcr.io/openfaas/faas-netes:0.18.0
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
         command:
           - ./faas-netes
-          - -operator=false
         env:
         - name: port
           value: "8081"
