@@ -57,7 +57,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.23
+  image: ghcr.io/openfaasltd/gateway:0.4.24
   pprof: false
 
 gateway:
@@ -195,7 +195,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.22
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.23
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -251,7 +251,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.3
+  image: ghcr.io/openfaasltd/autoscaler:0.3.4
   replicas: 1
   enabled: true
   resources:
@@ -322,7 +322,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.50.0
+  image: prom/prometheus:v2.50.1
   create: true
   resources:
     requests:
