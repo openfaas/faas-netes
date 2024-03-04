@@ -18,11 +18,11 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "2993d20522f954bb2d8c872b517f1ee442b6e8b6882bce80984ed7c1c2377a81"
+        checksum/alertmanager-config: "ee80f79bb101ce415a59c49c948948302ffec1cde840e56062bcb75ae8e84771"
     spec:
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.26.0
+        image: prom/alertmanager:v0.27.0
         imagePullPolicy: IfNotPresent
         command:
           - "alertmanager"
