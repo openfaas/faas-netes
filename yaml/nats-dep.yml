@@ -36,3 +36,13 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 10001
+        volumeMounts:
+        - mountPath: /tmp/nats
+          name: nats-data
+      volumes:
+      - name: nats-data
+        emptyDir: {}

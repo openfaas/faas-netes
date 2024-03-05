@@ -47,6 +47,7 @@ spec:
           - ./gateway
         securityContext:
           readOnlyRootFilesystem: true
+          runAsNonRoot: true
           runAsUser: 10001
         livenessProbe:
           initialDelaySeconds: 1
@@ -123,6 +124,7 @@ spec:
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
+          runAsNonRoot: true
           runAsUser: 10001
         command:
           - ./faas-netes

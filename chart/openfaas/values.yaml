@@ -18,7 +18,16 @@ createCRDs: true              # Set to false if applying CRDs in another way
 basic_auth: true              # Authentication for core components, no good reason to disable this
 rbac: true                    # Kubernetes RBAC, no good reason to disable this
 generateBasicAuth: true       # Set to false if applying credentials separately from the chart, otherwise set to true
-securityContext: true
+
+# Define a securityContext for the core services
+# Currently applies to:
+# NATS
+# OIDC plugin
+# gateway
+securityContext:
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
 
 exposeServices: true
 serviceType: NodePort        # serviceType for OpenFaaS gateway

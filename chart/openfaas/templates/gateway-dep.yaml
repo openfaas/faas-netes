@@ -78,8 +78,7 @@ spec:
         {{- end }}
         {{- if .Values.securityContext }}
         securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 10001
+          {{- toYaml .Values.securityContext | nindent 10 }}
         {{- end }}
         livenessProbe:
           {{- if $.Values.gateway.livenessProbe }}
@@ -361,8 +360,7 @@ spec:
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}
         securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 10001
+          {{- toYaml .Values.securityContext | nindent 10 }}
         {{- end }}
         command:
           - ./faas-netes

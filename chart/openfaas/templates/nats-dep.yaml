@@ -47,6 +47,16 @@ spec:
           - --cluster_id
           - faas-cluster
           {{- end }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - mountPath: /tmp/nats
+          name: nats-data
+      volumes:
+      - name: nats-data
+        emptyDir: {}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
