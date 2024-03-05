@@ -19,11 +19,7 @@ basic_auth: true              # Authentication for core components, no good reas
 rbac: true                    # Kubernetes RBAC, no good reason to disable this
 generateBasicAuth: true       # Set to false if applying credentials separately from the chart, otherwise set to true
 
-# Define a securityContext for the core services
-# Currently applies to:
-# NATS
-# OIDC plugin
-# gateway
+# Define a securityContext for the containers deployed by this helm chart.
 securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
