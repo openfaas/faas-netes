@@ -45,6 +45,10 @@ spec:
         ports:
         - containerPort: 9090
           protocol: TCP
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 10001
         volumeMounts:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config

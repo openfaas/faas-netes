@@ -52,8 +52,9 @@ spec:
         imagePullPolicy: Always
         {{- if .Values.securityContext }}
         securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- toYaml .Values.securityContext | nindent 10 }}
         {{- end }}
+
         livenessProbe:
           {{- if .Values.httpProbe }}
           httpGet:

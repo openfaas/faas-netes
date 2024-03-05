@@ -57,6 +57,12 @@ spec:
         - name: basic_auth
           value: "true"
         {{- end }}
+
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+
         volumeMounts:
         - name: license
           readOnly: true

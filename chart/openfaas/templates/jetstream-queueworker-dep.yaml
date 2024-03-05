@@ -100,6 +100,11 @@ spec:
           value: "{{ .Values.queueWorkerPro.insecureTLS }}"
         {{- end }}
 
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+
         volumeMounts:
         {{- if .Values.openfaasPro }}
         - name: license

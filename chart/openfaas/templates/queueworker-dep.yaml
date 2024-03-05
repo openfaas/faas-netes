@@ -35,7 +35,7 @@ spec:
           secretName: openfaas-license
       {{- end }}
       containers:
-      - name:  queue-worker
+      - name: queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
         {{- if .Values.openfaasPro }}
@@ -99,6 +99,7 @@ spec:
           value: "/var/secrets/gateway"
         - name: basic_auth
           value: "{{ .Values.basic_auth }}"
+
         volumeMounts:
         {{- if .Values.openfaasPro }}
         - name: license

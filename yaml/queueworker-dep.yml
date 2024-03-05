@@ -24,7 +24,7 @@ spec:
         secret:
           secretName: basic-auth
       containers:
-      - name:  queue-worker
+      - name: queue-worker
         resources:
             requests:
               cpu: 50m

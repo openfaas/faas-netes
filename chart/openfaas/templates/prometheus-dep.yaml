@@ -73,6 +73,12 @@ spec:
         ports:
         - containerPort: 9090
           protocol: TCP
+
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+
         volumeMounts:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config
