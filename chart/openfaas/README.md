@@ -459,7 +459,7 @@ yaml) |
 | `oem` | Deploy OpenFaaS oem | `false` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
 | `rbac` | Enable RBAC | `true` |
-| `securityContext` | Deploy with a `securityContext` set, this can be disabled for use with Istio sidecar injection | `true` |
+| `securityContext` | Give a `securityContext` template to be applied to each of the various containers in this chart, set to `{}` to disable, if required for Istio side-car injection.  | See values.yaml |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `tolerations` | Global [Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
 
