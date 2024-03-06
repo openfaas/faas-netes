@@ -20,10 +20,7 @@ rbac: true                    # Kubernetes RBAC, no good reason to disable this
 generateBasicAuth: true       # Set to false if applying credentials separately from the chart, otherwise set to true
 
 # Define a securityContext for the containers deployed by this helm chart.
-securityContext:
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 10001
+securityContext: {}
 
 exposeServices: true
 serviceType: NodePort        # serviceType for OpenFaaS gateway

@@ -4,6 +4,12 @@
 # Initial configuration to set Pro configurations on
 openfaasPro: true
 
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
+
 # Recommended operating mode for the OpenFaaS controller aka "faas-netes"
 # is operator mode, including a CustomResource for functions.
 #
