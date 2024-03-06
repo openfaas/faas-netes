@@ -18,7 +18,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "6331af8aad3655763154deb95bb5eb3b44473b7237e44dcab829f095e2957d49"
+        checksum/prometheus-config: "395b37a481af76a2c7a0ceb75d50f2ef73c104a9252d93742fc65b27aa563567"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -45,10 +45,6 @@ spec:
         ports:
         - containerPort: 9090
           protocol: TCP
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 10001
         volumeMounts:
         - mountPath: /etc/prometheus/prometheus.yml
           name: prometheus-config

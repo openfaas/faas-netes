@@ -45,10 +45,6 @@ spec:
         imagePullPolicy: IfNotPresent
         command:
           - ./gateway
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 10001
         livenessProbe:
           initialDelaySeconds: 1
           periodSeconds: 5
@@ -122,10 +118,6 @@ spec:
               memory: 120Mi
         image: ghcr.io/openfaas/faas-netes:0.18.1
         imagePullPolicy: IfNotPresent
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 10001
         command:
           - ./faas-netes
         env:
