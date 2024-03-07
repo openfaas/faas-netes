@@ -10,12 +10,6 @@ SERVER?=ttl.sh
 export DOCKER_CLI_EXPERIMENTAL=enabled
 export DOCKER_BUILDKIT=1
 
-TOOLS_DIR := .tools
-
-GOPATH := $(shell go env GOPATH)
-CODEGEN_VERSION := $(shell hack/print-codegen-version.sh)
-CODEGEN_PKG := $(GOPATH)/pkg/mod/k8s.io/code-generator@${CODEGEN_VERSION}
-
 VERSION := $(shell git describe --tags --dirty --always)
 GIT_COMMIT := $(shell git rev-parse HEAD)
 
@@ -24,13 +18,6 @@ all: build-docker
 local:
 	CGO_ENABLED=0 GOOS=linux go build -o faas-netes
 
-$(TOOLS_DIR)/code-generator.mod: go.mod
-	@echo "syncing code-generator tooling version"
-	@cd $(TOOLS_DIR) && go mod edit -require "k8s.io/code-generator@${CODEGEN_VERSION}"
-
-${CODEGEN_PKG}: $(TOOLS_DIR)/code-generator.mod
-	@echo "(re)installing k8s.io/code-generator-${CODEGEN_VERSION}"
-	@cd $(TOOLS_DIR) && go mod download -modfile=code-generator.mod
 
 build-docker:
 	docker build \
@@ -165,9 +152,9 @@ stop-kind: ## attempt to stop the dev environment
 	@./contrib/stop_dev.sh
 
 .PHONY: verify-codegen
-verify-codegen: ${CODEGEN_PKG}
+verify-codegen:
 	./hack/verify-codegen.sh
 
 .PHONY: update-codegen
-update-codegen: ${CODEGEN_PKG}
+update-codegen:
 	./hack/update-codegen.sh
