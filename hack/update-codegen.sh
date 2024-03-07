@@ -29,6 +29,7 @@ echo ">> Temporary output directory ${TEMP_DIR}"
 
 # Ensure we can execute.
 chmod +x ${CODEGEN_PKG}/generate-groups.sh
+chmod +x ${CODEGEN_PKG}/generate-internal-groups.sh
 
 ${CODEGEN_PKG}/generate-groups.sh all \
     github.com/openfaas/faas-netes/pkg/client github.com/openfaas/faas-netes/pkg/apis \
