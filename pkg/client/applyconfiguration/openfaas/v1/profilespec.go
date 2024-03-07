@@ -20,6 +20,8 @@ type ProfileSpecApplyConfiguration struct {
 	PodSecurityContext        *v1.PodSecurityContext        `json:"podSecurityContext,omitempty"`
 	Affinity                  *v1.Affinity                  `json:"affinity,omitempty"`
 	TopologySpreadConstraints []v1.TopologySpreadConstraint `json:"topologySpreadConstraints,omitempty"`
+	DNSPolicy                 *v1.DNSPolicy                 `json:"dnsPolicy,omitempty"`
+	DNSConfig                 *v1.PodDNSConfig              `json:"dnsConfig,omitempty"`
 }
 
 // ProfileSpecApplyConfiguration constructs an declarative configuration of the ProfileSpec type for use with
@@ -69,5 +71,21 @@ func (b *ProfileSpecApplyConfiguration) WithTopologySpreadConstraints(values ...
 	for i := range values {
 		b.TopologySpreadConstraints = append(b.TopologySpreadConstraints, values[i])
 	}
+	return b
+}
+
+// WithDNSPolicy sets the DNSPolicy field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the DNSPolicy field is set to the value of the last call.
+func (b *ProfileSpecApplyConfiguration) WithDNSPolicy(value v1.DNSPolicy) *ProfileSpecApplyConfiguration {
+	b.DNSPolicy = &value
+	return b
+}
+
+// WithDNSConfig sets the DNSConfig field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the DNSConfig field is set to the value of the last call.
+func (b *ProfileSpecApplyConfiguration) WithDNSConfig(value v1.PodDNSConfig) *ProfileSpecApplyConfiguration {
+	b.DNSConfig = &value
 	return b
 }

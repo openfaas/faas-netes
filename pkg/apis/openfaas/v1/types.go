@@ -128,7 +128,7 @@ type ProfileSpec struct {
 	//
 	// https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
 	// +optional
-	DNSPolicy *corev1.DNSPolicy `json:"dnsPolicy,omitempty"`
+	DNSPolicy corev1.DNSPolicy `json:"dnsPolicy,omitempty"`
 
 	// DNSConfig allows customizing DNS resolution for Pods. See type description for default values
 	// of each field.
