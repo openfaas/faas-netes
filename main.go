@@ -34,9 +34,6 @@ import (
 
 	// required to authenticate against GKE clusters
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
-
-	// required for updating and validating the CRD clientset
-	_ "k8s.io/code-generator/cmd/client-gen/generators"
 	// main.go:36:2: import "sigs.k8s.io/controller-tools/cmd/controller-gen" is a program, not an importable package
 	// _ "sigs.k8s.io/controller-tools/cmd/controller-gen"
 )
