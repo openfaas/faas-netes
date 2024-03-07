@@ -120,6 +120,25 @@ type ProfileSpec struct {
 	// https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
 	// +optional
 	TopologySpreadConstraints []corev1.TopologySpreadConstraint `json:"topologySpreadConstraints,omitempty"`
+
+	// DNSPolicy determines how DNS resolution is handled for Pods
+	//
+	// copied to the Pod DNSPolicy, this will replace any existing value or previously
+	// applied Profile.
+	//
+	// https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+	// +optional
+	DNSPolicy *corev1.DNSPolicy `json:"dnsPolicy,omitempty"`
+
+	// DNSConfig allows customizing DNS resolution for Pods. See type description for default values
+	// of each field.
+	//
+	// each non-nil value will be merged into the function's pods DNSConfig, the value will
+	// replace any existing value or previously applied Profile
+	//
+	// https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+	// +optional
+	DNSConfig *corev1.PodDNSConfig `json:"dnsConfig,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
