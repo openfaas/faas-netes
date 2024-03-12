@@ -59,7 +59,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.24
+  image: ghcr.io/openfaasltd/gateway:0.4.25
   pprof: false
 
 gateway:
@@ -138,7 +138,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.22
+  image: ghcr.io/openfaasltd/faas-netes:0.5.24
   create: false
   logs:
     debug: false
@@ -176,17 +176,17 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.22
+  image: ghcr.io/openfaasltd/faas-netes:0.5.24
   logs:
     debug: false
     format: "console"
 
 faasnetesOem:
-  image: ghcr.io/openfaasltd/faas-netes-oem:0.1.0
+  image: ghcr.io/openfaasltd/faas-netes-oem:0.1.1
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.1
+  image: ghcr.io/openfaas/faas-netes:0.18.2
   resources:
     requests:
       memory: "120Mi"
@@ -197,7 +197,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.23
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.24
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -271,7 +271,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.9
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.11
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
