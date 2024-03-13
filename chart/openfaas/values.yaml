@@ -138,7 +138,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.24
+  image: ghcr.io/openfaasltd/faas-netes:0.5.25
   create: false
   logs:
     debug: false
@@ -176,7 +176,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.24
+  image: ghcr.io/openfaasltd/faas-netes:0.5.25
   logs:
     debug: false
     format: "console"
@@ -197,7 +197,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.24
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.25
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -291,7 +291,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.0
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.1
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
@@ -360,7 +360,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.11
+  image: nats:2.10.12
   resources:
     requests:
       memory: "120Mi"
