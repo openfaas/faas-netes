@@ -22,6 +22,7 @@ type ProfileSpecApplyConfiguration struct {
 	TopologySpreadConstraints []v1.TopologySpreadConstraint `json:"topologySpreadConstraints,omitempty"`
 	DNSPolicy                 *v1.DNSPolicy                 `json:"dnsPolicy,omitempty"`
 	DNSConfig                 *v1.PodDNSConfig              `json:"dnsConfig,omitempty"`
+	Resources                 *v1.ResourceRequirements      `json:"resources,omitempty"`
 }
 
 // ProfileSpecApplyConfiguration constructs an declarative configuration of the ProfileSpec type for use with
@@ -87,5 +88,13 @@ func (b *ProfileSpecApplyConfiguration) WithDNSPolicy(value v1.DNSPolicy) *Profi
 // If called multiple times, the DNSConfig field is set to the value of the last call.
 func (b *ProfileSpecApplyConfiguration) WithDNSConfig(value v1.PodDNSConfig) *ProfileSpecApplyConfiguration {
 	b.DNSConfig = &value
+	return b
+}
+
+// WithResources sets the Resources field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Resources field is set to the value of the last call.
+func (b *ProfileSpecApplyConfiguration) WithResources(value v1.ResourceRequirements) *ProfileSpecApplyConfiguration {
+	b.Resources = &value
 	return b
 }
