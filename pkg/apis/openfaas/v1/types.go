@@ -139,6 +139,14 @@ type ProfileSpec struct {
 	// https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
 	// +optional
 	DNSConfig *corev1.PodDNSConfig `json:"dnsConfig,omitempty"`
+
+	// Resources allows customizing resource requests and limits for the function container.
+	//
+	// Resource requests and limits keys are merged with the function container resources.
+	// This will replace any existing value or previously applied Profile for that key.
+	//
+	// +optional
+	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
