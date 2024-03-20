@@ -138,7 +138,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.25
+  image: ghcr.io/openfaasltd/faas-netes:0.5.26
   create: false
   logs:
     debug: false
@@ -176,7 +176,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.25
+  image: ghcr.io/openfaasltd/faas-netes:0.5.26
   logs:
     debug: false
     format: "console"
@@ -186,7 +186,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.2
+  image: ghcr.io/openfaas/faas-netes:0.18.3
   resources:
     requests:
       memory: "120Mi"
@@ -324,7 +324,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.50.1
+  image: prom/prometheus:v2.51.0
   create: true
   resources:
     requests:
