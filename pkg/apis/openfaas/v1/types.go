@@ -6,7 +6,7 @@ import (
 )
 
 // +genclient
-// +genclient:noStatus
+// +kubebuilder:subresource:status
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:printcolumn:name="Image",type=string,JSONPath=`.spec.image`
 
@@ -16,6 +16,10 @@ type Function struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec FunctionSpec `json:"spec"`
+
+	// +optional
+	// +kubebuilder:validation:Optional
+	Status FunctionStatus `json:"status"`
 }
 
 // FunctionSpec is the spec for a Function resource
@@ -41,6 +45,26 @@ type FunctionSpec struct {
 	Requests *FunctionResources `json:"requests,omitempty"`
 	// +optional
 	ReadOnlyRootFilesystem bool `json:"readOnlyRootFilesystem"`
+}
+
+// FunctionStatus is the most recent observed status of the Function
+// +optional
+type FunctionStatus struct {
+	// OpenFaaS Profiles that are applied to this function
+	// +optional
+	Profiles []AppliedProfile `json:"profiles,omitempty"`
+}
+
+// AppliedProfile describes an OpenFaaS profile that is applied to the function
+type AppliedProfile struct {
+	// Name of the applied profile object
+	Name string `json:"name"`
+
+	// Namespace of the applied profile object
+	Namespace string `json:"namespace"`
+
+	// The generation of the OpenFaaS profile object that was applied to the function
+	AppliedProfileGeneration int64 `json:"appliedProfileGeneration"`
 }
 
 // FunctionResources is used to set CPU and memory limits and requests
@@ -73,7 +97,7 @@ type Profile struct {
 }
 
 // ProfileSpec is an openfaas api extension that can be predefined and applied
-// to functions by annotating them with `com.openfaas/profile: name1,name2`
+// to functions by annotating them with `com.openfaas.profile: name1,name2`
 type ProfileSpec struct {
 	// If specified, the function's pod tolerations.
 	//
