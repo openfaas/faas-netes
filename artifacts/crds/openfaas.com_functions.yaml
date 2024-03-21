@@ -24,7 +24,6 @@ spec:
           type: object
           required:
             - spec
-            - status
           properties:
             apiVersion:
               description: |-

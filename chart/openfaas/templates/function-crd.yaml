@@ -97,10 +97,35 @@ spec:
                   type: array
                   items:
                     type: string
+            status:
+              description: FunctionStatus is the most recent observed status of the Function
+              type: object
+              properties:
+                profiles:
+                  description: OpenFaaS Profiles that are applied to this function
+                  type: array
+                  items:
+                    description: AppliedProfile describes an OpenFaaS profile that is applied to the function
+                    type: object
+                    required:
+                      - appliedProfileGeneration
+                      - name
+                      - namespace
+                    properties:
+                      appliedProfileGeneration:
+                        description: The generation of the OpenFaaS profile object that was applied to the function
+                        type: integer
+                        format: int64
+                      name:
+                        description: Name of the applied profile object
+                        type: string
+                      namespace:
+                        description: Namespace of the applied profile object
+                        type: string
       served: true
       storage: true
-      subresources: {}
-
+      subresources:
+        status: {}
 
 {{- end }}
 {{- end }}
