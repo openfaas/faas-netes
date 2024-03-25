@@ -116,7 +116,7 @@ spec:
             requests:
               cpu: 100m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.18.3
+        image: ghcr.io/openfaas/faas-netes:0.18.4
         imagePullPolicy: IfNotPresent
         command:
           - ./faas-netes

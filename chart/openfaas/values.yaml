@@ -186,7 +186,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.3
+  image: ghcr.io/openfaas/faas-netes:0.18.4
   resources:
     requests:
       memory: "120Mi"
@@ -253,7 +253,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.4
+  image: ghcr.io/openfaasltd/autoscaler:0.3.5
   replicas: 1
   enabled: true
   resources:
