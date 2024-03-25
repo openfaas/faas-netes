@@ -119,8 +119,7 @@ func updateDeploymentSpec(
 
 		factory.ConfigureReadOnlyRootFilesystem(request, deployment)
 		factory.ConfigureContainerUserID(deployment)
-
-		deployment.Spec.Template.Spec.NodeSelector = createSelector(request.Constraints)
+		deployment.Spec.Template.Spec.NodeSelector = map[string]string{}
 
 		labels := map[string]string{
 			"faas_function": request.Service,

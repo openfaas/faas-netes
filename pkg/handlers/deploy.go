@@ -146,8 +146,6 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 		}
 	}
 
-	nodeSelector := createSelector(request.Constraints)
-
 	resources, err := createResources(request)
 
 	if err != nil {
@@ -200,7 +198,7 @@ func makeDeploymentSpec(request types.FunctionDeployment, existingSecrets map[st
 					Annotations: annotations,
 				},
 				Spec: corev1.PodSpec{
-					NodeSelector: nodeSelector,
+					NodeSelector: map[string]string{},
 					Containers: []corev1.Container{
 						{
 							Name:  request.Service,
@@ -328,22 +326,6 @@ func buildEnvVars(request *types.FunctionDeployment) []corev1.EnvVar {
 
 func int32p(i int32) *int32 {
 	return &i
-}
-
-func createSelector(constraints []string) map[string]string {
-	selector := make(map[string]string)
-
-	if len(constraints) > 0 {
-		for _, constraint := range constraints {
-			parts := strings.Split(constraint, "=")
-
-			if len(parts) == 2 {
-				selector[parts[0]] = parts[1]
-			}
-		}
-	}
-
-	return selector
 }
 
 func createResources(request types.FunctionDeployment) (*corev1.ResourceRequirements, error) {
