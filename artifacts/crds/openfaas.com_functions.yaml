@@ -20,14 +20,18 @@ spec:
     - jsonPath: .spec.image
       name: Image
       type: string
-    - jsonPath: .status.conditions[?(@.type == "Ready")].status
+    - description: The function's desired state has been applied by the controller
+      jsonPath: .status.conditions[?(@.type == "Ready")].status
       name: Ready
       priority: 1
       type: string
-    - jsonPath: .status.conditions[?(@.type == "Healthy")].status
+    - description: All replicas of the function's desired state are available to serve
+        traffic
+      jsonPath: .status.conditions[?(@.type == "Healthy")].status
       name: Healthy
       type: string
-    - jsonPath: .status.replicas
+    - description: The desired number of replicas
+      jsonPath: .status.replicas
       name: Replicas
       type: integer
     - jsonPath: .status.availableReplicas
