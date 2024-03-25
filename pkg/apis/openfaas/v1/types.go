@@ -63,8 +63,8 @@ type AppliedProfile struct {
 	// Namespace of the applied profile object
 	Namespace string `json:"namespace"`
 
-	// The generation of the OpenFaaS profile object that was applied to the function
-	AppliedProfileGeneration int64 `json:"appliedProfileGeneration"`
+	// The resource version of the OpenFaaS profile object that is applied to the function
+	AppliedProfileVersion string `json:"appliedProfileVersion"`
 }
 
 // FunctionResources is used to set CPU and memory limits and requests

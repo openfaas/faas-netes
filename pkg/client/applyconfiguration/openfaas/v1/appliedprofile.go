@@ -11,9 +11,9 @@ package v1
 // AppliedProfileApplyConfiguration represents an declarative configuration of the AppliedProfile type for use
 // with apply.
 type AppliedProfileApplyConfiguration struct {
-	Name                     *string `json:"name,omitempty"`
-	Namespace                *string `json:"namespace,omitempty"`
-	AppliedProfileGeneration *int64  `json:"appliedProfileGeneration,omitempty"`
+	Name                  *string `json:"name,omitempty"`
+	Namespace             *string `json:"namespace,omitempty"`
+	AppliedProfileVersion *string `json:"appliedProfileVersion,omitempty"`
 }
 
 // AppliedProfileApplyConfiguration constructs an declarative configuration of the AppliedProfile type for use with
@@ -38,10 +38,10 @@ func (b *AppliedProfileApplyConfiguration) WithNamespace(value string) *AppliedP
 	return b
 }
 
-// WithAppliedProfileGeneration sets the AppliedProfileGeneration field in the declarative configuration to the given value
+// WithAppliedProfileVersion sets the AppliedProfileVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the AppliedProfileGeneration field is set to the value of the last call.
-func (b *AppliedProfileApplyConfiguration) WithAppliedProfileGeneration(value int64) *AppliedProfileApplyConfiguration {
-	b.AppliedProfileGeneration = &value
+// If called multiple times, the AppliedProfileVersion field is set to the value of the last call.
+func (b *AppliedProfileApplyConfiguration) WithAppliedProfileVersion(value string) *AppliedProfileApplyConfiguration {
+	b.AppliedProfileVersion = &value
 	return b
 }

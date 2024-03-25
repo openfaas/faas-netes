@@ -108,14 +108,13 @@ spec:
                     description: AppliedProfile describes an OpenFaaS profile that is applied to the function
                     type: object
                     required:
-                      - appliedProfileGeneration
+                      - appliedProfileVersion
                       - name
                       - namespace
                     properties:
-                      appliedProfileGeneration:
-                        description: The generation of the OpenFaaS profile object that was applied to the function
-                        type: integer
-                        format: int64
+                      appliedProfileVersion:
+                        description: The resource version of the OpenFaaS profile object that is applied to the function
+                        type: string
                       name:
                         description: Name of the applied profile object
                         type: string
@@ -126,6 +125,7 @@ spec:
       storage: true
       subresources:
         status: {}
+
 
 {{- end }}
 {{- end }}
