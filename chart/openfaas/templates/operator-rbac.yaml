@@ -27,7 +27,7 @@ metadata:
     release: {{ .Release.Name }}
 rules:
 - apiGroups: ["openfaas.com"]
-  resources: ["functions"]
+  resources: ["functions", "functions/status"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: [""]
   resources: ["events"]
@@ -129,16 +129,13 @@ metadata:
     release: {{ .Release.Name }}
 rules:
   - apiGroups: ["openfaas.com"]
-    resources: ["functions"]
+    resources: ["functions", "functions/status"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   - apiGroups: ["openfaas.com"]
     resources: ["profiles"]
     verbs: ["get", "list", "watch"]
   - apiGroups: ["iam.openfaas.com"]
     resources: ["policies", "jwtissuers"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["openfaas.com"]
-    resources: ["profiles"]
     verbs: ["get", "list", "watch"]
   - apiGroups: [""]
     resources: ["services"]

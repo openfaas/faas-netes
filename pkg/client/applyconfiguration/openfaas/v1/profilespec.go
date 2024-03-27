@@ -9,6 +9,7 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 package v1
 
 import (
+	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -23,6 +24,7 @@ type ProfileSpecApplyConfiguration struct {
 	DNSPolicy                 *v1.DNSPolicy                 `json:"dnsPolicy,omitempty"`
 	DNSConfig                 *v1.PodDNSConfig              `json:"dnsConfig,omitempty"`
 	Resources                 *v1.ResourceRequirements      `json:"resources,omitempty"`
+	Strategy                  *appsv1.DeploymentStrategy    `json:"strategy,omitempty"`
 }
 
 // ProfileSpecApplyConfiguration constructs an declarative configuration of the ProfileSpec type for use with
@@ -96,5 +98,13 @@ func (b *ProfileSpecApplyConfiguration) WithDNSConfig(value v1.PodDNSConfig) *Pr
 // If called multiple times, the Resources field is set to the value of the last call.
 func (b *ProfileSpecApplyConfiguration) WithResources(value v1.ResourceRequirements) *ProfileSpecApplyConfiguration {
 	b.Resources = &value
+	return b
+}
+
+// WithStrategy sets the Strategy field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Strategy field is set to the value of the last call.
+func (b *ProfileSpecApplyConfiguration) WithStrategy(value appsv1.DeploymentStrategy) *ProfileSpecApplyConfiguration {
+	b.Strategy = &value
 	return b
 }
