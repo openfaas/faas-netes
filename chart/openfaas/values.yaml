@@ -59,11 +59,11 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.25
+  image: ghcr.io/openfaasltd/gateway:0.4.27
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.5
+  image: ghcr.io/openfaas/gateway:0.27.6
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -126,7 +126,7 @@ eventSubscription:
     httpVerbs: "PUT,POST,DELETE"
 
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.0.8
+  image: ghcr.io/openfaasltd/event-worker:0.0.9
   replicas: 1
   logs:
     debug: false
@@ -138,7 +138,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.26
+  image: ghcr.io/openfaasltd/faas-netes:0.5.27
   create: false
   logs:
     debug: false
@@ -176,7 +176,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.26
+  image: ghcr.io/openfaasltd/faas-netes:0.5.27
   logs:
     debug: false
     format: "console"
@@ -197,7 +197,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.26
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.37
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -253,7 +253,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.5
+  image: ghcr.io/openfaasltd/autoscaler:0.3.6
   replicas: 1
   enabled: true
   resources:
@@ -291,7 +291,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.1
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.3
   insecureTLS: false
   verbose: true # debug setting
   replicas: 1
@@ -324,7 +324,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.51.0
+  image: prom/prometheus:v2.51.1
   create: true
   resources:
     requests:

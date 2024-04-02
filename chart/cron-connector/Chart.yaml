@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Trigger OpenFaaS Functions with cron schedules
 name: cron-connector
-version: 0.6.9
+version: 0.6.10
 sources:
 - https://github.com/openfaas/cron-connector
 home: https://www.openfaas.com
