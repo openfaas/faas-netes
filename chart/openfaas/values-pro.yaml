@@ -1,14 +1,8 @@
-# Suggested additional overrides for OpenFaaS Pro users, 
+# Suggested additional overrides for OpenFaaS Pro users (Standard or for Enterprises) 
 # in addition to (not instead of) values.yaml
 
 # Initial configuration to set Pro configurations on
 openfaasPro: true
-
-securityContext:
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 10001
 
 # Recommended operating mode for the OpenFaaS controller aka "faas-netes"
 # is operator mode, including a CustomResource for functions.
@@ -18,9 +12,9 @@ securityContext:
 operator:
   create: true
 
-  # For when you are running more than one replica of the gateway
+  # leaderElection is not required if running only one gateway replica
   leaderElection:
-    enabled: false
+    enabled: true
 
   # For handling large amounts of functions
   kubeClientQPS: 100
@@ -81,3 +75,10 @@ nats:
 
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
+
+# securityContext applied to the OpenFaaS components deployed by this chart 
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
