@@ -1,3 +1,6 @@
+## For OpenFaaS Standard and OpenFaaS for Enterprises users, see:
+# https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/values-pro.yaml
+
 functionNamespace: openfaas-fn  # Default namespace for functions
 
 # Contact us via https://www.openfaas.com/support to purchase a license
