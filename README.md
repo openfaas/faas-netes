@@ -69,18 +69,15 @@ Read more: [Introducing PLONK](https://www.openfaas.com/blog/plonk-stack/).
 
 The rest of this document is dedicated to technical and operational information for the controller.
 
-### Operating modes - classic or operator
+### Operating modes - "controller" or operator
 
-There are two modes available for faas-netes, the classic mode is the default.
+There are two modes available for faas-netes, the operator mode is supported for production. The controller mode is legacy and will be removed in a future release. We are unable to support new customers who use the controller mode, and it may not have feature parity with the operator mode.
 
-* Classic mode (aka faas-netes) - includes a REST API,  multiple-namespace support but no Function CRD - available in Community Edition and OpenFaaS Standard/Enteprise
-* Operator mode (aka "The OpenFaaS Operator") - includes a REST API, with a "Function" CRD and multiple-namespace [OpenFaaS Standard/Enterprise](https://openfaas.com/pricing/)
+The controller mode is the only option for OpenFaaS Community Edition (CE).
 
-See also: [README for "The OpenFaaS Operator"](README-OPERATOR.md)
+See also: [How and why you should upgrade to the Function Custom Resource Definition (CRD)](https://www.openfaas.com/blog/upgrade-to-the-function-crd/)
 
-The single faas-netes image and binary contains both modes, switch between one or the other using the helm chart or the flag `-operator=true/false`.
-
-### Configuration of the controller
+### Configuration of this component
 
 faas-netes can be configured with environment variables, but for a full set of options see the [helm chart](./chart/openfaas/).
 
