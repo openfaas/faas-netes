@@ -20,3 +20,4 @@ helm upgrade \
 
 kubectl --context "kind-$DEVENV" rollout status deploy/prometheus -n openfaas
 kubectl --context "kind-$DEVENV" rollout status deploy/gateway -n openfaas
+
