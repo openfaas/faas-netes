@@ -2,12 +2,12 @@
 
 set -e
 
-KIND_VERSION="v0.11.1"
+KIND_VERSION="v0.22.0"
 # Causes a validation failure when linting due to CRDs moving to v1
 # HELM_VERSION="v3.4.0"
-HELM_VERSION="v3.0.3"
-KUBE_VERSION="v1.18.8"
-ARKADE_VERSION="0.8.11"
+HELM_VERSION="v3.14.4"
+KUBE_VERSION="v1.29.2"
+ARKADE_VERSION="0.11.9"
 
 echo "Downloading arkade"
 
