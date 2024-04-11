@@ -22,7 +22,7 @@ kubectl --context "kind-$DEVENV" port-forward deploy/gateway -n openfaas 8080:80
     echo -n "$!" > "of_${DEVENV}_portforward.pid"
 
 # Wait for the gateway to be ready
-faas-cli ready --attempts 180 --interval
+faas-cli ready --attempts=180 --interval=1s
 
 echo "Using existing password for OpenFaaS gateway retrieved from Kubernetes."
 PASSWORD=$(kubectl get secret -n openfaas basic-auth -o=go-template='{{index .data "basic-auth-password"}}' | base64 --decode)
@@ -46,4 +46,4 @@ fi
 faas-cli deploy --image=functions/alpine:latest --fprocess=cat --name "echo"
 
 # Call echo function
-faas-cli ready --attempts 180 --interval 1s echo
+faas-cli ready --attempts=180 --interval=1s echo
