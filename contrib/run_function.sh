@@ -21,9 +21,8 @@ fi
 kubectl --context "kind-$DEVENV" port-forward deploy/gateway -n openfaas 8080:8080 &>/dev/null & \
     echo -n "$!" > "of_${DEVENV}_portforward.pid"
 
-# port-forward needs some time to start
-sleep 10
-
+# Wait for the gateway to be ready
+faas-cli ready --attempts 180 --interval
 
 echo "Using existing password for OpenFaaS gateway retrieved from Kubernetes."
 PASSWORD=$(kubectl get secret -n openfaas basic-auth -o=go-template='{{index .data "basic-auth-password"}}' | base64 --decode)
@@ -47,30 +46,4 @@ fi
 faas-cli deploy --image=functions/alpine:latest --fprocess=cat --name "echo"
 
 # Call echo function
-for i in {1..180};
-do
-    Ready="$(faas-cli describe echo | awk '{ if($1 ~ /Status:/) print $2 }')"
-    if [[ $Ready == "Ready" ]];
-    then
-        exit 0
-    fi
-    sleep 1
-done
-
-# Apply a CRD to test the operator
-
-if [ "${OPERATOR}" == "1" ]; then
-    kubectl --context "kind-$DEVENV" apply ./alpine-fn.yaml
-
-    for i in {1..180};
-    do
-        Ready="$(faas-cli describe nodeinfo | awk '{ if($1 ~ /Status:/) print $2 }')"
-        if [[ $Ready == "Ready" ]];
-        then
-            exit 0
-        fi
-        sleep 1
-    done
-fi
-
-exit 1
+faas-cli ready --attempts 180 --interval 1s echo
