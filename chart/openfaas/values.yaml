@@ -296,9 +296,11 @@ dashboard:
 oidcAuthPlugin:
   image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.3
   insecureTLS: false
-  verbose: true # debug setting
   replicas: 1
   securityContext: true
+  logs:
+    debug: false
+    format: "console"
   resources:
     requests:
       memory: "120Mi"
