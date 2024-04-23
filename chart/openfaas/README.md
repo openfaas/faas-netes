@@ -600,8 +600,9 @@ yaml) |
 | `oidcAuthPlugin.image` | Container image used for the oidc-auth-plugin | See [values.yaml](./values.yaml) |
 | `oidcAuthPlugin.insecureTLS` | Enable insecure TLS | `false` |
 | `oidcAuthPlugin.replicas` | Replicas of the oidc-auth-plugin | `1` |
+| `oidcAuthPlugin.logs.debug` | Log debug messages | `false` |
+| `oidcAuthPlugin.logs.format` | Set the log format, supports `console` or `json` | `console` |
 | `oidcAuthPlugin.resources` | Resource limits and requests for the oidc-auth-plugin containers | See [values.yaml](./values.yaml) |
-| `oidcAuthPlugin.verbose` | Enable verbose logging | `false` |
 
 ### Event subscriptions
 

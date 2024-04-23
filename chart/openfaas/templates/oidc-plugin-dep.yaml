@@ -89,9 +89,6 @@ spec:
           timeoutSeconds: 5
         args:
         - "-license-file=/var/secrets/license/license"
-        {{- if .Values.oidcAuthPlugin.verbose }}
-        - "-verbose=true"
-        {{- end }}
         env:
         - name: base_host
           value: "{{- .Values.iam.systemIssuer.url}}"
@@ -101,6 +98,10 @@ spec:
           value: "{{- .Values.oidcAuthPlugin.insecureTLS}}"
         - name: issuer_key_path
           value: "/var/secrets/issuer-key/issuer.key"
+        - name: "debug"
+          value: "{{ .Values.oidcAuthPlugin.logs.debug }}"
+        - name: "log_encoding"
+          value: "{{ .Values.oidcAuthPlugin.logs.format }}"
         {{ if .Values.caBundleSecretName }}
         - name: ca_bundle_path
           value: /var/secrets/ca-bundle/ca.crt
