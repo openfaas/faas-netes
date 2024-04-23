@@ -1,5 +1,7 @@
-faas-netes - Serverless Functions For Kubernetes with OpenFaaS
+faas-netes Community Edition (CE)
 ===========
+
+Serverless Functions For Kubernetes with OpenFaaS
 
 [![Build Status](https://github.com/openfaas/faas-netes/workflows/build/badge.svg?branch=master)](https://github.com/openfaas/faas-netes/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/openfaas/faas-netes)](https://goreportcard.com/report/github.com/openfaas/faas-netes)
@@ -7,7 +9,7 @@ faas-netes - Serverless Functions For Kubernetes with OpenFaaS
 
 ## Introduction
 
-`faas-netes` is an [OpenFaaS provider](https://github.com/openfaas/faas-provider) which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). It's part of a larger stack that brings a cloud-agnostic serverless experience to Kubernetes.
+`faas-netes` is an [OpenFaaS provider](https://github.com/openfaas/faas-provider) which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). It's part of a larger stack that brings a cloud-agnostic serverless experience to Kubernetes. This repository hosts the Community Edition (CE) of the provider, OpenFaaS Standard and OpenFaaS for Enterprises use separate codebases and licensing.
 
 The existing REST API, CLI and UI are fully compatible. With OpenFaaS Standard/Enterprise, you have an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
 
