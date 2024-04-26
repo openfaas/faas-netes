@@ -94,6 +94,18 @@ func (c *FakeFunctions) Update(ctx context.Context, function *v1.Function, opts 
 	return obj.(*v1.Function), err
 }
 
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+func (c *FakeFunctions) UpdateStatus(ctx context.Context, function *v1.Function, opts metav1.UpdateOptions) (*v1.Function, error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewUpdateSubresourceAction(functionsResource, "status", c.ns, function), &v1.Function{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*v1.Function), err
+}
+
 // Delete takes name of the function and deletes it. Returns an error if one occurs.
 func (c *FakeFunctions) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
 	_, err := c.Fake.
@@ -136,6 +148,29 @@ func (c *FakeFunctions) Apply(ctx context.Context, function *openfaasv1.Function
 	}
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(functionsResource, c.ns, *name, types.ApplyPatchType, data), &v1.Function{})
+
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*v1.Function), err
+}
+
+// ApplyStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating ApplyStatus().
+func (c *FakeFunctions) ApplyStatus(ctx context.Context, function *openfaasv1.FunctionApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Function, err error) {
+	if function == nil {
+		return nil, fmt.Errorf("function provided to Apply must not be nil")
+	}
+	data, err := json.Marshal(function)
+	if err != nil {
+		return nil, err
+	}
+	name := function.Name
+	if name == nil {
+		return nil, fmt.Errorf("function.Name must be provided to Apply")
+	}
+	obj, err := c.Fake.
+		Invokes(testing.NewPatchSubresourceAction(functionsResource, c.ns, *name, types.ApplyPatchType, data, "status"), &v1.Function{})
 
 	if obj == nil {
 		return nil, err

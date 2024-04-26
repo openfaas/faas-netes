@@ -43,7 +43,7 @@ spec:
             spec:
               description: |-
                 ProfileSpec is an openfaas api extension that can be predefined and applied
-                to functions by annotating them with `com.openfaas/profile: name1,name2`
+                to functions by annotating them with `com.openfaas.profile: name1,name2`
               type: object
               properties:
                 affinity:
