@@ -6,9 +6,13 @@ import (
 )
 
 // +genclient
-// +genclient:noStatus
+// +kubebuilder:subresource:status
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:printcolumn:name="Image",type=string,JSONPath=`.spec.image`
+// +kubebuilder:printcolumn:name="Ready",type=string,JSONPath=`.status.conditions[?(@.type == "Ready")].status`
+// +kubebuilder:printcolumn:name="Healthy",type=string,JSONPath=`.status.conditions[?(@.type == "Healthy")].status`
+// +kubebuilder:printcolumn:name="Replicas",type=string,JSONPath=`.status.replicas`
+// +kubebuilder:printcolumn:name="Available",type=string,JSONPath=`.status.availableReplicas`
 
 // Function describes an OpenFaaS function
 type Function struct {
@@ -16,6 +20,9 @@ type Function struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec FunctionSpec `json:"spec"`
+
+	// +optional
+	Status FunctionStatus `json:"status,omitempty"`
 }
 
 // FunctionSpec is the spec for a Function resource
@@ -59,6 +66,20 @@ type FunctionList struct {
 	Items []Function `json:"items"`
 }
 
+type FunctionStatus struct {
+	// Conditions contains observations of the resource's state.
+	// +optional
+	// +patchMergeKey=type
+	// +patchStrategy=merge
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
+
+	// +optional
+	Replicas int32 `json:"replicas,omitempty"`
+
+	// +optional
+	AvailableReplicas int32 `json:"availableReplicas,omitempty"`
+}
+
 // +genclient
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -73,7 +94,7 @@ type Profile struct {
 }
 
 // ProfileSpec is an openfaas api extension that can be predefined and applied
-// to functions by annotating them with `com.openfaas/profile: name1,name2`
+// to functions by annotating them with `com.openfaas.profile: name1,name2`
 type ProfileSpec struct {
 	// If specified, the function's pod tolerations.
 	//
