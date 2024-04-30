@@ -331,6 +331,8 @@ iam:
 prometheus:
   image: prom/prometheus:v2.51.2
   create: true
+  retention:
+    time: 15d
   resources:
     requests:
       memory: "512Mi"

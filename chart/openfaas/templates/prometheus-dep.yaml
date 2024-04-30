@@ -37,6 +37,12 @@ spec:
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
+          {{- if .Values.prometheus.retention.time }}
+          - "--storage.tsdb.retention.time={{.Values.prometheus.retention.time}}"
+          {{- end }}
+          {{-  if .Values.prometheus.retention.size }}
+          - "--storage.tsdb.retention.size={{.Values.prometheus.retention.size}}"
+          {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         livenessProbe:
           {{- if .Values.httpProbe }}
