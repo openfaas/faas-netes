@@ -651,4 +651,6 @@ For legacy scaling in OpenFaaS Community Edition.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `prometheus.create` | Create the Prometheus component | `true` |
 | `prometheus.image` | Container image used for prometheus | See [values.yaml](./values.yaml) |
+| `prometheus.retention.time` | When to remove old data from the prometheus db. | `15d` |
+| `prometheus.retention.size` | The maximum number of bytes of storage blocks to retain. Units supported: B, KB, MB, GB, TB, PB, EB. 0 meaning disabled. See: [Prometheus storage](https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects)| `0` |
 | `prometheus.resources` | Resource limits and requests for prometheus containers | See [values.yaml](./values.yaml) |
