@@ -141,7 +141,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.33
+  image: ghcr.io/openfaasltd/faas-netes:0.5.35
   create: false
   logs:
     debug: false
@@ -179,7 +179,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.33
+  image: ghcr.io/openfaasltd/faas-netes:0.5.35
   logs:
     debug: false
     format: "console"
@@ -256,7 +256,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.6
+  image: ghcr.io/openfaasltd/autoscaler:0.3.7
   replicas: 1
   enabled: true
   resources:
@@ -329,7 +329,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.51.2
+  image: prom/prometheus:v2.52.0
   create: true
   retention:
     time: 15d
