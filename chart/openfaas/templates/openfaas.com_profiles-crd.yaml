@@ -1,3 +1,5 @@
+{{- if .Values.createCRDs }}
+
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1483,3 +1485,5 @@ spec:
         type: object
     served: true
     storage: true
+
+{{- end }}

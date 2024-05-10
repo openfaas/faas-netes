@@ -3,6 +3,8 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+  labels:
+    app.kubernetes.io/name: openfaas
   name: roles.iam.openfaas.com
 spec:
   group: iam.openfaas.com
@@ -13,82 +15,72 @@ spec:
     singular: role
   scope: Namespaced
   versions:
-    - additionalPrinterColumns:
-        - jsonPath: .spec.principal
-          name: Principal
-          type: string
-        - jsonPath: .spec.condition
-          name: Condition
-          type: string
-        - jsonPath: .spec.policy
-          name: Policy
-          type: string
-      name: v1
-      schema:
-        openAPIV3Schema:
-          description: Role is used to define a role for a function
-          type: object
-          required:
-            - spec
-          properties:
-            apiVersion:
-              description: |-
-                APIVersion defines the versioned schema of this representation of an object.
-                Servers should convert recognized schemas to the latest internal value, and
-                may reject unrecognized values.
-                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-              type: string
-            kind:
-              description: |-
-                Kind is a string value representing the REST resource this object represents.
-                Servers may infer this from the endpoint the client submits requests to.
-                Cannot be updated.
-                In CamelCase.
-                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: |-
-                RoleSpec maps a number of principals or attributes within a JWT to
-                a set of policies.
-              type: object
-              properties:
-                condition:
-                  description: |-
-                    Condition is a set of conditions that can be used instead of a principal
-                    to match against claims within a JWT
-                    {
-                    	"StringLike": {
-                    		"jwt:https://my-identity-provider.com#sub-id": [
-                    			"1234567890",
-                    			"0987654321"
-                    		],
-                    	}
-                    }
-                  type: object
+  - additionalPrinterColumns:
+    - jsonPath: .spec.principal
+      name: Principal
+      type: string
+    - jsonPath: .spec.condition
+      name: Condition
+      type: string
+    - jsonPath: .spec.policy
+      name: Policy
+      type: string
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Role is used to define a role for a function
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              RoleSpec maps a number of principals or attributes within a JWT to
+              a set of policies.
+            properties:
+              condition:
+                additionalProperties:
                   additionalProperties:
-                    type: object
-                    additionalProperties:
-                      type: array
-                      items:
-                        type: string
-                policy:
-                  description: Policy is a list of named policies which apply to this role
-                  type: array
-                  items:
-                    type: string
-                principal:
-                  description: |-
-                    Principal is the principal that the role applies to i.e.
-                    {
-                    		"jwt:sub":["repo:alexellis/minty:ref:refs/heads/master"]
-                    }
-                  type: object
-                  additionalProperties:
-                    type: array
                     items:
                       type: string
-      served: true
-      storage: true
-      subresources: {}
+                    type: array
+                  type: object
+                description: "Condition is a set of conditions that can be used instead
+                  of a principal\nto match against claims within a JWT\n{\n\t\"StringLike\":
+                  {\n\t\t\"jwt:https://my-identity-provider.com#sub-id\": [\n\t\t\t\"1234567890\",\n\t\t\t\"0987654321\"\n\t\t],\n\t}\n}"
+                type: object
+              policy:
+                description: Policy is a list of named policies which apply to this
+                  role
+                items:
+                  type: string
+                type: array
+              principal:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
+                description: "Principal is the principal that the role applies to
+                  i.e.\n{\n\t\t\"jwt:sub\":[\"repo:alexellis/minty:ref:refs/heads/master\"]\n}"
+                type: object
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources: {}
