@@ -79,6 +79,52 @@ subjects:
   name: {{ .Release.Name }}-operator
   namespace: {{ .Release.Namespace | quote }}
 ---
+
+{{- if .Values.operator.leaderElection.enabled }}
+# RBAC for leader election for the operator in installation namespace
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-leaderelection
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: openfaas-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+rules:
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: openfaas-operator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ .Release.Name }}-leaderelection
+  namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-leaderelection
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-operator
+    namespace: {{ .Release.Namespace | quote }}
+
+{{- end }}
+
+---
+
+# RBAC for profiles for the operator in installation namespace
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -114,6 +160,8 @@ subjects:
   - kind: ServiceAccount
     name: {{ .Release.Name }}-operator
     namespace: {{ .Release.Namespace | quote }}
+
+
 {{- if and .Values.openfaasPro .Values.clusterRole}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
