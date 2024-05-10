@@ -98,7 +98,15 @@ PASSWORD=$(kubectl -n openfaas get secret basic-auth -o jsonpath="{.data.basic-a
 echo "OpenFaaS admin password: $PASSWORD"
 ```
 
-#### Deploy OpenFaaS Pro
+#### Deploy OpenFaaS Pro - OpenFaaS Standard / OpenFaaS For Enterprises
+
+It's recommended to run with a ClusterRole so that:
+
+* Prometheus can scrape node metrics for CPU-based autoscaling, and report CPU/RAM consumption usage of functions via the API.
+* The Operator can manage functions across multiple namespaces
+* The Operator can obtain accurate namespace information for the installation
+
+First:
 
 * Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/pricing/):
 
@@ -140,15 +148,10 @@ You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
 
 #### Installing OpenFaaS Pro without Cluster Admin access
 
-In order to install OpenFaaS Pro, you need to create at least one namespace, a Cluster Admin role and Custom Resource Definitions (CRDs), however some DevOps teams prevent business teams from getting access to Cluster Admin.
+There are two potential issues when installing OpenFaaS without Cluster Admin access:
 
-This option is reserved for OpenFaaS Pro customers, see the installation steps here: [Split installation instructions](https://github.com/openfaas/openfaas-pro/blob/master/split-installation.md)
-
-See also:
-
-* Scale-down to zero (in this document)
-* [OpenFaaS Pro SSO/OIDC](https://docs.openfaas.com/openfaas-pro/sso/)
-* [OpenFaaS Pro Kafka Event Connector](https://docs.openfaas.com/openfaas-pro/kafka-events/)
+1. You cannot create a ClusterRole. In this case, your admin team can install OpenFaaS and create the required resources, you can then perform updates with limited permissions. Pass the `--set rbac=false` flag to the `helm` command to prevent your account from tying to update or change resources. Alternatively, you can also use a Role instead of a ClusterRole however this may result in more limited functionality for OpenFaaS, set `--set clusterRole=false`
+2. You cannot install CRDs. If you do not have a Cluster Admin account, you won't be able to create CRDs, see the notes in [crds/README.md](crds/README.md) for how to perform a "split installation" of CRDs with a privileged account.
 
 ## Test changes for the helm chart
 
@@ -407,7 +410,13 @@ Follow this by the following to remove all other associated objects:
 kubectl delete namespace openfaas openfaas-fn
 ```
 
-In some cases your additional functions may need to be either deleted before deleting the chart with `faas-cli` or manually deleted using `kubectl delete`.
+Then delete the CRDs:
+
+```bash
+kubectl delete crd -l app.kubernetes.io/name=openfaas
+```
+
+If you have created additional namespaces for functions, delete those too, with `kubectl delete namespace <namespace>`. 
 
 ## Kubernetes versioning
 
@@ -444,7 +453,6 @@ yaml) |
 | `basicAuthPlugin.resources` | Resource limits and requests for basic-auth-plugin containers | See [values.yaml](./values.yaml) |
 | `caBundleSecretName` | Name of the Kubernetes secret that contains the CA bundle for making HTTP requests for IAM (optional) | `""` |
 | `clusterRole` | Use a `ClusterRole` for the Operator or faas-netes. Set to `true` for multiple namespace, pro scaler and CPU/RAM metrics in OpenFaaS REST API | `false` |
-| `createCRDs` | Create the CRDs for OpenFaaS Functions and Profiles | `true` |
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `openfaas-fn` |
 | `gatewayExternal.annotations` | Annotation for getaway-external service | `{}` |
