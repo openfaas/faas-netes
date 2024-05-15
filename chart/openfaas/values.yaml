@@ -386,8 +386,9 @@ ingress:
       serviceName: gateway
       servicePort: 8080
       path: /
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  # annotations:
+    # This annotation is deprecated, use IngressClass in the spec instead
+    # kubernetes.io/ingress.class: nginx
   tls:
   # Secrets must be manually created in the namespace.
 
