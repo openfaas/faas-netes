@@ -2,5 +2,5 @@ Thanks for installing kafka-connector. Please follow the instructions below to g
 
 You can watch the Connector logs to see it invoke your functions:
 
-$ kubectl logs -n {{ .Release.Namespace }} deploy/sqs-connector -f
+$ kubectl logs -n {{ .Release.Namespace }} deploy/{{ template "connector.fullname" . }} -f
 

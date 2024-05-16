@@ -62,7 +62,8 @@ maxMessages: 1
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
-$ helm upgrade sqs-connector openfaas/sqs-connector \
+$ helm repo update && \
+  helm upgrade sqs-connector openfaas/sqs-connector \
     --install \
     --namespace openfaas
 ```
@@ -81,7 +82,8 @@ You may also want to save your values.yaml file with a similar name like `values
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
-$ helm upgrade sqs-connector-s3-events openfaas/sqs-connector \
+$ helm repo update && \
+  helm upgrade sqs-connector-s3-events openfaas/sqs-connector \
     --install \
     --namespace openfaas \
     -f values-s3-events.yaml
