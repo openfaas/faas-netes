@@ -4,10 +4,14 @@
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaasltd/sqs-connector:0.3.2
+image: ghcr.io/openfaasltd/sqs-connector:0.3.3
 
 replicas: 1
 
+# Give one URL or a comma-separated list of URLs
+# Each queueURL for this deployment will use the same AWS credentials
+# queueURL: "https://"
+# queueURL: "https://,https://,https://"
 queueURL: "https://"
 
 # Set to empty string if using AWS ambient credentials
