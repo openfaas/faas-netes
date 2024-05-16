@@ -69,6 +69,26 @@ $ helm upgrade sqs-connector openfaas/sqs-connector \
 
 > The above command will also update your helm repo to pull in any new releases.
 
+## Install an additional SQS connector
+
+To install an additional connector, you will need a different copy of values.yaml with the queueURL you want to use, and a reference to either the same, or a different secret for the AWS credentials. The default secret name is `aws-sqs-credentials`.
+
+Now, make sure you add a new "release name" to the additional SQS connector, you could use the queue name or another memorable string.
+
+If your queue name was `s3-events` you could use: `sqs-connector-s3-events`.
+
+You may also want to save your values.yaml file with a similar name like `values-s3-events.yaml`.
+
+```sh
+$ helm repo add openfaas https://openfaas.github.io/faas-netes/
+$ helm upgrade sqs-connector-s3-events openfaas/sqs-connector \
+    --install \
+    --namespace openfaas \
+    -f values-s3-events.yaml
+```
+
+This will install another copy of the SQS connector and you'll be able to see it via `kubectl get deployments -n openfaas`.
+
 ## Install a development version
 
 ```sh
