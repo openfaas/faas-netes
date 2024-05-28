@@ -24,16 +24,21 @@ spec:
       type: string
     - jsonPath: .status.conditions[?(@.type == "Ready")].status
       name: Ready
+      priority: 1
       type: string
     - jsonPath: .status.conditions[?(@.type == "Healthy")].status
       name: Healthy
       type: string
     - jsonPath: .status.replicas
       name: Replicas
-      type: string
+      type: integer
     - jsonPath: .status.availableReplicas
       name: Available
-      type: string
+      type: integer
+    - jsonPath: .status.unavailableReplicas
+      name: Unavailable
+      priority: 1
+      type: integer
     name: v1
     schema:
       openAPIV3Schema:
@@ -185,6 +190,9 @@ spec:
                   type: object
                 type: array
               replicas:
+                format: int32
+                type: integer
+              unavailableReplicas:
                 format: int32
                 type: integer
             type: object

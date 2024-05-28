@@ -9,10 +9,11 @@ import (
 // +kubebuilder:subresource:status
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:printcolumn:name="Image",type=string,JSONPath=`.spec.image`
-// +kubebuilder:printcolumn:name="Ready",type=string,JSONPath=`.status.conditions[?(@.type == "Ready")].status`
-// +kubebuilder:printcolumn:name="Healthy",type=string,JSONPath=`.status.conditions[?(@.type == "Healthy")].status`
-// +kubebuilder:printcolumn:name="Replicas",type=string,JSONPath=`.status.replicas`
-// +kubebuilder:printcolumn:name="Available",type=string,JSONPath=`.status.availableReplicas`
+// +kubebuilder:printcolumn:name="Ready",type=string,JSONPath=`.status.conditions[?(@.type == "Ready")].status`,priority=1,description="The function's desired state has been applied by the controller"
+// +kubebuilder:printcolumn:name="Healthy",type=string,JSONPath=`.status.conditions[?(@.type == "Healthy")].status`,description="All replicas of the function's desired state are available to serve traffic"
+// +kubebuilder:printcolumn:name="Replicas",type=integer,JSONPath=`.status.replicas`,description="The desired number of replicas"
+// +kubebuilder:printcolumn:name="Available",type=integer,JSONPath=`.status.availableReplicas`
+// +kubebuilder:printcolumn:name="Unavailable",type=integer,JSONPath=`.status.unavailableReplicas`,priority=1
 
 // Function describes an OpenFaaS function
 type Function struct {
@@ -78,6 +79,9 @@ type FunctionStatus struct {
 
 	// +optional
 	AvailableReplicas int32 `json:"availableReplicas,omitempty"`
+
+	// +optional
+	UnavailableReplicas int32 `json:"unavailableReplicas,omitempty"`
 }
 
 // +genclient

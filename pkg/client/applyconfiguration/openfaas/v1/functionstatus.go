@@ -15,9 +15,10 @@ import (
 // FunctionStatusApplyConfiguration represents an declarative configuration of the FunctionStatus type for use
 // with apply.
 type FunctionStatusApplyConfiguration struct {
-	Conditions        []v1.Condition `json:"conditions,omitempty"`
-	Replicas          *int32         `json:"replicas,omitempty"`
-	AvailableReplicas *int32         `json:"availableReplicas,omitempty"`
+	Conditions          []v1.Condition `json:"conditions,omitempty"`
+	Replicas            *int32         `json:"replicas,omitempty"`
+	AvailableReplicas   *int32         `json:"availableReplicas,omitempty"`
+	UnavailableReplicas *int32         `json:"unavailableReplicas,omitempty"`
 }
 
 // FunctionStatusApplyConfiguration constructs an declarative configuration of the FunctionStatus type for use with
@@ -49,5 +50,13 @@ func (b *FunctionStatusApplyConfiguration) WithReplicas(value int32) *FunctionSt
 // If called multiple times, the AvailableReplicas field is set to the value of the last call.
 func (b *FunctionStatusApplyConfiguration) WithAvailableReplicas(value int32) *FunctionStatusApplyConfiguration {
 	b.AvailableReplicas = &value
+	return b
+}
+
+// WithUnavailableReplicas sets the UnavailableReplicas field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the UnavailableReplicas field is set to the value of the last call.
+func (b *FunctionStatusApplyConfiguration) WithUnavailableReplicas(value int32) *FunctionStatusApplyConfiguration {
+	b.UnavailableReplicas = &value
 	return b
 }
