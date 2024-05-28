@@ -1,7 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-  {{- $apiIsStable := eq (include "openfaas.ingress.isStable" .) "true" -}}
-  {{- $pathType := .Values.ingress.pathType | default "ImplementationSpecific" -}}
-  {{- $ingressSupportsPathType := eq (include "openfaas.ingress.supportsPathType" .) "true" -}}
 apiVersion: {{ include "openfaas.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -21,25 +18,8 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   {{- end }}
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host.host }}
-      http:
-        paths:
-          - path: {{ $host.path }}
-            {{- if and $pathType $ingressSupportsPathType }}
-            pathType: {{ $pathType }}
-            {{- end }}
-            backend:
-              {{- if $apiIsStable }}
-              service:
-                name: {{ $host.serviceName }}
-                port:
-                  number: {{ $host.servicePort }}
-              {{- else }}
-              serviceName: {{ $host.serviceName }}
-              servicePort: {{ $host.servicePort }}
-    {{- end }}
-    {{- end -}}
+
+{{ toYaml .Values.ingress.hosts | indent 2 }}
   {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
