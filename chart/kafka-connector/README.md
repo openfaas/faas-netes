@@ -1,34 +1,32 @@
 # OpenFaaS Pro Kafka Connector
 
-The [Kafka connector](https://docs.openfaas.com/openfaas-pro/introduction) brings Kafka to OpenFaaS by invoking functions based on Kafka topic annotations.
+The Kafka connector brings Kafka to OpenFaaS by invoking functions based on Kafka topic annotations.
 
-* See also: [Staying on topic: trigger your OpenFaaS functions with Apache Kafka](https://www.openfaas.com/blog/kafka-connector/)
+See also: [Docs & tutorials for the Kafka connector](https://docs.openfaas.com/openfaas-pro/introduction)
 
 ## Prerequisites
 
-- Purchase a license
+- Obtain an license for OpenFaaS
 
-  You will need an OpenFaaS License
-
-  Contact us to find out more [openfaas.com/pricing](https://www.openfaas.com/pricing)
+  You will need an OpenFaaS license, [find out more](https://www.openfaas.com/pricing)
 
 - Install OpenFaaS
 
-  You must have a working OpenFaaS installed.
+  You must have a working OpenFaaS installation.
 
-- Self-hosted Kafka with Helm
-
-  For development and testing, you can install [Apache Kafka](https://kafka.apache.org/) using Confluent's [chart](https://github.com/confluentinc/cp-helm-charts). Find out additional options here: [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart)
-
-- Hosted Kafka
+- Option 1 - hosted Kafka
 
   [Aiven](https://aiven.io/) and [Confluent Cloud](https://confluent.cloud/) have both been tested with the Kafka Connector.
 
-Other versions of Kafka like Redpanda should work out of the box.
+  Other hosted Kafka offerings such as Kafka like Redpanda should also work.
 
-## Complete walk-through guide
+- Option 2 - Self-hosted Kafka
 
-  You can continue with this guide, or start the [walk-through](quickstart.md) for testing purposes.
+  For development and testing, you can install [Apache Kafka](https://kafka.apache.org/) using Confluent's [chart](https://github.com/confluentinc/cp-helm-charts). Find out additional options here: [available here](https://github.com/helm/charts/tree/master/incubator/kafka#installing-the-chart)
+
+- Option 3 - Use an existing Kafka deployment
+
+  If you already have Kafka deployed, you'll all the usual details such as whether TLS is enabled along with any required certs, what kind of authentication is being used, what the topic names are, and the partition size for each.
 
 ## Install the Chart
 
@@ -45,20 +43,25 @@ $ kubectl create secret generic \
 
 ```sh
 $ helm repo add openfaas https://openfaas.github.io/faas-netes/
-$ helm upgrade kafka-connector openfaas/kafka-connector \
+```
+
+Prepare a custom [values.yaml](values.yaml) with:
+
+* brokerHosts - comma separted list of host:port
+* topics - the topics to subscribe to
+* replicas - this should match the partition size, so if the size is 3, set this to 3 
+
+Then you will need to read up on the encryption and authentication options and update the settings accordingly.
+
+```sh
+$ helm repo update && \
+  helm upgrade kafka-connector openfaas/kafka-connector \
     --install \
-    --namespace openfaas
+    --namespace openfaas \
+    -f ./custom-values.yaml
 ```
 
 > The above command will also update your helm repo to pull in any new releases.
-
-## Install a development version
-
-```sh
-$ helm upgrade kafka-connector ./chart/kafka-connector \
-    --install \
-    --namespace openfaas
-```
 
 ## Encryption options
 
@@ -104,6 +107,17 @@ Additional kafka-connector options in `values.yaml`.
 | `logs.format`          | The log encoding format. Supported values: `json` or `console`                                                                     | `console`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
+
+## Install a development version of the chart
+
+When developing on the chart locally, just specify the path to the chart where you've cloned it:
+
+```sh
+$ helm upgrade kafka-connector ./chart/kafka-connector \
+    --install \
+    --namespace openfaas \
+    -f values.yaml
+```
 
 ## Removing the kafka-connector
 
