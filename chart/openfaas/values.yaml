@@ -62,11 +62,11 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.27
+  image: ghcr.io/openfaasltd/gateway:0.4.28
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.6
+  image: ghcr.io/openfaas/gateway:0.27.7
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -129,7 +129,7 @@ eventSubscription:
     httpVerbs: "PUT,POST,DELETE"
 
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.0.9
+  image: ghcr.io/openfaasltd/event-worker:0.1.0
   replicas: 1
   logs:
     debug: false
@@ -141,7 +141,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.39
+  image: ghcr.io/openfaasltd/faas-netes:0.5.41
   create: false
   logs:
     debug: false
@@ -179,13 +179,13 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.39
+  image: ghcr.io/openfaasltd/faas-netes:0.5.41
   logs:
     debug: false
     format: "console"
 
 faasnetesOem:
-  image: ghcr.io/openfaasltd/faas-netes-oem:0.2.0
+  image: ghcr.io/openfaasltd/faas-netes-oem:0.2.1
 
 # For the Community Edition
 faasnetes:
@@ -200,7 +200,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.37
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.38
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -256,7 +256,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.7
+  image: ghcr.io/openfaasltd/autoscaler:0.3.8
   replicas: 1
   enabled: true
   resources:
@@ -274,7 +274,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.18
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.19
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
