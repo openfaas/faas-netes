@@ -85,6 +85,24 @@ type FunctionStatus struct {
 	UnavailableReplicas int32 `json:"unavailableReplicas,omitempty"`
 
 	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
+	// OpenFaaS Profiles that are applied to this function
+	// +optional
+	Profiles []AppliedProfile `json:"profiles,omitempty"`
+}
+
+// AppliedProfile describes an OpenFaaS profile that is applied to the function
+type AppliedProfile struct {
+	// Reference to the applied Profile object
+	ProfileRef ResourceRef `json:"profileRef"`
+
+	// The generation of the OpenFaaS profile object that was applied to the function
+	ObservedGeneration int64 `json:"observedGeneration"`
+}
+
+// ResourceRef references resources across namespaces
+type ResourceRef struct {
+	Name      string `json:"name,omitempty"`
+	Namespace string `json:"namespace,omitempty"`
 }
 
 // +genclient

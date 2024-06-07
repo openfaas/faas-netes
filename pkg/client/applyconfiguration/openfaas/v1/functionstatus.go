@@ -15,10 +15,12 @@ import (
 // FunctionStatusApplyConfiguration represents an declarative configuration of the FunctionStatus type for use
 // with apply.
 type FunctionStatusApplyConfiguration struct {
-	Conditions          []v1.Condition `json:"conditions,omitempty"`
-	Replicas            *int32         `json:"replicas,omitempty"`
-	AvailableReplicas   *int32         `json:"availableReplicas,omitempty"`
-	UnavailableReplicas *int32         `json:"unavailableReplicas,omitempty"`
+	Conditions          []v1.Condition                     `json:"conditions,omitempty"`
+	Replicas            *int32                             `json:"replicas,omitempty"`
+	AvailableReplicas   *int32                             `json:"availableReplicas,omitempty"`
+	UnavailableReplicas *int32                             `json:"unavailableReplicas,omitempty"`
+	ObservedGeneration  *int64                             `json:"observedGeneration,omitempty"`
+	Profiles            []AppliedProfileApplyConfiguration `json:"profiles,omitempty"`
 }
 
 // FunctionStatusApplyConfiguration constructs an declarative configuration of the FunctionStatus type for use with
@@ -58,5 +60,26 @@ func (b *FunctionStatusApplyConfiguration) WithAvailableReplicas(value int32) *F
 // If called multiple times, the UnavailableReplicas field is set to the value of the last call.
 func (b *FunctionStatusApplyConfiguration) WithUnavailableReplicas(value int32) *FunctionStatusApplyConfiguration {
 	b.UnavailableReplicas = &value
+	return b
+}
+
+// WithObservedGeneration sets the ObservedGeneration field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the ObservedGeneration field is set to the value of the last call.
+func (b *FunctionStatusApplyConfiguration) WithObservedGeneration(value int64) *FunctionStatusApplyConfiguration {
+	b.ObservedGeneration = &value
+	return b
+}
+
+// WithProfiles adds the given value to the Profiles field in the declarative configuration
+// and returns the receiver, so that objects can be build by chaining "With" function invocations.
+// If called multiple times, values provided by each call will be appended to the Profiles field.
+func (b *FunctionStatusApplyConfiguration) WithProfiles(values ...*AppliedProfileApplyConfiguration) *FunctionStatusApplyConfiguration {
+	for i := range values {
+		if values[i] == nil {
+			panic("nil value passed to WithProfiles")
+		}
+		b.Profiles = append(b.Profiles, *values[i])
+	}
 	return b
 }
