@@ -37,6 +37,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &iamv1.RoleSpecApplyConfiguration{}
 
 		// Group=openfaas.com, Version=v1
+	case openfaasv1.SchemeGroupVersion.WithKind("AppliedProfile"):
+		return &applyconfigurationopenfaasv1.AppliedProfileApplyConfiguration{}
 	case openfaasv1.SchemeGroupVersion.WithKind("Function"):
 		return &applyconfigurationopenfaasv1.FunctionApplyConfiguration{}
 	case openfaasv1.SchemeGroupVersion.WithKind("FunctionResources"):
@@ -49,6 +51,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationopenfaasv1.ProfileApplyConfiguration{}
 	case openfaasv1.SchemeGroupVersion.WithKind("ProfileSpec"):
 		return &applyconfigurationopenfaasv1.ProfileSpecApplyConfiguration{}
+	case openfaasv1.SchemeGroupVersion.WithKind("ResourceRef"):
+		return &applyconfigurationopenfaasv1.ResourceRefApplyConfiguration{}
 
 	}
 	return nil
