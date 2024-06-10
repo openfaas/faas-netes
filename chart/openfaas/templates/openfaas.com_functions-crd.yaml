@@ -196,6 +196,30 @@ spec:
               observedGeneration:
                 format: int64
                 type: integer
+              profiles:
+                description: OpenFaaS Profiles that are applied to this function
+                items:
+                  description: AppliedProfile describes an OpenFaaS profile that is
+                    applied to the function
+                  properties:
+                    observedGeneration:
+                      description: The generation of the OpenFaaS profile object that
+                        was applied to the function
+                      format: int64
+                      type: integer
+                    profileRef:
+                      description: Reference to the applied Profile object
+                      properties:
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+                      type: object
+                  required:
+                  - observedGeneration
+                  - profileRef
+                  type: object
+                type: array
               replicas:
                 format: int32
                 type: integer
