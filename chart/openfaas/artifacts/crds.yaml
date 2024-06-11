@@ -624,6 +624,9 @@ spec:
                   - type
                   type: object
                 type: array
+              observedGeneration:
+                format: int64
+                type: integer
               replicas:
                 format: int32
                 type: integer

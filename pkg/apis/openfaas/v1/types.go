@@ -83,6 +83,8 @@ type FunctionStatus struct {
 
 	// +optional
 	UnavailableReplicas int32 `json:"unavailableReplicas,omitempty"`
+
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 }
 
 // +genclient
