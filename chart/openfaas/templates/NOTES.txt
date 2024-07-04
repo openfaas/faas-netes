@@ -14,3 +14,17 @@ To retrieve the admin password, run:
 Warning: The dashboard is using auto generated signing keys.
 These should only be used for development. See: https://docs.openfaas.com/openfaas-pro/dashboard/
 {{- end}}
+
+{{- if not .Values.basic_auth }}
+
+====================================================================================
+
+WARNING: Basic Auth .basic_auth has been set to false!
+
+This should never be disabled because it makes the OpenFaaS API vulnerable to attack
+from functions, and any other workload within the cluster.
+
+This is a breach of all applicable warranties, and no technical support will be given.
+
+====================================================================================
+{{- end }}
