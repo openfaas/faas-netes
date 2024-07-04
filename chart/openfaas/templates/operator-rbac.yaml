@@ -27,7 +27,7 @@ metadata:
     release: {{ .Release.Name }}
 rules:
 - apiGroups: ["openfaas.com"]
-  resources: ["functions", "functions/status"]
+  resources: ["functions", "functions/status", "functions/finalizers"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: [""]
   resources: ["events"]
@@ -177,7 +177,7 @@ metadata:
     release: {{ .Release.Name }}
 rules:
   - apiGroups: ["openfaas.com"]
-    resources: ["functions", "functions/status"]
+    resources: ["functions", "functions/status", "functions/finalizers"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   - apiGroups: ["openfaas.com"]
     resources: ["profiles"]

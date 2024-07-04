@@ -27,7 +27,7 @@ metadata:
     release: {{ .Release.Name }}
 rules:
 - apiGroups: ["openfaas.com"]
-  resources: ["functioningresses"]
+  resources: ["functioningresses", "functioningresses/status", "functioningresses/finalizers"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["extensions", "networking.k8s.io"]
   resources: ["ingresses"]
