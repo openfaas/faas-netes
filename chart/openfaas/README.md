@@ -146,6 +146,19 @@ helm repo update \
 
 You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
 
+#### OpenFaaS OEM
+
+OpenFaaS OEM is available subject to contract for local development and requires a secret to be created with your separate OpenFaaS OEM license key:
+
+```bash
+kubectl create secret generic \
+  -n openfaas \
+  openfaas-license \
+  --from-file license=$HOME/.openfaas/OEM
+```
+
+Then, pass the `--set oem=true` flag to `helm`, or set `oem: true` in your values.yaml file.
+
 #### Installing OpenFaaS Pro without Cluster Admin access
 
 There are two potential issues when installing OpenFaaS without Cluster Admin access:
