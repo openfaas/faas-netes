@@ -66,7 +66,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.28
+  image: ghcr.io/openfaasltd/gateway:0.4.30
   pprof: false
 
 gateway:
@@ -145,7 +145,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.46
+  image: ghcr.io/openfaasltd/faas-netes:0.5.47
   create: false
   logs:
     debug: false
@@ -183,7 +183,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.46
+  image: ghcr.io/openfaasltd/faas-netes:0.5.47
   logs:
     debug: false
     format: "console"
@@ -278,7 +278,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.22
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.23
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
