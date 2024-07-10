@@ -145,7 +145,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.47
+  image: ghcr.io/openfaasltd/faas-netes:0.5.48
   create: false
   logs:
     debug: false
@@ -183,7 +183,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.47
+  image: ghcr.io/openfaasltd/faas-netes:0.5.48
   logs:
     debug: false
     format: "console"
@@ -333,7 +333,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.53.0
+  image: prom/prometheus:v2.53.1
   create: true
   retention:
     time: 15d

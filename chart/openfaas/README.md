@@ -154,7 +154,7 @@ OpenFaaS OEM is available subject to contract for local development and requires
 kubectl create secret generic \
   -n openfaas \
   openfaas-license \
-  --from-file license=$HOME/.openfaas/OEM
+  --from-file license=$HOME/.openfaas/LICENSE-OEM
 ```
 
 Then, pass the `--set oem=true` flag to `helm`, or set `oem: true` in your values.yaml file.
