@@ -260,7 +260,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.8
+  image: ghcr.io/openfaasltd/autoscaler:0.3.9
   replicas: 1
   enabled: true
   resources:
@@ -371,7 +371,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.17
+  image: nats:2.10.18
   resources:
     requests:
       memory: "120Mi"

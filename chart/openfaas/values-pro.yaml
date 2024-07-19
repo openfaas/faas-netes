@@ -12,7 +12,9 @@ openfaasPro: true
 operator:
   create: true
 
-  # leaderElection is not required if running only one gateway replica
+  # leaderElection is required if gateway.replicas > 1 and makes sure
+  # that only one instance is running the reconciliation loop to
+  # convert Function CRDs into Kubernetes resources.
   leaderElection:
     enabled: true
 
@@ -40,6 +42,11 @@ dashboard:
 # https://docs.openfaas.com/architecture/autoscaling/
 autoscaler:
   enabled: true
+  # Set to "true" to learn how the autoscaler works, both for horizonal Pod scaling 
+  # and for scaling to zero.
+  # The Grafana dashboards can be used in combination to see the effect of the 
+  # autoscaler: https://docs.openfaas.com/openfaas-pro/grafana-dashboards/ 
+  verbose: false
 
 # A cluster role is required for OpenFaaS Pro due to:
 # 1) Autoscaling and metrics for functions - CPU / RAM
