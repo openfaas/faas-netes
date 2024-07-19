@@ -260,7 +260,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.9
+  image: ghcr.io/openfaasltd/autoscaler:0.3.10
   replicas: 1
   enabled: true
   resources:
