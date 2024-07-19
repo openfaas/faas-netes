@@ -642,10 +642,6 @@ yaml) |
 | `eventWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
 | `eventWorker.logs.debug` | Print debug logs    | `false` |
 
-### faas-idler (OpenFaaS Pro)
-
-Deprecated and replaced by the new autoscaler, which supports scale to zero.
-
 ### ingressOperator
 
 | Parameter               | Description                           | Default                                                    |

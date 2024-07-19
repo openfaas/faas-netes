@@ -261,6 +261,8 @@ queueWorker:
 ## Includes: scale to zero
 autoscaler:
   image: ghcr.io/openfaasltd/autoscaler:0.3.10
+
+  # replicas should only ever be set to 1, as a singleton.
   replicas: 1
   enabled: true
   resources:

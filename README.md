@@ -96,7 +96,6 @@ faas-netes can be configured with environment variables, but for a full set of o
 | `prometheus.resources`      | CPU/Memory resources requests/limits (memory: `512Mi`)                                           |
 | `alertmanager.resources`    | CPU/Memory resources requests/limits (memory: `25Mi`)                                            |
 | `nats.resources`            | CPU/Memory resources requests/limits (memory: `120Mi`)                                           |
-| `faasIdler.resources`       | CPU/Memory resources requests/limits (memory: `64Mi`)                                            |
 | `basicAuthPlugin.resources` | CPU/Memory resources requests/limits (memory: `50Mi`, cpu: `20m`)                                |
 
 ### Readiness checking
