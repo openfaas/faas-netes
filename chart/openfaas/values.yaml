@@ -271,6 +271,13 @@ autoscaler:
       cpu: "100m"
     limits:
       memory: "256Mi"
+
+  # Set to "true" to learn how the autoscaler works, both for horizonal Pod scaling 
+  # and for scaling to zero.
+  # The Grafana dashboards can be used in combination to see the effect of the 
+  # autoscaler: https://docs.openfaas.com/openfaas-pro/grafana-dashboards/ 
+  verbose: false
+
   # When disableHorizontalScaling is set to true, then the autoscaler will 
   # only scale to zero, without scaling replicas between the defined Min and Max
   # count for the function
