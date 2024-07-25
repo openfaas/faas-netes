@@ -173,7 +173,7 @@ The Pod for the builder contains two containers:
 
 Pass either to the logs command:
 
-```
+```bash
 # Check the logs of the pro-builder API
 kubectl logs -n openfaas \
   deploy/pro-builder -c pro-builder
@@ -187,20 +187,6 @@ kubectl get events -n openfaas
 ```
 
 To test the builder head over to the [Function Builder API Documentation](https://docs.openfaas.com/openfaas-pro/builder/)
-
-## Troubleshooting
-
-### Errors due to permissions
-
-If you see errors about permissions, then you may need to review the options for the securityContext.
-
-See also: [rootless mode](https://github.com/moby/buildkit/blob/master/docs/rootless.md)
-
-### Errors due to authentication
-
-If you're having issues getting your registry authentication to work, then why not try out ttl.sh, a free, ephemeral container registry. [ttl.sh](https://ttl.sh) is a public service run by Replicated, which allows you to push and pull images without authentication.
-
-Once you've seen the building work end to end, get in touch with us and we'll try to help you with your authentication.
 
 ## Push images to Amazon ECR
 
@@ -266,6 +252,21 @@ Additional pro-builder options in `values.yaml`.
 | `awsCredentialsSecret` | Mount a secret with AWS credentials for pushing images to ECR | `""` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
+
+
+## Troubleshooting
+
+### Errors due to permissions
+
+If you see errors about permissions, then you may need to review the options for the securityContext.
+
+See also: [rootless mode](https://github.com/moby/buildkit/blob/master/docs/rootless.md)
+
+### Errors due to authentication
+
+If you're having issues getting your registry authentication to work, then why not try out ttl.sh, a free, ephemeral container registry. [ttl.sh](https://ttl.sh) is a public service run by Replicated, which allows you to push and pull images without authentication.
+
+Once you've seen the building work end to end, get in touch with us and we'll try to help you with your authentication.
 
 ## Removing the pro-builder
 
