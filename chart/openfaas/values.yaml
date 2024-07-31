@@ -66,7 +66,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.31
+  image: ghcr.io/openfaasltd/gateway:0.4.32
   pprof: false
 
 gateway:
@@ -204,7 +204,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.39
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.40
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -307,7 +307,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.6
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.7
   insecureTLS: false
   replicas: 1
   securityContext: true
