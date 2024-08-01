@@ -29,6 +29,11 @@ spec:
         secret:
           secretName: openfaas-license
       {{- end }}
+      {{- if .Values.nats.authorization.enabled }}
+      - name: nats-token
+        secret:
+          secretName: nats-token
+      {{- end }}
       containers:
       - name:  queue-worker
         resources:
@@ -48,6 +53,9 @@ spec:
           {{- end }}
           {{- if .Values.jetstreamQueueWorker.pprof }}
           - "-pprof=true"
+          {{- end }}
+          {{- if .Values.nats.authorization.enabled }}
+          - -nats-token-file=/var/secrets/nats_token/token
           {{- end }}
         env:
         {{- if .Values.nats.external.enabled }}
@@ -111,6 +119,11 @@ spec:
           readOnly: true
           mountPath: "/var/secrets/license"
         {{- end }}
+        {{- if .Values.nats.authorization.enabled }}
+        - name: nats-token
+          readOnly: true
+          mountPath: "/var/secrets/nats_token"
+        {{- end }}        
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

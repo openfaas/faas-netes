@@ -33,6 +33,11 @@ spec:
         secret:
           secretName: {{.Values.eventSubscription.endpointSecret}}
       {{- end }}
+      {{- if .Values.nats.authorization.enabled }}
+      - name: nats-token
+        secret:
+          secretName: nats-token
+      {{- end }}
       containers:
       - name:  event-worker
         resources:
@@ -45,6 +50,9 @@ spec:
           {{- if .Values.eventSubscription.endpointSecret }}
           - "-webhook-secret-file=/var/secrets/webhook-secret/webhook-secret"
           {{- end}}
+          {{- if .Values.nats.authorization.enabled }}
+          - -nats-token-file=/var/secrets/nats_token/token
+          {{- end }}
         env:
         {{- if .Values.nats.external.enabled }}
         - name: nats_host
@@ -80,6 +88,11 @@ spec:
           readOnly: true
           mountPath: "/var/secrets/webhook-secret"
         {{- end }}
+        {{- if .Values.nats.authorization.enabled }}
+        - name: nats-token
+          readOnly: true
+          mountPath: "/var/secrets/nats_token"
+        {{- end }}   
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

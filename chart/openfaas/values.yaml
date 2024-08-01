@@ -381,6 +381,13 @@ nats:
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
   image: nats:2.10.18
+  authorization:
+    enabled: false
+    # Generate the authorization token for NATS on first install.
+    # Set to false if you are creating the token manually.
+    generateToken: true
+    # Secret resource that will be used to read the NATS authorization secret.
+    tokenSecret: nats-token 
   resources:
     requests:
       memory: "120Mi"
