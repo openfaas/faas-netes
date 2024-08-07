@@ -66,11 +66,11 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.32
+  image: ghcr.io/openfaasltd/gateway:0.4.33
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.8
+  image: ghcr.io/openfaas/gateway:0.27.9
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -145,7 +145,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.48
+  image: ghcr.io/openfaasltd/faas-netes:0.5.49
   create: false
   logs:
     debug: false
@@ -183,7 +183,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.48
+  image: ghcr.io/openfaasltd/faas-netes:0.5.49
   logs:
     debug: false
     format: "console"
@@ -260,7 +260,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.10
+  image: ghcr.io/openfaasltd/autoscaler:0.3.11
 
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1
