@@ -145,7 +145,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.49
+  image: ghcr.io/openfaasltd/faas-netes:0.5.51
   create: false
   logs:
     debug: false
@@ -183,7 +183,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.49
+  image: ghcr.io/openfaasltd/faas-netes:0.5.51
   logs:
     debug: false
     format: "console"
@@ -193,7 +193,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.8
+  image: ghcr.io/openfaas/faas-netes:0.18.9
   resources:
     requests:
       memory: "120Mi"
@@ -260,7 +260,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.11
+  image: ghcr.io/openfaasltd/autoscaler:0.3.13
 
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1

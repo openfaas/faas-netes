@@ -124,7 +124,6 @@ bump-charts:
 	arkade chart bump --file ./chart/sns-connector/Chart.yaml -w && \
 	arkade chart bump --file ./chart/federated-gateway/Chart.yaml -w
 	
-
 charts-only:
 	@cd chart && \
 		helm package openfaas/ && \
@@ -140,10 +139,7 @@ charts-only:
 		helm package federated-gateway/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
-	./contrib/create-static-manifest.sh
 
-render-charts:
-	./contrib/create-static-manifest.sh
 
 start-kind: ## attempt to start a new dev environment
 	@./contrib/create_dev.sh
