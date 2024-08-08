@@ -10,11 +10,8 @@ package fake
 
 import (
 	"context"
-	json "encoding/json"
-	"fmt"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/iam/v1"
-	iamv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/iam/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	types "k8s.io/apimachinery/pkg/types"
@@ -114,28 +111,6 @@ func (c *FakeJwtIssuers) DeleteCollection(ctx context.Context, opts metav1.Delet
 func (c *FakeJwtIssuers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.JwtIssuer, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(jwtissuersResource, c.ns, name, pt, data, subresources...), &v1.JwtIssuer{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.JwtIssuer), err
-}
-
-// Apply takes the given apply declarative configuration, applies it and returns the applied jwtIssuer.
-func (c *FakeJwtIssuers) Apply(ctx context.Context, jwtIssuer *iamv1.JwtIssuerApplyConfiguration, opts metav1.ApplyOptions) (result *v1.JwtIssuer, err error) {
-	if jwtIssuer == nil {
-		return nil, fmt.Errorf("jwtIssuer provided to Apply must not be nil")
-	}
-	data, err := json.Marshal(jwtIssuer)
-	if err != nil {
-		return nil, err
-	}
-	name := jwtIssuer.Name
-	if name == nil {
-		return nil, fmt.Errorf("jwtIssuer.Name must be provided to Apply")
-	}
-	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(jwtissuersResource, c.ns, *name, types.ApplyPatchType, data), &v1.JwtIssuer{})
 
 	if obj == nil {
 		return nil, err
