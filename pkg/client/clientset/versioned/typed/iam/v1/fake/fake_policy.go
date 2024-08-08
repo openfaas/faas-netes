@@ -10,11 +10,8 @@ package fake
 
 import (
 	"context"
-	json "encoding/json"
-	"fmt"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/iam/v1"
-	iamv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/iam/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	types "k8s.io/apimachinery/pkg/types"
@@ -114,28 +111,6 @@ func (c *FakePolicies) DeleteCollection(ctx context.Context, opts metav1.DeleteO
 func (c *FakePolicies) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Policy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(policiesResource, c.ns, name, pt, data, subresources...), &v1.Policy{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.Policy), err
-}
-
-// Apply takes the given apply declarative configuration, applies it and returns the applied policy.
-func (c *FakePolicies) Apply(ctx context.Context, policy *iamv1.PolicyApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Policy, err error) {
-	if policy == nil {
-		return nil, fmt.Errorf("policy provided to Apply must not be nil")
-	}
-	data, err := json.Marshal(policy)
-	if err != nil {
-		return nil, err
-	}
-	name := policy.Name
-	if name == nil {
-		return nil, fmt.Errorf("policy.Name must be provided to Apply")
-	}
-	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(policiesResource, c.ns, *name, types.ApplyPatchType, data), &v1.Policy{})
 
 	if obj == nil {
 		return nil, err

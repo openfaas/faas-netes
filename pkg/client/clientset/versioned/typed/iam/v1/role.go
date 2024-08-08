@@ -10,12 +10,9 @@ package v1
 
 import (
 	"context"
-	json "encoding/json"
-	"fmt"
 	"time"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/iam/v1"
-	iamv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/iam/v1"
 	scheme "github.com/openfaas/faas-netes/pkg/client/clientset/versioned/scheme"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
@@ -39,7 +36,6 @@ type RoleInterface interface {
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.RoleList, error)
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
 	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Role, err error)
-	Apply(ctx context.Context, role *iamv1.RoleApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Role, err error)
 	RoleExpansion
 }
 
@@ -165,32 +161,6 @@ func (c *roles) Patch(ctx context.Context, name string, pt types.PatchType, data
 		Name(name).
 		SubResource(subresources...).
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Apply takes the given apply declarative configuration, applies it and returns the applied role.
-func (c *roles) Apply(ctx context.Context, role *iamv1.RoleApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Role, err error) {
-	if role == nil {
-		return nil, fmt.Errorf("role provided to Apply must not be nil")
-	}
-	patchOpts := opts.ToPatchOptions()
-	data, err := json.Marshal(role)
-	if err != nil {
-		return nil, err
-	}
-	name := role.Name
-	if name == nil {
-		return nil, fmt.Errorf("role.Name must be provided to Apply")
-	}
-	result = &v1.Role{}
-	err = c.client.Patch(types.ApplyPatchType).
-		Namespace(c.ns).
-		Resource("roles").
-		Name(*name).
-		VersionedParams(&patchOpts, scheme.ParameterCodec).
 		Body(data).
 		Do(ctx).
 		Into(result)

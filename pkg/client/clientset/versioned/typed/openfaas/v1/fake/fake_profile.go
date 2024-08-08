@@ -10,11 +10,8 @@ package fake
 
 import (
 	"context"
-	json "encoding/json"
-	"fmt"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
-	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/openfaas/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	types "k8s.io/apimachinery/pkg/types"
@@ -114,28 +111,6 @@ func (c *FakeProfiles) DeleteCollection(ctx context.Context, opts metav1.DeleteO
 func (c *FakeProfiles) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Profile, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(profilesResource, c.ns, name, pt, data, subresources...), &v1.Profile{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.Profile), err
-}
-
-// Apply takes the given apply declarative configuration, applies it and returns the applied profile.
-func (c *FakeProfiles) Apply(ctx context.Context, profile *openfaasv1.ProfileApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Profile, err error) {
-	if profile == nil {
-		return nil, fmt.Errorf("profile provided to Apply must not be nil")
-	}
-	data, err := json.Marshal(profile)
-	if err != nil {
-		return nil, err
-	}
-	name := profile.Name
-	if name == nil {
-		return nil, fmt.Errorf("profile.Name must be provided to Apply")
-	}
-	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(profilesResource, c.ns, *name, types.ApplyPatchType, data), &v1.Profile{})
 
 	if obj == nil {
 		return nil, err

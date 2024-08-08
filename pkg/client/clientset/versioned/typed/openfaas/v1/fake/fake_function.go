@@ -10,11 +10,8 @@ package fake
 
 import (
 	"context"
-	json "encoding/json"
-	"fmt"
 
 	v1 "github.com/openfaas/faas-netes/pkg/apis/openfaas/v1"
-	openfaasv1 "github.com/openfaas/faas-netes/pkg/client/applyconfiguration/openfaas/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	types "k8s.io/apimachinery/pkg/types"
@@ -126,51 +123,6 @@ func (c *FakeFunctions) DeleteCollection(ctx context.Context, opts metav1.Delete
 func (c *FakeFunctions) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Function, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(functionsResource, c.ns, name, pt, data, subresources...), &v1.Function{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.Function), err
-}
-
-// Apply takes the given apply declarative configuration, applies it and returns the applied function.
-func (c *FakeFunctions) Apply(ctx context.Context, function *openfaasv1.FunctionApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Function, err error) {
-	if function == nil {
-		return nil, fmt.Errorf("function provided to Apply must not be nil")
-	}
-	data, err := json.Marshal(function)
-	if err != nil {
-		return nil, err
-	}
-	name := function.Name
-	if name == nil {
-		return nil, fmt.Errorf("function.Name must be provided to Apply")
-	}
-	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(functionsResource, c.ns, *name, types.ApplyPatchType, data), &v1.Function{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.Function), err
-}
-
-// ApplyStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating ApplyStatus().
-func (c *FakeFunctions) ApplyStatus(ctx context.Context, function *openfaasv1.FunctionApplyConfiguration, opts metav1.ApplyOptions) (result *v1.Function, err error) {
-	if function == nil {
-		return nil, fmt.Errorf("function provided to Apply must not be nil")
-	}
-	data, err := json.Marshal(function)
-	if err != nil {
-		return nil, err
-	}
-	name := function.Name
-	if name == nil {
-		return nil, fmt.Errorf("function.Name must be provided to Apply")
-	}
-	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(functionsResource, c.ns, *name, types.ApplyPatchType, data, "status"), &v1.Function{})
 
 	if obj == nil {
 		return nil, err
