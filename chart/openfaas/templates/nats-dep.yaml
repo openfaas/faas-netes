@@ -41,6 +41,9 @@ spec:
         args:
           {{- if eq .Values.queueMode "jetstream" }}
           - --js
+          {{- if .Values.nats.authorization.enabled }}
+          - --auth=$(AUTH_TOKEN)
+          {{- end }}
           {{- else}}
           - --store
           - memory
@@ -50,6 +53,14 @@ spec:
         {{- if .Values.securityContext }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+        env:
+        {{- if and (eq .Values.queueMode "jetstream") .Values.nats.authorization.enabled }}
+        - name: AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: nats-token
+              key: token
         {{- end }}
         volumeMounts:
         - mountPath: /tmp/nats

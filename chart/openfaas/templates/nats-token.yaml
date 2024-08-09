@@ -1,0 +1,18 @@
+{{- if and .Values.nats.authorization.enabled .Values.nats.authorization.generateToken }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nats-token
+  namespace: {{ .Release.namespace | quote }}
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: queue-worker
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": "pre-install"
+data:
+  # kubectl -n openfaas get secret nats-token -o jsonpath="{.data.token}" | base64 --decode
+  token: {{ randAlphaNum 12 | b64enc | quote }}
+{{- end }}
