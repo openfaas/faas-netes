@@ -72,9 +72,7 @@ data:
             namespaces:
               names:
                 - {{ .Release.Namespace }}
-{{- if ne $functionNs (.Release.Namespace | toString) }}
-                - {{ $functionNs }}
-{{- end }}
+
         relabel_configs:
         - action: labelmap
           regex: __meta_kubernetes_pod_label_(.+)
@@ -138,6 +136,52 @@ data:
           replacement: '$1'
           target_label: deployment_name
         # Output fully-qualified function name fn.ns
+        - source_labels: [deployment_name, kubernetes_namespace]
+          separator: ";"
+          regex: '(.*);(.*)'
+          replacement: '${1}.${2}'
+          target_label: "function_name"
+      
+      - job_name: 'openfaas-function-pods'
+        scrape_interval: 15s
+        kubernetes_sd_configs:
+          - role: pod
+          # TODO: Insert namespace for role
+            {{- if not .Values.clusterRole }}
+            namespaces:
+              names: [ {{ $functionNs | quote }} ]
+            {{- end }}
+        relabel_configs:
+          # Only keep OpenFaaS function pods
+          - source_labels: [__meta_kubernetes_pod_labelpresent_faas_function]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: replace
+            regex: (.+)
+            source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            target_label: __metrics_path__
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+          - action: replace
+            source_labels:
+            - kubernetes_pod_name
+            regex: '^([0-9a-zA-Z-]+)+(-[0-9a-zA-Z]+-[0-9a-zA-Z]+)$'
+            replacement: '$1'
+            target_label: deployment_name
+          
+        metric_relabel_configs:
         - source_labels: [deployment_name, kubernetes_namespace]
           separator: ";"
           regex: '(.*);(.*)'
