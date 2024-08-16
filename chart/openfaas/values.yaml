@@ -260,7 +260,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.13
+  image: ghcr.io/openfaasltd/autoscaler:0.3.14
 
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1
@@ -342,7 +342,7 @@ iam:
     tokenExpiry: 2h
 
 prometheus:
-  image: prom/prometheus:v2.53.1
+  image: prom/prometheus:v2.54.0
   create: true
   retention:
     time: 15d
