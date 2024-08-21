@@ -170,7 +170,7 @@ data:
             target_label: __metrics_path__
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
-            target_label: kubernetes_namespace
+            target_label: kubernetes_namespacev
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
@@ -193,17 +193,17 @@ data:
     - name: load
       rules:
       - record: job:function_current_load:sum
-        expr: sum by (function_name) ( rate( gateway_function_invocation_total{}[30s] ) )  and avg by (function_name) (gateway_service_target_load{scaling_type="rps"}) > 1
+        expr: ceil(sum by (function_name) ( rate( gateway_function_invocation_total{}[30s] ) )  and avg by (function_name) (gateway_service_target_load{scaling_type="rps"}) > 1)
         labels:
           scaling_type: rps
 
       - record: job:function_current_load:sum
-        expr: sum by (function_name) ( max_over_time( gateway_function_invocation_inflight[45s:5s])) and on (function_name) avg by(function_name) (gateway_service_target_load{scaling_type="capacity"}) > bool 1
+        expr: ceil(sum by (function_name) ( max_over_time( gateway_function_invocation_inflight[45s:5s])) and on (function_name) avg by(function_name) (gateway_service_target_load{scaling_type="capacity"}) > bool 1)
         labels:
           scaling_type: capacity
 
       - record: job:function_current_load:sum
-        expr: sum(irate ( pod_cpu_usage_seconds_total{}[1m])*1000) by (function_name) * on (function_name) avg by (function_name) (gateway_service_target_load{scaling_type="cpu"}  > bool 1 )
+        expr: ceil(sum(irate ( pod_cpu_usage_seconds_total{}[1m])*1000) by (function_name) * on (function_name) avg by (function_name) (gateway_service_target_load{scaling_type="cpu"}  > bool 1 ))
         labels:
           scaling_type: cpu
 
