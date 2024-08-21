@@ -260,7 +260,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.14
+  image: ghcr.io/openfaasltd/autoscaler:0.3.15
 
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1
