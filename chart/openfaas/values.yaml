@@ -388,7 +388,7 @@ nats:
 
 # ingress configuration
 ingress:
-  enabled: true
+  enabled: false
 
   ## See notes on how to configure ingress for the gateway
   ## and dashboard, including TLS with cert-manager.
