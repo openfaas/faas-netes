@@ -360,6 +360,7 @@ prometheus:
       memory: "512Mi"
       cpu: "100m"
   annotations: {}
+  recordingRules: []
 
 alertmanager:
   image: prom/alertmanager:v0.27.0

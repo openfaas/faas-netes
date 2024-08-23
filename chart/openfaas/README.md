@@ -409,7 +409,28 @@ OpenFaaS Pro will only scale down functions which have marked themselves as elig
 
 See also: [Scale to Zero docs](https://docs.openfaas.com/openfaas-pro/scale-to-zero/).
 
-## Removing the OpenFaaS
+## Custom autoscaling rules
+
+In order to build custom autoscaling rules, an additional recording rule is required for Prometheus for each type of scaling you want to add.
+
+To add latency-based scaling with the metrics recorded at the gateway, you could add the following to values.yaml:
+
+```yaml
+prometheus:
+  recordingRules:
+    - record: job:function_current_load:sum
+      expr: |
+        sum by (function_name) (rate(gateway_functions_seconds_sum{}[30s])) / sum by (function_name)  (rate( gateway_functions_seconds_count{}[30s]))
+        and on (function_name) avg by(function_name) (gateway_service_target_load{scaling_type="latency"}) > bool 1
+      labels:
+        scaling_type: latency
+```
+
+To check the configuration of current recording rules use the Prometheus UI or run `kubectl edit -n openfaas configmap/prometheus-config`.
+
+See also: [How to scale OpenFaaS Functions with Custom Metrics](https://www.openfaas.com/blog/custom-metrics-scaling/).
+
+## Removing OpenFaaS
 
 All control plane components can be cleaned up with helm:
 
@@ -671,3 +692,4 @@ For legacy scaling in OpenFaaS Community Edition.
 | `prometheus.retention.time` | When to remove old data from the prometheus db. | `15d` |
 | `prometheus.retention.size` | The maximum number of bytes of storage blocks to retain. Units supported: B, KB, MB, GB, TB, PB, EB. 0 meaning disabled. See: [Prometheus storage](https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects)| `0` |
 | `prometheus.resources` | Resource limits and requests for prometheus containers | See [values.yaml](./values.yaml) |
+| `prometheus.recordingRules` | Custom recording rules for autoscaling. | `[]` |

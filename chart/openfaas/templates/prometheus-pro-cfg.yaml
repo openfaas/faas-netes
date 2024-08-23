@@ -207,6 +207,10 @@ data:
         expr: ceil(sum(irate ( pod_cpu_usage_seconds_total{}[1m])*1000) by (function_name) * on (function_name) avg by (function_name) (gateway_service_target_load{scaling_type="cpu"}  > bool 1 ))
         labels:
           scaling_type: cpu
+      
+      {{- with .Values.prometheus.recordingRules }}
+      {{ toYaml . | nindent 6 }}
+      {{- end }}
 
     - name: recently_started_1m
       interval: 10s
