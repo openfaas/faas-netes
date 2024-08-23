@@ -110,6 +110,15 @@ gateway:
     failureThreshold: 3
     successThreshold: 1
 
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      # Set to "DoNotSchedule" if you need a strict enforcement
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app: gateway
+
 eventSubscription:
   endpoint: ""
   endpointSecret: ""

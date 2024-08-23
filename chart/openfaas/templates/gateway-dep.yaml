@@ -30,6 +30,10 @@ spec:
       labels:
         app: gateway
     spec:
+      {{- if and .Values.gateway.topologySpreadConstraints .Values.openfaasPro }}
+      topologySpreadConstraints:
+      {{- toYaml .Values.gateway.topologySpreadConstraints | nindent 8 }}
+      {{- end }}
       {{- if .Values.operator.create }}
       serviceAccountName: {{ .Release.Name }}-operator
       {{- else }}
