@@ -98,6 +98,7 @@ data:
 
       - job_name: 'kubernetes-resource-metrics'
         scrape_interval: 10s
+        honor_timestamps: false
         scheme: https
         tls_config:
           ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
