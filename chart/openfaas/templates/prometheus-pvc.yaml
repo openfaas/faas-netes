@@ -1,0 +1,30 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.openfaasPro }}
+{{- if and .Values.prometheus.create .Values.prometheus.pvc.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: prometheus
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+{{- if .Values.prometheus.pvc.name }}
+  name: {{.Values.prometheus.pvc.name}}
+{{- else }}
+  name: prometheus-data
+{{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.prometheus.pvc.size | quote }}
+  {{- with .Values.prometheus.pvc.storageClassName }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
+{{- end }}
+{{- end }}

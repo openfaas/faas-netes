@@ -680,8 +680,7 @@ For legacy scaling in OpenFaaS Community Edition.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `alertmanager.create` | Create the AlertManager component | `true` |
 | `alertmanager.image` | Container image used for alertmanager | See [values.yaml](./values.yaml) |
-| `alertmanager.resources` | Resource limits and requests for alertmanager pods | See [values.yaml](./values.
-
+| `alertmanager.resources` | Resource limits and requests for alertmanager pods | See [values.yaml](./values.yaml) |
 
 ### Prometheus (built-in, for autoscaling and metrics)
 
@@ -693,3 +692,8 @@ For legacy scaling in OpenFaaS Community Edition.
 | `prometheus.retention.size` | The maximum number of bytes of storage blocks to retain. Units supported: B, KB, MB, GB, TB, PB, EB. 0 meaning disabled. See: [Prometheus storage](https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects)| `0` |
 | `prometheus.resources` | Resource limits and requests for prometheus containers | See [values.yaml](./values.yaml) |
 | `prometheus.recordingRules` | Custom recording rules for autoscaling. | `[]` |
+| `prometheus.pvc` | Persistent volume claim for Prometheus used so that metrics survive restarts of the Pod and upgrades of the chart | `{}` |
+| `prometheus.pvc.enabled` | Enable persistent volume claim for Prometheus | `false` |
+| `prometheus.pvc.storageClassName` | Storage class for Prometheus PVC, set to `""` for the default/standard class to be picked | `""` |
+| `prometheus.pvc.size` | Size of the Prometheus PVC, 60-100Gi may be a better fit for a busy production environment | `10Gi` |
+| `prometheus.pvc.name` | Name of the Prometheus PVC, required for multiple installations within the same cluster | `""` |
