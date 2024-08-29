@@ -14,6 +14,8 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: prometheus
@@ -119,8 +121,20 @@ spec:
                 path: prometheus-rules.yml
                 mode: 0644
 {{- end }}
+
+{{- if and .Values.prometheus.pvc.enabled .Values.openfaasPro }}
+        - name: prom-data
+          persistentVolumeClaim:
+  {{- if .Values.prometheus.pvc.name }}
+            claimName: {{.Values.prometheus.pvc.name}}
+  {{- else }}
+            claimName: prometheus-data
+  {{- end }}
+{{- else }}
         - name: prom-data
           emptyDir: {}
+{{- end }}
+
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

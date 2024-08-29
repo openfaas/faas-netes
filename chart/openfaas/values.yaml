@@ -359,6 +359,11 @@ iam:
     url: https://kubernetes.default.svc.cluster.local
     tokenExpiry: 2h
 
+## Prometheus is required for metrics and autoscaling
+##
+## It is bundled into OpenFaaS to be used only as an internal component
+## if you wish to retain the metrics for a longer period, you should
+## scrape this instance from an external Prometheus server
 prometheus:
   image: prom/prometheus:v2.54.0
   create: true
@@ -371,22 +376,19 @@ prometheus:
   annotations: {}
   recordingRules: []
 
-alertmanager:
-  image: prom/alertmanager:v0.27.0
-  create: true
-  resources:
-    requests:
-      memory: "25Mi"
-      cpu: "50m"
-    limits:
-      memory: "50Mi"
+  # Set to true to enable persistent storage for the Prometheus Pod
+  # otherwise, the data will be lost when the Pod is restarted
+  pvc:
+    enabled: false
+    # You may want to set this higher for production, or lower for development/staging.
+    size: 30Gi
+    # Leave the storageClassName blank for the default storage class
+    # using the string "default" does not necessarily mean the default
+    # storage class
+    storageClassName:
 
-stan:
-  # Image used for the NATS Streaming when using the deprecated 
-  # support in the Community Edition (CE)
-  image: nats-streaming:0.25.6
-
-# NATS (required for async)
+## NATS is used for OpenFaaS Pro and is required for:
+## asynchronous invocations, billing & auditing webhooks
 nats:
   channel: "faas-request"
   # Stream replication is set to 1 by default. This is only recommended for development.
@@ -404,6 +406,22 @@ nats:
     requests:
       memory: "120Mi"
       cpu: "100m"
+
+## alertmanager is only used for OpenFaaS CE
+alertmanager:
+  image: prom/alertmanager:v0.27.0
+  create: true
+  resources:
+    requests:
+      memory: "25Mi"
+      cpu: "50m"
+    limits:
+      memory: "50Mi"
+
+## stan is only used for OpenFaaS CE and will be removed in
+## a fture release, having already been deprecated by the NATS team
+stan:
+  image: nats-streaming:0.25.6
 
 # ingress configuration
 ingress:
