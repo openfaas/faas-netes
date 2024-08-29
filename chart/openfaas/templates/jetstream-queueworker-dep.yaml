@@ -23,6 +23,10 @@ spec:
       labels:
         app: queue-worker
     spec:
+      {{- if and .Values.jetstreamQueueWorker.topologySpreadConstraints .Values.openfaasPro }}
+      topologySpreadConstraints:
+      {{- toYaml .Values.jetstreamQueueWorker.topologySpreadConstraints | nindent 8 }}
+      {{- end }}
       volumes:
       {{- if .Values.openfaasPro }}
       - name: license

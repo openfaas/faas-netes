@@ -226,6 +226,15 @@ jetstreamQueueWorker:
   # Set pprof to listen on port 6000 to debug issues
   pprof: false
 
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      # Set to "DoNotSchedule" if you need a strict enforcement
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app: queue-worker
+
 # OpenFaaS Pro
 # The values for queueWorkerPro are merged with those under
 # the "queueWorker" section
