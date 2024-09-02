@@ -583,6 +583,9 @@ yaml) |
 | `jetstreamQueueWorker.maxWaiting` | Configure the max waiting pulls for the queue-worker JetStream consumer. The value should be at least max_inflight * queue_worker.replicas. Note that this value can not be updated once the consumer is created. | `512` |
 | `jetstreamQueueWorker.logs.debug` | Log debug messages | `false` |
 | `jetstreamQueueWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
+| `nats.authorization.enabled` | Enable authorization for NATS | `false` |
+| `nats.authorization.generateToken` | Generate the NATS authorization token on first installation. | `true` |
+| `nats.authorization.tokenSecret` | Secret resource that will be used to read the NATS authorization secret | `nats-token` |
 | `nats.channel` | The name of the NATS Streaming channel or NATS JetStream stream to use for asynchronous function invocations | `faas-request` |
 | `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `""` |
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |

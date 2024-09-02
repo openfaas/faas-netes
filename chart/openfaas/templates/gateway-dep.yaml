@@ -6,6 +6,9 @@
   {{- fail "enabling 'operator.create' is only supported for OpenFaaS Pro" }}
 {{- end }}
 
+{{- $jetstreamEnabled := and .Values.async (eq .Values.queueMode "jetstream") }}
+{{- $natsRequired := or $jetstreamEnabled .Values.eventSubscription.metering.enabled .Values.eventSubscription.auditing.enabled }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,6 +48,11 @@ spec:
         secret:
           secretName: issuer-key
       {{- end}}
+      {{- if and $natsRequired .Values.nats.authorization.enabled }}
+      - name: nats-token
+        secret:
+          secretName: nats-token
+      {{- end }}
       # - name: faas-auth
       #   projected:
       #     sources:
@@ -79,6 +87,9 @@ spec:
           - ./gateway
         {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
+        {{- end }}
+        {{- if and $natsRequired .Values.nats.authorization.enabled }}
+          - -nats-token-file=/var/secrets/nats_token/token
         {{- end }}
         {{- if .Values.securityContext }}
         securityContext:
@@ -222,6 +233,11 @@ spec:
           readOnly: true
           mountPath: "/var/secrets/license"
         {{- end }}
+        {{- if and $natsRequired .Values.nats.authorization.enabled }}
+        - name: nats-token
+          readOnly: true
+          mountPath: "/var/secrets/nats_token"
+        {{- end }}
         ports:
         - name: http
           containerPort: 8080
@@ -239,6 +255,9 @@ spec:
           - ./faas-netes
           - -operator=true
           - "-license-file=/var/secrets/license/license"
+          {{- if and $natsRequired .Values.nats.authorization.enabled }}
+          - -nats-token-file=/var/secrets/nats_token/token
+          {{- end }}
         env:
           - name: reconcile_workers
             value: {{ .Values.operator.reconcileWorkers | quote }}
@@ -349,6 +368,11 @@ spec:
           readOnly: true
           mountPath: "/var/secrets"
         {{- end }}
+        {{- if and $natsRequired .Values.nats.authorization.enabled }}
+        - name: nats-token
+          readOnly: true
+          mountPath: "/var/secrets/nats_token"
+        {{- end }}
 
       {{- else }}
       - name: faas-netes
@@ -370,6 +394,9 @@ spec:
           - ./faas-netes
         {{- if or .Values.openfaasPro .Values.oem }}
           - "-license-file=/var/secrets/license/license"
+        {{- end }}
+        {{- if and $natsRequired .Values.nats.authorization.enabled }}
+          - -nats-token-file=/var/secrets/nats_token/token
         {{- end }}
         env:
         - name: port
@@ -458,6 +485,11 @@ spec:
         - name: auth
           readOnly: true
           mountPath: "/var/secrets"
+        {{- end }}
+        {{- if and $natsRequired .Values.nats.authorization.enabled }}
+        - name: nats-token
+          readOnly: true
+          mountPath: "/var/secrets/nats_token"
         {{- end }}
         - mountPath: /tmp
           name: faas-netes-temp-volume

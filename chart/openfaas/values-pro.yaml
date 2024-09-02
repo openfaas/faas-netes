@@ -79,6 +79,8 @@ queueMode: jetstream
 # See https://github.com/openfaas/openfaas-pro/blob/master/jetstream.md
 nats:
   streamReplication: 1
+  authorization:
+    enabled: true
 
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
