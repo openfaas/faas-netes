@@ -98,6 +98,12 @@ func main() {
 
 	config.Fprint(verbose)
 
+	// use kubeclient to check the current namespace
+	namespace, _ := k8s.CurrentNamespace()
+	if namespace == "kube-system" {
+		log.Fatal("You cannot run the OpenFaaS provider in the kube-system namespace, please try another namespace.")
+	}
+
 	deployConfig := k8s.DeploymentConfig{
 		RuntimeHTTPPort: 8080,
 		HTTPProbe:       config.HTTPProbe,
