@@ -1,6 +1,8 @@
+// License: OpenFaaS Community Edition (CE) EULA
+// Copyright (c) 2017,2019-2024 OpenFaaS Author(s)
+
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Copyright 2020 OpenFaaS Author(s)
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 package handlers
 
@@ -25,7 +27,7 @@ const MaxReplicas = 5
 
 // MaxFunctions licensed for OpenFaaS CE is 15
 // a license for OpenFaaS Standard is required to increase this limit.
-const MaxFunctions = 15
+const MaxFunctions = 10
 
 // MakeReplicaReader reads the amount of replicas for a deployment
 func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http.HandlerFunc {

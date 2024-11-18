@@ -1,6 +1,8 @@
+// License: OpenFaaS Community Edition (CE) EULA
+// Copyright (c) 2017,2019-2024 OpenFaaS Author(s)
+
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Copyright 2020 OpenFaaS Author(s)
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 package handlers
 
@@ -377,8 +379,6 @@ func getMinReplicaCount(labels map[string]string) *int32 {
 		if err == nil && minReplicas > 0 {
 			return int32p(int32(minReplicas))
 		}
-
-		log.Println(err)
 	}
 
 	return nil

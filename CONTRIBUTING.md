@@ -4,6 +4,10 @@ This project follows the contributing guide for [OpenFaaS](https://github.com/op
 
 The project-level contributing guide contains instructions specifically relating to faas-netes.
 
+## Third party contributions
+
+All third-party contributions are licensed under the MIT license, all OpenFaaS Ltd contributions are licensed under the [OpenFaaS CE EULA](https://github.com/openfaas/faas/blob/master/EULA.md).
+
 ## Update the version
 
 ### Helm

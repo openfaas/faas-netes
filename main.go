@@ -1,6 +1,8 @@
+// License: OpenFaaS Community Edition (CE) EULA
+// Copyright (c) 2017,2019-2024 OpenFaaS Author(s)
+
 // Copyright (c) Alex Ellis 2017. All rights reserved.
 // Copyright (c) OpenFaaS Author(s) 2020. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 package main
 
@@ -9,6 +11,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
@@ -56,12 +59,13 @@ func main() {
 
 	flag.Parse()
 
-	mode := "controller"
-
 	sha, release := version.GetReleaseInfo()
-	fmt.Printf("faas-netes - Community Edition (CE)\n"+
-		"Warning: Commercial use limited to 60 days.\n"+
-		"\nVersion: %s Commit: %s Mode: %s\n", release, sha, mode)
+	fmt.Printf(`faas-netes - Community Edition (CE)
+Warning: Commercial use limited to 60 days.
+Learn more: https://github.com/openfaas/faas/blob/master/EULA.md
+
+Version: %s Commit: %s
+`, release, sha)
 
 	if err := config.ConnectivityCheck(); err != nil {
 		log.Fatalf("Error checking connectivity, OpenFaaS CE cannot be run in an offline environment: %s", err.Error())
@@ -194,8 +198,20 @@ func runController(setup serverSetup) {
 	functionList := k8s.NewFunctionList(config.DefaultFunctionNamespace, deployLister)
 
 	printFunctionExecutionTime := true
+
+	proxyHandler := proxy.NewHandlerFunc(config.FaaSConfig, functionLookup, printFunctionExecutionTime)
+
+	if err := handlers.Check(functionList); err != nil {
+		msg := fmt.Sprintf("Function invocations disabled due to error: %s.", err.Error())
+		log.Print(msg)
+
+		proxyHandler = func(w http.ResponseWriter, r *http.Request) {
+			http.Error(w, msg, http.StatusMethodNotAllowed)
+		}
+	}
+
 	bootstrapHandlers := providertypes.FaaSHandlers{
-		FunctionProxy:  proxy.NewHandlerFunc(config.FaaSConfig, functionLookup, printFunctionExecutionTime),
+		FunctionProxy:  proxyHandler,
 		DeleteFunction: handlers.MakeDeleteHandler(config.DefaultFunctionNamespace, kubeClient),
 		DeployFunction: handlers.MakeDeployHandler(config.DefaultFunctionNamespace, factory, functionList),
 		FunctionLister: handlers.MakeFunctionReader(config.DefaultFunctionNamespace, deployLister),

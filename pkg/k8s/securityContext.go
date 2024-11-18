@@ -1,5 +1,5 @@
-// Copyright 2020 OpenFaaS Authors
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// License: OpenFaaS Community Edition (CE) EULA
+// Copyright (c) 2017,2019-2024 OpenFaaS Author(s)
 
 package k8s
 

@@ -1,3 +1,6 @@
+// License: OpenFaaS Community Edition (CE) EULA
+// Copyright (c) 2017,2019-2024 OpenFaaS Author(s)
+
 package handlers
 
 import (
