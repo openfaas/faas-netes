@@ -46,7 +46,7 @@ kubectl create secret generic registry-secret \
 
 When you want to authenticate to a private registry, you must either:
 
-* Use `faas-cli registry-login` and the resulting file
+* Use `faas-cli registry-login`, to create a file in the `.credentials` folder of the current working directory
 * Or, turn off the credential store for Docker Desktop, delete `~/docker/config.json` and then run: `docker login` and enter your credentials.
 
 And remember to delete any existing secret from the cluster first: `kubectl delete secret registry-secret -n openfaas`.
