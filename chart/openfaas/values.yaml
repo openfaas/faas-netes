@@ -70,7 +70,7 @@ gatewayPro:
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.9
+  image: ghcr.io/openfaas/gateway:0.27.10
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -154,7 +154,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.53
+  image: ghcr.io/openfaasltd/faas-netes:0.5.54
   create: false
   logs:
     debug: false
@@ -192,7 +192,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.53
+  image: ghcr.io/openfaasltd/faas-netes:0.5.54
   logs:
     debug: false
     format: "console"
@@ -202,7 +202,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.9
+  image: ghcr.io/openfaas/faas-netes:0.18.10
   resources:
     requests:
       memory: "120Mi"
@@ -213,7 +213,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.42
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.43
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -325,7 +325,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.7
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.8
   insecureTLS: false
   replicas: 1
   securityContext: true

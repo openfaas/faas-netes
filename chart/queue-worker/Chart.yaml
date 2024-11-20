@@ -2,7 +2,7 @@ apiVersion: v2
 name: queue-worker
 description: Dedicated queue-worker for OpenFaaS using JetStream
 type: application
-version: 0.2.9
+version: 0.2.10
 keywords:
 - openfaas
 - jetstream
