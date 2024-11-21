@@ -365,7 +365,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v2.54.0
+  image: prom/prometheus:v3.0.0
   create: true
   retention:
     time: 15d
