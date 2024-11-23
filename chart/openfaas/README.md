@@ -100,15 +100,15 @@ echo "OpenFaaS admin password: $PASSWORD"
 
 #### Deploy OpenFaaS Pro - OpenFaaS Standard / OpenFaaS For Enterprises
 
-It's recommended to run with a ClusterRole so that:
+You should have landed here from the following page: [Install OpenFaaS Pro](https://docs.openfaas.com/deployment/pro/), if you did not, please go there now and read the instructions before continuing.
+
+It's recommended to install OpenFaaS Pro with a ClusterRole so that:
 
 * Prometheus can scrape node metrics for CPU-based autoscaling, and report CPU/RAM consumption usage of functions via the API.
-* The Operator can manage functions across multiple namespaces
 * The Operator can obtain accurate namespace information for the installation
+* The Operator can manage functions across multiple namespaces
 
-First:
-
-* Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/pricing/):
+Create the required secret with your [OpenFaaS Pro license](https://www.openfaas.com/pricing/):
 
 ```bash
 kubectl create secret generic \
@@ -119,21 +119,9 @@ kubectl create secret generic \
 
 If you wish to use the OpenFaaS Pro dashboard, [you must run the steps to "Create a signing key"](https://docs.openfaas.com/openfaas-pro/dashboard/#installation) before installing the Helm chart.
 
+Review the recommended Pro values in [values-pro.yaml](values-pro.yaml). These are overlaid on top of the default values in [values.yaml](values.yaml), which is used as a base for all installations.
+
 Now deploy OpenFaaS from the helm chart repo:
-
-```sh
-helm repo update \
- && helm upgrade openfaas \
-  --install openfaas/openfaas \
-  --namespace openfaas  \
-  --set openfaasPro=true
-```
-
-The main change here is to add: `--set openfaasPro=true`
-
-For production, we recommend creating your own values.yaml file, but make sure you do not copy any more settings into it than strictly necessary. This way the file can be maintained easily over time.
-
-Example installation with a values.yaml file instead of using `--set`:
 
 ```sh
 helm repo update \
@@ -144,7 +132,7 @@ helm repo update \
   -f values-pro.yaml
 ```
 
-You can also review recommended Pro values in [values-pro.yaml](values-pro.yaml)
+For production, you should take a copy of the `values-pro.yaml` file, and keep any of your own custom settings and overrides there. We do not recommend copying the base `values.yaml` files as it is rather large, and contains settings that are updated by our team on a regular basis such as image versions.
 
 #### OpenFaaS OEM
 
