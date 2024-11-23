@@ -343,16 +343,18 @@ Some configurations in combination with client-side KeepAlive settings may becau
     In this mode, all invocations will pass through the gateway to faas-netes, which will look up endpoint IPs directly from Kubernetes, the additional hop may add some latency, but will do fair load-balancing, even with KeepAlive.
 
 
-### Metrics
+### Viewing the Prometheus metrics
+
+It's better to view the metrics from OpenFaaS via [the official Grafana dashboards](https://docs.openfaas.com/openfaas-pro/grafana-dashboards/), than by running direct queries, however, it can be useful to view the metrics directly for exploration and debugging.
 
 You temporarily access the Prometheus metrics by using `port-forward`
 
 ```sh
-kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
+kubectl -n openfaas \
+  port-forward deployment/prometheus 9090:9090
 ```
 
-Then open `http://localhost:31119` to directly query the OpenFaaS metrics scraped by Prometheus.
-
+Then open `http://127.0.0.1:9090` to directly query the OpenFaaS metrics scraped by Prometheus.
 
 ### Service meshes
 
@@ -362,7 +364,7 @@ If you use a service mesh like Linkerd or Istio in your cluster, then you should
 --set gateway.directFunctions=true
 ```
 
-### Istio mTLS
+#### Istio mTLS
 
 Istio requires OpenFaaS Pro to function correctly.
 
@@ -375,7 +377,8 @@ helm upgrade openfaas --install chart/openfaas \
     --set exposeServices=false \
     --set gateway.directFunctions=true \
     --set gateway.probeFunctions=true \
-    --set istio.mtls=true
+    --set istio.mtls=true \
+    -f values-pro.yaml
 ```
 
 The above command will enable mTLS for the openfaas control plane services and functions excluding NATS.
@@ -384,7 +387,7 @@ The above command will enable mTLS for the openfaas control plane services and f
 
 ### Scale-up from zero (on by default)
 
-Scaling up from zero replicas is enabled by default, to turn it off set `scaleFromZero` to `false` in the helm chart options for the `gateway` component.
+Scaling up from zero replicas is enabled by default, to turn it off set `scaleFromZero` to `false` in the helm chart options for the `gateway` component. There is very little reason to turn this setting off.
 
 ```sh
 --set gateway.scaleFromZero=true/false
@@ -447,7 +450,7 @@ If you have created additional namespaces for functions, delete those too, with 
 
 ## Kubernetes versioning
 
-This Helm chart currently supports version 1.16+
+This Helm chart currently supports version 1.19+
 
 Note that OpenFaaS itself may support a wider range of versions, [see here](../../README.md#kubernetes-versions)
 
@@ -487,7 +490,7 @@ yaml) |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |
 | `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
-| `k8sVersionOverride` | Override kubeVersion for the ingress creation | `""` |
+| `k8sVersionOverride` | Override kubeVersion for the ingress creation, this should be left blank. | `""` |
 | `nodeSelector` | Global [NodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `openfaasPro` | Deploy OpenFaaS Pro | `false` |

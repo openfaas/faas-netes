@@ -57,15 +57,10 @@ Find out more: [OpenFaaS Standard and For Enterprises](https://www.openfaas.com/
 
 ## Get started
 
-* Tutorial: [Deploy OpenFaaS to Kubernetes with its helm chart](https://docs.openfaas.com/deployment)
+* [Deploy OpenFaaS Pro to Kubernetes with its helm chart](https://docs.openfaas.com/deployment/pro/)
+* [Deploy OpenFaaS CE to Kubernetes with its helm chart](https://docs.openfaas.com/deployment)
 * [Read news and tutorials on the openfaas.com blog](https://www.openfaas.com/blog/)
 * [Meet the community at the weekly Office Hours](https://docs.openfaas.com/community)
-
-### The PLONK Stack
-
-OpenFaaS can be used as complete stack for Cloud Native application development called PLONK. The PLONK Stack includes: Prometheus, Linux/Linkerd, OpenFaaS, NATS/Nginx and Kubernetes.
-
-Read more: [Introducing PLONK](https://www.openfaas.com/blog/plonk-stack/).
 
 ## Technical and operational information
 
@@ -106,13 +101,10 @@ The readiness checking for functions assumes you are using our function watchdog
 
 By default all OpenFaaS functions and services are deployed to the `openfaas` and `openfaas-fn` namespaces. To alter the namespace use the `helm` chart.
 
-### Ingress
+### Ingress & TLS
 
-To configure ingress see the `helm` chart. By default NodePorts are used. These are listed in the [deployment guide](https://docs.openfaas.com/deployment).
-
-By default functions are exposed at `http://gateway:8080/function/NAME`.
-
-You can also use the [IngressOperator to set up custom domains and HTTP paths](https://github.com/openfaas/ingress-operator)
+* [Configure TLS for the gateway and dashboard](https://docs.openfaas.com/reference/tls-openfaas/)
+* [Configure TLS for functions](https://docs.openfaas.com/reference/tls-functions/)
 
 ### Image pull policy
 
@@ -125,7 +117,7 @@ Note: When set to `Never`, **only** local (or pulled) images will work.  When se
 
 ## Kubernetes Versions
 
-faas-netes maintainers strive to support as many Kubernetes versions as possible and it is currently compatible with Kubernetes 1.11 and higher. Instructions for OpenShift are also available in the documentation.
+faas-netes maintainers strive to support as many Kubernetes versions as possible and it is currently compatible with Kubernetes 1.19 and higher. Instructions for OpenShift are also available in the documentation.
 
 ## Contributing
 
