@@ -71,7 +71,7 @@ helm repo add openfaas https://openfaas.github.io/faas-netes/
 Now decide how you want to expose the services and edit the `helm upgrade` command as required.
 
 * To use NodePorts/ClusterIP - (the default and best for development, with port-forwarding)
-* To use an IngressController add `--set ingress.enabled=true` (recommended for production, for use with TLS)
+* To use an IngressController add `--set ingress.enabled=true` (recommended for production, for use with TLS) - [follow the full guide](https://docs.openfaas.com/reference/tls-openfaas/)
 * To use a LoadBalancer add `--set serviceType=LoadBalancer` (not recommended, since it will expose plain HTTP)
 
 #### Deploy OpenFaaS Community Edition (CE)
@@ -270,19 +270,17 @@ echo -n $PASSWORD | faas-cli login -g $OPENFAAS_URL -u admin --password-stdin
 faas-cli version
 ```
 
-## OpenFaaS Operator and Function CRD
+### faas-netes (controller) vs OpenFaaS Operator
 
-If you would like to work with Function CRDs there is an alternative controller to faas-netes named [OpenFaaS Operator](https://github.com/openfaas-incubator/openfaas-operator) which can be swapped in at deployment time.
-The OpenFaaS Operator is suitable for development and testing and may replace the faas-netes controller in the future.
-The Operator is compatible with Kubernetes 1.9 or later.
+OpenFaaS CE uses the old "controller" mode of OpenFaaS, where Kubernetes objects are directly modified by the HTTP API call. If the HTTP call fails, the objects may not be updated or create successfully.
 
-To use it, add the flag: `--set operator.create=true` when installing with Helm.
+OpenFaaS Pro uses a more idiomatic Kubernetes integration through the use of [CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/). The operator pattern used with the CRD means that you can interact with a "Function" Custom Resource along with the HTTP REST API.
 
-### faas-netes vs OpenFaaS Operator
+The HTTP REST endpoints all interact with the Function CRD, then the operator watches for changes and updates the Kubernetes objects accordingly, retrying, backing off, and reporting the progress via the .Status field.
 
-The faas-netes controller is the most tested, stable and supported version of the OpenFaaS integration with Kubernetes. In contrast the OpenFaaS Operator is based upon the codebase and features from `faas-netes`, but offers a tighter integration with Kubernetes through [CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/). This means you can type in `kubectl get functions` for instance.
+Some long-time OpenFaaS Pro users still use the controller mode, for backwards compatibility. It should be considered deprecated and will be removed in the future. No no users should adopt it for this reason.
 
-See also: [Introducing the OpenFaaS Operator](https://www.openfaas.com/blog/kubernetes-operator-crd/)
+See also: [How and why you should upgrade to the Function Custom Resource Definition (CRD)](https://www.openfaas.com/blog/upgrade-to-the-function-crd/)
 
 ## Deployment with `helm template`
 
@@ -316,33 +314,31 @@ Now [verify your installation](#verify-the-installation).
 
 ## Exposing services
 
-### NodePorts
-
-By default a NodePort will be created for the API Gateway.
-
-### Metrics
-
-You temporarily access the Prometheus metrics by using `port-forward`
-
-```sh
-kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
-```
-
-Then open `http://localhost:31119` to directly query the OpenFaaS metrics scraped by Prometheus.
-
-### LB
-
-If you're running on a cloud such as AKS or GKE you will need to pass an additional flag of `--set serviceType=LoadBalancer` to tell `helm` to create LoadBalancer objects instead. An alternative to using multiple LoadBalancers is to install an Ingress controller.
 
 ### Deploy with an IngressController
 
-In order to make use of automatic ingress settings you will need an IngressController in your cluster such as Traefik or Nginx.
+Use the following guide to setup TLS for the [Gateway and Dashboard](https://docs.openfaas.com/reference/tls-openfaas/).
 
-Add `--set ingress.enabled` to enable ingress pass `--set ingress.enabled=true` when running the installation via `helm`.
+If you are using Ingress locally, for testing, then you can access the gateway by adding:
 
-By default services will be exposed with following hostnames (can be changed, see values.yaml for details):
+```yaml
+ingress: 
+  enabled: true
+```
 
-* `gateway.openfaas.local`
+Update the fields for the `ingress` section of values.yaml
+
+By default, the name `gateway.openfaas.local` will be used with HTTP access only, without TLS.
+
+### NodePorts
+
+By default a NodePort will be created for the OpenFaaS Gateway on port 31112, you can prevent this by setting `exposeServices` to `false`, or `serviceType` to `ClusterIP`.
+
+### LoadBalancer (not recommended)
+
+There is no reason to use a LoadBalancer for OpenFaaS, because it will expose the gateway using plain-text HTTP, and you will have no encryption.
+
+This flag is controlled by `--set serviceType=LoadBalancer`, which creates a new gateway service of type LoadBalancer.
 
 ### Endpoint load-balancing
 
@@ -358,11 +354,20 @@ Some configurations in combination with client-side KeepAlive settings may becau
 
     In this mode, all invocations will pass through the gateway to faas-netes, which will look up endpoint IPs directly from Kubernetes, the additional hop may add some latency, but will do fair load-balancing, even with KeepAlive.
 
-### SSL / TLS
 
-If you require TLS/SSL then please make use of an IngressController. A full guide is provided to [enable TLS for the OpenFaaS Gateway using cert-manager and Let's Encrypt](https://docs.openfaas.com/reference/ssl/kubernetes-with-cert-manager/).
+### Metrics
+
+You temporarily access the Prometheus metrics by using `port-forward`
+
+```sh
+kubectl --namespace openfaas port-forward deployment/prometheus 31119:9090
+```
+
+Then open `http://localhost:31119` to directly query the OpenFaaS metrics scraped by Prometheus.
+
 
 ### Service meshes
+
 If you use a service mesh like Linkerd or Istio in your cluster, then you should enable the `directFunctions` mode using:
 
 ```sh
