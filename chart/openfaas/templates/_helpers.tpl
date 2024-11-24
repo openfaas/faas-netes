@@ -19,9 +19,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{/* Way to override KubeVersion. */}}
+{{/* Way to override KubeVersion, with EKS suffix sanitization */}}
 {{- define "openfaas.ingress.kubeVersion" -}}
-  {{- default .Capabilities.KubeVersion.Version .Values.k8sVersionOverride -}}
+  {{- $version := default .Capabilities.KubeVersion.Version .Values.k8sVersionOverride -}}
+  {{- regexReplaceAll "([0-9]+\\.[0-9]+\\.[0-9]+).*" $version "$1" -}}
 {{- end -}}
 
 {{/* Determine Ingress API Version */}}
