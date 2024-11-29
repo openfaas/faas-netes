@@ -70,7 +70,7 @@ gatewayPro:
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.10
+  image: ghcr.io/openfaas/gateway:0.27.11
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -365,7 +365,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.0.0
+  image: prom/prometheus:v3.0.1
   create: true
   retention:
     time: 15d
