@@ -27,32 +27,62 @@ proBuilder:
 # Both configurations are "rootless", however the rootless: true mode does not
 # require Buildkit to run as a privileged container and is preferred.
 buildkit:
+
+  # "mode" can be set to "rootless" or "root"
+  #
+  # "rootless" (preferred)
+  # If the Kubernetes node's OS/configuration, Kernel and Kubernetes
+  # support it, rootless mode runs without needing root or a privileged container.
+  #
+  # "root" (fallback)
   # A configuration which uses a privileged container for when 
   # your nodes have issues running in rootless mode
   #
   # Use rootless if possible, and if not, set up a dedicated 
   # nodepool for the function builder pods, which is recycled often
   # through the use of spot instances or preemptive VMs.
-  #
-  # image: moby/buildkit:v0.15.1
-  # rootless: false
-  # securityContext:
-  #   runAsUser: 0
-  #   runAsGroup: 0
-  #   privileged: true
 
-  # For a rootless configuration, preferred, if the configuration
-  # and Kernel version of your Kubernetes nodes supports it
-  # 
-  image: moby/buildkit:v0.15.1-rootless
-  rootless: true
-  securityContext:
-    # Needs Kubernetes >= 1.19
-    seccompProfile:
-      type: Unconfined
-    runAsUser: 1000
-    runAsGroup: 1000
-    privileged: false
+  mode: rootless
+
+  rootless:
+    image: moby/buildkit:v0.15.1-rootless
+    securityContext:
+      seccompProfile:
+        type: Unconfined
+      runAsUser: 1000
+      runAsGroup: 1000
+      privileged: false
+
+  root:
+    image: moby/buildkit:v0.15.1
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      privileged: true
+
+  # Custom CA certificates for the registry / and custom buildkit configuration
+
+  # Provide the name of the secret containing the CA certificate
+  # for a self-signed registry, when pushing or pulling images
+  #
+  # kubectl create secret generic -n openfaas \
+  #   registry-tls --from-file=ca.crt=ca.crt
+  # caSecret: "registry-tls"
+  caSecret: ""
+
+  # Provide a custom buildkit configuration, ideal for setting up
+  # a custom CA for a registry, or other advanced configuration.
+  #
+  # Reference: https://docs.docker.com/build/buildkit/toml-configuration/
+  # Config for rootless mode, reads the CA from the home directory
+  # config: |
+  #   [registry."registry-service:443"]
+  #     ca=["/home/user/.config/buildkit-tls/ca.crt"]
+
+  # The config for root mode, reads the CA from the /var/run/registry-tls directory
+  config: |
+    [registry."registry-service:443"]
+      ca=["/var/run/registry-tls/ca.crt"]
 
   resources:
     requests:
