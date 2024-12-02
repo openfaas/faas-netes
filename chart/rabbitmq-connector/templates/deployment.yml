@@ -1,0 +1,179 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "connector.name" . }}
+    component: rabbitmq-connector
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "connector.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
+    app.kubernetes.io/component: rabbitmq-connector
+    app.kubernetes.io/part-of: openfaas
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "connector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "connector.name" . }}
+      component: rabbitmq-connector
+
+  template:
+    metadata:
+      labels:
+        app: {{ template "connector.name" . }}
+        component: rabbitmq-connector
+    spec:
+      volumes:
+        - name: openfaas-license
+          secret:
+            secretName: openfaas-license
+      {{- if .Values.basic_auth }}
+        - name: auth
+          secret:
+            secretName: basic-auth
+      {{- end }}
+      {{- if .Values.rabbitmqUsernameSecret }}
+        - name: rabbitmq-username
+          secret:
+            secretName: {{ .Values.rabbitmqUsernameSecret }}
+      {{- end }}
+      {{- if .Values.rabbitmqPasswordSecret }}
+        - name: rabbitmq-password
+          secret:
+            secretName: {{ .Values.rabbitmqPasswordSecret }}
+      {{- end }}
+      {{- if .Values.caSecret }}
+        - name: rabbitmq-ca
+          secret:
+            secretName: {{ .Values.caSecret }}
+      {{- end}}
+      {{- if .Values.certSecret }}
+        - name: client-cert
+          secret:
+            secretName: {{ .Values.certSecret }}
+      {{- end}}
+      {{- if .Values.keySecret }}
+        - name: client-key
+          secret:
+            secretName: {{ .Values.keySecret }}
+      {{- end}}
+      containers:
+        - name: connector
+          image: {{ .Values.image }}
+          command:
+            - "/usr/bin/connector"
+            - "-license-file=/var/secrets/license/license"
+            {{- if.Values.rabbitmqUsernameSecret }}
+            - "-username-file=/var/secrets/rabbitmq-username/username"
+            {{- end }}
+            {{- if.Values.rabbitmqPasswordSecret }}
+            - "-password-file=/var/secrets/rabbitmq-password/password"
+            {{- end }}
+            {{- if .Values.caSecret }}
+            - "-ca-file=/var/secrets/rabbitmq-ca/ca-cert"
+            {{- end }}
+            {{- if .Values.certSecret }}
+            - "-cert-file=/var/secrets/client-cert/client-cert"
+            {{- end }}
+            {{- if .Values.keySecret }}
+            - "-key-file=/var/secrets/client-key/client-key"
+            {{- end }}
+          env:
+            - name: gateway_url
+              value: {{ .Values.gatewayURL | quote }}
+            - name: topics
+              value: {{ .Values.topics | quote }}
+            - name: print_response
+              value: {{ .Values.printResponse | quote }}
+            - name: print_response_body
+              value: {{ .Values.printResponseBody | quote }}
+            - name: print_request_body
+              value: {{ .Values.printRequestBody | quote }}
+            - name: asynchronous_invocation
+              value: {{ .Values.asyncInvocation | quote }}
+            {{- if .Values.basic_auth }}
+            - name: basic_auth
+              value: "true"
+            - name: secret_mount_path
+              value: "/var/secrets"
+            {{- end }}
+            - name: rabbitmq_url
+              value: {{ .Values.rabbitmqURL | quote }}
+            - name: queues
+              value: {{ .Values.queues | toJson | quote }}
+            {{- if .Values.upstreamTimeout }}
+            - name: upstream_timeout
+              value: {{ .Values.upstreamTimeout | quote }}
+            {{- end }}
+            {{- if .Values.rebuildInterval }}
+            - name: rebuild_interval
+              value: {{ .Values.rebuildInterval | quote }}
+            {{- end }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
+          
+          {{- if .Values.securityContext }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: openfaas-license
+              readOnly: true
+              mountPath: "/var/secrets/license"
+          {{- if .Values.basic_auth }}
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+          {{- end }}
+          {{- if .Values.rabbitmqUsernameSecret }}
+            - name: rabbitmq-username
+              readOnly: true
+              mountPath: "/var/secrets/rabbitmq-username"
+          {{- end }}
+          {{- if .Values.rabbitmqPasswordSecret }}
+            - name: rabbitmq-password
+              readOnly: true
+              mountPath: "/var/secrets/rabbitmq-password"
+          {{- end }}
+
+          {{- if .Values.caSecret }}
+            - name: rabbitmq-ca
+              readOnly: true
+              mountPath: "/var/secrets/rabbitmq-ca"
+          {{- end}}
+
+          {{- if .Values.certSecret }}
+            - name: client-cert
+              readOnly: true
+              mountPath: "/var/secrets/client-cert"
+          {{- end }}
+          {{- if .Values.keySecret }}
+            - name: client-key
+              readOnly: true
+              mountPath: "/var/secrets/client-key"
+          {{- end }}
+
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

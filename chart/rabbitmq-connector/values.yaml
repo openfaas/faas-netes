@@ -1,0 +1,126 @@
+# This component is licensed for OpenFaaS Standard/Enterprise customers only.
+# Purchase or obtain a trial license at https://openfaas.com/pricing/
+
+# You will need to create a license named "openfaas-license" - see the
+# chart README for detailed instructions.
+
+
+# Set either a single topic, or multiple with a comma separating each
+# topics: payment.requested
+# topics: "payment.requested,customer.created,invoice.generated"
+topics: faas-request
+
+# The address of the RabbitMQ node
+rabbitmqURL: amqp://rabbitmq:5672
+
+queues: []
+
+# queues:
+  # - name: queue1
+  #   durable: true
+
+image: ghcr.io/openfaasltd/rabbitmq-connector:0.0.1
+
+# The number of replicas of the connector.
+replicas: 1
+
+logs:
+  # Log debug messages
+  debug: false
+  # Set the log format, supports console or json
+  format: "console"
+
+# Max timeout for a function
+upstreamTimeout: 2m
+
+# interval for rebuilding the map of functions and topics
+rebuildInterval: 30s
+
+# Use with slow consumers or long running functions.
+asyncInvocation: false
+
+# HTTP content-type for invoking functions
+contentType: text/plain
+
+# Print the data read from the Kafka topic before invoking functions
+printRequestBody: false
+
+# Print the HTTP status of invoked functions
+printResponse: true
+
+# Print the data received from invoked functions
+printResponseBody: false
+
+# Gateway URL to access API and for invocations
+gatewayURL: http://gateway.openfaas:8080
+
+# Basic auth for the gateway
+basic_auth: true
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+securityContext: {}
+
+# Authentication
+
+# kubectl create secret generic \
+# rabbitmq-username \
+# -n openfaas \
+# --from-file username=./rabbitmq-username.txt
+
+# kubectl create secret generic \
+# rabbitmq-password \
+# -n openfaas \
+# --from-file password=./rabbitmq-password.txt
+
+# Set to empty to disable username password authentication:
+
+rabbitmqUsernameSecret: ""
+rabbitmqPasswordSecret: ""
+
+# Or give a secret name to enable
+
+# rabbitmqUsernameSecret: rabbitmq-username
+# rabbitmqPasswordSecret: rabbitmq-password
+
+## When using a custom CA:
+
+# kubectl create secret generic \
+# rabbitmq-ca \
+# -n openfaas \
+# --from-file ca-cert=./ca-cert.pem
+
+# When using client certs
+
+# kubectl create secret generic \
+# rabbitmq-cert \
+# -n openfaas \
+# --from-file client-cert=./client-cert.pem
+
+# kubectl create secret generic \
+# rabbitmq-key \
+# -n openfaas \
+# --from-file client-key=./client-key.pem
+
+# Set to empty to disable:
+
+caSecret: ""
+certSecret: ""
+keySecret: ""
+
+# Or give a name to each to enable
+
+# caSecret: rabbitmq-ca
+# certSecret: rabbitmq-cert
+# keySecret: rabbitmq-key
