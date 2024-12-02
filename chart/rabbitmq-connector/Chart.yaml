@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Invoke OpenFaaS functions from RabbitMQ messages.
 name: rabbitmq-connector
-version: 0.1.0
+version: 0.0.2
 sources:
 - https://github.com/openfaas/faas-netes
 home: https://www.openfaas.com

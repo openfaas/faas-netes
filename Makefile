@@ -136,7 +136,7 @@ charts-only:
 		helm package postgres-connector/ && \
 		helm package queue-worker/ && \
 		helm package sns-connector/ && \
-		helm package rabbitmq-connector/ && \
+		helm package rabbitmq-connector/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 
