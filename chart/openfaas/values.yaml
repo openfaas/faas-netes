@@ -66,11 +66,11 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.34
+  image: ghcr.io/openfaasltd/gateway:0.4.35
   pprof: false
 
 gateway:
-  image: ghcr.io/openfaas/gateway:0.27.11
+  image: ghcr.io/openfaas/gateway:0.27.12
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
   upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
@@ -198,11 +198,11 @@ faasnetesPro:
     format: "console"
 
 faasnetesOem:
-  image: ghcr.io/openfaasltd/faas-netes-oem:0.3.0
+  image: ghcr.io/openfaasltd/faas-netes-oem:0.3.2
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.10
+  image: ghcr.io/openfaas/faas-netes:0.18.11
   resources:
     requests:
       memory: "120Mi"
@@ -213,7 +213,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.43
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.44
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -264,7 +264,7 @@ queueWorkerPro:
 # Community Edition, maxInflight is 1
 # Name of shared queue is "faas-request"
 queueWorker:
-  image: ghcr.io/openfaas/queue-worker:0.14.1
+  image: ghcr.io/openfaas/queue-worker:0.14.2
   # Control HA of queue-worker
   replicas: 1
   queueGroup: "faas"
