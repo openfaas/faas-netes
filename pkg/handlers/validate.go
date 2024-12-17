@@ -9,8 +9,10 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"net"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
@@ -98,6 +100,10 @@ func validateScalingLabels(request *types.FunctionDeployment) error {
 	return nil
 }
 
+// OpenFaaS CE license
+// This code is licensed under the OpenFaaS Community Edition (CE) EULA
+// A license is required to use public images, however a registry on localhost is supported
+// for local testing within the terms of the EULA.
 func isAnonymous(image string) error {
 	// Use context to cancel or timeout requests
 	ctx := context.Background()
@@ -109,6 +115,15 @@ func isAnonymous(image string) error {
 	ref, err := name.ParseReference(image)
 	if err != nil {
 		return fmt.Errorf("unable to parse image reference: %s", err.Error())
+	}
+
+	registryServer := ref.Context().Registry.Name()
+
+	if strings.HasPrefix(registryServer, "localhost") {
+		host, _, err := net.SplitHostPort(registryServer)
+		if err == nil && host == "localhost" {
+			return nil
+		}
 	}
 
 	if _, err := remote.Head(ref, remote.WithAuth(auth), remote.WithContext(ctx)); err != nil {
