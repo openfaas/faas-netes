@@ -202,7 +202,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.11
+  image: ghcr.io/openfaas/faas-netes:0.18.12
   resources:
     requests:
       memory: "120Mi"
@@ -305,7 +305,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.25
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.26
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -401,7 +401,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.23
+  image: nats:2.10.24
   resources:
     requests:
       memory: "120Mi"
