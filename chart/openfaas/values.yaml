@@ -66,7 +66,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.36
+  image: ghcr.io/openfaasltd/gateway:0.4.37
   pprof: false
 
 gateway:
@@ -154,7 +154,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.58
+  image: ghcr.io/openfaasltd/faas-netes:0.5.59
   create: false
   logs:
     debug: false
@@ -192,7 +192,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.58
+  image: ghcr.io/openfaasltd/faas-netes:0.5.59
   logs:
     debug: false
     format: "console"
@@ -213,7 +213,7 @@ faasnetes:
 #  
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.45
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.46
   durableName: "faas-workers"
   # Configure the max waiting pulls for the queue-worker JetStream consumer. 
   # The value should be at least max_inflight * replicas.
@@ -365,7 +365,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.0.1
+  image: prom/prometheus:v3.1.0
   create: true
   retention:
     time: 15d
@@ -409,7 +409,7 @@ nats:
 
 ## alertmanager is only used for OpenFaaS CE
 alertmanager:
-  image: prom/alertmanager:v0.27.0
+  image: prom/alertmanager:v0.28.0
   create: true
   resources:
     requests:
