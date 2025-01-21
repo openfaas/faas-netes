@@ -1,9 +1,9 @@
 openfaasPro: false
 
 pro:
-  image: ghcr.io/openfaasltd/cron-connector:0.2.8
+  image: ghcr.io/openfaasltd/cron-connector:0.2.9
 
-image: ghcr.io/openfaas/cron-connector:0.6.1
+image: ghcr.io/openfaas/cron-connector:0.7.0
 
 logs:
   # Log debug messages
