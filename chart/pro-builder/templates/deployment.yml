@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-{{- if .Values.buildkit.rootless }}
+{{- if eq .Values.buildkit.mode "rootless" }}
   annotations:
     container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
 {{- end }}
@@ -36,6 +36,20 @@ spec:
         component: pro-builder
     spec:
       volumes:
+
+{{- if .Values.buildkit.config }}
+        - name: buildkit-config
+          configMap:
+           name: buildkit-config
+{{- end }}
+
+# If given, mount buildkit caSecret as /var/var/run/registry-tls/
+{{- if .Values.buildkit.caSecret }}
+        - name: registry-tls
+          secret:
+            secretName: {{ .Values.buildkit.caSecret }}
+{{- end }}
+
         - name: client-certs
           secret:
             secretName: buildkit-client-certs
@@ -146,20 +160,36 @@ spec:
           - "--tlscert=/var/secrets/certs/server.crt"
           - "--tlskey=/var/secrets/certs/server.key"
           - "--tlscacert=/var/secrets/certs/ca.crt"
-{{- if .Values.buildkit.rootless }}
+{{- if eq .Values.buildkit.mode "rootless" }}
           - "--oci-worker-no-process-sandbox"
+          - "--config=/home/user/.config/buildkit/buildkitd.toml"
 {{- end }}
-        image: {{ .Values.buildkit.image }}
+
+{{- if eq .Values.buildkit.mode "rootless" }}
+        image: {{ .Values.buildkit.rootless.image }}
+{{- else }}
+        image: {{ .Values.buildkit.root.image }}
+{{- end }}
+
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         ports:
         - containerPort: 1234
           protocol: TCP
         resources:
           {{- .Values.buildkit.resources | toYaml | nindent 12 }}
-        {{- with .Values.buildkit.securityContext }}
+
+{{- if eq .Values.buildkit.mode "rootless" }}
+        {{- with .Values.buildkit.rootless.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
         {{- end }}
+{{- else }}
+        {{- with .Values.buildkit.root.securityContext }}
+        securityContext:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
+{{- end }}
+
         volumeMounts:
         - name: daemon-certs
           readOnly: true
@@ -167,6 +197,30 @@ spec:
         - name: buildkit-workspace
           mountPath: /tmp/
           readOnly: false
+
+{{- if .Values.buildkit.config }}
+
+# If rootless, add buildkit-config ConfigMap to: ~/.config/buildkit/buildkitd
+{{- if eq .Values.buildkit.mode "rootless" }}
+        - name: buildkit-config
+          mountPath: /home/user/.config/buildkit
+{{- else }}
+# If rootful, add buildkit-config ConfigMap to: /etc/buildkit/buildkitd.toml
+        - name: buildkit-config
+          mountPath: /etc/buildkit
+{{- end }}
+{{- end }}
+
+# If rootless, mount CA to /home/user/.config/buildkit-tls
+{{- if eq .Values.buildkit.mode "rootless" }}
+        - name: registry-tls
+          mountPath: /home/user/.config/buildkit-tls
+{{- else }}
+# If rootful, mount CA to /var/run/registry-tls/
+        - name: registry-tls
+          mountPath: /var/run/registry-tls/
+{{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

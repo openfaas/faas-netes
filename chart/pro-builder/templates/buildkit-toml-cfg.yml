@@ -1,0 +1,12 @@
+{{- if .Values.buildkit.config}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: buildkit-config
+  namespace: {{ .Release.Namespace }}
+data:
+  buildkitd.toml: |
+{{ .Values.buildkit.config | indent 4 }}
+
+{{- end}}
