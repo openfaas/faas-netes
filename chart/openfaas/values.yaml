@@ -278,7 +278,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.15
+  image: ghcr.io/openfaasltd/autoscaler:0.3.16
 
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1
@@ -325,7 +325,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.8
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.9
   insecureTLS: false
   replicas: 1
   securityContext: true
@@ -401,7 +401,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.10.24
+  image: nats:2.10.25
   resources:
     requests:
       memory: "120Mi"
