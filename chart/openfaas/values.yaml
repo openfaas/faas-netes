@@ -305,7 +305,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.26
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.27
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -456,7 +456,7 @@ ingress:
 # ingressOperator (optional) – component to have specific FQDN and TLS for Functions
 # https://github.com/openfaas/ingress-operator
 ingressOperator:
-  image: ghcr.io/openfaas/ingress-operator:0.8.2
+  image: ghcr.io/openfaas/ingress-operator:0.8.3
   replicas: 1
   create: false
   resources:

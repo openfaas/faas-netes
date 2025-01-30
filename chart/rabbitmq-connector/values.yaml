@@ -19,7 +19,7 @@ queues: []
   # - name: queue1
   #   durable: true
 
-image: ghcr.io/openfaasltd/rabbitmq-connector:0.1.1
+image: ghcr.io/openfaasltd/rabbitmq-connector:0.1.2
 
 # The number of replicas of the connector.
 replicas: 1
