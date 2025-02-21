@@ -154,7 +154,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.59
+  image: ghcr.io/openfaasltd/faas-netes:0.5.60
   create: false
   logs:
     debug: false
@@ -192,7 +192,7 @@ operator:
   pprof: false
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.59
+  image: ghcr.io/openfaasltd/faas-netes:0.5.60
   logs:
     debug: false
     format: "console"
@@ -305,7 +305,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.27
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.28
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -365,7 +365,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.1.0
+  image: prom/prometheus:v3.2.0
   create: true
   retention:
     time: 15d
