@@ -174,13 +174,13 @@ operator:
 
   # For OpenFaaS for Enterprises, these numbers can be set higher,
   # if experiencing rate limiting due to a large number of functions
-  # within the cluster
+  # within the cluster or frequent creation/update events
   kubeClientQPS: 100
   kubeClientBurst: 250
 
   # For OpenFaaS for Enterprises, these numbers can be set higher,
   # For very high usage, you can increase the rate at which Function CRs
-  # are processed and turned into deployments, or updated in response to changes
+  # are processed into deployments
   reconcileQPS: 100
   reconcileBurst: 250
 
