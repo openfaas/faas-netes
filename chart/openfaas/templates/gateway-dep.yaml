@@ -104,7 +104,7 @@ spec:
             - --tries=1
             - --timeout=5
             - --spider
-            - http://localhost:8080/healthz
+            - http://127.0.0.1:8080/healthz
           {{- end }}
         readinessProbe:
           {{- if $.Values.gateway.readinessProbe }}
@@ -126,7 +126,7 @@ spec:
             - --tries=1
             - --timeout=5
             - --spider
-            - http://localhost:8080/healthz
+            - http://127.0.0.1:8080/healthz
           {{- end }}
         env:
         {{- if .Values.gateway.logsProviderURL }}
@@ -366,6 +366,28 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
         {{- end }}
+        livenessProbe:
+          {{- if $.Values.operator.livenessProbe }}
+          initialDelaySeconds: {{ $.Values.operator.livenessProbe.initialDelaySeconds | default 0 }}
+          periodSeconds: {{ $.Values.operator.livenessProbe.periodSeconds | default 10 }}
+          timeoutSeconds: {{ $.Values.operator.livenessProbe.timeoutSeconds | default 5 }}
+          failureThreshold: {{ $.Values.operator.livenessProbe.failureThreshold | default 3 }}
+          successThreshold: {{ $.Values.operator.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          {{- if .Values.httpProbe }}
+          httpGet:
+            path: /healthz
+            port: 8081
+          {{- else }}
+          exec:
+            command:
+            - wget
+            - --quiet
+            - --tries=1
+            - --timeout=3
+            - --spider
+            - http://127.0.0.1:8081/healthz
+          {{- end }}
         command:
           - ./faas-netes
         {{- if or .Values.openfaasPro .Values.oem }}

@@ -191,6 +191,15 @@ operator:
   # for debugging purposes
   pprof: false
 
+  # The liveness probe was added so that the operator can be restarted
+  # if its watch connections to the Kubernetes API server are lost.
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+
 faasnetesPro:
   image: ghcr.io/openfaasltd/faas-netes:0.5.63
   logs:
