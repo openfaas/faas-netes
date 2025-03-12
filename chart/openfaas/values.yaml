@@ -287,7 +287,10 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.16
+  image: ghcr.io/openfaasltd/autoscaler:0.3.17
+
+  # Default value for "com.openfaas.scale.target" when not set via label
+  defaultTarget: 50
 
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1
@@ -418,7 +421,7 @@ nats:
 
 ## alertmanager is only used for OpenFaaS CE
 alertmanager:
-  image: prom/alertmanager:v0.28.0
+  image: prom/alertmanager:v0.28.1
   create: true
   resources:
     requests:
