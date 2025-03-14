@@ -58,7 +58,7 @@ For pushing images to ECR see: [Push images to Amazon ECR](#push-images-to-amazo
 Create a HMAC signing secret for use between the Pro Builder and your client:
 
 ```bash
-$(openssl rand -base64 32) > payload.txt
+echo -n $(openssl rand -base64 32) > payload.txt
 ```
 
 Create a secret with the contents of the signing secret:
