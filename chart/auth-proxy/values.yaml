@@ -1,0 +1,43 @@
+image: docker.io/welteki/auth-proxy:v0.0.1-3-g1b1b4b3
+
+url: "https://auth-proxy.example.com"
+
+gatewayURL: http://gateway.openfaas.svc.cluster.local:8080
+
+accessTokenSecret: ""
+
+iam:
+  # URL for the OpenFaaS system components issuer.
+  # This is usually the public url of the gateway.
+  systemIssuer:
+    url: "http://gateway.openfaas.svc.cluster.local:8080"
+  # URL for the Kubernetes service account issuer.
+  kubernetesIssuer:
+    url: https://kubernetes.default.svc.cluster.local
+  # Use same configuration as the dashboardIssuer in the OpenFaaS chart
+  loginIssuer:
+    url: ""
+    clientId: ""
+    clientSecret: ""
+  # Function resources the auth-proxy should be allow to invoke.
+  resource: ["*"]
+
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+logs:
+  # Log debug messages
+  debug: false
+  # Set the log format, supports console or json
+  format: "console"
