@@ -6,7 +6,7 @@
 
 # image is for the pro-builder API
 proBuilder:
-  image: ghcr.io/openfaasltd/pro-builder:0.4.1
+  image: ghcr.io/openfaasltd/pro-builder:0.4.3
 
   # Set to 0 for unlimited, or some non-zero value for a hard limit
   # the builder will return a HTTP 429 status code, then the client 
