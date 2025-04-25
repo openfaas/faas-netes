@@ -287,7 +287,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.17
+  image: ghcr.io/openfaasltd/autoscaler:0.3.18
 
   # Default value for "com.openfaas.scale.target" when not set via label
   defaultTarget: 50
@@ -317,7 +317,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to 
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.31
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.34
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
