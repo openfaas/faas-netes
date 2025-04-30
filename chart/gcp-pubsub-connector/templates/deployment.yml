@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "connector.name" . }}
+    component: gcp-pubsub-connector
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "connector.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.Version }}
+    app.kubernetes.io/component: gcp-pubsub-connector
+    app.kubernetes.io/part-of: openfaas
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  name: {{ template "connector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "connector.name" . }}
+      component: gcp-pubsub-connector
+
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: {{ template "connector.name" . }}
+        component: gcp-pubsub-connector
+    spec:
+      volumes:
+        - name: openfaas-license
+          secret:
+            secretName: openfaas-license
+      {{- if .Values.basic_auth }}
+        - name: auth
+          secret:
+            secretName: basic-auth
+      {{- end }}
+      {{- if .Values.gcpCredentialsSecret }}
+        - name: gcp-pubsub-credentials
+          secret:
+            secretName: {{ .Values.gcpCredentialsSecret }}
+      {{- end }}
+      containers:
+        - name: connector
+          image: {{ .Values.image }}
+          command:
+            - "/usr/bin/connector"
+            - "-license-file=/var/secrets/license/license"
+          env:
+            - name: gateway_url
+              value: {{ .Values.gatewayURL | quote }}
+            - name: print_response
+              value: {{ .Values.printResponse | quote }}
+            - name: print_response_body
+              value: {{ .Values.printResponseBody | quote }}
+            - name: print_request_body
+              value: {{ .Values.printRequestBody | quote }}
+            - name: asynchronous_invocation
+              value: {{ .Values.asyncInvocation | quote }}
+            - name: project_id
+              value: {{ .Values.projectID | quote }}
+            - name: subscriptions
+              value: {{ .Values.subscriptions | toJson | quote }}
+            {{- if .Values.basic_auth }}
+            - name: basic_auth
+              value: "true"
+            - name: secret_mount_path
+              value: "/var/secrets"
+            {{- end }}
+            {{- if .Values.upstreamTimeout }}
+            - name: upstream_timeout
+              value: {{ .Values.upstreamTimeout | quote }}
+            {{- end }}
+            {{- if .Values.rebuildInterval }}
+            - name: rebuild_interval
+              value: {{ .Values.rebuildInterval | quote }}
+            {{- end }}
+            - name: content_type
+              value: {{ .Values.contentType | quote }}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
+            {{- if .Values.gcpCredentialsSecret }}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/gcp-pubsub-credentials/gcp-pubsub-credentials
+            {{- end}}
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
+          
+          {{- if .Values.securityContext }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: openfaas-license
+              readOnly: true
+              mountPath: "/var/secrets/license"
+          {{- if .Values.basic_auth }}
+            - name: auth
+              readOnly: true
+              mountPath: "/var/secrets"
+          {{- end }}
+          {{- if .Values.gcpCredentialsSecret }}
+            - name: gcp-pubsub-credentials
+              readOnly: true
+              mountPath: "/var/secrets/gcp-pubsub-credentials"
+          {{- end }}          
+
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
