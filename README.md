@@ -58,7 +58,7 @@ Find out more: [OpenFaaS Standard and For Enterprises](https://www.openfaas.com/
 ## Get started
 
 * [Deploy OpenFaaS Pro to Kubernetes with its helm chart](https://docs.openfaas.com/deployment/pro/)
-* [Deploy OpenFaaS CE to Kubernetes with its helm chart](https://docs.openfaas.com/deployment)
+* [Deploy OpenFaaS CE to Kubernetes with its helm chart](https://docs.openfaas.com/deployment/kubernetes/)
 * [Read news and tutorials on the openfaas.com blog](https://www.openfaas.com/blog/)
 * [Meet the community at the weekly Office Hours](https://docs.openfaas.com/community)
 
