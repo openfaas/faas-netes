@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/openfaas/faas-netes/pkg/k8s"
@@ -50,8 +49,6 @@ func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http
 			return
 		}
 
-		s := time.Now()
-
 		function, err := getService(lookupNamespace, functionName, lister)
 		if err != nil {
 			log.Printf("Unable to fetch service: %s", functionName)
@@ -64,9 +61,6 @@ func MakeReplicaReader(defaultNamespace string, lister v1.DeploymentLister) http
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-
-		d := time.Since(s)
-		log.Printf("Replicas: %s.%s, (%d/%d) %dms", functionName, lookupNamespace, function.AvailableReplicas, function.Replicas, d.Milliseconds())
 
 		functionBytes, err := json.Marshal(function)
 		if err != nil {
