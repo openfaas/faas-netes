@@ -189,7 +189,8 @@ func proxyRequest(w http.ResponseWriter, originalReq *http.Request, proxyClient 
 		}()
 	}
 
-	if v := originalReq.Header.Get("Accept"); v == "text/event-stream" {
+	if v := originalReq.Header.Get("Accept"); v == "text/event-stream" ||
+		originalReq.Header.Get("Upgrade") == "websocket" {
 		originalReq.URL = proxyReq.URL
 
 		reverseProxy.ServeHTTP(w, originalReq)
