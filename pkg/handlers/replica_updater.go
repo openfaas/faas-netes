@@ -85,7 +85,7 @@ func MakeReplicaUpdater(defaultNamespace string, clientset *kubernetes.Clientset
 			replicas = MaxReplicas
 		}
 
-		log.Printf("Set replicas - %s %s, %d/%d\n", functionName, lookupNamespace, replicas, oldReplicas)
+		log.Printf("Set replicas - %s %s, %d => %d\n", functionName, lookupNamespace, oldReplicas, replicas)
 
 		deployment.Spec.Replicas = &replicas
 
