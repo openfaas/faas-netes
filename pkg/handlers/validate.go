@@ -9,10 +9,8 @@ package handlers
 import (
 	"context"
 	"fmt"
-	"net"
 	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
@@ -117,17 +115,8 @@ func isAnonymous(image string) error {
 		return fmt.Errorf("unable to parse image reference: %s", err.Error())
 	}
 
-	registryServer := ref.Context().Registry.Name()
-
-	if strings.HasPrefix(registryServer, "localhost") {
-		host, _, err := net.SplitHostPort(registryServer)
-		if err == nil && host == "localhost" {
-			return nil
-		}
-	}
-
 	if _, err := remote.Head(ref, remote.WithAuth(auth), remote.WithContext(ctx)); err != nil {
-		return fmt.Errorf("the Community Edition license agreement only supports public images")
+		return fmt.Errorf("the Community Edition license agreement only allows public images")
 	}
 
 	return nil
