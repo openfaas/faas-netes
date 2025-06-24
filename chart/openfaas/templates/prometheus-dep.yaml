@@ -31,6 +31,10 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ .Release.Name }}-prometheus
+      {{- if .Values.prometheus.fsGroup }}
+      securityContext:
+        fsGroup: {{ .Values.prometheus.fsGroup }}
+      {{- end }}
       containers:
       - name: prometheus
         resources:
@@ -82,7 +86,10 @@ spec:
         - containerPort: 9090
           protocol: TCP
 
-        {{- if .Values.securityContext }}
+        {{- if .Values.prometheus.securityContext }}
+        securityContext:
+          {{- toYaml .Values.prometheus.securityContext | nindent 10 }}
+        {{- else if .Values.securityContext }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
         {{- end }}

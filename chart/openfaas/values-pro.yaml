@@ -83,9 +83,31 @@ nats:
  # For timeouts longer than 60 seconds see:
  # https://docs.openfaas.com/tutorials/expanded-timeouts/
 
-# securityContext applied to the OpenFaaS components deployed by this chart 
+# securityContext applied to the OpenFaaS components deployed by this chart
+# other than Prometheus, which is a special case. See notes on the prometheus section.
 securityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 10001
+
+# Prometheus configuration for persistent volume access
+# When using persistent volumes with Prometheus, you may need to configure
+# the security context to ensure proper file permissions
+prometheus:
+  # Enable persistent storage for production deployments
+  pvc:
+    enabled: true
+    size: 30Gi
+  
+  # Simplified security context configuration for Prometheus
+  # fsGroup: Set to 65534 (nobody) for persistent volume access
+  fsGroup: 65534
+
+  # securityContext: Applied only at container level, ignoring global chart security context
+  securityContext:
+    runAsUser: 65534
+    runAsGroup: 65534
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false  # Prometheus needs to write to /prometheus/data

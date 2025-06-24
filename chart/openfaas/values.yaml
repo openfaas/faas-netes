@@ -388,6 +388,18 @@ prometheus:
   annotations: {}
   recordingRules: []
 
+  # Simplified security context configuration for Prometheus
+  # set fsGroup to 65534 (nobody) for persistent volume access
+  # fsGroup: 65534
+  
+  # Applied only at container level, ignoring global chart security context
+  # securityContext:
+  #   runAsUser: 65534
+  #   runAsGroup: 65534
+  #   runAsNonRoot: true
+  #   allowPrivilegeEscalation: false
+  #   readOnlyRootFilesystem: false  # Prometheus needs to write to /prometheus/data
+
   # Set to true to enable persistent storage for the Prometheus Pod
   # otherwise, the data will be lost when the Pod is restarted
   pvc:

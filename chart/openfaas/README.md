@@ -473,7 +473,6 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `affinity`| Global [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) rules assigned to deployments | `{}` |
-yaml) |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS | `true` |
 | `queueMode` | Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming|
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
@@ -693,3 +692,5 @@ For legacy scaling in OpenFaaS Community Edition.
 | `prometheus.pvc.storageClassName` | Storage class for Prometheus PVC, set to `""` for the default/standard class to be picked | `""` |
 | `prometheus.pvc.size` | Size of the Prometheus PVC, 60-100Gi may be a better fit for a busy production environment | `10Gi` |
 | `prometheus.pvc.name` | Name of the Prometheus PVC, required for multiple installations within the same cluster | `""` |
+| `prometheus.fsGroup` | Simplified way to set fsGroup for persistent volume access. Set to 65534 (nobody) for proper volume permissions | `""` |
+| `prometheus.securityContext` | Simplified container-level security context for Prometheus. Takes precedence over global `securityContext` when set. Falls back to global `securityContext` when not set for backward compatibility | `{}` |
