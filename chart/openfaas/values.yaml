@@ -66,7 +66,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.40
+  image: ghcr.io/openfaasltd/gateway:0.4.41
   pprof: false
 
 gateway:
@@ -154,7 +154,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.68
+  image: ghcr.io/openfaasltd/faas-netes:0.5.70
   create: false
   logs:
     debug: false
@@ -201,7 +201,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.68
+  image: ghcr.io/openfaasltd/faas-netes:0.5.70
   logs:
     debug: false
     format: "console"
@@ -211,7 +211,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.13
+  image: ghcr.io/openfaas/faas-netes:0.18.14
   resources:
     requests:
       memory: "120Mi"
@@ -377,7 +377,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.4.1
+  image: prom/prometheus:v3.4.2
   create: true
   retention:
     time: 15d
@@ -425,7 +425,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.11.4
+  image: nats:2.11.5
   resources:
     requests:
       memory: "120Mi"
