@@ -45,20 +45,20 @@ Community:
 
 Commercial options:
 
-* Support from full-time team
+* Scale to zero and horizontal scaling - capacity, RPS, CPU, memory, and custom rules
+* Multi-tenant functions hosting and Function Builder API
+* Role Based Access Control & Single Sign-On (SSO)
 * Commercial add-ons and integrations with events like Kafka, Postgres, AWS SQS and Cron
-* Multiple namespace support
-* gVisor support and runtimeClass for isolation
 * Affinity and advanced scheduling / security constraints
-* Airgap
-* RBAC/IAM & SSO
+* Airgapped installation and offline support
+* Support from full-time team
 
 Find out more: [OpenFaaS Standard and For Enterprises](https://www.openfaas.com/pricing)
 
 ## Get started
 
-* [Deploy OpenFaaS Pro to Kubernetes with its helm chart](https://docs.openfaas.com/deployment/pro/)
-* [Deploy OpenFaaS CE to Kubernetes with its helm chart](https://docs.openfaas.com/deployment)
+* [Deploy OpenFaaS Pro to Kubernetes via helm](https://docs.openfaas.com/deployment/pro/)
+* [Deploy OpenFaaS CE to Kubernetes via helm/arkade](https://docs.openfaas.com/deployment/kubernetes/)
 * [Read news and tutorials on the openfaas.com blog](https://www.openfaas.com/blog/)
 * [Meet the community at the weekly Office Hours](https://docs.openfaas.com/community)
 
