@@ -30,7 +30,7 @@ spec:
       - name:  nats
         resources:
           {{- .Values.nats.resources | toYaml | nindent 12 }}
-        {{- if eq .Values.queueMode "jetstream" }}
+        {{- if .Values.openfaasPro }}
         image: {{ include "openfaas.image" (dict "image" .Values.nats.image "registryPrefix" .Values.registryPrefix) }}
         {{- else }}
         image: {{ include "openfaas.image" (dict "image" .Values.stan.image "registryPrefix" .Values.registryPrefix) }}
@@ -39,11 +39,11 @@ spec:
         ports:
         - containerPort: 4222
           protocol: TCP
-        {{- if not (eq .Values.queueMode "jetstream") }}
+        {{- if not .Values.openfaasPro }}
         command: ["/nats-streaming-server"]
         {{- end }}
         args:
-          {{- if eq .Values.queueMode "jetstream" }}
+          {{- if .Values.openfaasPro }}
           - --js
           {{- else}}
           - --store
