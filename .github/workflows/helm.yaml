@@ -38,7 +38,7 @@ jobs:
       - uses: alexellis/arkade-get@master
         with:
           kubeval: latest
-          kubeconform: latset
+          kubeconform: latest
       - name: Run kubeval
         env:
           KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
