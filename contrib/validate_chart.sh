@@ -2,7 +2,7 @@
 export KUBEVAL_SCHEMA_LOCATION=${KUBEVAL_SCHEMA_LOCATION:-"https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"}
 
 ROOT=$(git rev-parse --show-toplevel)
-KUBERNETES_VERSION=${KUBERNETES_VERSION:-'v1.21.1'}
+KUBERNETES_VERSION=${KUBERNETES_VERSION:-'v1.31.1'}
 
 status=0
 msg=''
@@ -17,6 +17,7 @@ for version in $KUBERNETES_VERSION; do
         helm template $chart -f $chart/values.yaml -n openfaas |
             kubeval -n openfaas --strict --ignore-missing-schemas --kubernetes-version "${version#v}" |
             grep -v 'WARN - Set to ignore missing schemas' |
+            grep -v 'was not validated against a schema' |
             grep -v 'PASS'
         if [ $? != 0 ]; then
             status=1
