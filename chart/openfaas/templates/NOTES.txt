@@ -7,13 +7,30 @@ To verify that openfaas has started, run:
 To retrieve the admin password, run:
 
   echo $(kubectl -n {{ .Release.Namespace }} get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode)
+
 {{- end }}
 
 {{- if and .Values.dashboard.enabled (not .Values.dashboard.signingKeySecret) }}
 
 Warning: The dashboard is using auto generated signing keys.
 These should only be used for development. See: https://docs.openfaas.com/openfaas-pro/dashboard/
+
 {{- end}}
+
+{{- if and .Values.openfaasPro (ne .Values.queueMode "jetstream") }}
+
+Warning: Invalid queueMode when openfaasPro is set to true.
+Set queueMode to "jetstream", see values-pro.yaml for recommended settings.
+
+{{- end }}
+
+{{- if and .Values.openfaasPro (not .Values.async) }}
+
+Warning: It is not recommended to disable async for OpenFaaS Standard/Enterprise.
+Set async to true, see values-pro.yaml for recommended settings.
+
+{{- end }}
+
 
 {{- if not .Values.basic_auth }}
 
