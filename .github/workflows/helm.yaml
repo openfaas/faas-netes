@@ -37,6 +37,7 @@ jobs:
       - uses: alexellis/arkade-get@master
         with:
           kubeval: latest
+          kubeconform: latset
       # - uses: lra/setup-kubeval@v1
       #   with:
       #     version: v0.16.1
