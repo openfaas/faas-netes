@@ -24,21 +24,9 @@ jobs:
         with:
           helm: latest
           kubeconform: latest
-      # - uses: azure/setup-helm@v3
-      - name: Helm Lint
-        run: ./contrib/lint_chart.sh
-
-  kubeval-chart:
-    runs-on: ubuntu-latest
-    needs:
-      - lint-chart
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: alexellis/arkade-get@master
-        with:
           kubeval: latest
-          kubeconform: latest
+      - name: Run helm lint and kubeconform
+        run: ./contrib/lint_chart.sh
       - name: Run kubeval
         env:
           KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
