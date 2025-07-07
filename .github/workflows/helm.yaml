@@ -28,22 +28,19 @@ jobs:
       - name: Helm Lint
         run: ./contrib/lint_chart.sh
 
-  # kubeval-chart:
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - lint-chart
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - uses: alexellis/arkade-get@master
-  #       with:
-  #         kubeval: latest
-  #         kubeconform: latset
-  #     # - uses: lra/setup-kubeval@v1
-  #     #   with:
-  #     #     version: v0.16.1
-  #     - name: Run kubeval
-  #       env:
-  #         KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
-  #         KUBERNETES_VERSION: v1.26.11 v1.27.1  1.28.4
-  #       run: ./contrib/validate_chart.sh
+  kubeval-chart:
+    runs-on: ubuntu-latest
+    needs:
+      - lint-chart
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: alexellis/arkade-get@master
+        with:
+          kubeval: latest
+          kubeconform: latset
+      - name: Run kubeval
+        env:
+          KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+          KUBERNETES_VERSION: v1.31.1
+        run: ./contrib/validate_chart.sh

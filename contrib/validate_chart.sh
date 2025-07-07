@@ -14,11 +14,15 @@ for version in $KUBERNETES_VERSION; do
     for chart in $ROOT/chart/*; do
         name=$(basename $chart)
         echo -e "\n\nValidating $name"
-        helm template $chart -f $chart/values.yaml -n openfaas |
-            kubeval -n openfaas --strict --ignore-missing-schemas --kubernetes-version "${version#v}" |
-            grep -v 'WARN - Set to ignore missing schemas' |
-            grep -v 'was not validated against a schema' |
-            grep -v 'PASS'
+
+        VALUES_FILE="$chart/values.yaml"
+        if [ name = "openfaas" ]; then
+            VALUES_FILE="$chart/values-pro.yaml"
+        fi
+
+        helm template $chart -f $VALUES_FILE -n openfaas |
+          kubeval -n openfaas --strict --ignore-missing-schemas --kubernetes-version "${version#v}" 
+
         if [ $? != 0 ]; then
             status=1
             msg="$msg\n$name ($version)"
@@ -28,6 +32,12 @@ done
 
 if [ $status != 0 ]; then
     echo -e "Failures:\n$msg"
+fi
+
+if [ $status = 0 ]; then
+    echo ""
+    echo "Validation passed"
+    echo
 fi
 
 exit $status
