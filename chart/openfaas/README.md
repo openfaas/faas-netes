@@ -495,7 +495,6 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `openfaasPro` | Deploy OpenFaaS Pro | `false` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
-| `queueMode` | Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming|
 | `rbac` | Enable RBAC | `true` |
 | `registryPrefix` | Adds a prefix or replaces the server prefix for all images in chart i.e. `nats:2.11.6` becomes `registryPrefix/nats:2.11.6` | `""` |
 | `securityContext` | Give a `securityContext` template to be applied to each of the various containers in this chart, set to `{}` to disable, if required for Istio side-car injection.  | See values.yaml |

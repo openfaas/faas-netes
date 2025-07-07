@@ -33,8 +33,6 @@ exposeServices: true
 serviceType: NodePort        # serviceType for OpenFaaS gateway
 async: true                  # No known reason to disable this, kept for legacy reasons
 
-queueMode: ""                # Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming
-
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 psp: false
@@ -220,7 +218,7 @@ faasnetes:
 # The values for jetstreamQueueWorker are merged with those under
 # the "queueWorkerPro" and "queueWorker" section
 #
-# Enable automatically when nats.queueMode is set to "jetstream"
+# The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
   image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.47
   mode: "static"

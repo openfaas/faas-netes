@@ -17,13 +17,6 @@ These should only be used for development. See: https://docs.openfaas.com/openfa
 
 {{- end}}
 
-{{- if and .Values.openfaasPro (ne .Values.queueMode "jetstream") }}
-
-Warning: Invalid queueMode when openfaasPro is set to true.
-Set queueMode to "jetstream", see values-pro.yaml for recommended settings.
-
-{{- end }}
-
 {{- if and .Values.openfaasPro (not .Values.async) }}
 
 Warning: It is not recommended to disable async for OpenFaaS Standard/Enterprise.
