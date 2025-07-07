@@ -72,13 +72,6 @@ spec:
           - "--tlscert=/var/secrets/certs/client.crt"
           - "--tlskey=/var/secrets/certs/client.key"
           - "--tlscacert=/var/secrets/certs/ca.crt"
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 2
-          periodSeconds: 10
-          timeoutSeconds: 2
         env:
           - name: buildkit_server_name
             value: "127.0.0.1"
