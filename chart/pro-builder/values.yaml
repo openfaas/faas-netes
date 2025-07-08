@@ -8,9 +8,11 @@
 serviceAccount: ""
 
 # Set at the Pod level
-# The permission is set to that AWS IAM can be used to access credentials for AWS ECR.
 securityContext: {}
-  # fsGroup: 65534
+
+# Use this permission for AWS IRSA.
+# securityContext:
+#   fsGroup: 65534
 
 # image is for the pro-builder API
 proBuilder:
@@ -18,8 +20,9 @@ proBuilder:
 
   # Set to 0 for unlimited, or some non-zero value for a hard limit
   # the builder will return a HTTP 429 status code, then the client 
-  # must retry the request. If it's helpful to you, the OpenFaaS Pro 
-  # queue-worker supports retrying failed requests. 
+  # must retry the request.
+  # A function executed via the async queue will be retried, so can be
+  # a convenient way to build functions without blocking the client.
   maxInflight: 0
 
   resources:
