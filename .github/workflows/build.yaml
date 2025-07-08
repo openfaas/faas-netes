@@ -68,7 +68,7 @@ jobs:
           kind: latest
           helm: latest
           kubectl: latest
-          faas_cli: latest
+          faas-cli: latest
           kubeconform: latest
           kubeval: latest
       - name: Install custom CLIs
