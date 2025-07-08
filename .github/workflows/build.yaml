@@ -14,11 +14,11 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Install Go
-        uses: actions/setup-go@master
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.23.x
+          go-version: 1.24.x
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -33,7 +33,7 @@ jobs:
         run: echo "GIT_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build x86_64 container into library
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -46,7 +46,7 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/faas-netes:${{ github.sha }}
 
       - name: Build multi-arch containers for validation only
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -57,11 +57,24 @@ jobs:
             VERSION=dev-${{env.GIT_COMMIT}}
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/faas-netes:${{ github.sha }}
- # Todo - load the image into Kind before running tests
+
+ # TODO: AE - load the image into Kind before running tests
  # otherwise, this just tests the chart with images that
  # have already been built and pushed in an earlier job
-      - name: get tools
-        run: ./contrib/get_tools.sh
+
+      - name: Get various tools via arkade
+        uses: alexellis/arkade-get@master
+        with:
+          kind: latest
+          helm: latest
+          kubectl: latest
+          faas_cli: latest
+          kubeconform: latest
+          kubeval: latest
+      - name: Install custom CLIs
+        run: |
+          sudo mv $HOME/.arkade/bin/* /usr/local/bin/
+
       - name: lint chart
         run: ./contrib/lint_chart.sh
       - name: create cluster

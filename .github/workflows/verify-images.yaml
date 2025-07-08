@@ -9,16 +9,15 @@ jobs:
   verifyImages:
     strategy:
       matrix:
-        go-version: [1.22.x]
+        go-version: [1.24.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@master
-      - name: Get arkade
-        id: get_arkade
-        run: |
-          curl -sLS https://get.arkade.dev | sudo sh
+      - name: Install arkade
+        uses: alexellis/setup-arkade@v3
+
       - name: Verify chart images
         id: verify_images
         run: |

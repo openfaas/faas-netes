@@ -17,11 +17,11 @@ jobs:
       repository-projects: read
       statuses: read
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Install Go
-        uses: actions/setup-go@master
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.23.x
+          go-version: 1.24.x
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -49,7 +49,7 @@ jobs:
 
 
       - name: Push containers
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
