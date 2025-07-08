@@ -35,6 +35,10 @@ spec:
         app: {{ template "builder.name" . }}
         component: pro-builder
     spec:
+{{- if .Values.securityContext }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+{{- end }}
       volumes:
         - name: client-certs
           secret:
@@ -63,6 +67,9 @@ spec:
           secret:
             secretName: {{ .Values.awsCredentialsSecret }}
         {{- end}}
+{{- if .Values.serviceAccount}}
+      serviceAccountName: {{ .Values.serviceAccount | quote }}
+{{- end }}
       containers:
       - name: pro-builder
         image: {{ .Values.proBuilder.image }}

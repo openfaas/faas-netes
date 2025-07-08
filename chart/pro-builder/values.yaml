@@ -4,6 +4,14 @@
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
+# Set if using AWS IRSA to access ECR with a service account
+serviceAccount: ""
+
+# Set at the Pod level
+# The permission is set to that AWS IAM can be used to access credentials for AWS ECR.
+securityContext: {}
+  # fsGroup: 65534
+
 # image is for the pro-builder API
 proBuilder:
   image: ghcr.io/openfaasltd/pro-builder:0.5.0
@@ -13,7 +21,7 @@ proBuilder:
   # must retry the request. If it's helpful to you, the OpenFaaS Pro 
   # queue-worker supports retrying failed requests. 
   maxInflight: 0
-  securityContext: {}
+
   resources:
     requests:
       memory: "64Mi"
@@ -61,9 +69,9 @@ buildkit:
     # limits:
     #   memory: "4Gi"
 
-
 # Use a shared credentials file for ECR credentials:
 # The format is the standard ini-type AWS file format.
+# This is not needed if using IAM roles for service accounts (IRSA) on EKS.
 #
 # kubectl create secret generic -n openfaas \
 #   aws-ecr-credentials --from-file aws-ecr-credentials=$HOME/ecr-credentials.txt

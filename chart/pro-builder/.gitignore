@@ -1,4 +1,8 @@
-/ae-values.yaml
+/values-ae.yaml
 /out/**
 /payload.txt
 
+
+template
+build
+.secrets
