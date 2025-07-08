@@ -86,7 +86,7 @@ spec:
             value: {{ .Values.enableLchown  | quote}}
           - name: insecure
             value: "false"
-          - name: buildkit_url  
+          - name: buildkit_url
             value: "tcp://127.0.0.1:1234"
           - name: "disable_hmac"
             value: {{ .Values.disableHmac | quote }}

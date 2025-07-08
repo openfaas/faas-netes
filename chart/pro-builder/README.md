@@ -215,11 +215,11 @@ Configure the Pro Builder to use the Amazon ECR credential helper. The required 
 
 ```bash
 faas-cli registry-login --ecr \
-  --acount-id <aws_account_id> \
+  --account-id <aws_account_id> \
   --region <region>
 ```
 
-```
+```bash
 kubectl create secret generic registry-secret \
     --from-file config.json=credentials/config.json -n openfaas
 ```
@@ -232,24 +232,30 @@ Create the credentials file:
 ```bash
 export AWS_ACCESS_KEY_ID=""
 export AWS_ACCESS_SECRET_KEY=""
+export AWS_REGION="us-east-1" # Your AWS region
 
 cat > ecr-credentials.txt <<EOF
 [default]
+region = $AWS_REGION
 aws_access_key_id=$AWS_ACCESS_KEY_ID
 aws_secret_access_key=$AWS_ACCESS_SECRET_KEY
 EOF
 ```
 
-```
+Create a secret in the `openfaas` namespace with the contents of the credentials file:
+
+```bash
 kubectl create secret generic -n openfaas \
   aws-ecr-credentials --from-file aws-ecr-credentials=./ecr-credentials.txt
 ```
 
-Modify your `values.yaml` file accordingly to mount the secret in the Pro Builder.
+Modify your `values.yaml` file accordingly to mount the secret to the pro-builder Pod:
 
 ```yaml
 awsCredentialsSecret: aws-ecr-credentials
 ```
+
+Then perform an installation.
 
 ### Push using AWS IAM roles and IAM roles for service accounts (IRSA)
 
