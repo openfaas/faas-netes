@@ -16,7 +16,6 @@ import (
 
 	clientset "github.com/openfaas/faas-netes/pkg/client/clientset/versioned"
 	informers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions"
-	v1 "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/openfaas/v1"
 	"github.com/openfaas/faas-netes/pkg/config"
 	"github.com/openfaas/faas-netes/pkg/handlers"
 	"github.com/openfaas/faas-netes/pkg/k8s"
@@ -147,21 +146,10 @@ Version: %s Commit: %s
 type customInformers struct {
 	EndpointsInformer  v1core.EndpointsInformer
 	DeploymentInformer v1apps.DeploymentInformer
-	FunctionsInformer  v1.FunctionInformer
 }
 
 func startInformers(setup serverSetup, stopCh <-chan struct{}, operator bool) customInformers {
 	kubeInformerFactory := setup.kubeInformerFactory
-	faasInformerFactory := setup.faasInformerFactory
-
-	var functions v1.FunctionInformer
-	if operator {
-		functions = faasInformerFactory.Openfaas().V1().Functions()
-		go functions.Informer().Run(stopCh)
-		if ok := cache.WaitForNamedCacheSync("faas-netes:functions", stopCh, functions.Informer().HasSynced); !ok {
-			log.Fatalf("failed to wait for cache to sync")
-		}
-	}
 
 	deployments := kubeInformerFactory.Apps().V1().Deployments()
 	go deployments.Informer().Run(stopCh)
@@ -178,7 +166,6 @@ func startInformers(setup serverSetup, stopCh <-chan struct{}, operator bool) cu
 	return customInformers{
 		EndpointsInformer:  endpoints,
 		DeploymentInformer: deployments,
-		FunctionsInformer:  functions,
 	}
 }
 
