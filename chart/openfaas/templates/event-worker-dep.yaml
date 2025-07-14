@@ -24,6 +24,10 @@ spec:
       labels:
         app: event-worker
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       - name: license
         secret:
@@ -37,7 +41,7 @@ spec:
       - name:  event-worker
         resources:
           {{- .Values.eventWorker.resources | toYaml | nindent 12 }}
-        image: {{ .Values.eventWorker.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.eventWorker.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - "event-worker"

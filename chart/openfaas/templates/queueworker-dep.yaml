@@ -22,6 +22,10 @@ spec:
       labels:
         app: queue-worker
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       {{- if .Values.basic_auth }}
       - name: auth
@@ -39,9 +43,9 @@ spec:
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
         {{- if .Values.openfaasPro }}
-        image: {{ .Values.queueWorkerPro.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.queueWorkerPro.image "registryPrefix" .Values.registryPrefix) }}
       {{- else }}
-        image: {{ .Values.queueWorker.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.queueWorker.image "registryPrefix" .Values.registryPrefix) }}
       {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.openfaasPro }}

@@ -30,6 +30,10 @@ spec:
       labels:
         app: gateway
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if and .Values.gateway.topologySpreadConstraints .Values.openfaasPro }}
       topologySpreadConstraints:
       {{- toYaml .Values.gateway.topologySpreadConstraints | nindent 8 }}
@@ -70,9 +74,9 @@ spec:
         resources:
           {{- .Values.gateway.resources | toYaml | nindent 12 }}
         {{- if .Values.openfaasPro }}
-        image: {{ .Values.gatewayPro.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.gatewayPro.image "registryPrefix" .Values.registryPrefix) }}
         {{- else }}
-        image: {{ .Values.gateway.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.gateway.image "registryPrefix" .Values.registryPrefix) }}
         {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
@@ -233,7 +237,7 @@ spec:
       - name: operator
         resources:
           {{- .Values.operator.resources | toYaml | nindent 12 }}
-        image: {{ .Values.operator.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.operator.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - ./faas-netes
@@ -355,11 +359,11 @@ spec:
         resources:
           {{- .Values.faasnetes.resources | toYaml | nindent 12 }}
       {{- if .Values.openfaasPro }}
-        image: {{ .Values.faasnetesPro.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.faasnetesPro.image "registryPrefix" .Values.registryPrefix) }}
       {{- else if .Values.oem }}
-        image: {{ .Values.faasnetesOem.image}}
+        image: {{ include "openfaas.image" (dict "image" .Values.faasnetesOem.image "registryPrefix" .Values.registryPrefix) }}
       {{- else }}
-        image: {{ .Values.faasnetes.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.faasnetes.image "registryPrefix" .Values.registryPrefix) }}
       {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.securityContext }}

@@ -22,14 +22,18 @@ spec:
       labels:
         app: nats
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name:  nats
         resources:
           {{- .Values.nats.resources | toYaml | nindent 12 }}
         {{- if eq .Values.queueMode "jetstream" }}
-        image: {{ .Values.nats.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.nats.image "registryPrefix" .Values.registryPrefix) }}
         {{- else }}
-        image: {{ .Values.stan.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.stan.image "registryPrefix" .Values.registryPrefix) }}
         {{- end }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         ports:

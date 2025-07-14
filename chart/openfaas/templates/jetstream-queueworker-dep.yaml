@@ -23,6 +23,10 @@ spec:
       labels:
         app: queue-worker
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if and .Values.jetstreamQueueWorker.topologySpreadConstraints .Values.openfaasPro }}
       topologySpreadConstraints:
       {{- toYaml .Values.jetstreamQueueWorker.topologySpreadConstraints | nindent 8 }}
@@ -37,7 +41,7 @@ spec:
       - name:  queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
-        image: {{ .Values.jetstreamQueueWorker.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.jetstreamQueueWorker.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         {{- if .Values.jetstreamQueueWorker.pprof }}
         ports:

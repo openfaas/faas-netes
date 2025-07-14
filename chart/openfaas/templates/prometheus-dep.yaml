@@ -30,6 +30,10 @@ spec:
           {{- toYaml .Values.prometheus.annotations | nindent 8 }}
         {{- end }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ .Release.Name }}-prometheus
       {{- if .Values.prometheus.fsGroup }}
       securityContext:
@@ -39,7 +43,7 @@ spec:
       - name: prometheus
         resources:
           {{- .Values.prometheus.resources | toYaml | nindent 12 }}
-        image: {{ .Values.prometheus.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.prometheus.image "registryPrefix" .Values.registryPrefix) }}
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
