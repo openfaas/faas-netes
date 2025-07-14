@@ -77,7 +77,7 @@ Now decide how you want to expose the services and edit the `helm upgrade` comma
 #### Deploy OpenFaaS Community Edition (CE)
 
 > OpenFaaS Community Edition is meant exploration and development.
-> 
+>
 > OpenFaaS Pro has been tuned for production use including flexible auto-scaling, high-available deployments, durability, add-on features, and more.
 
 Deploy CE from the helm chart repo directly:
@@ -310,7 +310,7 @@ Use the following guide to setup TLS for the [Gateway and Dashboard](https://doc
 If you are using Ingress locally, for testing, then you can access the gateway by adding:
 
 ```yaml
-ingress: 
+ingress:
   enabled: true
 ```
 
@@ -446,7 +446,7 @@ Then delete the CRDs:
 kubectl delete crd -l app.kubernetes.io/name=openfaas
 ```
 
-If you have created additional namespaces for functions, delete those too, with `kubectl delete namespace <namespace>`. 
+If you have created additional namespaces for functions, delete those too, with `kubectl delete namespace <namespace>`.
 
 ## Kubernetes versioning
 
@@ -575,9 +575,11 @@ See [values.yaml](./values.yaml) for detailed configuration.
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `jetstreamQueueWorker.durableName` | Durable name used by JetStream consumers | `faas-workers` |
+| `jetstreamQueueWorker.mode` | Queue operation mode: `static` or `function` | `static` |
+| `jetstreamQueueWorker.durableName` | Deprecated: Durable name used by JetStream consumers | `faas-workers` |
 | `jetstreamQueueWorker.image` | Container image used for the queue-worker when the `queueMode` is `jetstream` | See [values.yaml](./values.yaml) |
-| `jetstreamQueueWorker.maxWaiting` | Configure the max waiting pulls for the queue-worker JetStream consumer. The value should be at least max_inflight * queue_worker.replicas. Note that this value can not be updated once the consumer is created. | `512` |
+| `jetstreamQueueWorker.consumer.inactiveThreshold` | If a function is inactive (has no invocations) for longer than this threshold its consumer will be removed to save resources | `30s` |
+| `jetstreamQueueWorker.consumer.pullMaxMessages` | PullMaxMessages limits the number of messages to be buffered per consumer. Leave empty to use optimized default for the selected queue mode | `` |
 | `jetstreamQueueWorker.logs.debug` | Log debug messages | `false` |
 | `jetstreamQueueWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
 | `nats.channel` | The name of the NATS Streaming channel or NATS JetStream stream to use for asynchronous function invocations | `faas-request` |
@@ -616,7 +618,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `iam.dashboardIssuer.clientSecret` | Name of the Kubernetes secret that contains the OAuth client secret for the dashboard | `""` |
 | `iam.dashboardIssuer.scopes` | OpenID Connect (OIDC) scopes for the dashboard | `[openid, email, profile]` |
 | `iam.kubernetesIssuer.create` | Create a JwtIssuer object for the kubernetes service account issuer | `true` |
-| `iam.kubernetesIssuer.tokenExpiry` | Expiry time of OpenFaaS access tokens exchanged for tokens issued by the Kubernetes issuer. | `2h` | 
+| `iam.kubernetesIssuer.tokenExpiry` | Expiry time of OpenFaaS access tokens exchanged for tokens issued by the Kubernetes issuer. | `2h` |
 | `iam.kubernetesIssuer.url` | URL for the Kubernetes service account issuer. | `https://kubernetes.default.svc.cluster.local` |
 
 ### Dashboard (OpenFaaS Pro)

@@ -43,27 +43,44 @@ spec:
               value: "{{ .Values.nats.host }}"
             - name: "nats_port"
               value: "{{ .Values.nats.port }}"
+
             - name: "nats_stream"
               value: "{{ .Values.nats.stream.name }}"
             - name: "nats_durable"
               value: "{{ .Values.nats.consumer.durableName }}"
-            - name: "nats_stream_replicas"
-              value: "{{ .Values.nats.stream.replicas }}"
-            - name:  "max_reconnect"
-              value: "{{ .Values.nats.reconnect.attempts }}"
-            - name: "reconnect_delay"
-              value: "{{ .Values.nats.reconnect.delay }}"
-            - name: "gateway_url"
-              value: "{{ .Values.gateway.host }}:{{ .Values.gateway.port }}"
+
+            - name: "queue_name"
+              value: "{{ .Values.queueName }}"
+            - name: "queue_partitions"
+              value: "{{ .Values.queuePartitions }}"
+            - name: "filter_partition"
+              value: "{{ .Values.partition }}"
             - name: "max_inflight"
               value: "{{ .Values.maxInflight }}"
-            - name: max_waiting
-              value: "{{ .Values.maxWaiting }}"
-            - name: "upstream_timeout"
-              value: "{{ .Values.upstreamTimeout }}"
+            - name: "scaling_mode"
+              value: "{{ .Values.mode }}"
+            - name: "consumer_inactive_threshold"
+              value: "{{ .Values.consumer.inactiveThreshold }}"
+            {{- if .Values.consumer.pullMaxMessages }}
+            - name: "consumer_pull_max_messages"
+              value: "{{ .Values.consumer.pullMaxMessages }}"
+            {{- end }}
+            - name: "gateway_url"
+              value: "{{ .Values.gateway.host }}:{{ .Values.gateway.port }}"
             - name: "tls_insecure"
               value: "{{ .Values.insecureTLS }}"
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
 
+            - name: "nats_stream_replicas"
+              value: "{{ .Values.nats.stream.replicas }}"
+            - name: "ack_wait"
+              value: "{{ .Values.nats.consumer.ackWait }}"
+
+            - name: "upstream_timeout"
+              value: "{{ .Values.upstreamTimeout }}"
             - name: "max_retry_attempts"
               value: "{{ .Values.maxRetryAttempts }}"
             - name: "max_retry_wait"
@@ -74,12 +91,6 @@ spec:
               value: "{{ .Values.httpRetryCodes }}"
             - name: "backoff"
               value: "{{ .Values.backoff }}"
-
-            - name: "debug"
-              value: "{{ .Values.logs.debug }}"
-            - name: "log_encoding"
-              value: "{{ .Values.logs.format }}"
-
         volumeMounts:
         - name: license
           readOnly: true

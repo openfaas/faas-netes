@@ -31,9 +31,9 @@ securityContext: {}
 
 exposeServices: true
 serviceType: NodePort        # serviceType for OpenFaaS gateway
-async: true                  # No known reason to disable this, kept for legacy reasons 
+async: true                  # No known reason to disable this, kept for legacy reasons
 
-queueMode: ""                # Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming 
+queueMode: ""                # Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming
 
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
@@ -42,7 +42,7 @@ psp: false
 # image pull policy for openfaas components, can change to `IfNotPresent` for an air-gapped environment
 openfaasImagePullPolicy: "IfNotPresent"
 
-# Optionally, give the name of a secret containing a CA bundle to be added to the 
+# Optionally, give the name of a secret containing a CA bundle to be added to the
 # OIDC plugin and OpenFaaS Dashboard components when a self-signed certificate is used
 #
 # kubectl create secret generic -n openfaas ca-bundle --from-file=ca.crt=./ca.crt
@@ -123,7 +123,7 @@ eventSubscription:
   endpoint: ""
   endpointSecret: ""
 
-  # Do not validate the TLS certificate of the endpoint, use when 
+  # Do not validate the TLS certificate of the endpoint, use when
   # testing with self-signed certificates
   insecureTLS: false
 
@@ -184,7 +184,7 @@ operator:
   reconcileQPS: 100
   reconcileBurst: 250
 
-  # When set to true, pprof will be enabled, and the 
+  # When set to true, pprof will be enabled, and the
   # service "faas-provider" will gain an extra port to
   # expose the pprof endpoint, this cannot be used in production
   # since it may bypass authentication, and should only be used
@@ -219,15 +219,17 @@ faasnetes:
 
 # The values for jetstreamQueueWorker are merged with those under
 # the "queueWorkerPro" and "queueWorker" section
-#  
+#
 # Enable automatically when nats.queueMode is set to "jetstream"
 jetstreamQueueWorker:
   image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.47
+  mode: "static"
+  consumer:
+    inactiveThreshold: "30s"
+
+  # Deprecated: Only required for stream migration when
+  # upgrading from queue-worker version 0.3.46 or older
   durableName: "faas-workers"
-  # Configure the max waiting pulls for the queue-worker JetStream consumer. 
-  # The value should be at least max_inflight * replicas.
-  # Note that this value can not be updated once the consumer is created.
-  maxWaiting: 512
   logs:
     debug: false
     format: "console"
@@ -310,19 +312,19 @@ autoscaler:
     limits:
       memory: "256Mi"
 
-  # Set to "true" to learn how the autoscaler works, both for horizonal Pod scaling 
+  # Set to "true" to learn how the autoscaler works, both for horizonal Pod scaling
   # and for scaling to zero.
-  # The Grafana dashboards can be used in combination to see the effect of the 
-  # autoscaler: https://docs.openfaas.com/openfaas-pro/grafana-dashboards/ 
+  # The Grafana dashboards can be used in combination to see the effect of the
+  # autoscaler: https://docs.openfaas.com/openfaas-pro/grafana-dashboards/
   verbose: false
 
-  # When disableHorizontalScaling is set to true, then the autoscaler will 
+  # When disableHorizontalScaling is set to true, then the autoscaler will
   # only scale to zero, without scaling replicas between the defined Min and Max
   # count for the function
   disableHorizontalScaling: false
 
 # OpenFaaS Pro
-## To use with port-forwarding, set publicURL to 
+## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
   image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.35
@@ -399,7 +401,7 @@ prometheus:
   # Simplified security context configuration for Prometheus
   # set fsGroup to 65534 (nobody) for persistent volume access
   # fsGroup: 65534
-  
+
   # Applied only at container level, ignoring global chart security context
   # securityContext:
   #   runAsUser: 65534

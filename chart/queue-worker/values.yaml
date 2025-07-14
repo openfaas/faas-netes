@@ -8,12 +8,17 @@ image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.47
 
 replicas: 1
 
+# Change this to your queue name.
+# Allowed characters (a - z), (0 - 9), - and _
+queueName: "custom-request"
+mode: static
 maxInflight: 1
 
-# Configure the max waiting pulls for the queue-worker JetStream consumer. 
-# The value should be at least max_inflight * replicas.
-# Note that this value can not be updated once the consumer is created.
-maxWaiting: 512
+queuePartitions: 1
+partition: 0
+
+consumer:
+  inactiveThreshold: "30s"
 
 upstreamTimeout: "1m"
 
@@ -37,14 +42,12 @@ gateway:
 nats:
   host: "nats.openfaas"
   port: "4222"
-  reconnect:
-    attempts: 120
-    delay: "2s"
   stream:
     name: "faas-request"
     replicas: 1
   consumer:
     durableName: "faas-workers"
+    ackWait: "30s"
 
 logs:
   debug: false
