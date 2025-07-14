@@ -23,6 +23,10 @@ spec:
       labels:
         app: autoscaler
     spec:
+{{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+{{- end }}
       volumes:
       {{- if .Values.basic_auth }}
       - name: auth
@@ -36,7 +40,7 @@ spec:
       - name:  autoscaler
         resources:
           {{- .Values.autoscaler.resources | toYaml | nindent 12 }}
-        image: {{ .Values.autoscaler.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.autoscaler.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - "/usr/bin/autoscaler"

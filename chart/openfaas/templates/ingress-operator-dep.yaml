@@ -23,12 +23,16 @@ spec:
       labels:
         app: ingress-operator
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: ingress-operator
       containers:
       - name: operator
         resources:
           {{- .Values.ingressOperator.resources | toYaml | nindent 10 }}
-        image: {{ .Values.ingressOperator.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.ingressOperator.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:
           - ./ingress-operator

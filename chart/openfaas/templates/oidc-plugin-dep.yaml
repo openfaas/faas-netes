@@ -24,6 +24,10 @@ spec:
       labels:
         app: oidc-plugin
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: oidc-plugin
       volumes:
       - name: oidc-plugin-temp-volume
@@ -48,7 +52,7 @@ spec:
       - name:  oidc-plugin
         resources:
           {{- .Values.oidcAuthPlugin.resources | toYaml | nindent 12 }}
-        image: {{ .Values.oidcAuthPlugin.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.oidcAuthPlugin.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: Always
         {{- if .Values.securityContext }}
         securityContext:

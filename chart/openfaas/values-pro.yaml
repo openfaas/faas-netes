@@ -111,3 +111,12 @@ prometheus:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false  # Prometheus needs to write to /prometheus/data
+
+# Only applied to Deployments installed by this chart.
+imagePullSecrets: []
+
+# imagePullSecrets:
+# - name: private-registry-pull-secret
+
+# When set, docker.io or ghcr.io will be replaced by the value contained in registryPrefix
+# registryPrefix: "ttl.sh/openfaas"

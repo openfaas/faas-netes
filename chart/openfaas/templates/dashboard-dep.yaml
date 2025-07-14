@@ -22,6 +22,10 @@ spec:
       labels:
         app: dashboard
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       {{- if .Values.basic_auth }}
       - name: auth
@@ -58,7 +62,7 @@ spec:
       - name:  dashboard
         resources:
           {{- .Values.dashboard.resources | toYaml | nindent 12 }}
-        image: {{ .Values.dashboard.image }}
+        image: {{ include "openfaas.image" (dict "image" .Values.dashboard.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
 
         command:
