@@ -27,16 +27,14 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if and .Values.jetstreamQueueWorker.topologySpreadConstraints .Values.openfaasPro }}
+      {{- if .Values.jetstreamQueueWorker.topologySpreadConstraints }}
       topologySpreadConstraints:
       {{- toYaml .Values.jetstreamQueueWorker.topologySpreadConstraints | nindent 8 }}
       {{- end }}
       volumes:
-      {{- if .Values.openfaasPro }}
       - name: license
         secret:
           secretName: openfaas-license
-      {{- end }}
       containers:
       - name:  queue-worker
         resources:
@@ -51,9 +49,7 @@ spec:
         {{- end }}
         command:
           - "jetstream-queue-worker"
-          {{- if .Values.openfaasPro }}
           - "-license-file=/var/secrets/license/license"
-          {{- end }}
           {{- if .Values.jetstreamQueueWorker.pprof }}
           - "-pprof=true"
           {{- end }}
@@ -67,30 +63,42 @@ spec:
         - name: nats_host
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end}}
+
+        # Only required for stream migration when upgrading queue-worker from version < 0.3.47
+        # Not used once stream has been migrated.
         - name: nats_stream
           value: "{{ .Values.nats.channel }}"
         - name: nats_durable
           value: "{{ .Values.jetstreamQueueWorker.durableName }}"
-        - name: nats_stream_replicas
-          value: "{{ .Values.nats.streamReplication }}"
-        - name: gateway_url
-          value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}:8080"
-        - name: ack_wait
-          value: "{{ .Values.queueWorker.ackWait }}"
+        - name: default_function_name
+          value: "{{ .Values.functionNamespace }}"
+
         - name: max_inflight
           value: "{{ .Values.queueWorkerPro.maxInflight }}"
-        - name: max_waiting
-          value: "{{ .Values.jetstreamQueueWorker.maxWaiting }}"
+        - name: "scaling_mode"
+          value: "{{ .Values.jetstreamQueueWorker.mode }}"
+        - name: "inactive_threshold"
+          value: "{{ .Values.jetstreamQueueWorker.consumer.inactiveThreshold }}"
+        {{- if .Values.jetstreamQueueWorker.consumer.pullMaxMessages }}
+        - name: "consumer_pull_max_messages"
+          value: "{{ .Values.jetstreamQueueWorker.consumer.pullMaxMessages }}"
+        {{- end }}
+        - name: gateway_url
+          value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}:8080"
+        - name: "tls_insecure"
+          value: "{{ .Values.queueWorkerPro.insecureTLS }}"
         - name: "debug"
           value: "{{ .Values.jetstreamQueueWorker.logs.debug }}"
         - name: "log_encoding"
           value: "{{ .Values.jetstreamQueueWorker.logs.format }}"
+
+        - name: nats_stream_replicas
+          value: "{{ .Values.nats.streamReplication }}"
+        - name: ack_wait
+          value: "{{ .Values.queueWorker.ackWait }}"
+
         - name: upstream_timeout
           value: "{{ .Values.gateway.upstreamTimeout }}"
-        - name: backoff
-          value: "{{ .Values.queueWorkerPro.backoff }}"
-
-        # OpenFaaS PRO license required
         - name: "max_retry_attempts"
           value: "{{ .Values.queueWorkerPro.maxRetryAttempts }}"
         - name: "max_retry_wait"
@@ -99,14 +107,8 @@ spec:
           value: "{{ .Values.queueWorkerPro.initialRetryWait }}"
         - name: "retry_http_codes"
           value: "{{ .Values.queueWorkerPro.httpRetryCodes }}"
-        - name: print_request_body
-          value: "{{ .Values.queueWorkerPro.printRequestBody }}"
-        - name: print_response_body
-          value: "{{ .Values.queueWorkerPro.printResponseBody }}"
-        {{- if .Values.openfaasPro }}
-        - name: "tls_insecure"
-          value: "{{ .Values.queueWorkerPro.insecureTLS }}"
-        {{- end }}
+        - name: backoff
+          value: "{{ .Values.queueWorkerPro.backoff }}"
 
         {{- if .Values.securityContext }}
         securityContext:
@@ -114,11 +116,9 @@ spec:
         {{- end }}
 
         volumeMounts:
-        {{- if .Values.openfaasPro }}
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
-        {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

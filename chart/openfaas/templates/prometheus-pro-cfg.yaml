@@ -142,7 +142,7 @@ data:
           regex: '(.*);(.*)'
           replacement: '${1}.${2}'
           target_label: "function_name"
-      
+
       - job_name: 'openfaas-function-pods'
         scrape_interval: 15s
         kubernetes_sd_configs:
@@ -181,7 +181,7 @@ data:
             regex: '^([0-9a-zA-Z-]+)+(-[0-9a-zA-Z]+-[0-9a-zA-Z]+)$'
             replacement: '$1'
             target_label: deployment_name
-          
+
         metric_relabel_configs:
         - source_labels: [deployment_name, kubernetes_namespace]
           separator: ";"
@@ -207,7 +207,12 @@ data:
         expr: ceil(sum(irate ( pod_cpu_usage_seconds_total{}[1m])*1000) by (function_name) * on (function_name) avg by (function_name) (gateway_service_target_load{scaling_type="cpu"}  > bool 1 ))
         labels:
           scaling_type: cpu
-      
+
+      - record: job:function_current_load:sum
+        expr: avg(queue_worker_pending_messages{}) by (function_name) and on (function_name) avg by (function_name) (gateway_service_target_load{scaling_type="queue"})  > bool 1
+        labels:
+          scaling_type: queue
+
       {{- with .Values.prometheus.recordingRules }}
       {{ toYaml . | nindent 6 }}
       {{- end }}
