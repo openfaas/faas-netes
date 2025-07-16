@@ -154,7 +154,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.70
+  image: ghcr.io/openfaasltd/faas-netes:0.5.71
   create: false
   logs:
     debug: false
@@ -201,7 +201,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.70
+  image: ghcr.io/openfaasltd/faas-netes:0.5.71
   logs:
     debug: false
     format: "console"
@@ -211,7 +211,7 @@ faasnetesOem:
 
 # For the Community Edition
 faasnetes:
-  image: ghcr.io/openfaas/faas-netes:0.18.14
+  image: ghcr.io/openfaas/faas-netes:0.18.15
   resources:
     requests:
       memory: "120Mi"
@@ -287,14 +287,22 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.18
+  image: ghcr.io/openfaasltd/autoscaler:0.3.19
 
   # Default value for "com.openfaas.scale.target" when not set via label
   defaultTarget: 50
 
+  # Advanced feature, not recommended to use this.
+  # When set to true, any function that has been scaled to zero without
+  # a com.openfaas.scale.zero=true label will be immediately scaled back to its
+  # minimum replica count.
+  maintainMinimumReplicas: false
+
   # replicas should only ever be set to 1, as a singleton.
   replicas: 1
+
   enabled: true
+
   resources:
     requests:
       memory: "128Mi"
@@ -377,7 +385,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.4.2
+  image: prom/prometheus:v3.5.0
   create: true
   retention:
     time: 15d

@@ -63,6 +63,11 @@ spec:
           value: {{ .Values.autoscaler.defaultTarget | quote }}
         {{- end }}
 
+        {{- if .Values.autoscaler.maintainMinimumReplicas }}
+        - name: maintain_min_replicas
+          value: "true"
+        {{- end }}
+
         {{- if .Values.securityContext }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
