@@ -474,9 +474,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
 | `affinity`| Global [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) rules assigned to deployments | `{}` |
 | `async` | Enables asynchronous function invocations. If `.nats.external.enabled` is `false`, also deploys NATS | `true` |
-| `queueMode` | Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming|
 | `basic_auth` | Enable basic authentication on the gateway and Prometheus. Warning: do not disable. | `true` |
-| `generateBasicAuth` | Generate admin password for basic authentication | `true` |
 | `basicAuthPlugin.image` | Container image used for basic-auth-plugin | See [values.yaml](./values.yaml) |
 | `basicAuthPlugin.replicas` | Replicas of the basic-auth-plugin | `1` |
 | `basicAuthPlugin.resources` | Resource limits and requests for basic-auth-plugin containers | See [values.yaml](./values.yaml) |
@@ -485,17 +483,21 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `exposeServices` | Expose `NodePorts/LoadBalancer`  | `true` |
 | `functionNamespace` | Functions namespace, preferred `openfaas-fn` | `openfaas-fn` |
 | `gatewayExternal.annotations` | Annotation for getaway-external service | `{}` |
+| `generateBasicAuth` | Generate admin password for basic authentication | `true` |
 | `httpProbe` | Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS system Pods (compatible with Istio >= 1.1.5) | `true` |
+| `imagePullSecrets` | Image pull secrets to be attached to all Deployments within chart, given as an array such as `- name: SECRET_NAME` | `[]` |
 | `ingress.enabled` | Create ingress resources | `false` |
 | `istio.mtls` | Create Istio policies and destination rules to enforce mTLS for OpenFaaS components and functions | `false` |
-| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `k8sVersionOverride` | Override kubeVersion for the ingress creation, this should be left blank. | `""` |
+| `kubernetesDNSDomain` | Domain name of the Kubernetes cluster | `cluster.local` |
 | `nodeSelector` | Global [NodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| `oem` | Deploy OpenFaaS oem | `false` |
 | `openfaasImagePullPolicy` | Image pull policy for openfaas components, can change to `IfNotPresent` in offline env | `Always` |
 | `openfaasPro` | Deploy OpenFaaS Pro | `false` |
-| `oem` | Deploy OpenFaaS oem | `false` |
 | `psp` | Enable [Pod Security Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) for OpenFaaS accounts | `false` |
+| `queueMode` | Set to `jetstream` to run the async system backed by NATS JetStream. By default the async system uses NATS Streaming|
 | `rbac` | Enable RBAC | `true` |
+| `registryPrefix` | Adds a prefix or replaces the server prefix for all images in chart i.e. `nats:2.11.6` becomes `registryPrefix/nats:2.11.6` | `""` |
 | `securityContext` | Give a `securityContext` template to be applied to each of the various containers in this chart, set to `{}` to disable, if required for Istio side-car injection.  | See values.yaml |
 | `serviceType` | Type of external service to use `NodePort/LoadBalancer` | `NodePort` |
 | `tolerations` | Global [Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
