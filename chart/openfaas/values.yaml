@@ -345,7 +345,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.10
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.11
   insecureTLS: false
   replicas: 1
   securityContext: true
