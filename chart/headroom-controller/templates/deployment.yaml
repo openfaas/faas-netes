@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "headroom-controller.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       {{- include "headroom-controller.selectorLabels" . | nindent 6 }}

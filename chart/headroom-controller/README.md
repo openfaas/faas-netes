@@ -198,8 +198,8 @@ See [values.yaml](./values.yaml) for detailed configuration.
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `replicaCount` | Number of controller replicas. It is not recommended to alter this value. | `1` |
 | `image` | Container image | See [values.yaml](./values.yaml) |
+| `replicas` | Number of controller replicas. It is not recommended to alter this value. | `1` |
 | `imagePullPolicy` | Image pull policy | `IfNotPresent` |
 | `imagePullSecrets` | Image pull secrets | `[]` |
 | `nameOverride` | Override chart name | `""` |
