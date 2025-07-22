@@ -86,7 +86,8 @@ verify-charts:
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/postgres-connector/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/queue-worker/values.yaml && \
 	arkade chart verify --verbose=$(VERBOSE) -f ./chart/sns-connector/values.yaml && \
-	arkade chart verify --verbose=$(VERBOSE) -f ./chart/rabbitmq-connector/values.yaml
+	arkade chart verify --verbose=$(VERBOSE) -f ./chart/rabbitmq-connector/values.yaml && \
+	arkade chart verify --verbose=$(VERBOSE) -f ./chart/headroom-controller/values.yaml
 
 verify-chart:
 	@echo Verifying helm chart images in remote registries && \
@@ -109,7 +110,8 @@ upgrade-charts:
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/postgres-connector/values.yaml && \
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/queue-worker/values.yaml && \
 	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/sns-connector/values.yaml && \
-	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/rabbitmq-connector/values.yaml
+	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/rabbitmq-connector/values.yaml && \
+	arkade chart upgrade --verbose=$(VERBOSE) -w -f ./chart/headroom-controller/values.yaml
 
 bump-charts:
 	arkade chart bump --file ./chart/openfaas/Chart.yaml -w && \
@@ -122,8 +124,9 @@ bump-charts:
 	arkade chart bump --file ./chart/postgres-connector/Chart.yaml -w && \
 	arkade chart bump --file ./chart/queue-worker/Chart.yaml -w && \
 	arkade chart bump --file ./chart/sns-connector/Chart.yaml -w && \
-	arkade chart bump --file ./chart/rabbitmq-connector/Chart.yaml -w
-	
+	arkade chart bump --file ./chart/rabbitmq-connector/Chart.yaml -w && \
+	arkade chart bump --file ./chart/headroom-controller/Chart.yaml -w
+
 charts-only:
 	@cd chart && \
 		helm package openfaas/ && \
@@ -136,7 +139,8 @@ charts-only:
 		helm package postgres-connector/ && \
 		helm package queue-worker/ && \
 		helm package sns-connector/ && \
-		helm package rabbitmq-connector/
+		helm package rabbitmq-connector/ && \
+		helm package headroom-controller/
 	mv chart/*.tgz docs/
 	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
 
