@@ -1,0 +1,48 @@
+# Default values for headroom-controller
+replicaCount: 1
+
+image: ghcr.io/openfaasltd/headroom-controller:0.0.1
+
+imagePullPolicy: IfNotPresent
+
+rbac:
+  create: true
+  # Role can be either "Role" or "ClusterRole"
+  role: ClusterRole
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+metrics:
+  enabled: false
+
+leaderElection:
+  enabled: true
+  namespace: "default"
+
+logging:
+  level: info

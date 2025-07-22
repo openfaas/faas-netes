@@ -1,0 +1,19 @@
+apiVersion: v2
+name: headroom-controller
+description: A Helm chart for headroom-controller - Kubernetes resource reservation controller
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - kubernetes
+  - resource-management
+  - autoscaling
+home: https://github.com/openfaas/faas-netes/chart/headroom-controller/README.md
+sources:
+  - https://github.com/openfaas/faas-netes
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+maintainers:
+  - name: alexellis
+    email: alex@openfaas.com
+  - name: welteki
+    email: han@openfaas.com

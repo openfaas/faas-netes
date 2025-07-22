@@ -1,0 +1,101 @@
+{{- if .Values.rbac.create -}}
+
+{{- if eq .Values.rbac.role "ClusterRole" }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "headroom-controller.fullname" . }}
+  labels:
+    {{- include "headroom-controller.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms/finalizers"]
+    verbs: ["update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  {{- if .Values.leaderElection.enabled }}
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "watch", "update", "create"] # Add "create", "update", "watch" for leader election", "update", "watch" for leader election.
+  {{- end }}
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["events"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "headroom-controller.fullname" . }}
+  labels:
+    {{- include "headroom-controller.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "headroom-controller.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "headroom-controller.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+
+{{- else if eq .Values.rbac.role "Role" }}
+
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "headroom-controller.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "headroom-controller.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms/finalizers"]
+    verbs: ["update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  {{- if .Values.leaderElection.enabled }}
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "watch", "update", "create"] # Add "create", "update", "watch" for leader election.
+  {{- end }}
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["events"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "headroom-controller.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "headroom-controller.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "headroom-controller.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "headroom-controller.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+
+{{- end }}
+
+
+{{- end }}
