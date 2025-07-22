@@ -125,6 +125,71 @@ EOF
 
    `kubectl scale headroom example --replicas=2`
 
+## Advanced example - scale a headroom down from a Cron Job
+
+Imagine you wanted to scale down the headroom resource overnight.
+
+Here's an example of how Kubernetes-native resources can be used.
+
+```yaml
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: scale-headroom
+  namespace: default
+spec:
+  schedule: "0 0 * * * *"
+  successfulJobsHistoryLimit: 5 # Keep 5 successful jobs
+  failedJobsHistoryLimit: 1 # Keep 1 failed job
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: headroom-scaler
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: alpine/k8s:1.33.3 # Or a specific version
+              command:
+                - "/bin/sh"
+                - "-c"
+                - |
+                  apk add --no-cache kubectl
+                  kubectl scale headroom/example --replicas=0
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: headroom-scaler
+  namespace: default # Or your target namespace
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding # Or RoleBinding if headroom controller is namespace scoped
+metadata:
+  name: headroom-scaler-rb
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: headroom-scaler
+    namespace: default
+roleRef:
+  kind: ClusterRole # Or Role if headroom controller is namespace scoped
+  name: headroom-scaler-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole # Or Role if headroom controller is namespace scoped
+metadata:
+  name: headroom-scaler-role
+  namespace: default
+rules:
+  - apiGroups: ["openfaas.com"]
+    resources: ["headrooms", "headrooms/scale"]
+    verbs: ["get", "patch", "update"]
+```
+
 ## Configuration
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
