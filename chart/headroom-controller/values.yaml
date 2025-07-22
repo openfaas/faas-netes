@@ -1,9 +1,9 @@
 # Default values for headroom-controller
-replicaCount: 1
-
 image: ghcr.io/openfaasltd/headroom-controller:v0.0.1-rc1
 
 imagePullPolicy: IfNotPresent
+
+replicas: 1
 
 rbac:
   create: true
