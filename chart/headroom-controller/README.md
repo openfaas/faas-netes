@@ -14,7 +14,7 @@ You do not need to use OpenFaaS to install this chart and use the headroom-contr
 
 Watch a [live demo with the Cluster Autoscaler and K3s](https://www.youtube.com/embed/MHXvhKb6PpA?si=QFEf632Ha3VUESbs):
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/MHXvhKb6PpA?si=QFEf632Ha3VUESbs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Video demo of headroom controller](https://img.youtube.com/vi/MHXvhKb6PpA/0.jpg)](https://www.youtube.com/watch?v=MHXvhKb6PpA)
 
 ## Installation
 
