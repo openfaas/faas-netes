@@ -1,0 +1,48 @@
+1. Create a default priority priorityClassName
+
+kubectl apply -f - << EOF
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: default
+value: 1000
+globalDefault: true
+description: "Default priority class for all pods"
+EOF
+
+2. Create a low priority class for the headroom Custom Resources
+
+kubectl apply -f - <<EOF
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: headroom
+description: Low priority class for headroom pods
+globalDefault: false
+preemptionPolicy: Never
+value: -10
+EOF
+
+3. Create a headroom resource:
+
+kubectl apply -f - <<EOF
+apiVersion: openfaas.com/v1
+kind: Headroom
+metadata:
+  name: example
+spec:
+  replicas: 1
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  priorityClassName: "headroom"
+EOF
+
+4. Check the status:
+
+   kubectl get headrooms
+
+5. Scale the headroom:
+
+   kubectl scale headroom example --replicas=2
+

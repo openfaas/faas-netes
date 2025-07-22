@@ -1,6 +1,6 @@
 # Headroom Controller Helm Chart
 
-A Helm chart for deploying the headroom-controller controller, which manages Kubernetes resource reservations through custom Headroom resources.
+Speed up scaling up and rolling out of workloads by pre-provisioning headroom in your Kubernetes cluster.
 
 ## Prerequisites
 
