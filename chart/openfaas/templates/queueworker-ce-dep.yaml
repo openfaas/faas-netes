@@ -1,0 +1,90 @@
+{{- if and .Values.async (not .Values.openfaasPro) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: queue-worker
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: queue-worker
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.queueWorker.replicas }}
+  selector:
+    matchLabels:
+      app: queue-worker
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "false"
+      labels:
+        app: queue-worker
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.basic_auth }}
+      - name: auth
+        secret:
+          secretName: basic-auth
+      {{- end }}
+      containers:
+      - name: queue-worker
+        resources:
+          {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
+        image: {{ include "openfaas.image" (dict "image" .Values.queueWorker.image "registryPrefix" .Values.registryPrefix) }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        env:
+        {{- if .Values.nats.external.enabled }}
+        - name: faas_nats_address
+          value: "{{ .Values.nats.external.host }}"
+        - name: faas_nats_port
+          value: "{{ .Values.nats.external.port }}"
+        - name: faas_nats_cluster_name
+          value: "{{ .Values.nats.external.clusterName }}"
+        {{- else }}
+        - name: faas_nats_address
+          value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- end}}
+        - name: faas_nats_channel
+          value: "{{ .Values.nats.channel }}"
+        - name: faas_nats_queue_group
+          value: "{{ .Values.queueWorker.queueGroup }}"
+        - name: faas_gateway_address
+          value: "gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- if .Values.functionNamespace }}
+        - name: faas_function_suffix
+          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        {{- end }}
+        - name: ack_wait
+          value: "{{ .Values.queueWorker.ackWait }}"
+        - name: max_inflight
+          value: "{{ or (.Values.queueWorker.maxInflight ) ("1") }}"
+
+        {{- if .Values.basic_auth }}
+        - name: secret_mount_path
+          value: "/var/secrets/gateway"
+        - name: basic_auth
+          value: "{{ .Values.basic_auth }}"
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets/gateway"
+        {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+{{- end }}

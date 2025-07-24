@@ -1,4 +1,4 @@
-{{- if and .Values.async (not .Values.openfaasPro) }}
+{{- if and .Values.async .Values.openfaasPro }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +18,8 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io/scrape: "false"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
       labels:
         app: queue-worker
     spec:
@@ -26,55 +27,98 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      volumes:
-      {{- if .Values.basic_auth }}
-      - name: auth
-        secret:
-          secretName: basic-auth
+      {{- if .Values.jetstreamQueueWorker.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml .Values.jetstreamQueueWorker.topologySpreadConstraints | nindent 8 }}
       {{- end }}
+      volumes:
+      - name: license
+        secret:
+          secretName: openfaas-license
       containers:
-      - name: queue-worker
+      - name:  queue-worker
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
-        image: {{ include "openfaas.image" (dict "image" .Values.queueWorker.image "registryPrefix" .Values.registryPrefix) }}
+        image: {{ include "openfaas.image" (dict "image" .Values.jetstreamQueueWorker.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        {{- if .Values.jetstreamQueueWorker.pprof }}
+        ports:
+        - name: pprof
+          containerPort: 6060
+          protocol: TCP
+        {{- end }}
+        command:
+          - "jetstream-queue-worker"
+          - "-license-file=/var/secrets/license/license"
+          {{- if .Values.jetstreamQueueWorker.pprof }}
+          - "-pprof=true"
+          {{- end }}
         env:
         {{- if .Values.nats.external.enabled }}
-        - name: faas_nats_address
+        - name: nats_host
           value: "{{ .Values.nats.external.host }}"
-        - name: faas_nats_port
+        - name: nats_port
           value: "{{ .Values.nats.external.port }}"
-        - name: faas_nats_cluster_name
-          value: "{{ .Values.nats.external.clusterName }}"
         {{- else }}
-        - name: faas_nats_address
+        - name: nats_host
           value: "nats.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
         {{- end}}
-        - name: faas_nats_channel
+
+        # Only required for stream migration when upgrading queue-worker from version < 0.3.47
+        # Not used once stream has been migrated.
+        - name: nats_stream
           value: "{{ .Values.nats.channel }}"
-        - name: faas_nats_queue_group
-          value: "{{ .Values.queueWorker.queueGroup }}"
-        - name: faas_gateway_address
-          value: "gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
-        {{- if .Values.functionNamespace }}
-        - name: faas_function_suffix
-          value: ".{{ .Values.functionNamespace }}.svc.{{ .Values.kubernetesDNSDomain }}"
+        - name: nats_durable
+          value: "{{ .Values.jetstreamQueueWorker.durableName }}"
+        - name: default_function_name
+          value: "{{ .Values.functionNamespace }}"
+
+        - name: max_inflight
+          value: "{{ .Values.queueWorkerPro.maxInflight }}"
+        - name: "scaling_mode"
+          value: "{{ .Values.jetstreamQueueWorker.mode }}"
+        - name: "inactive_threshold"
+          value: "{{ .Values.jetstreamQueueWorker.consumer.inactiveThreshold }}"
+        {{- if .Values.jetstreamQueueWorker.consumer.pullMaxMessages }}
+        - name: "consumer_pull_max_messages"
+          value: "{{ .Values.jetstreamQueueWorker.consumer.pullMaxMessages }}"
         {{- end }}
+        - name: gateway_url
+          value: "http://gateway.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesDNSDomain }}:8080"
+        - name: "tls_insecure"
+          value: "{{ .Values.queueWorkerPro.insecureTLS }}"
+        - name: "debug"
+          value: "{{ .Values.jetstreamQueueWorker.logs.debug }}"
+        - name: "log_encoding"
+          value: "{{ .Values.jetstreamQueueWorker.logs.format }}"
+
+        - name: nats_stream_replicas
+          value: "{{ .Values.nats.streamReplication }}"
         - name: ack_wait
           value: "{{ .Values.queueWorker.ackWait }}"
-        - name: max_inflight
-          value: "{{ (.Values.queueWorker.maxInflight ) ("1") }}"
 
-        {{- if .Values.basic_auth }}
-        - name: secret_mount_path
-          value: "/var/secrets/gateway"
-        - name: basic_auth
-          value: "{{ .Values.basic_auth }}"
-        volumeMounts:
-        - name: auth
-          readOnly: true
-          mountPath: "/var/secrets/gateway"
+        - name: upstream_timeout
+          value: "{{ .Values.gateway.upstreamTimeout }}"
+        - name: "max_retry_attempts"
+          value: "{{ .Values.queueWorkerPro.maxRetryAttempts }}"
+        - name: "max_retry_wait"
+          value: "{{ .Values.queueWorkerPro.maxRetryWait }}"
+        - name: "initial_retry_wait"
+          value: "{{ .Values.queueWorkerPro.initialRetryWait }}"
+        - name: "retry_http_codes"
+          value: "{{ .Values.queueWorkerPro.httpRetryCodes }}"
+        - name: backoff
+          value: "{{ .Values.queueWorkerPro.backoff }}"
+
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
         {{- end }}
+
+        volumeMounts:
+        - name: license
+          readOnly: true
+          mountPath: "/var/secrets/license"
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
