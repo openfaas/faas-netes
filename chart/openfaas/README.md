@@ -597,7 +597,6 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `queueWorker.queueGroup` | The name of the queue group used to process asynchronous function invocations | `faas` |
 | `queueWorkerPro.backoff` | The backoff algorithm used for retries. Must be one off `exponential`, `full` or `equal`| `exponential` |
 | `queueWorkerPro.httpRetryCodes` | Comma-separated list of HTTP status codes the queue-worker should retry | `408,429,500,502,503,504` |
-| `queueWorkerPro.image` | Container image used for the Pro version of the queue-worker | See [values.yaml](./values.yaml) |
 | `queueWorkerPro.initialRetryWait` | Time to wait for the first retry | `10s` |
 | `queueWorkerPro.insecureTLS` | Enable insecure TLS for callback invocations | `false` |
 | `queueWorkerPro.maxRetryAttempts` | Amount of times to try sending a message to a function before discarding it | `10` |
