@@ -77,7 +77,7 @@ spec:
           value: "{{ .Values.queueWorkerPro.maxInflight }}"
         - name: "scaling_mode"
           value: "{{ .Values.jetstreamQueueWorker.mode }}"
-        - name: "inactive_threshold"
+        - name: "consumer_inactive_threshold"
           value: "{{ .Values.jetstreamQueueWorker.consumer.inactiveThreshold }}"
         {{- if .Values.jetstreamQueueWorker.consumer.pullMaxMessages }}
         - name: "consumer_pull_max_messages"
