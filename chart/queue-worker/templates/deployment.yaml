@@ -59,8 +59,10 @@ spec:
               value: "{{ .Values.maxInflight }}"
             - name: "scaling_mode"
               value: "{{ .Values.mode }}"
+{{- if .Values.consumer.inactiveThreshold }}
             - name: "consumer_inactive_threshold"
               value: "{{ .Values.consumer.inactiveThreshold }}"
+{{- end }}
             {{- if .Values.consumer.pullMaxMessages }}
             - name: "consumer_pull_max_messages"
               value: "{{ .Values.consumer.pullMaxMessages }}"
