@@ -64,7 +64,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.4.42
+  image: ghcr.io/openfaasltd/gateway:0.5.0
   pprof: false
 
 gateway:
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.3.47
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.0
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
