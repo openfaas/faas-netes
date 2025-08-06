@@ -324,7 +324,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.36
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.37
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -432,7 +432,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.11.6
+  image: nats:2.11.7
   resources:
     requests:
       memory: "120Mi"
