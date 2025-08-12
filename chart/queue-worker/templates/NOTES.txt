@@ -1,0 +1,11 @@
+To view the logs for this queue-worker release:
+
+  kubectl logs -n {{ .Release.Namespace }} deploy/{{ include "queue-worker.fullname" . }} -f
+
+View logs across all replicas:
+
+  kubectl logs -n {{ .Release.Namespace }} -l app={{ include "queue-worker.name" . }},release={{ .Release.Name }} -f
+
+Check the various Pods:
+
+  kubectl get pods -n {{ .Release.Namespace }} -l app={{ include "queue-worker.name" . }},release={{ .Release.Name }}

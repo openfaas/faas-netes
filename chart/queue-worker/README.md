@@ -13,16 +13,18 @@ Reasons why you may want an additional queue-worker:
 ## Install an additional queue-worker
 
 ```bash
-helm upgrade slow-queue openfaas/queue-worker \
-  --install \
+helm upgrade --install \
+  slow-fns openfaas/queue-worker \
   --namespace openfaas \
   --set maxInflight=5 \
-  --set nats.stream.name=slow-queue \
-  --set nats.consumer.durableName=slow-queue-workers \
+  --set nats.stream.name=slow-fns \
+  --set nats.consumer.durableName=slow-fns-workers \
   --set upstreamTimeout=15m
 ```
 
-Upon start-up, the queue-worker will create a NATS JetStream stream named `slow-queue`. Depending on the queue mode either one static consumer will be created, or if the mode is set to `function`, a consumer will be created for each function that has invocations pending.
+The chart will append a suffix of `-queue-worker` to the release name given above, so the name of the queue-worker will be `slow-fns-queue-worker`.
+
+Upon start-up, the queue-worker will create a NATS JetStream stream named `slow-fns`. Depending on the queue mode either one static consumer will be created, or if the mode is set to `function`, a consumer will be created for each function that has invocations pending.
 
 Remember to set the `com.openfaas.queue` annotation for your functions, so that their requests get submitted to the correct queue (NATS JetStream Stream).
 
@@ -30,10 +32,17 @@ For example:
 
 ```bash
 # Runs on the slow queue
-faas-cli store deploy sleep --name slow-fn --annotation com.openfaas.queue=slow-queue
+faas-cli store deploy sleep --name slow-fn --annotation com.openfaas.queue=slow-fns
 
 # Runs on the default queue
 faas-cli store deploy env --name fast-fn
+```
+
+To remove a queue-worker, run:
+
+```bash
+helm uninstall --namespace openfaas \
+  slow-fns
 ```
 
 ## Install a development version of the chart
@@ -48,12 +57,12 @@ cd faas-netes/chart/queue-worker
 ```
 
 ```bash
-helm upgrade slow-queue chart/queue-worker \
-  --install \
+helm upgrade --install \
+  slow-fns ./ \
   --namespace openfaas \
   --set maxInflight=5 \
-  --set nats.stream.name=slow-queue \
-  --set nats.consumer.durableName=slow-queue-workers \
+  --set nats.stream.name=slow-fns \
+  --set nats.consumer.durableName=slow-fns-workers \
   --set upstreamTimeout=15m
 ```
 

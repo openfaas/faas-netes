@@ -24,6 +24,7 @@ spec:
       labels:
         app: {{ template "queue-worker.name" . }}
         component: queue-worker
+        release: {{ .Release.Name }}
     spec:
       volumes:
       - name: license
