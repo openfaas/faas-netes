@@ -17,10 +17,34 @@ helm upgrade --install \
   slow-fns openfaas/queue-worker \
   --namespace openfaas \
   --set maxInflight=5 \
-  --set nats.stream.name=slow-fns \
+  --set queueName=slow-fns \
+  --set mode=static \
+  --set nats.stream.name=slow-fns-requests \
   --set nats.consumer.durableName=slow-fns-workers \
   --set upstreamTimeout=15m
 ```
+
+It's recommended to take the NAME of the queue i.e. `slow-fns` and then use it as prefix in the following way for the above configuration:
+
+* `queueName` - NAME
+* `nats.stream.name` - NAME`-requests`
+* `nats.consumer.durableName` - NAME`-workers`
+
+As an alternative to using `--set`, you could also write your own YAML file. Below is the equivalent configuration in a values.yaml file, for instance `values-slow-fns.yaml`:
+
+```yaml
+maxInflight: 5
+queueName: slow-fns
+mode: static
+nats:
+  stream:
+    name: slow-fns-requests
+  consumer:
+    durableName: slow-fns-workers
+upstreamTimeout: 15m  
+```
+
+Then pass `-f ./values-slow-fns.yaml` to the `helm upgrade --install` command instead of the `--set` flags.
 
 The chart will append a suffix of `-queue-worker` to the release name given above, so the name of the queue-worker will be `slow-fns-queue-worker`.
 
@@ -34,8 +58,12 @@ For example:
 # Runs on the slow queue
 faas-cli store deploy sleep --name slow-fn --annotation com.openfaas.queue=slow-fns
 
+faas-cli invoke --async slow-fn <<< ""
+
 # Runs on the default queue
 faas-cli store deploy env --name fast-fn
+
+faas-cli invoke --async fast-fn <<< ""
 ```
 
 To remove a queue-worker, run:
@@ -61,7 +89,9 @@ helm upgrade --install \
   slow-fns ./ \
   --namespace openfaas \
   --set maxInflight=5 \
-  --set nats.stream.name=slow-fns \
+  --set queueName=slow-fns \
+  --set mode=static \
+  --set nats.stream.name=slow-fns-requests \
   --set nats.consumer.durableName=slow-fns-workers \
   --set upstreamTimeout=15m
 ```
