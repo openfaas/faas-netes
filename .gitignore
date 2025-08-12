@@ -38,3 +38,4 @@ jwt_key.pub
 /.secrets/*
 
 /pro.sh
+/pro2.sh

@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.0
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.1
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
