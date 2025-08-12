@@ -1,10 +1,16 @@
 # JetStream for OpenFaaS queue-worker
 
-Deploy additional, named OpenFaaS queues.
+Use this chart to [deploy additional queues and queue-workers](https://docs.openfaas.com/reference/async/#dedicated-queues), for functions which need to be separated out from the default queue.
 
-Named queues requires OpenFaaS Enterprise. Please reach out to us if you're an existing OpenFaaS Pro customer and need this feature.
+> Note: This chart requires OpenFaaS for Enterprises. Please [reach out to us](https://openfaas.com/pricing) to discuss upgrading your installation.
 
-## Install an additional queue
+Reasons why you may want an additional queue-worker:
+
+* You run workloads for your own product, and for tenants, and want to separate the two
+* You want to run some queues with different settings, such as `maxInflight` (perhaps a function has a specific amount of requests it can handle at once), `upstreamTimeout` (longer timeouts), `mode` (static/function based consumers)
+* Certain long-running invocations may "clog up" the queue and starve requests from other functions, so you want to run those separately
+
+## Install an additional queue-worker
 
 ```bash
 helm upgrade slow-queue openfaas/queue-worker \
@@ -16,7 +22,30 @@ helm upgrade slow-queue openfaas/queue-worker \
   --set upstreamTimeout=15m
 ```
 
-When installing from the faas-netes repository on your local computer, whilst making changes or customising the chart, you can run this command from within the `faas-netes` folder.
+Upon start-up, the queue-worker will create a NATS JetStream stream named `slow-queue`. Depending on the queue mode either one static consumer will be created, or if the mode is set to `function`, a consumer will be created for each function that has invocations pending.
+
+Remember to set the `com.openfaas.queue` annotation for your functions, so that their requests get submitted to the correct queue (NATS JetStream Stream).
+
+For example:
+
+```bash
+# Runs on the slow queue
+faas-cli store deploy sleep --name slow-fn --annotation com.openfaas.queue=slow-queue
+
+# Runs on the default queue
+faas-cli store deploy env --name fast-fn
+```
+
+## Install a development version of the chart
+
+The below instructions are for development on the chart itself, or if you want to test changes to the chart's templates that have not yet been released.
+
+Checkout the code, and cd to the folder:
+
+```bash
+git clone https://github.com/openfaas/faas-netes --depth=1
+cd faas-netes/chart/queue-worker
+```
 
 ```bash
 helm upgrade slow-queue chart/queue-worker \
@@ -35,7 +64,7 @@ helm upgrade slow-queue chart/queue-worker \
 | `image` | The queue-worker image that should be deployed | See values.yaml |
 | `replicas` | Number of queue-worker replicas to create | `1` |
 | `queueName` | Name of the queue | `faas-request` |
-| `mode` | Queue operation mode: `static` or `function` | `static` |
+| `mode` | Queue operation mode: `static` (OpenFaaS Standard) or `function` (requires OpenFaaS for Enterprises) | `static` |
 | `maxInflight` | Control the concurrent invocations | `1` |
 | `queuePartitions` | Number of queue partitions | `1` |
 | `partition` | Queue partition number this queue should subscribe to | `0` |
