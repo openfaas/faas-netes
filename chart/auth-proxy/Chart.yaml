@@ -1,0 +1,17 @@
+apiVersion: v1
+description: OpenFaaS Authentication Proxy
+name: auth-proxy
+version: 0.0.1
+sources:
+- https://github.com/openfaas/faas-netes
+home: https://www.openfaas.com
+icon: https://raw.githubusercontent.com/openfaas/media/master/OpenFaaS_logo_stacked_opaque.png
+keywords:
+- functions
+- serverless
+- faas
+maintainers:
+- name: alexellis
+  email: alex@openfaas.com
+- name: welteki
+  email: han@openfaas.com
