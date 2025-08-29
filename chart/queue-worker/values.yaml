@@ -10,7 +10,7 @@ replicas: 1
 
 # Change this to your queue name.
 # Allowed characters (a - z), (0 - 9), - and _
-queueName: "custom-request"
+queueName: ""
 mode: static
 maxInflight: 1
 
@@ -43,10 +43,10 @@ nats:
   host: "nats.openfaas"
   port: "4222"
   stream:
-    name: "faas-request"
+    name: "custom-request"
     replicas: 1
   consumer:
-    durableName: "faas-workers"
+    durableName: "custom-workers"
     ackWait: "30s"
 
 logs:

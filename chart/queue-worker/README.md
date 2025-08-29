@@ -17,16 +17,14 @@ helm upgrade --install \
   slow-fns openfaas/queue-worker \
   --namespace openfaas \
   --set maxInflight=5 \
-  --set queueName=slow-fns \
   --set mode=static \
-  --set nats.stream.name=slow-fns-requests \
+  --set nats.stream.name=slow-fns \
   --set nats.consumer.durableName=slow-fns-workers \
   --set upstreamTimeout=15m
 ```
 
 It's recommended to take the NAME of the queue i.e. `slow-fns` and then use it as prefix in the following way for the above configuration:
 
-* `queueName` - NAME
 * `nats.stream.name` - NAME`-requests`
 * `nats.consumer.durableName` - NAME`-workers`
 
@@ -34,11 +32,10 @@ As an alternative to using `--set`, you could also write your own YAML file. Bel
 
 ```yaml
 maxInflight: 5
-queueName: slow-fns
 mode: static
 nats:
   stream:
-    name: slow-fns-requests
+    name: slow-fns
   consumer:
     durableName: slow-fns-workers
 upstreamTimeout: 15m  
@@ -89,9 +86,8 @@ helm upgrade --install \
   slow-fns ./ \
   --namespace openfaas \
   --set maxInflight=5 \
-  --set queueName=slow-fns \
   --set mode=static \
-  --set nats.stream.name=slow-fns-requests \
+  --set nats.stream.name=slow-fns \
   --set nats.consumer.durableName=slow-fns-workers \
   --set upstreamTimeout=15m
 ```
@@ -102,7 +98,7 @@ helm upgrade --install \
 |-----------|-------------|---------|
 | `image` | The queue-worker image that should be deployed | See values.yaml |
 | `replicas` | Number of queue-worker replicas to create | `1` |
-| `queueName` | Name of the queue | `faas-request` |
+| `queueName` | Name of the queue if you want it to be different to the stream name | `""` - when empty, defaults to `nats.stream.name` |
 | `mode` | Queue operation mode: `static` (OpenFaaS Standard) or `function` (requires OpenFaaS for Enterprises) | `static` |
 | `maxInflight` | Control the concurrent invocations | `1` |
 | `queuePartitions` | Number of queue partitions | `1` |
