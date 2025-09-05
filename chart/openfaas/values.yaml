@@ -64,7 +64,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.5.2
+  image: ghcr.io/openfaasltd/gateway:0.5.3
   pprof: false
 
 gateway:
@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.75
+  image: ghcr.io/openfaasltd/faas-netes:0.5.76
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.75
+  image: ghcr.io/openfaasltd/faas-netes:0.5.76
   logs:
     debug: false
     format: "console"
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.3
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.4
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
@@ -286,7 +286,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.21
+  image: ghcr.io/openfaasltd/autoscaler:0.3.22
 
   # Default value for "com.openfaas.scale.target" when not set via label
   defaultTarget: 50
