@@ -324,7 +324,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.37
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.38
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
