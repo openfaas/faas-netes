@@ -64,7 +64,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.5.4
+  image: ghcr.io/openfaasltd/gateway:0.5.5
   pprof: false
 
 gateway:
@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.77
+  image: ghcr.io/openfaasltd/faas-netes:0.5.78
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.77
+  image: ghcr.io/openfaasltd/faas-netes:0.5.78
   logs:
     debug: false
     format: "console"
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.5
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.6
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
@@ -286,7 +286,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.23
+  image: ghcr.io/openfaasltd/autoscaler:0.3.24
 
   # Default value for "com.openfaas.scale.target" when not set via label
   defaultTarget: 50
@@ -324,7 +324,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.39
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.40
   publicURL: https://dashboard.example.com
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
@@ -432,7 +432,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.11.8
+  image: nats:2.11.9
   resources:
     requests:
       memory: "120Mi"
