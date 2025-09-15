@@ -14,7 +14,7 @@ topics: faas-request
 # them as a comma separated list i.e. "kafka-1:9092,kafka-2:9092,kafka-3:9092"
 brokerHosts: kf-kafka:9092
 
-image: ghcr.io/openfaasltd/kafka-connector:0.7.13
+image: ghcr.io/openfaasltd/kafka-connector:0.7.14
 
 # Output detailed logs from the consumer group's lifecycle
 sessionLogging: true
