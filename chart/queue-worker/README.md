@@ -38,7 +38,7 @@ nats:
     name: slow-fns
   consumer:
     durableName: slow-fns-workers
-upstreamTimeout: 15m  
+upstreamTimeout: 15m
 ```
 
 Then pass `-f ./values-slow-fns.yaml` to the `helm upgrade --install` command instead of the `--set` flags.
@@ -101,6 +101,7 @@ helm upgrade --install \
 | `queueName` | Name of the queue if you want it to be different to the stream name | `""` - when empty, defaults to `nats.stream.name` |
 | `mode` | Queue operation mode: `static` (OpenFaaS Standard) or `function` (requires OpenFaaS for Enterprises) | `static` |
 | `maxInflight` | Control the concurrent invocations | `1` |
+| `adaptiveConcurrency` | Enable adaptive concurrency limiting for functions based on 429 response. This setting only takes effect when `mode` is set to `function`. | `true` |
 | `queuePartitions` | Number of queue partitions | `1` |
 | `partition` | Queue partition number this queue should subscribe to | `0` |
 | `consumer.inactiveThreshold` | If a function is inactive (has no invocations) for longer than this threshold its consumer will be removed to save resources | `30s` |

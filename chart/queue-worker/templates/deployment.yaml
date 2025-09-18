@@ -82,6 +82,8 @@ spec:
             - name: "ack_wait"
               value: "{{ .Values.nats.consumer.ackWait }}"
 
+            - name: "adaptive_concurrency"
+              value: "{{ .Values.adaptiveConcurrency }}"
             - name: "upstream_timeout"
               value: "{{ .Values.upstreamTimeout }}"
             - name: "max_retry_attempts"
