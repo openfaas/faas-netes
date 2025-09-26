@@ -99,6 +99,10 @@ spec:
           value: "{{ .Values.dashboard.logs.debug }}"
         - name: "log_encoding"
           value: "{{ .Values.dashboard.logs.format }}"
+{{- if .Values.dashboard.publicURLGateway }}
+        - name: public_url_gateway
+          value: {{ .Values.dashboard.publicURLGateway }}
+{{- end }}
         {{- if .Values.iam.enabled }}
         - name: issuer_key_path
           value: "/var/secrets/issuer-key/issuer.key"

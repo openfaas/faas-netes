@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.78
+  image: ghcr.io/openfaasltd/faas-netes:0.5.80
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.78
+  image: ghcr.io/openfaasltd/faas-netes:0.5.80
   logs:
     debug: false
     format: "console"
@@ -324,13 +324,23 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.5.41
-  publicURL: https://dashboard.example.com
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.6.2
+
+  # publicURL for the dashboard itself
+  # i.e. https://dashboard.example.com
+  publicURL: ""
+
+  # The public URL for the gateway - set to enable links for functions within the UI.
+  # i.e. https://gateway.example.com
+  publicURLGateway: ""
+
   # Name of signing key secret for sessions.
   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
   signingKeySecret: ""
   replicas: 1
+
   enabled: false
+
   logs:
     debug: false
     format: "console"
@@ -384,7 +394,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.5.0
+  image: prom/prometheus:v3.6.0
   create: true
   retention:
     time: 15d
@@ -432,7 +442,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.11.9
+  image: nats:2.12.0
   resources:
     requests:
       memory: "120Mi"

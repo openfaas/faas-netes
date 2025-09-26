@@ -34,8 +34,14 @@ generateBasicAuth: true
 # Follow docs at: https://docs.openfaas.com/openfaas-pro/dashboard/
 # for setting up the new dashboard
 dashboard:
-  publicURL: localhost
   enabled: true
+
+  # Set to the public URL i.e. https://dashboard.example.com
+  publicURL: localhost
+
+  # The public URL for the gateway - set to enable links for functions within the UI.
+  # i.e. https://gateway.example.com
+  publicURLGateway: ""
 
 # The autoscaler is enabled by default
 # Learn more: 
