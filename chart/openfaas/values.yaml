@@ -1,7 +1,7 @@
 ## For OpenFaaS Standard and OpenFaaS for Enterprises users, see:
 # https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/values-pro.yaml
 
-functionNamespace: openfaas-fn  # Default namespace for functions
+functionNamespace: openfaas-fn # Default namespace for functions
 
 # Contact us via https://www.openfaas.com/support to purchase a license
 openfaasPro: false
@@ -9,29 +9,29 @@ openfaasPro: false
 # Contact us via https://www.openfaas.com/support to purchase a license
 oem: false
 
-httpProbe: true               # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS core components
+httpProbe: true # Setting to true will use HTTP for readiness and liveness probe on the OpenFaaS core components
 
 # set clusterRole: true for:
 ## CPU/RAM metrics in OpenFaaS API
 ## Multiple-namespace support
 clusterRole: false
 
-createCRDs: true              # Creates the Function/Profile CRDs, set to false if you are managing CRDs in another way
+createCRDs: true # Creates the Function/Profile CRDs, set to false if you are managing CRDs in another way
 
 # basic_auth must never be disabled, and is required for all OpenFaaS components.
 # There is no good reason to disable this, and it causes a severe security risk.
 # The configuration option remains for backwards-compatibility.
-basic_auth: true              # Authentication for core components, always set to true
+basic_auth: true # Authentication for core components, always set to true
 
-rbac: true                    # Kubernetes RBAC, no good reason to disable this
-generateBasicAuth: true       # Set to false if applying credentials separately from the chart, otherwise set to true
+rbac: true # Kubernetes RBAC, no good reason to disable this
+generateBasicAuth: true # Set to false if applying credentials separately from the chart, otherwise set to true
 
 # Define a securityContext for the containers deployed by this helm chart.
 securityContext: {}
 
 exposeServices: true
-serviceType: NodePort        # serviceType for OpenFaaS gateway
-async: true                  # No known reason to disable this, kept for legacy reasons
+serviceType: NodePort # serviceType for OpenFaaS gateway
+async: true # No known reason to disable this, kept for legacy reasons
 
 # create pod security policies for OpenFaaS control plane
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
@@ -45,22 +45,22 @@ openfaasImagePullPolicy: "IfNotPresent"
 #
 # kubectl create secret generic -n openfaas ca-bundle --from-file=ca.crt=./ca.crt
 #
-caBundleSecretName: ""       # Name of the secret containing the CA bundle for the OpenFaaS gateway
+caBundleSecretName: "" # Name of the secret containing the CA bundle for the OpenFaaS gateway
 
 functions:
-  imagePullPolicy: "Always"    # Image pull policy for deployed functions, for OpenFaaS Pro you can also set: IfNotPresent and Never.
-  httpProbe: true              # Setting to true will use HTTP for readiness and liveness probe on function pods
-  setNonRootUser: false        # It's recommended to set this to "true", but test your images before committing to it
+  imagePullPolicy: "Always" # Image pull policy for deployed functions, for OpenFaaS Pro you can also set: IfNotPresent and Never.
+  httpProbe: true # Setting to true will use HTTP for readiness and liveness probe on function pods
+  setNonRootUser: false # It's recommended to set this to "true", but test your images before committing to it
   readinessProbe:
     initialDelaySeconds: 0
-    timeoutSeconds: 1           # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
-    periodSeconds: 2            # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    timeoutSeconds: 1 # Tuned-in to run checks early and quickly to support fast cold-start from zero replicas
+    periodSeconds: 2 # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
     successThreshold: 1
     failureThreshold: 3
   livenessProbe:
     initialDelaySeconds: 0
     timeoutSeconds: 1
-    periodSeconds: 2           # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
+    periodSeconds: 2 # Reduce to 1 for a faster cold-start, increase higher for lower-CPU usage
     failureThreshold: 3
 
 gatewayPro:
@@ -71,7 +71,7 @@ gateway:
   image: ghcr.io/openfaas/gateway:0.27.13
   readTimeout: "1m05s"
   writeTimeout: "1m05s"
-  upstreamTimeout: "1m"  # Must be smaller than read/write_timeout
+  upstreamTimeout: "1m" # Must be smaller than read/write_timeout
   replicas: 1
   scaleFromZero: true
   # change the port when creating multiple releases in the same baremetal cluster
@@ -222,6 +222,9 @@ faasnetes:
 jetstreamQueueWorker:
   image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.7
   mode: "static"
+  # Enable adaptive concurrency limiting for functions based on 429 response.
+  # This setting only takes effect when jetstreamQueueWorker.mode is set to "function".
+  adaptiveConcurrency: true
   consumer:
     inactiveThreshold: "30s"
 
@@ -474,20 +477,20 @@ ingress:
 
   # Used to create Ingress record (should be used with exposeServices: false).
   hosts:
-  - host: gateway.openfaas.local  # Replace with gateway.example.com if public-facing
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: gateway
-            port:
-              number: 8080
+    - host: gateway.openfaas.local # Replace with gateway.example.com if public-facing
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  number: 8080
 
   # annotations:
-    # This annotation is deprecated, use IngressClass in the spec instead
-    # kubernetes.io/ingress.class: nginx
+  # This annotation is deprecated, use IngressClass in the spec instead
+  # kubernetes.io/ingress.class: nginx
   tls:
   # Secrets must be manually created in the namespace.
 

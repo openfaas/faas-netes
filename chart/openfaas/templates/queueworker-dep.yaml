@@ -99,6 +99,8 @@ spec:
         - name: ack_wait
           value: "{{ .Values.queueWorker.ackWait }}"
 
+        - name: adaptive_concurrency
+          value: "{{ .Values.jetstreamQueueWorker.adaptiveConcurrency }}"
         - name: upstream_timeout
           value: "{{ .Values.gateway.upstreamTimeout }}"
         - name: "max_retry_attempts"
