@@ -13,6 +13,9 @@ replicas: 1
 queueName: ""
 mode: static
 maxInflight: 1
+# Enable adaptive concurrency limiting for functions based on 429 response.
+# This setting only takes effect when mode is set to "function".
+adaptiveConcurrency: true
 
 queuePartitions: 1
 partition: 0

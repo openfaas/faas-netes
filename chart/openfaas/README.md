@@ -581,6 +581,7 @@ See [values.yaml](./values.yaml) for detailed configuration.
 | `jetstreamQueueWorker.consumer.pullMaxMessages` | PullMaxMessages limits the number of messages to be buffered per consumer. Leave empty to use optimized default for the selected queue mode | `` |
 | `jetstreamQueueWorker.logs.debug` | Log debug messages | `false` |
 | `jetstreamQueueWorker.logs.format` | Set the log format, supports `console` or `json` | `console` |
+| `jetstreamQueueWorker.adaptiveConcurrency` | Enable adaptive concurrency limiting for functions based on 429 response. This setting only takes effect when `jetstreamQueueWorker.mode` is set to `function`. | `true` |
 | `nats.channel` | The name of the NATS Streaming channel or NATS JetStream stream to use for asynchronous function invocations | `faas-request` |
 | `nats.external.clusterName` | The name of the externally-managed NATS Streaming server | `""` |
 | `nats.external.enabled` | Whether to use an externally-managed NATS Streaming server | `false` |
