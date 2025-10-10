@@ -13,7 +13,7 @@ The *Function Builder* aka [pro-builder](https://docs.openfaas.com/openfaas-pro/
 - A container image registry that is accessible from your cluster
 
   You can generate a valid container registry login file by:
-  
+
   * Running `faas-cli registry-login` (preferred)
   * Or, disable the keychain in Docker, then run `docker login`, and supply the `$HOME/.docker/config.json` file.
 
@@ -70,33 +70,6 @@ kubectl create secret generic payload-secret \
   --from-file payload-secret=payload.txt -n openfaas
 ```
 
-### mTLS certificates
-
-Generate mTLS certificates for BuildKit and the Pro Builder which are used to encrypt messages between the builder component and BuildKit.
-
-```bash
-docker run -v `pwd`/out:/tmp/ -ti ghcr.io/openfaas/certgen:latest
-
-# Reset the permissions of the files to your own user:
-sudo chown -R $USER:$USER out
-```
-
-Then create two secrets, one for the BuildKit daemon and one for the builder component.
-
-```bash
-kubectl create secret generic -n openfaas \
-  buildkit-daemon-certs \
-  --from-file ./out/certs/ca.crt \
-  --from-file ./out/certs/server.crt \
-  --from-file ./out/certs/server.key
-
-kubectl create secret generic -n openfaas \
-  buildkit-client-certs \
-  --from-file ./out/certs/ca.crt \
-  --from-file ./out/certs/client.crt \
-  --from-file ./out/certs/client.key
-```
-
 ## Install the Chart
 
 - Create the required secret with your OpenFaaS Pro license code:
@@ -123,28 +96,14 @@ Root mode, for development, or where rootless for some reason isn't working:
 
 ```yaml
 buildkit:
-  image: moby/buildkit:v0.10.3
   rootless: false
-  securityContext:
-    runAsUser: 0
-    runAsGroup: 0
-    privileged: true
 ```
 
 Rootless mode (preferred, if possible):
 
 ```yaml
 buildkit:
-  # For a rootless configuration
-  image: moby/buildkit:master-rootless
   rootless: true
-  securityContext:
-    # Needs Kubernetes >= 1.19
-    seccompProfile:
-      type: Unconfined
-    runAsUser: 1000
-    runAsGroup: 1000
-    privileged: false
 ```
 
 Then install the chart using its official path and the custom YAML file:
@@ -346,8 +305,9 @@ Additional pro-builder options in `values.yaml`.
 | `replicas`                | How many replicas of buildkit and the pro-builder API to create                        | `1`                            |
 | `proBuilder.image`        | Container image to use for the pro-builder                                             | See values.yaml                |
 | `proBuilder.maxInflight`  | Limit the total amount of concurrent builds for the  pro-builder replica               | See values.yaml                |
-| `buildkit.image`          | Image version for the buildkit daemon                                                  | See values.yaml                |
-| `buildkit.rootless`       | When set to true, uses user-namespaces to avoid a privileged container                 | See notes in values.yaml       |
+| `buildkit.image`          | Image version for the buildkit daemon when `buildkit.rootless` is false                | See values.yaml                |
+| `buildkitRootless.image`  | Image version for the buildkit daemon when `buildkit.rootless` is true                 | See values.yaml                |
+| `buildkit.rootless`       | When set to true, uses user-namespaces to avoid a privileged container                 | `true`                         |
 | `buildkit.securityContext` | Used to set security policy for buildkit                                              | See values.yaml                |
 | `imagePullPolicy`         | The policy for pulling either of the containers deployed by this chart                 | `IfNotPresent`                 |
 | `disableHmac`             | This setting disable request verification, so should never to set to `true`            | `false`                        |

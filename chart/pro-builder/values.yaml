@@ -19,7 +19,7 @@ proBuilder:
   image: ghcr.io/openfaasltd/pro-builder:0.5.3
 
   # Set to 0 for unlimited, or some non-zero value for a hard limit
-  # the builder will return a HTTP 429 status code, then the client 
+  # the builder will return a HTTP 429 status code, then the client
   # must retry the request.
   # A function executed via the async queue will be retried, so can be
   # a convenient way to build functions without blocking the client.
@@ -32,20 +32,24 @@ proBuilder:
     # limits:
     #   memory: "256Mi"
 
+buildkitRootless:
+  # Image used when running buildkit in rootless mode.
+  image: moby/buildkit:v0.23.2-rootless
+
 # buildkit.image is for the buildkit daemon
 # Check for the latest release on GitHub: https://github.com/moby/buildkit/releases
 #
 # Both configurations are "rootless", however the rootless: true mode does not
 # require Buildkit to run as a privileged container and is preferred.
 buildkit:
-  # A configuration which uses a privileged container for when 
+  # A configuration which uses a privileged container for when
   # your nodes have issues running in rootless mode
   #
-  # Use rootless if possible, and if not, set up a dedicated 
+  # Use rootless if possible, and if not, set up a dedicated
   # nodepool for the function builder pods, which is recycled often
   # through the use of spot instances or preemptive VMs.
   #
-  # image: moby/buildkit:v0.23.2-rootless
+  # image: moby/buildkit:v0.23.2
   # rootless: false
   # securityContext:
   #   runAsUser: 0
@@ -54,16 +58,9 @@ buildkit:
 
   # For a rootless configuration, preferred, if the configuration
   # and Kernel version of your Kubernetes nodes supports it
-  # 
-  image: moby/buildkit:v0.23.2-rootless
+  #
+  image: moby/buildkit:v0.23.2
   rootless: true
-  securityContext:
-    # Needs Kubernetes >= 1.19
-    seccompProfile:
-      type: Unconfined
-    runAsUser: 1000
-    runAsGroup: 1000
-    privileged: false
 
   resources:
     requests:
@@ -97,4 +94,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
