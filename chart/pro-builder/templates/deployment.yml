@@ -40,12 +40,6 @@ spec:
         {{- toYaml .Values.securityContext | nindent 8 }}
 {{- end }}
       volumes:
-        - name: client-certs
-          secret:
-            secretName: buildkit-client-certs
-        - name: daemon-certs
-          secret:
-            secretName: buildkit-daemon-certs
         - name: registry-secret
           secret:
             defaultMode: 420
@@ -67,18 +61,17 @@ spec:
           secret:
             secretName: {{ .Values.awsCredentialsSecret }}
         {{- end}}
-{{- if .Values.serviceAccount}}
+        - name: socket-dir
+          emptyDir: {}
+      {{- if .Values.serviceAccount}}
       serviceAccountName: {{ .Values.serviceAccount | quote }}
-{{- end }}
+      {{- end }}
       containers:
       - name: pro-builder
         image: {{ .Values.proBuilder.image }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         args:
           - "-license-file=/var/secrets/license/license"
-          - "--tlscert=/var/secrets/certs/client.crt"
-          - "--tlskey=/var/secrets/certs/client.key"
-          - "--tlscacert=/var/secrets/certs/ca.crt"
         env:
           - name: buildkit_server_name
             value: "127.0.0.1"
@@ -87,7 +80,7 @@ spec:
           - name: insecure
             value: "false"
           - name: buildkit_url
-            value: "tcp://127.0.0.1:1234"
+            value: "unix:///home/app/.local/run/buildkit/buildkitd.sock"
           - name: "disable_hmac"
             value: {{ .Values.disableHmac | quote }}
           - name: "max_inflight"
@@ -118,8 +111,13 @@ spec:
         {{- with .Values.proBuilder.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
+        {{- else }}
+        securityContext:
+          runAsGroup: 1000
         {{- end }}
         volumeMounts:
+        - name: socket-dir
+          mountPath: /home/app/.local/run/buildkit
         - name: registry-secret
           readOnly: true
           mountPath: "/home/app/.docker/"
@@ -132,9 +130,6 @@ spec:
         - name: builder-workspace
           mountPath: /tmp/
           readOnly: false
-        - name: client-certs
-          readOnly: true
-          mountPath: /var/secrets/certs
         {{- if .Values.awsCredentialsSecret }}
         - name: aws-credentials
           readOnly: true
@@ -142,14 +137,18 @@ spec:
         {{- end }}
       - name: buildkit
         args:
-          - "--addr=tcp://127.0.0.1:1234"
-          - "--tlscert=/var/secrets/certs/server.crt"
-          - "--tlskey=/var/secrets/certs/server.key"
-          - "--tlscacert=/var/secrets/certs/ca.crt"
-{{- if .Values.buildkit.rootless }}
+        {{- if .Values.buildkit.rootless }}
+          - "--addr=unix:///home/user/.local/run/buildkit/buildkitd.sock"
           - "--oci-worker-no-process-sandbox"
-{{- end }}
+        {{- else }}
+          - "--addr=unix:///run/buildkit/buildkitd.sock"
+          - "--group=1000"
+        {{- end }}
+        {{- if .Values.buildkit.rootless }}
+        image: {{ .Values.buildkitRootless.image }}
+        {{- else }}
         image: {{ .Values.buildkit.image }}
+        {{- end }}
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         ports:
         - containerPort: 1234
@@ -159,11 +158,28 @@ spec:
         {{- with .Values.buildkit.securityContext }}
         securityContext:
           {{- . | toYaml | nindent 12 }}
+        {{- else }}
+       {{- if .Values.buildkit.rootless }}
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+          runAsUser: 1000
+          runAsGroup: 1000
+          privileged: false
+        {{- else }}
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          privileged: true
+        {{- end }}
         {{- end }}
         volumeMounts:
-        - name: daemon-certs
-          readOnly: true
-          mountPath: /var/secrets/certs
+        - name: socket-dir
+          {{- if .Values.buildkit.rootless }}
+          mountPath: /home/user/.local/run/buildkit
+          {{- else }}
+          mountPath: /run/buildkit/
+          {{- end }}
         - name: buildkit-workspace
           mountPath: /tmp/
           readOnly: false
