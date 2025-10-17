@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.80
+  image: ghcr.io/openfaasltd/faas-netes:0.5.81
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.80
+  image: ghcr.io/openfaasltd/faas-netes:0.5.81
   logs:
     debug: false
     format: "console"
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.7
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.8
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
@@ -394,7 +394,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.6.0
+  image: prom/prometheus:v3.7.1
   create: true
   retention:
     time: 15d
@@ -442,7 +442,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.12.0
+  image: nats:2.12.1
   resources:
     requests:
       memory: "120Mi"
