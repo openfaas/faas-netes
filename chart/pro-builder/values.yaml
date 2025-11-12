@@ -34,7 +34,7 @@ proBuilder:
 
 buildkitRootless:
   # Image used when running buildkit in rootless mode.
-  image: moby/buildkit:v0.25.1-rootless
+  image: moby/buildkit:v0.25.2-rootless
 
 # buildkit.image is for the buildkit daemon
 # Check for the latest release on GitHub: https://github.com/moby/buildkit/releases
@@ -49,7 +49,7 @@ buildkit:
   # nodepool for the function builder pods, which is recycled often
   # through the use of spot instances or preemptive VMs.
   #
-  # image: moby/buildkit:v0.25.1
+  # image: moby/buildkit:v0.25.2
   # rootless: false
   # securityContext:
   #   runAsUser: 0
@@ -59,7 +59,7 @@ buildkit:
   # For a rootless configuration, preferred, if the configuration
   # and Kernel version of your Kubernetes nodes supports it
   #
-  image: moby/buildkit:v0.25.1
+  image: moby/buildkit:v0.25.2
   rootless: true
 
   resources:

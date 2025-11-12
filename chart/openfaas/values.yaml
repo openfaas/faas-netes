@@ -394,7 +394,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.7.1
+  image: prom/prometheus:v3.7.3
   create: true
   retention:
     time: 15d
@@ -450,7 +450,7 @@ nats:
 
 ## alertmanager is only used for OpenFaaS CE
 alertmanager:
-  image: prom/alertmanager:v0.28.1
+  image: prom/alertmanager:v0.29.0
   create: true
   resources:
     requests:
