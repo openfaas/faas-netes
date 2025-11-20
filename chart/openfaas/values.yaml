@@ -442,7 +442,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.12.1
+  image: nats:2.12.2
   resources:
     requests:
       memory: "120Mi"
