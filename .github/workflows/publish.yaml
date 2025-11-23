@@ -17,9 +17,9 @@ jobs:
       repository-projects: read
       statuses: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: 1.24.x
       - name: Set up QEMU
