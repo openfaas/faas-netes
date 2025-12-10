@@ -4,7 +4,7 @@
 # You will need to create a license named "openfaas-license" - see the
 # chart README for detailed instructions.
 
-image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.10
+image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.11
 
 replicas: 1
 
