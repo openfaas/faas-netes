@@ -253,7 +253,7 @@ jetstreamQueueWorker:
 #
 # Enabled automatically when openfaasPro is set to true
 queueWorkerPro:
-  maxRetryAttempts: "10"
+  maxRetryAttempts: "100"
   maxRetryWait: "120s"
   initialRetryWait: "10s"
   # 408 Request Timeout message
