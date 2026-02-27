@@ -184,6 +184,10 @@ spec:
         - name: secret_mount_path
           value: "/var/secrets"
         {{- end }}
+        {{- if .Values.autoscaler.defaultTarget }}
+        - name: default_target
+          value: "{{ .Values.autoscaler.defaultTarget }}"
+        {{- end }}
         {{- if .Values.gateway.authProxyUrl }}
         - name: auth_proxy_url
           value: "{{.Values.gateway.authProxyUrl}}"
