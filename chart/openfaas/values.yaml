@@ -64,7 +64,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.5.9
+  image: ghcr.io/openfaasltd/gateway:0.5.13
   pprof: false
 
 gateway:
@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.84
+  image: ghcr.io/openfaasltd/faas-netes:0.5.86
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.84
+  image: ghcr.io/openfaasltd/faas-netes:0.5.86
   logs:
     debug: false
     format: "console"
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.4.12
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.5.2
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
@@ -286,7 +286,7 @@ queueWorker:
 ## Advanced auto-scaler for scaling functions on RPS, CPU and in-flight requests
 ## Includes: scale to zero
 autoscaler:
-  image: ghcr.io/openfaasltd/autoscaler:0.3.26
+  image: ghcr.io/openfaasltd/autoscaler:0.3.27
 
   # Default value for "com.openfaas.scale.target" when not set via label
   defaultTarget: 50
@@ -324,7 +324,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.6.6
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.6.10
 
   # publicURL for the dashboard itself
   # i.e. https://dashboard.example.com
@@ -394,7 +394,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.9.1
+  image: prom/prometheus:v3.10.0
   create: true
   retention:
     time: 15d
@@ -442,7 +442,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.12.3
+  image: nats:2.12.4
   resources:
     requests:
       memory: "120Mi"
@@ -450,7 +450,7 @@ nats:
 
 ## alertmanager is only used for OpenFaaS CE
 alertmanager:
-  image: prom/alertmanager:v0.30.1
+  image: prom/alertmanager:v0.31.1
   create: true
   resources:
     requests:
