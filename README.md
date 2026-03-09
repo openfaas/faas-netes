@@ -9,6 +9,8 @@ Serverless Functions For Kubernetes with OpenFaaS
 
 ## Introduction
 
+> "OpenFaaS Community Edition (CE) is licensed for individual exploration and hobbyist use. A 60 day limit applies for commercial PoCs. Commercial and production workloads require OpenFaaS Standard or OpenFaaS for Enterprises."
+
 `faas-netes` is an [OpenFaaS provider](https://github.com/openfaas/faas-provider) which enables Kubernetes for [OpenFaaS](https://github.com/openfaas/faas). It's part of a larger stack that brings a cloud-agnostic serverless experience to Kubernetes. This repository hosts the Community Edition (CE) of the provider, OpenFaaS Standard and OpenFaaS for Enterprises use separate codebases and licensing.
 
 The existing REST API, CLI and UI are fully compatible. With OpenFaaS Standard/Enterprise, you have an optional *operator* mode so that you can manage functions with `kubectl` and a `CustomResource`.
@@ -134,4 +136,3 @@ Check the contributor guide in `CONTRIBUTING.md` for more details on the workflo
 ## License
 
 See the [LICENSE](./LICENSE) file for details.
-
