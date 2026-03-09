@@ -64,7 +64,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.5.13
+  image: ghcr.io/openfaasltd/gateway:0.5.16
   pprof: false
 
 gateway:
@@ -140,7 +140,7 @@ eventSubscription:
     httpVerbs: "PUT,POST,DELETE"
 
 eventWorker:
-  image: ghcr.io/openfaasltd/event-worker:0.1.1
+  image: ghcr.io/openfaasltd/event-worker:0.1.2
   replicas: 1
   logs:
     debug: false
@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.86
+  image: ghcr.io/openfaasltd/faas-netes:0.5.87
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.86
+  image: ghcr.io/openfaasltd/faas-netes:0.5.87
   logs:
     debug: false
     format: "console"
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.5.2
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.5.4
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
