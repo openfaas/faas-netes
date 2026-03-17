@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.87
+  image: ghcr.io/openfaasltd/faas-netes:0.5.88
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.87
+  image: ghcr.io/openfaasltd/faas-netes:0.5.88
   logs:
     debug: false
     format: "console"
@@ -354,7 +354,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.12
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.13
   insecureTLS: false
   replicas: 1
   securityContext: true
@@ -442,7 +442,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.12.4
+  image: nats:2.12.5
   resources:
     requests:
       memory: "120Mi"
