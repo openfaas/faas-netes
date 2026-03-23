@@ -52,6 +52,14 @@ spec:
           secret:
             defaultMode: 420
             secretName: openfaas-license
+        {{- if .Values.buildSecrets.privateKeySecret }}
+        - name: build-secrets-key
+          secret:
+            secretName: {{ .Values.buildSecrets.privateKeySecret }}
+            items:
+              - key: {{ .Values.buildSecrets.privateKeyKey | quote }}
+                path: {{ .Values.buildSecrets.privateKeyKey | quote }}
+        {{- end }}
         - name: builder-workspace
           emptyDir: {}
         - name: buildkit-workspace
@@ -85,6 +93,14 @@ spec:
             value: {{ .Values.disableHmac | quote }}
           - name: "max_inflight"
             value: {{ or .Values.proBuilder.maxInflight 0  | quote }}
+          {{- if .Values.buildSecrets.privateKeySecret }}
+          - name: build_secrets_private_key_path
+            value: {{ printf "%s/%s" .Values.buildSecrets.mountPath .Values.buildSecrets.privateKeyKey | quote }}
+          {{- if .Values.buildSecrets.keyID }}
+          - name: build_secrets_key_id
+            value: {{ .Values.buildSecrets.keyID | quote }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.awsCredentialsSecret }}
           - name: AWS_SHARED_CREDENTIALS_FILE
             value: /var/secrets/aws-credentials/{{ .Values.awsCredentialsSecret }}
@@ -127,6 +143,11 @@ spec:
         - name: license
           readOnly: true
           mountPath: "/var/secrets/license"
+        {{- if .Values.buildSecrets.privateKeySecret }}
+        - name: build-secrets-key
+          readOnly: true
+          mountPath: {{ .Values.buildSecrets.mountPath | quote }}
+        {{- end }}
         - name: builder-workspace
           mountPath: /tmp/
           readOnly: false

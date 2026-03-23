@@ -70,6 +70,37 @@ kubectl create secret generic payload-secret \
   --from-file payload-secret=payload.txt -n openfaas
 ```
 
+### Optional sealed build secrets
+
+To enable per-build sealed secrets, generate a keypair:
+
+```bash
+faas-cli secret keygen -o private.key
+
+kubectl create secret generic -n openfaas \
+  pro-builder-build-secrets-key \
+  --from-file private.key=./private.key
+```
+
+Distribute `private.key.pub` to build clients. They seal secrets with:
+
+```bash
+faas-cli secret seal \
+  --public-key ./private.key.pub \
+  --key-id builder-key-1 \
+  --from-literal pip_token=s3cr3t
+```
+
+Then enable the feature in your custom values file:
+
+```yaml
+buildSecrets:
+  keyID: builder-key-1
+  privateKeySecret: pro-builder-build-secrets-key
+```
+
+When enabled, the builder unseals `com.openfaas.secrets` from the build tar and exposes `GET /publickey` so callers can fetch the public key and `key_id`.
+
 ## Install the Chart
 
 - Create the required secret with your OpenFaaS Pro license code:

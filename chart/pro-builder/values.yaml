@@ -16,7 +16,7 @@ securityContext: {}
 
 # image is for the pro-builder API
 proBuilder:
-  image: ghcr.io/openfaasltd/pro-builder:0.5.3
+  image: ghcr.io/openfaasltd/pro-builder:0.5.4
 
   # Set to 0 for unlimited, or some non-zero value for a hard limit
   # the builder will return a HTTP 429 status code, then the client
@@ -82,6 +82,21 @@ disableHmac: false
 
 # enableLchown is usually set to false
 enableLchown: false
+
+buildSecrets:
+  # Name of the Kubernetes Secret containing the nacl/box private key.
+  # Set this to enable build secrets — the feature is on when a key is configured.
+  privateKeySecret: ""
+
+  # A stable identifier returned by GET /publickey and validated on incoming
+  # build secrets envelopes.
+  keyID: ""
+
+  # Key within privateKeySecret to mount into the Pod.
+  privateKeyKey: private.key
+
+  # Directory mount for the private key file within the pro-builder container.
+  mountPath: /var/secrets/buildkit
 
 imagePullPolicy: IfNotPresent
 
