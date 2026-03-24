@@ -75,18 +75,18 @@ kubectl create secret generic payload-secret \
 To enable per-build sealed secrets, generate a keypair:
 
 ```bash
-faas-cli secret keygen -o private.key
+faas-cli secret keygen
 
 kubectl create secret generic -n openfaas \
   pro-builder-build-secrets-key \
-  --from-file private.key=./private.key
+  --from-file key=./key
 ```
 
-Distribute `private.key.pub` to build clients. They seal secrets with:
+Distribute `key.pub` to build clients. They seal secrets with:
 
 ```bash
 faas-cli secret seal \
-  --public-key ./private.key.pub \
+  --public-key ./key.pub \
   --key-id builder-key-1 \
   --from-literal pip_token=s3cr3t
 ```

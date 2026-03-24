@@ -93,7 +93,7 @@ buildSecrets:
   keyID: ""
 
   # Key within privateKeySecret to mount into the Pod.
-  privateKeyKey: private.key
+  privateKeyKey: key
 
   # Directory mount for the private key file within the pro-builder container.
   mountPath: /var/secrets/buildkit
