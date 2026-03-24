@@ -85,9 +85,7 @@ kubectl create secret generic -n openfaas \
 Distribute `key.pub` to build clients. They seal secrets with:
 
 ```bash
-faas-cli secret seal \
-  --public-key ./key.pub \
-  --key-id builder-key-1 \
+faas-cli secret seal key.pub \
   --from-literal pip_token=s3cr3t
 ```
 
@@ -95,7 +93,6 @@ Then enable the feature in your custom values file:
 
 ```yaml
 buildSecrets:
-  keyID: builder-key-1
   privateKeySecret: pro-builder-build-secrets-key
 ```
 

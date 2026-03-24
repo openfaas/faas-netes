@@ -88,10 +88,6 @@ buildSecrets:
   # Set this to enable build secrets — the feature is on when a key is configured.
   privateKeySecret: ""
 
-  # A stable identifier returned by GET /publickey and validated on incoming
-  # build secrets envelopes.
-  keyID: ""
-
   # Key within privateKeySecret to mount into the Pod.
   privateKeyKey: key
 
