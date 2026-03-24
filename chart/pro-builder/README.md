@@ -57,22 +57,20 @@ For pushing images to ECR see: [Push images to Amazon ECR](#push-images-to-amazo
 
 ### Signing secret
 
-Create a HMAC signing secret for use between the Pro Builder and your client:
+Generate an HMAC signing secret and create it in the cluster:
 
 ```bash
-echo -n $(openssl rand -base64 32) > payload.txt
-```
+faas-cli secret generate -o payload.txt
 
-Create a secret with the contents of the signing secret:
-
-```bash
 kubectl create secret generic payload-secret \
   --from-file payload-secret=payload.txt -n openfaas
 ```
 
-### Optional sealed build secrets
+### Optional: build secrets
 
-To enable per-build sealed secrets, generate a keypair:
+Build secrets let you pass private registry tokens, CA certificates, or other sensitive values into `RUN --mount=type=secret` instructions. Secrets are encrypted client-side before sending to the builder.
+
+Generate a keypair and create the Kubernetes secret:
 
 ```bash
 faas-cli secret keygen
@@ -82,6 +80,13 @@ kubectl create secret generic -n openfaas \
   --from-file key=./key
 ```
 
+Enable the feature in your custom values file:
+
+```yaml
+buildSecrets:
+  privateKeySecret: pro-builder-build-secrets-key
+```
+
 Distribute `key.pub` to build clients. They seal secrets with:
 
 ```bash
@@ -89,14 +94,43 @@ faas-cli secret seal key.pub \
   --from-literal pip_token=s3cr3t
 ```
 
-Then enable the feature in your custom values file:
+Or fetch the public key from a running builder:
 
-```yaml
-buildSecrets:
-  privateKeySecret: pro-builder-build-secrets-key
+```bash
+curl -s http://127.0.0.1:8081/publickey | jq -r '.public_key' > key.pub
 ```
 
-When enabled, the builder unseals `com.openfaas.secrets` from the build tar and exposes `GET /publickey` so callers can fetch the public key and `key_id`.
+See the [Function Builder documentation](https://docs.openfaas.com/openfaas-pro/builder/) for full usage examples.
+
+### Rotating secrets
+
+#### Rotating the HMAC payload secret
+
+```bash
+faas-cli secret generate -o payload.txt
+
+kubectl create secret generic payload-secret \
+  --from-file payload-secret=payload.txt -n openfaas \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl rollout restart deployment/pro-builder -n openfaas
+```
+
+Update the `payload.txt` file on any build clients.
+
+#### Rotating the build secrets keypair
+
+```bash
+faas-cli secret keygen
+
+kubectl create secret generic pro-builder-build-secrets-key \
+  --from-file key=./key -n openfaas \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl rollout restart deployment/pro-builder -n openfaas
+```
+
+Distribute the new `key.pub` to build clients. Any pre-sealed `com.openfaas.secrets` files must be re-sealed with the new key. The key ID changes automatically since it is derived from the key material.
 
 ## Install the Chart
 
@@ -340,6 +374,9 @@ Additional pro-builder options in `values.yaml`.
 | `imagePullPolicy`         | The policy for pulling either of the containers deployed by this chart                 | `IfNotPresent`                 |
 | `disableHmac`             | This setting disable request verification, so should never to set to `true`            | `false`                        |
 | `enableLchown`            | Toggle whether Lchown is used by buildkit, toggle if you run into errors               | `false`                        |
+| `buildSecrets.privateKeySecret` | Name of Kubernetes Secret containing the nacl/box private key for build secrets | `""` |
+| `buildSecrets.privateKeyKey` | Key within the secret to mount | `key` |
+| `buildSecrets.mountPath` | Mount path for the private key file | `/var/secrets/buildkit` |
 | `awsCredentialsSecret` | Mount a secret with AWS credentials for pushing images to ECR | `""` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. See `values.yaml` for the default configuration.
@@ -388,6 +425,9 @@ $ kubectl delete -n openfaas \
 
 $ kubectl delete -n openfaas \
     secret/payload-secret
+
+$ kubectl delete -n openfaas \
+    secret/pro-builder-build-secrets-key
 
 $ kubectl delete -n openfaas \
   secret/buildkit-daemon-certs
