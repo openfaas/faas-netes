@@ -222,6 +222,9 @@ faasnetes:
 jetstreamQueueWorker:
   image: ghcr.io/openfaasltd/jetstream-queue-worker:0.5.4
   mode: "static"
+  # Enable adaptive concurrency limiting for functions.
+  # This setting only takes effect when jetstreamQueueWorker.mode is set to "function".
+  adaptiveConcurrency: true
   consumer:
     inactiveThreshold: "30s"
 
