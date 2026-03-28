@@ -40,7 +40,7 @@ You can configure permissions using a dedicated IAM user. The user needs a polic
 
 To receive http calls from AWS SNS the callback url has to be publicly accessible.
 
-The below instructions show how to set up Ingress with a TLS certificate using Ingress Nginx. You can also use any other ingress-controller, inlets-pro or an Istio Gateway. Reach out to us if you need a hand.
+The below instructions show how to set up Ingress with a TLS certificate using Traefik. You can also use any other ingress-controller, inlets-pro or an Istio Gateway. Reach out to us if you need a hand.
 
 Install [cert-manager](https://cert-manager.io/docs/), which is used to manage TLS certificates.
 
@@ -50,10 +50,10 @@ You can use Helm, or [arkade](https://github.com/alexellis/arkade):
 arkade install cert-manager
 ```
 
-Install ingress-nginx using arkade or Helm:
+Install Traefik using arkade or Helm:
 
 ```bash
-arkade install ingress-nginx
+arkade install traefik2
 ```
 
 Create an ACME certificate issuer:
@@ -76,7 +76,7 @@ spec:
     solvers:
     - http01:
         ingress:
-          class: nginx
+          class: traefik
 EOF
 ```
 
@@ -96,11 +96,11 @@ metadata:
   name: sns-connector
   namespace: openfaas
   annotations:
-    kubernetes.io/ingress.class: nginx
     cert-manager.io/issuer: letsencrypt-prod
   labels:
     app: sns-connector
 spec:
+  ingressClassName: traefik
   tls:
   - hosts:
     - $DOMAIN
