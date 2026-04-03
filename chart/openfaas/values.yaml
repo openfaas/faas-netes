@@ -64,7 +64,7 @@ functions:
     failureThreshold: 3
 
 gatewayPro:
-  image: ghcr.io/openfaasltd/gateway:0.5.16
+  image: ghcr.io/openfaasltd/gateway:0.5.17
   pprof: false
 
 gateway:
@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.89
+  image: ghcr.io/openfaasltd/faas-netes:0.5.90
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.5.89
+  image: ghcr.io/openfaasltd/faas-netes:0.5.90
   logs:
     debug: false
     format: "console"
@@ -220,7 +220,7 @@ faasnetes:
 #
 # The Jetstream queue-worker is the default queue-worker for OpenFaaS Pro.
 jetstreamQueueWorker:
-  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.5.4
+  image: ghcr.io/openfaasltd/jetstream-queue-worker:0.5.5
   mode: "static"
   consumer:
     inactiveThreshold: "30s"
@@ -324,7 +324,7 @@ autoscaler:
 ## To use with port-forwarding, set publicURL to
 ## http://127.0.0.1
 dashboard:
-  image: ghcr.io/openfaasltd/openfaas-dashboard:0.6.10
+  image: ghcr.io/openfaasltd/openfaas-dashboard:0.6.11
 
   # publicURL for the dashboard itself
   # i.e. https://dashboard.example.com
@@ -394,7 +394,7 @@ iam:
 ## if you wish to retain the metrics for a longer period, you should
 ## scrape this instance from an external Prometheus server
 prometheus:
-  image: prom/prometheus:v3.10.0
+  image: prom/prometheus:v3.11.0
   create: true
   retention:
     time: 15d
@@ -442,7 +442,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.12.5
+  image: nats:2.12.6
   resources:
     requests:
       memory: "120Mi"
