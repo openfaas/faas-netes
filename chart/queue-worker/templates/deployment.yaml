@@ -32,6 +32,10 @@ spec:
           secretName: openfaas-license
       containers:
       - name:  queue-worker
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
         resources:
           {{- .Values.resources | toYaml | nindent 10 }}
         image: {{ .Values.image }}

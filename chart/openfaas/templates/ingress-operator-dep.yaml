@@ -30,6 +30,10 @@ spec:
       serviceAccountName: ingress-operator
       containers:
       - name: operator
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
         resources:
           {{- .Values.ingressOperator.resources | toYaml | nindent 10 }}
         image: {{ include "openfaas.image" (dict "image" .Values.ingressOperator.image "registryPrefix" .Values.registryPrefix) }}

@@ -50,6 +50,10 @@ spec:
         {{- end }}
       containers:
         - name: cron-connector
+          {{- if .Values.securityContext }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- end }}
           {{- if .Values.openfaasPro }}
           image: {{ .Values.pro.image }}
           {{- else }}
