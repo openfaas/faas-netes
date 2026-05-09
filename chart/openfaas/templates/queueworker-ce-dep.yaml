@@ -34,6 +34,10 @@ spec:
       {{- end }}
       containers:
       - name: queue-worker
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
         resources:
           {{- .Values.queueWorker.resources | toYaml | nindent 12 }}
         image: {{ include "openfaas.image" (dict "image" .Values.queueWorker.image "registryPrefix" .Values.registryPrefix) }}
