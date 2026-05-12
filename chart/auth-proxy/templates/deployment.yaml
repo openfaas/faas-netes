@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    # Original Helm labels v
+    app: {{ template "connector.name" . }}
+    component: auth-proxy
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    {{- include "connector.labels" . | nindent 4 }}
+  name: {{ template "connector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "connector.name" . }}
+      name: {{ template "connector.name" . }}
+      component: auth-proxy
+  template:
+    metadata:
+      labels:
+        app: {{ template "connector.name" . }}
+        name: {{ template "connector.name" . }}
+        component: auth-proxy
+    spec:
+      {{- if .Values.accessTokenSecret }}
+      serviceAccountName: {{ template "connector.fullname" . }}
+      {{- end }}
+      volumes:
+        - name: license
+          secret:
+            secretName: openfaas-license
+        {{- if .Values.accessTokenSecret }}
+        - name: openfaas-token
+          projected:
+            sources:
+            - serviceAccountToken:
+                path: openfaas-token
+                expirationSeconds: 7200
+                audience: {{ .Values.gatewayURL }}
+        - name: access-token-secret
+          secret:
+            secretName: {{ .Values.accessTokenSecret }}
+        {{- end }}
+        {{- if .Values.iam.loginIssuer.clientSecret }}
+        - name: oauth-client-secret
+          secret:
+            secretName: {{ .Values.iam.loginIssuer.clientSecret }}
+        {{- end }}
+      containers:
+        - name: auth-proxy
+          image: {{ .Values.image }}
+          command:
+            - "/usr/bin/proxy"
+            - "-license-file=/var/secrets/license/license"
+          env:
+            - name: "public_url"
+              value: {{ .Values.url | quote }}
+            - name: gateway_url
+              value: {{ .Values.gatewayURL | quote }}
+            - name: "debug"
+              value: "{{ .Values.logs.debug }}"
+            - name: "log_encoding"
+              value: "{{ .Values.logs.format }}"
+            {{- if .Values.iam.systemIssuer.url }}
+            - name: system_issuer
+              value: {{ .Values.iam.systemIssuer.url }}
+            {{- end }}
+            {{- if .Values.iam.loginIssuer.url }}
+            - name: login_issuer
+              value: {{ .Values.iam.loginIssuer.url }}
+            - name: login_issuer_client_id
+              value: {{ .Values.iam.loginIssuer.clientId }}
+            {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 12 }}
+          volumeMounts:
+            - name: license
+              readOnly: true
+              mountPath: "/var/secrets/license"
+            {{- if .Values.accessTokenSecret }}
+            - name: openfaas-token
+              readOnly: true
+              mountPath: /var/secrets/tokens
+            - name: access-token-secret
+              readOnly: true
+              mountPath: /var/secrets/access_token
+            {{- end }}
+            {{- if .Values.iam.loginIssuer.clientSecret }}
+            - name: oauth-client-secret
+              readOnly: true
+              mountPath: /var/secrets/oauth
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
