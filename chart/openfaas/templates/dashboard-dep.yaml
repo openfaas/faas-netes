@@ -85,6 +85,8 @@ spec:
       {{- end }}
         - name: gateway_url
           value: "http://gateway.{{ .Release.Namespace }}:8080/"
+        - name: upstream_timeout
+          value: "{{ .Values.gateway.upstreamTimeout }}"
         - name: metrics_window
           value: 60m
         - name: prometheus_host
