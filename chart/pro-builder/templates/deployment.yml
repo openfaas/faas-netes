@@ -86,7 +86,7 @@ spec:
           - name: enable_lchown
             value: {{ .Values.enableLchown  | quote}}
           - name: insecure
-            value: "false"
+            value: {{ .Values.proBuilder.insecureRegistry | quote }}
           - name: buildkit_url
             value: "unix:///home/app/.local/run/buildkit/buildkitd.sock"
           - name: "disable_hmac"

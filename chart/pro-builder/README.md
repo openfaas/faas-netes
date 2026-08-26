@@ -55,6 +55,17 @@ And remember to delete any existing secret from the cluster first: `kubectl dele
 
 For pushing images to ECR see: [Push images to Amazon ECR](#push-images-to-amazon-ecr)
 
+### Plain HTTP registry
+
+The Function Builder uses HTTPS when pushing images to a registry. To push to a trusted local development registry that only supports plain HTTP, enable the insecure registry option in your custom values file:
+
+```yaml
+proBuilder:
+  insecureRegistry: true
+```
+
+This option applies to every registry used by the Function Builder. Keep it disabled when publishing to production or other untrusted registries.
+
 ### Signing secret
 
 Generate an HMAC signing secret and create it in the cluster:
@@ -366,6 +377,7 @@ Additional pro-builder options in `values.yaml`.
 | ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------ |
 | `replicas`                | How many replicas of buildkit and the pro-builder API to create                        | `1`                            |
 | `proBuilder.image`        | Container image to use for the pro-builder                                             | See values.yaml                |
+| `proBuilder.insecureRegistry` | Allow pushing to plain HTTP registries for trusted local development only          | `false`                        |
 | `proBuilder.maxInflight`  | Limit the total amount of concurrent builds for the  pro-builder replica               | See values.yaml                |
 | `buildkit.image`          | Image version for the buildkit daemon when `buildkit.rootless` is false                | See values.yaml                |
 | `buildkitRootless.image`  | Image version for the buildkit daemon when `buildkit.rootless` is true                 | See values.yaml                |

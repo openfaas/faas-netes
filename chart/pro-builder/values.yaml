@@ -18,6 +18,10 @@ securityContext: {}
 proBuilder:
   image: ghcr.io/openfaasltd/pro-builder:0.6.0
 
+  # Allow pushing images to a registry over plain HTTP.
+  # Only enable this for a trusted local development registry.
+  insecureRegistry: false
+
   # Set to 0 for unlimited, or some non-zero value for a hard limit
   # the builder will return a HTTP 429 status code, then the client
   # must retry the request.
