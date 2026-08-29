@@ -30,8 +30,13 @@ upstreamTimeout: 2m
 # interval for rebuilding the map of functions and topics
 rebuildInterval: 30s
 
-# Use with slow consumers or long running functions
+# Invoke functions asynchronously.
 asyncInvocation: false
+
+async:
+  # Limit the number of inflight async invocations for the connector.
+  # A value of 0 indicates no concurrency limit.
+  maxInflight: 0
 
 # 1MB = 1024 bytes * 1024
 maxBytes: "1048576"
@@ -75,6 +80,18 @@ gatewayURL: http://gateway.openfaas:8080
 
 # Basic auth for the gateway
 basic_auth: true
+
+# NATS is used for async invocations and is required when
+# setting the 'async.maxInflight' parameter to a value other than 0.
+nats:
+  # Configure an externally-managed NATS server.
+  # When disabled the OpenFaaS embedded nats deployment is used. 
+  # These values should be identical to the configuration in your OpenFaaS deployment values.yaml file
+  # when external nats is enabled.
+  external:
+    enabled: false
+    host: ""
+    port: ""
 
 nodeSelector: {}
 

@@ -32,6 +32,9 @@ spec:
         app: {{ template "connector.name" . }}
         component: kafka-connector
     spec:
+      {{- if and .Values.asyncInvocation (gt (int .Values.async.maxInflight) 0) }}
+      serviceAccountName: {{ template "connector.fullname" . }}
+      {{- end }}
       volumes:
         - name: openfaas-license
           secret:
@@ -87,6 +90,12 @@ spec:
            - "-key-file=/var/secrets/broker-key/broker-key"
           {{- end }}
           env:
+            - name: connector_id
+              value: "{{template "connector.fullname" . }}"
+            - name: namespace
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: gateway_url
               value: {{ .Values.gatewayURL | quote }}
             - name: topics
@@ -99,6 +108,16 @@ spec:
               value: {{ .Values.printRequestBody | quote }}
             - name: asynchronous_invocation
               value: {{ .Values.asyncInvocation | quote }}
+            - name: async_max_inflight
+              value: {{ .Values.async.maxInflight | quote }}
+            - name: async_callback_url
+              value: "http://{{ template "connector.fullname" . }}.{{ .Release.Namespace }}:8080/api/v1/callback"
+            - name: nats_url
+              {{- if .Values.nats.external.enabled }}
+              value: "nats://{{ .Values.nats.external.host}}:{{ .Values.nats.external.port }}"
+              {{- else }}
+              value: "nats://nats.openfaas:4222"
+              {{- end }}
             {{- if .Values.basic_auth }}
             - name: basic_auth
               value: "true"
