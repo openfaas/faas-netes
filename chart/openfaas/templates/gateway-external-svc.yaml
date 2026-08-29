@@ -16,9 +16,12 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: {{ .Values.serviceType }}
+{{- if and (contains "LoadBalancer" .Values.serviceType) .Values.gatewayExternal.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.gatewayExternal.loadBalancerIP }}
+{{- end }}
   ports:
     - name: http
-      port: 8080
+      port: {{ .Values.gatewayExternal.port | default 8080 }}
       protocol: TCP
       targetPort: 8080
       {{- if contains "NodePort" .Values.serviceType }}
