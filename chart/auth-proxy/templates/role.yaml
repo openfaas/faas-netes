@@ -1,0 +1,19 @@
+ {{- if .Values.accessTokenSecret }}
+apiVersion: iam.openfaas.com/v1
+kind: Role
+metadata:
+  name: {{ template "connector.fullname" . }}
+  namespace: openfaas
+  labels:
+    {{- include "connector.labels" . | nindent 4 }}
+spec:
+  policy:
+  - {{ template "connector.fullname" . }}
+  principal:
+    jwt:sub:
+      - "system:serviceaccount:{{ .Release.Namespace }}:{{ template "connector.fullname" . }}"
+  condition:
+    StringEqual:
+      jwt:iss:
+        - {{.Values.iam.kubernetesIssuer.url}}
+{{- end }}
