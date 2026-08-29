@@ -33,3 +33,6 @@ resources:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+securityContext:
+  allowPrivilegeEscalation: false

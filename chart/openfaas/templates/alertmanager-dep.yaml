@@ -32,6 +32,10 @@ spec:
       {{- end }}
       containers:
       - name: alertmanager
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
         image: {{ include "openfaas.image" (dict "image" .Values.alertmanager.image "registryPrefix" .Values.registryPrefix) }}
         imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
         command:

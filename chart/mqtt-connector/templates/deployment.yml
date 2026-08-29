@@ -41,6 +41,10 @@ spec:
       {{- end }}
       containers:
         - name: connector
+          {{- if .Values.securityContext }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- end }}
           image: {{ .Values.image }}
           command:
           - "/usr/bin/mqtt-connector"

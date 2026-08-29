@@ -47,3 +47,6 @@ resources:
     cpu: "100m"
   # limits:
   #   memory: "256Mi"
+
+securityContext:
+  allowPrivilegeEscalation: false

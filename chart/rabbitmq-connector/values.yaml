@@ -70,7 +70,8 @@ tolerations: []
 
 affinity: {}
 
-securityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
 
 # Authentication
 

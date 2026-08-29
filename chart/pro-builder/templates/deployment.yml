@@ -126,6 +126,7 @@ spec:
         {{- else }}
         securityContext:
           runAsGroup: 1000
+          allowPrivilegeEscalation: false
         {{- end }}
         volumeMounts:
         - name: socket-dir
@@ -182,6 +183,7 @@ spec:
             type: Unconfined
           runAsUser: 1000
           runAsGroup: 1000
+          allowPrivilegeEscalation: false
           privileged: false
         {{- else }}
         securityContext:

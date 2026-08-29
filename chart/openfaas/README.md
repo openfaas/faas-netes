@@ -121,6 +121,13 @@ If you wish to use the OpenFaaS Pro dashboard, [you must run the steps to "Creat
 
 Review the recommended Pro values in [values-pro.yaml](values-pro.yaml). These are overlaid on top of the default values in [values.yaml](values.yaml), which is used as a base for all installations.
 
+For OpenFaaS Pro, the recommended baseline includes container-level hardening. This hardening is applied to the control plane components:
+
+```yaml
+securityContext:
+  allowPrivilegeEscalation: false
+```
+
 Now deploy OpenFaaS from the helm chart repo:
 
 ```sh
