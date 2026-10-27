@@ -272,6 +272,9 @@ spec:
             value: "8081"
           - name: function_namespace
             value: {{ $functionNs | quote }}
+          - name: installation_namespace
+            value: {{ .Release.Namespace | quote }}
+          # Deprecated and will be removed in a future release; retained for older images.
           - name: profiles_namespace
             value: {{ .Release.Namespace | quote }}
           - name: read_timeout
@@ -426,6 +429,9 @@ spec:
           value: {{ $functionNs | quote }}
         - name: read_timeout
           value: "{{ $providerReadTimeout }}"
+        - name: installation_namespace
+          value: {{ .Release.Namespace | quote }}
+        # Deprecated and will be removed in a future release; retained for older images.
         - name: profiles_namespace
           value: {{ .Release.Namespace | quote }}
         - name: write_timeout
