@@ -89,6 +89,9 @@ resources:
   # limits:
   #   memory: "256Mi"
 
+securityContext:
+  allowPrivilegeEscalation: false
+
 # Use TLS Encryption, this is usually set to true.
 tls: true
 

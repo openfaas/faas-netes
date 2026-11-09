@@ -66,6 +66,9 @@ resources:
   #   memory: "256Mi"
   #   cpu: "100m"
 
+securityContext:
+  allowPrivilegeEscalation: false
+
 nodeSelector: {}
 
 tolerations: []

@@ -63,6 +63,8 @@ kubectl create secret generic \
 Install with defaults:
 
 ```bash
+helm repo update
+
 helm upgrade --install headroom-controller \
   openfaas/headroom-controller \
   --namespace default
@@ -78,6 +80,8 @@ rbac:
 Then install with custom values:
 
 ```bash
+helm repo update
+
 helm upgrade --install headroom-controller \
   openfaas/headroom-controller \
   --namespace default \

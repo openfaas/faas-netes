@@ -27,7 +27,8 @@ serviceAccount:
 
 podAnnotations: {}
 podSecurityContext: {}
-securityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
 
 resources:
   limits:
