@@ -5,7 +5,7 @@
 # chart README for detailed instructions.
 
 # Default values for headroom-controller
-image: ghcr.io/openfaasltd/headroom-controller:v0.0.4
+image: ghcr.io/openfaasltd/headroom-controller:v0.0.6
 
 imagePullPolicy: IfNotPresent
 
