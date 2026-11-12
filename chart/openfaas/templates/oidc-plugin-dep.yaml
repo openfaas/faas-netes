@@ -94,6 +94,8 @@ spec:
         args:
         - "-license-file=/var/secrets/license/license"
         env:
+        - name: installation_namespace
+          value: {{ .Release.Namespace | quote }}
         - name: base_host
           value: "{{- .Values.iam.systemIssuer.url}}"
         - name: port
