@@ -169,6 +169,7 @@ const (
 	FORMAT_MESSAGE_ARGUMENT_ARRAY  = 8192
 	FORMAT_MESSAGE_MAX_WIDTH_MASK  = 255
 
+	MAX_USHORT    = 0xffff
 	MAX_PATH      = 260
 	MAX_LONG_PATH = 32768
 
@@ -1064,6 +1065,7 @@ const (
 	SO_BROADCAST              = 32
 	SO_LINGER                 = 128
 	SO_RCVBUF                 = 0x1002
+	SO_SNDTIMEO               = 0x1005
 	SO_RCVTIMEO               = 0x1006
 	SO_SNDBUF                 = 0x1001
 	SO_UPDATE_ACCEPT_CONTEXT  = 0x700b
@@ -3043,8 +3045,10 @@ const (
 )
 
 const (
-	// FileInformationClass for NtSetInformationFile
+	// FileInformationClass for NtSetInformationFile/NtQueryInformationFile, see
+	// https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ne-wdm-_file_information_class
 	FileBasicInformation                         = 4
+	FileEaInformation                            = 7
 	FileRenameInformation                        = 10
 	FileDispositionInformation                   = 13
 	FilePositionInformation                      = 14
