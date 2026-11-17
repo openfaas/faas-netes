@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.6.1
+  image: ghcr.io/openfaasltd/faas-netes:0.6.2
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.6.1
+  image: ghcr.io/openfaasltd/faas-netes:0.6.2
   logs:
     debug: false
     format: "console"
@@ -448,7 +448,7 @@ nats:
     host: ""
     port: ""
   # The version of NATS Core used with OpenFaaS Pro and JetStream
-  image: nats:2.15.2
+  image: nats:2.15.3
   resources:
     requests:
       memory: "120Mi"
