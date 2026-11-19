@@ -152,7 +152,7 @@ eventWorker:
 
 # For OpenFaaS Pro and the Function CRD
 operator:
-  image: ghcr.io/openfaasltd/faas-netes:0.6.2
+  image: ghcr.io/openfaasltd/faas-netes:0.6.3
   create: false
   logs:
     debug: false
@@ -199,7 +199,7 @@ operator:
     successThreshold: 1
 
 faasnetesPro:
-  image: ghcr.io/openfaasltd/faas-netes:0.6.2
+  image: ghcr.io/openfaasltd/faas-netes:0.6.3
   logs:
     debug: false
     format: "console"
@@ -360,7 +360,7 @@ dashboard:
 # OpenFaaS Enterprise (OpenFaaS IAM)
 # OIDC plugin for authentication on the OpenFaaS REST API
 oidcAuthPlugin:
-  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.16
+  image: ghcr.io/openfaasltd/openfaas-oidc-plugin:0.7.17
   insecureTLS: false
   replicas: 1
   securityContext: true
